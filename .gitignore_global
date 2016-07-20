@@ -1,0 +1,10 @@
+.DS_Store
+.DS_Store?
+
+.tags
+.tags_sorted_by_file
+
+custom_plan.rb
+zeus.json
+
+.current.tasks

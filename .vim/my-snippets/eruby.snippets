@@ -1,0 +1,83 @@
+snippet -
+abbr <% .. %>
+options word
+  <% ${0} %>
+
+snippet =
+abbr <%= .. %>
+options word
+  <%= ${0} %>
+
+snippet end
+abbr end
+  <% end %>
+
+snippet ea
+alias eaa
+abbr each do .. end
+  <% ${1}.each do |${2:e}| %>
+    ${0}
+  <% end %>
+
+snippet if
+abbr if .. end
+  <% if ${1:condition} %>
+    ${0}
+  <% end %>
+
+snippet else
+abbr else .. end
+  <% else %>
+    ${0}
+  <% end %>
+
+snippet elsif
+abbr elsif .. end
+  <% elsif ${1:condition} %>
+    ${0}
+  <% end %>
+
+snippet ife
+abbr if .. else .. end
+  <% if ${1:condition} %>
+    ${2}
+  <% else %>
+    ${0}
+  <% end %>
+
+snippet lt
+abbr link_to
+options word
+  <%= link_to '${1}', ${0} %>
+
+snippet cf
+abbr content_for
+options word
+  <%= content_for :${0} %>
+
+snippet cff
+abbr content_for .. end
+  <% content_for :${1} %>
+    ${0}
+  <% end %>
+
+snippet js
+alias jav
+abbr javascript_include_tag
+  <%= javascript_include_tag '${0}' %>
+
+snippet css
+alias sty
+abbr stylesheet_link_tag
+  <%= stylesheet_link_tag '${0}', media: 'all' %>
+
+snippet ass
+alias boil
+abbr CSS and JS assets
+  <% content_for :stylesheets do %>
+    <%= stylesheet_link_tag '${1}', media: 'all' %>
+  <% end %>
+
+  <% content_for :javascripts do %>
+    <%= javascript_include_tag '${0}' %>
+  <% end %>

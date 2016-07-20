@@ -1,0 +1,55 @@
+# Configs
+config windowHintsShowIcons           true
+config windowHintsIgnoreHiddenWindows false
+config windowHintsSpread              true
+
+# Aliases
+alias full        move screenOriginX;screenOriginY screenSizeX;screenSizeY
+alias lefthalf    move screenOriginX;screenOriginY screenSizeX/2;screenSizeY
+alias righthalf   move screenOriginX+screenSizeX/2;screenOriginY screenSizeX/2;screenSizeY
+alias tophalf     move screenOriginX;screenOriginY screenSizeX;screenSizeY/2
+alias bottomhalf  move screenOriginX;screenOriginY+screenSizeY/2 screenSizeX;screenSizeY/2
+alias topleft     corner top-left resize:screenSizeX/2;screenSizeY/2
+alias topright    corner top-right resize:screenSizeX/2;screenSizeY/2
+alias bottomleft  corner bottom-left resize:screenSizeX/2;screenSizeY/2
+alias bottomright corner bottom-right resize:screenSizeX/2;screenSizeY/2
+
+alias browser     'Google Chrome'
+alias editor      'Sublime Text 2'
+alias terminal    'iTerm'
+
+alias hyper       ctrl,alt,cmd
+alias special     ctrl,cmd
+
+# Bindings
+bind return:${hyper}    ${full}
+bind f:${hyper}         ${full}
+bind left:${hyper}      ${lefthalf}
+bind right:${hyper}     ${righthalf}
+bind up:${hyper}        ${tophalf}
+bind down:${hyper}      ${bottomhalf}
+
+# bind l:${hyper}         ${topleft}
+# bind ;:${hyper}         ${bottomleft}
+# bind ':${hyper}         ${bottomright}
+# bind backslash:${hyper} ${topright}
+
+bind right:${special}   resize +10% +0
+bind left:${special}    resize -10% +0
+# bind up:${special}      resize +0 -10%
+# bind down:${special}    resize +0 +10%
+
+# bind d:${hyper}         move screenOriginX;screenOriginY 970;430
+
+# bind esc:cmd            hint ASDFGHJKLQWERTYUIOPCVBN
+# bind esc:ctrl grid 0:6,2
+
+bind b:${hyper}         focus ${browser}
+bind m:${hyper}         focus ${editor}
+bind n:${hyper}         focus ${terminal}
+bind e:${hyper}         focus 'Evernote'
+bind o:${hyper}         focus 'Finder'
+bind p:${hyper}         focus 'Preview'
+
+bind 1:${special}       throw 0 resize
+bind 2:${special}       throw 1 resize

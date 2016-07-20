@@ -1,0 +1,18 @@
+[user]
+	name = Jerome Dalbert
+	email = jerome.dalbert@gmail.com
+
+[core]
+  excludesfile = /Users/jerome/.gitignore_global
+  ignorecase = false
+
+[color]
+	ui = true
+
+[alias]
+  ignore = !git update-index --assume-unchanged
+  unignore = !git update-index --no-assume-unchanged
+  ignored = !git ls-files -v | grep ^[a-z]
+  
+[push]
+	default = simple

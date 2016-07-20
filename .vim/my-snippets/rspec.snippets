@@ -1,0 +1,84 @@
+snippet aft
+abbr after { .. }
+  after { ${0} }
+
+snippet aftt
+abbr after do .. end
+  after do
+    ${0}
+  end
+
+snippet bef
+abbr before { .. }
+  before { ${0} }
+
+snippet beff
+abbr before do .. end
+  before do
+    ${0}
+  end
+
+snippet con
+abbr context do .. end
+  context '${1:description}' do
+    ${0}
+  end
+
+snippet des
+abbr describe do .. end
+  describe '${1:description}' do
+    ${0}
+  end
+
+snippet e
+alias ex
+alias x
+abbr expect(..)
+  expect(${1}).${0}
+
+snippet it
+abbr it { .. }
+  it { ${0} }
+
+snippet ite
+alias itx
+abbr expect(..)
+  it { expect(${1}).${0} }
+
+snippet its
+abbr its(..) { .. }
+  its(:${1}) { should ${0} }
+
+snippet itsh
+abbr it { should .. }
+  it { should ${0} }
+
+snippet itt
+abbr it 'does something' do .. end
+  it '${1:does something}' do
+    ${0}
+  end
+
+snippet let
+abbr let(:object) { .. }
+  let(:${1:object}) { ${0} }
+
+snippet lett
+abbr let(:object) do .. end
+  let(:${1:object}) do
+    ${0}
+  end
+
+snippet spec
+abbr spec template
+  require 'rails_helper'
+
+  describe ${1}`substitute(substitute(expand('%:t:r'), '_spec$', '', ''), '\(_\|^\)\(.\)', '\u\2', 'g')` do
+
+    ${0}
+
+  end
+
+snippet sub
+abbr subject
+  subject(:`substitute(expand('%:t:r'), '_spec$', '', '')`) { ${0} }

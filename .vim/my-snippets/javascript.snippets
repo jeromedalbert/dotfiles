@@ -1,0 +1,125 @@
+snippet ajax
+alias aja
+abbr ajax call
+options indent
+  $.ajax({
+    type: 'POST',
+    url: $form.attr('action'),
+    data: $form.serialize(),
+    success: function (response) {
+      ${0}
+    },
+    error: function (response) {
+
+    }
+  });
+
+snippet al
+abbr alert
+  alert(${0});
+
+snippet cl
+abbr console.log
+  console.log(${0});
+
+snippet ea
+abbr each
+options word
+  each(function() {
+    ${0}
+  });
+
+snippet eai
+abbr each index
+options word
+  each(function(i) {
+    ${0}
+  });
+
+snippet if
+abbr if
+  if (${1:condition}) {
+    ${0}
+  }
+
+snippet else
+abbr else
+  else {
+    ${0}
+  }
+
+snippet ife
+abbr if { .. } else { .. }
+  if (${1:condition}) {
+    ${0}
+  }
+  else {
+
+  }
+
+snippet f
+abbr function
+  function(${1}) {
+    ${0}
+  }
+
+snippet fn
+abbr function
+  function ${1:functionName}(${2}) {
+    ${0}
+  }
+
+snippet jk
+abbr $()
+  $(${1})${2}
+
+snippet ss
+abbr $('')
+  $('${1}')${2}
+
+snippet len
+abbr length
+  length
+
+snippet on
+abbr on event
+options word
+  on('${1}', function(${2:e}) {
+    ${0}
+  });
+
+snippet preven
+abbr e.preventDefault()
+  e.preventDefault();
+
+snippet re
+abbr $(document).ready
+  $(function() {
+    ${0}
+  });
+
+snippet stt
+abbr setTimeout
+  setTimeout(function() {${0}}, 1000);
+
+snippet this
+abbr $(this)
+options word
+  $(this)
+
+snippet try
+abbr try catch
+  try {
+    ${0}
+  }
+  catch (e) {
+
+  }
+
+snippet iife
+abbr Immediately Invoked Function Expression
+  (function() {
+
+    ${0}
+
+  })();

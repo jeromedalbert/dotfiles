@@ -1,0 +1,268 @@
+snippet #!
+options head
+  #!/usr/bin/env ruby
+
+snippet ->
+options word
+  -> (${1:e}) { ${0} }
+
+snippet all
+abbr all? { |e| .. }
+options word
+  all? { |${1:e}| ${0} }
+
+snippet any
+abbr any? { |e| .. }
+options word
+  any? { |${1:e}| ${2} }
+
+snippet ben
+abbr Benchmark.realtime { .. }
+  require 'benchmark'
+
+  puts Benchmark.realtime { 1_000_000.times { ${0} } }
+
+snippet benc
+abbr Benchmark.bm(10) do |x| .. end
+  require 'benchmark'
+
+  n = 1_000_000
+  Benchmark.bm(10) do |x|
+    x.report(:${2:label1}) { n.times { ${3} } }
+    x.report(:${4:label2}) { n.times { ${5} } }
+  end
+
+snippet beg
+abbr begin .. rescue .. end
+  begin
+    ${0}
+  rescue
+  end
+
+snippet case
+abbr case .. when .. end
+  case ${1:object}
+  when ${2:condition}
+    ${0}
+  end
+
+snippet def
+abbr def .. end
+  def ${1:method_name}
+    ${0}
+  end
+
+snippet defi
+abbr def initialize .. end
+  def initialize${1}
+    ${0}
+  end
+
+snippet do
+abbr do .. end
+  do ${1:#:}
+    ${0}
+  end
+
+snippet req
+abbr require
+  require '${0}'
+
+snippet pro
+abbr protected
+  protected
+
+snippet pri
+abbr private
+  private
+
+snippet cla
+abbr class .. end
+  class ${1:`substitute(expand('%:t:r'), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+    ${0}
+  end
+
+snippet clai
+abbr class .. initialize .. end
+  class ${1:`substitute(expand('%:t:r'), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+    def initialize${2}
+      ${3}
+    end
+  end
+
+snippet mod
+abbr module .. end
+  module ${1:`substitute(expand('%:t:r'), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+    ${0}
+  end
+
+snippet upt
+alias upto
+abbr upto(n) { |i| .. }
+options word
+  upto?(${1:n}) { |${2:i}| ${0} }
+
+snippet downt
+alias downto
+abbr downto(n) { |i| .. }
+options word
+  downto?(${1:n}) { |${2:i}| ${0} }
+
+snippet ea
+abbr each { |e| .. }
+options word
+  each { |${1:e}| ${0} }
+
+snippet eaa
+abbr each do |e| .. end
+options word
+  each do |${1:e}|
+    ${0}
+  end
+
+snippet eai
+abbr each_index { |i| .. }
+options word
+  each_index { |${1:i}| ${0} }
+
+snippet eaii
+abbr each_index do |i| .. end
+options word
+  each_index do |${1:i}|
+    ${0}
+  end
+
+snippet eawi
+abbr each_with_index { |e, i| .. }
+options word
+  each_with_index { |${1:e}, ${2:i}| ${0} }
+
+snippet eawii
+abbr each_with_index do |i| .. end
+options word
+  each_with_index do |${1:e}, ${2:i}|
+    ${0}
+  end
+
+snippet eos
+alias EOS
+abbr <<-EOS .. EOS
+  <<-EOS
+  ${0}
+  EOS
+
+snippet fea
+abbr find_each { |e| .. }
+options word
+  find_each { |${1:e}| ${0} }
+
+snippet feaa
+abbr find_each do |e| .. end
+options word
+  find_each do |${1:e}|
+    ${0}
+  end
+
+snippet fin
+alias find
+abbr find { |e| .. }
+options word
+  find { |${1:e}| ${0} }
+
+snippet finn
+alias findd
+abbr find do |e| .. end
+options word
+  find do |${1:e}|
+    ${0}
+  end
+
+snippet httpget
+abbr HTTP simple GET
+  res = Net::HTTP.get(URI(${0:url}))
+  puts res
+
+snippet httplget
+abbr HTTP long GET
+  res = Net::HTTP.get_response(URI(${0:url}))
+  puts res.body
+
+snippet if
+abbr if .. end
+  if ${1:condition}
+    ${0}
+  end
+
+snippet ife
+abbr if .. else .. end
+  if ${1:condition}
+    ${0}
+  else
+
+  end
+
+snippet map
+abbr map { |e| .. }
+options word
+  map { |${1:e}| ${0} }
+
+snippet mapp
+abbr map do |e| .. end
+options word
+  map do |${1:e}|
+    ${0}
+  end
+
+snippet red
+abbr reduce { |acc, e| .. }
+options word
+  reduce${1} { |${2:acc}, ${3:e}| ${0} }
+
+snippet redd
+abbr reduce do |acc, e| .. end
+options word
+  reduce${1} do |${2:acc}, ${3:e}|
+    ${0}
+  end
+
+snippet sel
+abbr select { |e| .. }
+options word
+  select { |${1:e}| ${0} }
+
+snippet sell
+abbr select do |e| .. end
+options word
+  select do |${1:e}|
+    ${0}
+  end
+
+snippet tim
+abbr times { |i| .. }
+options word
+  times { |${1:i}| ${0} }
+
+snippet timm
+abbr times do |i| .. end
+options word
+  times do |${1:i}|
+    ${0}
+  end
+
+snippet unt
+abbr until .. end
+  until ${1:condition}
+    ${0}
+  end
+
+snippet log
+abbr Rails.logger.debug(..)
+  Rails.logger.debug(${1})
+
+snippet loge
+abbr Rails.logger.error(..)
+  Rails.logger.error(${1})
+
+snippet logi
+abbr Rails.logger.info(..)
+  Rails.logger.info(${1})
