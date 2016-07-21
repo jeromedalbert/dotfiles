@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" Investigate why focus events don't work on a recovered iTerm tmux session
 " Detect division sign in ruby syntax
 " Detect : in ruby symbol syntax
 " Replace REPLs by something like http://goo.gl/0obV2s or rcodetools xmpfilter?
@@ -25,7 +26,6 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-rsi'
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-endwise'
@@ -110,15 +110,34 @@ cmap <M-right> <nop>
 map <del> <nop>
 imap <del> <nop>
 cmap <del> <nop>
-cnoremap <c-p> <up>
-cnoremap <c-n> <down>
+
+inoremap <c-a> <home>
+cnoremap <c-a> <home>
+inoremap <c-e> <end>
+cnoremap <c-e> <end>
+inoremap <c-b> <left>
+cnoremap <c-b> <left>
+inoremap <c-f> <right>
+cnoremap <c-f> <right>
+inoremap <c-d> <del>
 inoremap <c-k> <c-o>D
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
+inoremap <m-b> <s-left>
+cnoremap <m-b> <s-left>
+inoremap <m-f> <s-right>
+cnoremap <m-f> <s-right>
+inoremap <m-d> <c-o>dw
+cnoremap <m-d> <s-right><c-w>
+inoremap <m-bs> <c-w>
+cnoremap <m-bs> <c-w>
+cnoremap <c-p> <up>
+cnoremap <c-n> <down>
 
 map <c-t> <esc>:tabnew<cr>
-for tab_number in [1, 2, 3, 4, 5, 6, 7]
+for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
+" <bs> is set as c-h in my iTerm2
 map <bs> gT
 map <c-l> gt
 
@@ -172,7 +191,6 @@ noremap gi gi<c-o>zz
 map <leader>9 i<space><esc>l
 map <leader>0 a<space><esc>h
 
-inoremap <c-e> <end>
 " map <leader>g :file<cr>
 map <leader>2 @
 map <leader>22 @@
@@ -225,7 +243,6 @@ noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<c
 
 map <m-t> :call ToggleQuotes()<cr>
 imap <m-t> <c-o>:call ToggleQuotes()<cr>
-cnoremap <c-f> <end><c-f>
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -248,14 +265,14 @@ imap <f15> <end><cr>
 map <f16> [<space>
 imap <f16> <esc>O
 
-nnoremap <leader>ff :FullSearch -i -Q '' <left><left>
-nnoremap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
+nnoremap <leader>ff :FullSearch -Q -i '' <left><left>
+nmap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
 nmap <leader>fw <leader>yfiw
 nmap <leader>fW <leader>yfiW
-vnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr>:FullSearch -Q '<C-R>=@"<CR>'<left>
+vmap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <c-l> <end><space>-G '\.'<space><left><left>
-nnoremap <leader>fo :Gqfopen<cr>
-nnoremap <Leader>fR :Greplace!<cr>
+nmap <leader>fo :Gqfopen<cr>
+nmap <Leader>fR :Greplace!<cr>
 
 " map <m-w> <Plug>CamelCaseMotion_w
 " map <m-b> <Plug>CamelCaseMotion_b
@@ -321,7 +338,9 @@ cabbrev plugu PlugUpdate
 cabbrev goyo Goyo
 cabbrev tnew Tnew
 cabbrev gblame Gblame
+cabbrev gb Gblame
 cabbrev glog Glog
+cabbrev gdiff Gdiff
 cabbrev gd Gdiff
 cabbrev gmodif Gmodified
 cabbrev co copen
