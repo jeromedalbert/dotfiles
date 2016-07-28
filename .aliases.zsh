@@ -328,15 +328,7 @@ alias rtop="top -o rsize"
 alias ctop="top -o cpu"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 alias pow_restart='touch ~/.pow/restart.txt'
-alias subs='filebot -get-missing-subtitles'
-alias sub='filebot -get-missing-subtitles'
-# subs() {
-#   local dir=$1
-#   if [[ -f $1 ]]; then; dir=`dirname $1`; fi
-
-#   cd $dir
-#   filebot -get-missing-subtitles $dir
-# }
+alias sub='filebot -get-subtitles'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -377,7 +369,9 @@ alias rg='rails generate'
 alias rd='rails destroy'
 alias rc='rails c'
 alias rr='rake routes'
+alias mi='rake db:migrate'
 alias migr='rake db:migrate db:rollback && rake db:migrate && RAILS_ENV=test rake db:migrate'
+alias ro='rake db:rollback'
 alias roll='rake db:rollback && RAILS_ENV=test rake db:rollback'
 alias rT='rake -T'
 alias zs='zeus start'

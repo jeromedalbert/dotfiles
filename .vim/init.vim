@@ -63,6 +63,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
+" Plug 'sjl/vitality.vim'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
 call plug#end()
@@ -120,6 +121,7 @@ cnoremap <c-b> <left>
 inoremap <c-f> <right>
 cnoremap <c-f> <right>
 inoremap <c-d> <del>
+cnoremap <c-d> <del>
 inoremap <c-k> <c-o>D
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 inoremap <m-b> <s-left>
@@ -157,8 +159,8 @@ inoremap <f13> <C-o>A;
 noremap <f14> mCA,<Esc>`C
 inoremap <f14> <C-o>A,
 
-noremap <leader>n <c-w><c-w>
-noremap <leader>p <c-w>p
+noremap <leader>n <c-w>w
+noremap <leader>p <c-w>W
 
 tnoremap <Esc> <C-\><C-n>
 
@@ -196,6 +198,8 @@ map <leader>2 @
 map <leader>22 @@
 map <leader>1 :!
 map <leader>5 :%!
+
+vnoremap . :normal .<cr>
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -235,6 +239,9 @@ map <leader>fj :%!jq '.'<cr>
 vmap <leader>fj :!jq '.'<cr>
 map <leader>fh :silent %!tidy -qi --show-errors 0<cr>
 map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
+" https://github.com/beautify-web/js-beautify
+map <leader>fb :%!js-beautify<cr>
+vmap <leader>fb :!js-beautify<cr>
 
 nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
 nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
@@ -257,6 +264,8 @@ map <leader>i :CtrlPBufTag<cr>
 
 map <c-j> ]e
 map <c-k> [e
+xmap <c-j> ]egv
+xmap <c-k> [egv
 
 " f15 is c-cr in my iTerm2
 map <f15> ]<space>
@@ -343,6 +352,7 @@ cabbrev glog Glog
 cabbrev gdiff Gdiff
 cabbrev gd Gdiff
 cabbrev gmodif Gmodified
+cabbrev gm Gmodified
 cabbrev co copen
 cabbrev qf copen
 
@@ -1038,13 +1048,15 @@ function! BufEnterConfig()
 endfunction
 
 function! GitOpenModifiedFiles()
-  only
+  silent only
   let status = system('git status -s | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
   let filenames = split(status, "\n")
+  if empty(filenames) | echo 'No modified files!' | return | endif
   exec "edit " . filenames[0]
   for filename in filenames[1:]
     exec "sp " . filename
   endfor
+  wincmd w
 endfunction
 
 function! ConfigureLargeFiles()

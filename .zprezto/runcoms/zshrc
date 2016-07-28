@@ -23,6 +23,7 @@ export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.bin:$PATH
 export PATH=$NPM_HOME/bin:$PATH
 export PATH=$VICE_HOME/tools:$PATH
+if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 
 #########################
 ### ZSH CONFIGURATION ###
