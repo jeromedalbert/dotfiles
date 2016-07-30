@@ -8,7 +8,7 @@ syn match rubyOperator "\s\@= ?\S\@!"
 
 syn match rubyOperator "%\%([[:punct:]]\|[qwrsxQWRS][[:punct:]]\?\)\@!"
 
-" syn match rubyOperator "\%([[:alnum:]]\s*\)\@<!/\%(\s*[^/]\)\@!"
+syn match rubyOperator "\%([[:alnum:]]\s*\)\@<=/"
 
 syn match rubyOperator "\%(do\s*\)\@<!|"
 

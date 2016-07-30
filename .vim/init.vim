@@ -2,10 +2,8 @@
 "### TODO ###
 "############
 " Investigate why focus events don't work on a recovered iTerm tmux session
-" Detect division sign in ruby syntax
 " Detect : in ruby symbol syntax
 " Replace REPLs by something like http://goo.gl/0obV2s or rcodetools xmpfilter?
-" Check out Olical/vim-enmasse as a possible replacement for greplace
 " Textobj function that works for ES6 JS
 " Use syntastic / neomake especially JS linter
 " Figure out why some es6 end parentheses are highlighted in red
