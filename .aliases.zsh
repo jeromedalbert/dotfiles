@@ -17,8 +17,6 @@ alias lld="ll -d"
 alias llrt="ll -rt"
 alias rm="rm"
 alias rmrf="rm -rf"
-alias f="find . -iname"
-alias ff="find . -type f -iname"
 alias grep='grep --color=auto'
 fw() { grep -inr "$@" . }
 hs() { history | grep $* }
@@ -40,15 +38,6 @@ alias vi=v
 alias vi.=v.
 alias vim=v
 alias vim.=v.
-# fg() {
-#   jobs | grep 'vim' &> /dev/null
-
-#   if [ $? -eq 0 ]; then
-#     echo -n "\033]50;SetProfile=Solarized\a"
-#   fi
-
-#   builtin fg
-# }
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
@@ -268,27 +257,11 @@ alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
 alias ssh_key="cat ~/.ssh/id_rsa.pub | pbcopy"
 
 # Apps
-term() {
-  curr_dir=$PWD
-  osascript <<-eof
-    tell application "iTerm"
-      make new terminal
-      tell the last terminal
-        activate current session
-        launch session "Default Session"
-        tell the last session
-          write text "cd \"$curr_dir\"; clear"
-        end tell
-      end tell
-    end tell
-eof
-}
 alias s="subl"
 alias s.="subl ."
 alias zzz="pmset sleepnow"
 alias say_good="say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo"
 alias say_bad="say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo"
-alias empty_cache="echo '' > /Users/jerome/Library/Application\ Support/Google/Chrome/Default/History\ Provider\ Cache"
 alias keyboard_disable='sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
 alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
 alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
@@ -307,8 +280,6 @@ external_ip() {
 }
 alias public_ip="external_ip"
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 function cdf() {
   cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
 }
@@ -336,7 +307,7 @@ alias cowfact="clear && elinks -dump http://randomfunfacts.com  | sed -n '/^| /p
 alias dunnet="emacs -batch -l dunnet"
 alias emacs_games="ls /usr/share/emacs/22.1/lisp/play/*.elc | column -t"
 snow() {
-  clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|gawk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
+  clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|awk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
 }
 
 # Directories

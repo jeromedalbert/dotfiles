@@ -869,7 +869,7 @@ function! PreviewNERDTreeNode()
 endfunction
 
 function! FullSearch(search_options)
-  if IsCurrentBufferNew() || bufname('%') =~ 'ag -A '
+  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C '
     enew
   else
     tabnew
@@ -887,7 +887,7 @@ function! FullSearch(search_options)
 
   let @/ = EscapeStringForSearches(search_text)
   exe ':silent grep! ' . a:search_options
-  call termopen('ag -A 2 -B 2 ' . a:search_options)
+  call termopen('ag -C ' . a:search_options)
 endfunction
 
 function! ResetProject()
@@ -1281,7 +1281,7 @@ augroup on_display_events
   autocmd filetype nerdtree call OnNERDTreeDisplayed()
   autocmd filetype extradite call OnExtraditeDisplayed()
   autocmd TermOpen *neoterm* call OnNeotermDisplayed()
-  autocmd TermOpen *ag\ -A\ * call OnFullSearchDisplayed()
+  autocmd TermOpen *ag\ * call OnFullSearchDisplayed()
   autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
 augroup end
 

@@ -9,13 +9,14 @@ boost
 cloc
 cmake
 cmatrix
-coreutils
 cowsay
 cscope
 ctags
 curl
+docker
 docker-compose
 docker-machine
+elinks
 fig
 figlet
 findutils

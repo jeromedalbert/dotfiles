@@ -41,10 +41,10 @@ expand-or-complete-with-dots() {
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
 
-# zmodload -i zsh/parameter
-# insert-last-command-output() { LBUFFER+="$(eval $history[$((HISTCMD-1))])" }
-# zle -N insert-last-command-output
-# bindkey "^X^L" insert-last-command-output
+zmodload -i zsh/parameter
+insert-last-command-output() { LBUFFER+="$(eval $history[$((HISTCMD-1))])" }
+zle -N insert-last-command-output
+bindkey "^X^L" insert-last-command-output
 
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then

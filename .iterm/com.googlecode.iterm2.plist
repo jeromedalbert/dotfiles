@@ -1303,11 +1303,11 @@
 	<key>Hotkey</key>
 	<false/>
 	<key>HotkeyChar</key>
-	<integer>76</integer>
+	<integer>116</integer>
 	<key>HotkeyCode</key>
-	<integer>37</integer>
+	<integer>17</integer>
 	<key>HotkeyModifiers</key>
-	<integer>393475</integer>
+	<integer>1310985</integer>
 	<key>IRMemory</key>
 	<integer>4</integer>
 	<key>JobName</key>
@@ -1375,6 +1375,8 @@
 	<string>269 308 606 456 0 0 1280 777 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 117 700 622 0 0 1280 777 </string>
+	<key>NSWindow Frame SharedPreferences</key>
+	<string>269 174 937 465 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3930,7 +3932,7 @@
 	<key>NoSyncTimeOfLastPromo</key>
 	<real>477553260.926516</real>
 	<key>NoSyncTimeOfLastPromoDownload</key>
-	<real>486100521.90363902</real>
+	<real>491194074.39997703</real>
 	<key>OnlyWhenMoreTabs</key>
 	<false/>
 	<key>OpenArrangementAtStartup</key>
@@ -4001,11 +4003,11 @@
 	<key>SUFeedAlternateAppNameKey</key>
 	<string>iTerm</string>
 	<key>SUFeedURL</key>
-	<string>https://iterm2.com/appcasts/testing3.xml?shard=84</string>
+	<string>https://iterm2.com/appcasts/testing.xml?shard=84</string>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-06-28T17:24:25Z</date>
+	<date>2016-07-30T19:30:54Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -4064,7 +4066,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.3</string>
+	<string>3.0.5</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

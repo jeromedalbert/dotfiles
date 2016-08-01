@@ -4,7 +4,7 @@ caffeine
 colloquy
 cyberduck
 disk-inventory-x
-dockertoolbox
+dockertoolbox (!)
 dropbox
 evernote
 filebot
@@ -22,9 +22,9 @@ keyboard-maestro
 ngrok
 nosleep
 omnigraffle
+postman
 psequel
 qbittorrent
-rescuetime
 selfcontrol
 sitesucker
 skitch
@@ -32,7 +32,6 @@ skype
 slack
 slate
 sqleditor
-stand
 steam
 sublime-text
 trailer
