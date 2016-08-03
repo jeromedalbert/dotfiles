@@ -38,6 +38,8 @@ alias vi=v
 alias vi.=v.
 alias vim=v
 alias vim.=v.
+alias vimdiff="$VIM_EDITOR -d"
+alias vdiff=vimdiff
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
@@ -351,3 +353,8 @@ alias zc='zeus c'
 alias debug='pry-remote'
 alias st='spring stop'
 alias irb='pry'
+
+# Python
+gpip() {
+  PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}

@@ -420,7 +420,8 @@ set sidescroll=1 sidescrolloff=3
 "#############################
 "### Plugins configuration ###
 "#############################
-let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
+let g:ctrlp_user_command = 'ag %s -l --unrestricted --nocolor -g ""'
+" let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_match_window = 'top,order:ttb,min:45,max:45'
 let g:ctrlp_max_height = 45
@@ -692,6 +693,7 @@ function! DuplicateCurrentFile()
   let old_file = expand('%')
   let new_file = input('Duplicate as: ', old_file, 'file')
   if new_file != '' && new_file != old_file
+    if bufexists(new_file) | exec 'bd! ' . new_file | endif
     exec ':saveas! ' . new_file
   endif
 endfunction

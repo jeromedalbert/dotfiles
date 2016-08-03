@@ -176,3 +176,7 @@ hi markdownLineBreak guibg=#A57706
 
 hi diffRemoved guifg=#d32020 guibg=#eae3ca
 hi diffAdded guifg=#118714 guibg=#eae3ca
+
+hi link jsonQuote String
+
+hi pythonBuiltIn guifg=#6d9cbe

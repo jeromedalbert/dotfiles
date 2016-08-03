@@ -123,6 +123,9 @@ defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationM
 # Minimize windows using the scale effect (less intrusive)
 defaults write com.apple.dock mineffect -string scale
 
+# Show the user library folder
+chflags nohidden ~/Library/
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
