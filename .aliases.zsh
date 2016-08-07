@@ -43,19 +43,22 @@ alias vdiff=vimdiff
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
-alias t='tw'
-alias ta='tw'
-alias treload='tmux source-file ~/.tmux.conf'
-alias trename='tmux rename-window'
-tw() {
-  if [ -z $TMUX ]; then
-    tmux -CC attach -t work || tmux -CC new -s work
+alias t='tmux'
+alias tls='tmux ls'
+alias tl='tls'
+alias tn='tmux new-session -s'
+alias td='tmux detach'
+alias tk='tmux kill-session -t'
+alias ts='tmux source ~/.tmux.conf'
+ta() {
+  if [ $# -eq 0 ]; then
+    tmux attach
+  else
+    tmux attach -t "$*"
   fi
 }
-tp() {
-  if [ -z $TMUX ]; then
-    tmux -CC attach -t perso || tmux -CC new -s perso
-  fi
+tg() {
+  tmux attach -t "$*" || tmux new -s "$*"
 }
 psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)

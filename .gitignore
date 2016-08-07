@@ -1,3 +1,4 @@
 .vim/tmp
 .vim/plugged
 .secrets.zsh
+.tmux

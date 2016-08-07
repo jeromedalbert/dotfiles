@@ -1,5 +1,16 @@
 .git
+.svn
+.hg
+.idea
+.bundle
+.sass-cache
+.DS_Store
+
+tmp
+log
+CVS
 node_modules
-DS_Store
 bower_components
 coverage
+
+*.pyc

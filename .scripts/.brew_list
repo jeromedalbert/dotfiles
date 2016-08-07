@@ -68,12 +68,14 @@ p7zip
 pcre
 pkg-config
 postgresql
+protobuf
 pstree
 python
 python3
 q
 rbenv
 readline
+reattach-to-user-namespace
 ruby-build
 sdl2
 sdl2_image

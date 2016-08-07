@@ -1,12 +1,11 @@
 "############
 "### TODO ###
 "############
-" Investigate why focus events don't work on a recovered iTerm tmux session
+" Use syntastic / neomake especially JS linter
+" Figure out why some es6 end parentheses are highlighted in red
 " Detect : in ruby symbol syntax
 " Replace REPLs by something like http://goo.gl/0obV2s or rcodetools xmpfilter?
 " Textobj function that works for ES6 JS
-" Use syntastic / neomake especially JS linter
-" Figure out why some es6 end parentheses are highlighted in red
 " Bug with the <`0 stuff sometimes still displaying (ex: con snippet) - has to do with (tmux) session loading?
 " Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet?
 
@@ -61,7 +60,6 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-" Plug 'sjl/vitality.vim'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
 call plug#end()
@@ -169,7 +167,6 @@ map <silent> <leader>oo :silent! exe '!open %'<cr>
 
 map <silent> <leader>j mC:join<cr>`C
 
-map ' "
 map $ $ze
 
 " f17 is cmd-[ in my iTerm2
@@ -198,6 +195,16 @@ map <leader>1 :!
 map <leader>5 :%!
 
 vnoremap . :normal .<cr>
+
+nnoremap <c-g> :=<cr>
+
+map <c-q> <nop>
+map <c-q>x <nop>
+map <c-q>" <nop>
+map <c-q>% <nop>
+for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  execute 'map <c-q>' . i . ' <nop>'
+endfor
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -389,7 +396,6 @@ set notimeout
 set textwidth=0 colorcolumn=80
 set ruler
 set tags=./.tags;
-set wildignore+=*.o,*.obj,.git,node_modules,_site,*.class,*.zip,*.aux
 set showcmd
 set autoread
 set nostartofline
@@ -420,8 +426,7 @@ set sidescroll=1 sidescrolloff=3
 "#############################
 "### Plugins configuration ###
 "#############################
-let g:ctrlp_user_command = 'ag %s -l --unrestricted --nocolor -g ""'
-" let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
+let g:ctrlp_user_command = 'ag %s -l --skip-vcs-ignores --hidden --nocolor -g ""'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_match_window = 'top,order:ttb,min:45,max:45'
 let g:ctrlp_max_height = 45
