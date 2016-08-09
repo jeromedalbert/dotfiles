@@ -47,6 +47,7 @@ Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'sickill/vim-pasta'
 Plug 'kassio/neoterm'
 Plug 'kurkale6ka/vim-pairs'
+" Plug 'wellle/targets.vim'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'bkad/CamelCaseMotion'
 Plug 'mattn/emmet-vim'
@@ -169,10 +170,8 @@ map <silent> <leader>j mC:join<cr>`C
 
 map $ $ze
 
-" f17 is cmd-[ in my iTerm2
-map <f17> 20zh
-" f18 is cmd-] in my iTerm2
-map <f18> 20zl
+map <m-[> 20zh
+map <m-]> 20zl
 
 map @- @:
 
@@ -188,10 +187,10 @@ noremap gi gi<c-o>zz
 map <leader>9 i<space><esc>l
 map <leader>0 a<space><esc>h
 
-" map <leader>g :file<cr>
 map <leader>2 @
 map <leader>22 @@
 map <leader>1 :!
+cabbrev ! <esc>:call feedkeys(':silent !', 'n')<cr>
 map <leader>5 :%!
 
 vnoremap . :normal .<cr>
@@ -422,6 +421,7 @@ set nojoinspaces
 set conceallevel=2 concealcursor=niv
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
+set wildignorecase
 
 "#############################
 "### Plugins configuration ###

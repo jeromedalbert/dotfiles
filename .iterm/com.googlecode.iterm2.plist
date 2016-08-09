@@ -5,7 +5,7 @@
 	<key>AdjustWindowForFontSizeChange</key>
 	<true/>
 	<key>AllowClipboardAccess</key>
-	<false/>
+	<true/>
 	<key>AnimateDimming</key>
 	<false/>
 	<key>AppleAntiAliasingThreshold</key>
@@ -15,7 +15,7 @@
 	<key>AppleSmoothFixedFontsSizeThreshold</key>
 	<integer>1</integer>
 	<key>AutoHideTmuxClientSession</key>
-	<true/>
+	<false/>
 	<key>CheckTestRelease</key>
 	<true/>
 	<key>ClosingHotkeySwitchesSpaces</key>
@@ -1179,12 +1179,19 @@
 			<key>Text</key>
 			<string>0x13 0x22</string>
 		</dict>
+		<key>0x46-0x120000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x5b 0x3f</string>
+		</dict>
 		<key>0x47-0x120000</key>
 		<dict>
 			<key>Action</key>
-			<integer>25</integer>
+			<integer>13</integer>
 			<key>Text</key>
-			<string>Find Next</string>
+			<string></string>
 		</dict>
 		<key>0x4b-0x120000</key>
 		<dict>
@@ -1210,16 +1217,16 @@
 		<key>0x5b-0x100000</key>
 		<dict>
 			<key>Action</key>
-			<integer>10</integer>
+			<integer>11</integer>
 			<key>Text</key>
-			<string>[31~</string>
+			<string>0x13 0x3c</string>
 		</dict>
 		<key>0x5d-0x100000</key>
 		<dict>
 			<key>Action</key>
-			<integer>10</integer>
+			<integer>11</integer>
 			<key>Text</key>
-			<string>[32~</string>
+			<string>0x13 0x3e</string>
 		</dict>
 		<key>0x64-0x100000</key>
 		<dict>
@@ -1228,12 +1235,26 @@
 			<key>Text</key>
 			<string>0x13 0x25</string>
 		</dict>
+		<key>0x66-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x5b 0x2f</string>
+		</dict>
 		<key>0x67-0x100000</key>
 		<dict>
 			<key>Action</key>
-			<integer>25</integer>
+			<integer>13</integer>
 			<key>Text</key>
-			<string>Find Previous</string>
+			<string></string>
+		</dict>
+		<key>0x68-0x180000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x70</string>
 		</dict>
 		<key>0x6b-0x100000</key>
 		<dict>
@@ -1249,12 +1270,33 @@
 			<key>Text</key>
 			<string>0x13 0x64</string>
 		</dict>
+		<key>0x6c-0x180000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x6e</string>
+		</dict>
 		<key>0x70-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>13</integer>
 			<key>Text</key>
 			<string></string>
+		</dict>
+		<key>0x72-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x5b</string>
+		</dict>
+		<key>0x73-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13</string>
 		</dict>
 		<key>0x74-0x100000</key>
 		<dict>
@@ -1495,7 +1537,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 117 700 622 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>43 278 796 473 0 0 1280 777 </string>
+	<string>43 282 937 465 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3258,7 +3300,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-08-06T10:00:54Z</date>
+	<date>2016-08-09T10:01:39Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>

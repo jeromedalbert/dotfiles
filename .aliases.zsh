@@ -49,7 +49,13 @@ alias tl='tls'
 alias tn='tmux new-session -s'
 alias td='tmux detach'
 alias tk='tmux kill-session -t'
-alias ts='tmux source ~/.tmux.conf'
+ts() {
+  if [ $# -eq 0 ]; then
+    tmux source ~/.tmux.conf
+  else
+    tmux source ~/.tmux/sessions/$1.conf
+  fi
+}
 ta() {
   if [ $# -eq 0 ]; then
     tmux attach
@@ -60,9 +66,13 @@ ta() {
 tg() {
   tmux attach -t "$*" || tmux new -s "$*"
 }
+alias tw='ts work'
+alias tb='ts blog'
+alias tp='ts pokefarm'
 psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }
+elinks='elinks -no-connect'
 
 # Confs
 alias reload=". ~/.zshrc"
@@ -361,3 +371,7 @@ alias irb='pry'
 gpip() {
   PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
+alias venv='virtualenv --python=/usr/local/bin/python'
+alias vac='source bin/activate'
+alias va='vac'
+alias pir='pip install -r requirements.txt'

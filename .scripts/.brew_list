@@ -75,7 +75,6 @@ python3
 q
 rbenv
 readline
-reattach-to-user-namespace
 ruby-build
 sdl2
 sdl2_image

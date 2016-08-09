@@ -1,4 +1,7 @@
 .vim/tmp
 .vim/plugged
 .secrets.zsh
-.tmux
+.tmux/plugins
+.tmux/resurrect
+.tmux/sessions/work.conf
+.tmux/sessions/pokefarm.conf
