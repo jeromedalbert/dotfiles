@@ -48,7 +48,13 @@ alias tls='tmux ls'
 alias tl='tls'
 alias tn='tmux new-session -s'
 alias td='tmux detach'
-alias tk='tmux kill-session -t'
+tk() {
+  if [ $# -eq 0 ]; then
+    tmux kill-session -t `tmux display-message -p "#S"`
+  else
+    tmux kill-session -t "$*"
+  fi
+}
 ts() {
   if [ $# -eq 0 ]; then
     tmux source ~/.tmux.conf
@@ -66,9 +72,9 @@ ta() {
 tg() {
   tmux attach -t "$*" || tmux new -s "$*"
 }
-alias tw='ts work'
-alias tb='ts blog'
-alias tp='ts pokefarm'
+alias tw='ta work || ts work'
+alias tb='ta blog || ts blog'
+alias tp='ta pokefarm || ts pokefarm'
 psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }

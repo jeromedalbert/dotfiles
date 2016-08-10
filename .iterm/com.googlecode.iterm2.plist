@@ -1261,7 +1261,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x6b</string>
+			<string>0x13 0x72</string>
 		</dict>
 		<key>0x6c-0x100000</key>
 		<dict>
@@ -1283,13 +1283,6 @@
 			<integer>13</integer>
 			<key>Text</key>
 			<string></string>
-		</dict>
-		<key>0x72-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x13 0x5b</string>
 		</dict>
 		<key>0x73-0x100000</key>
 		<dict>
@@ -1338,7 +1331,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x4B</string>
+			<string>0x13 0x53</string>
 		</dict>
 		<key>0xf701-0x300000</key>
 		<dict>
@@ -1352,7 +1345,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x4A</string>
+			<string>0x13 0x58</string>
 		</dict>
 		<key>0xf702-0x300000</key>
 		<dict>
@@ -1366,7 +1359,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x48</string>
+			<string>0x13 0x5a</string>
 		</dict>
 		<key>0xf702-0x380000</key>
 		<dict>
@@ -1387,7 +1380,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x4C</string>
+			<string>0x13 0x43</string>
 		</dict>
 		<key>0xf703-0x380000</key>
 		<dict>
@@ -1537,7 +1530,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 117 700 622 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>43 282 937 465 0 0 1280 777 </string>
+	<string>43 290 796 473 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3206,6 +3199,8 @@
 	<true/>
 	<key>NoSyncInstallationId</key>
 	<string>8DA9E88F-E424-4EC3-8B1E-E7C0C001AED9</string>
+	<key>NoSyncNeverAskAboutSettingAlternateMouseScroll</key>
+	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLost</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
@@ -3300,7 +3295,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-08-09T10:01:39Z</date>
+	<date>2016-08-10T10:46:43Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
