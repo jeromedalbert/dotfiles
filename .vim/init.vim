@@ -1,6 +1,8 @@
 "############
 "### TODO ###
 "############
+" use c-l to clear screens when spec'ing or REPL'ing
+" Restrain/normalize tab size
 " Use syntastic / neomake especially JS linter
 " Figure out why some es6 end parentheses are highlighted in red
 " Detect : in ruby symbol syntax
@@ -138,7 +140,9 @@ for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
 endfor
 " <bs> is set as c-h in my iTerm2
 map <bs> gT
+map <m-h> gT
 map <c-l> gt
+map <m-l> gt
 
 nmap <leader>e :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
@@ -190,7 +194,8 @@ map <leader>0 a<space><esc>h
 map <leader>2 @
 map <leader>22 @@
 map <leader>1 :!
-cabbrev ! <esc>:call feedkeys(':silent !', 'n')<cr>
+" cabbrev ! <esc>:call feedkeys(':silent !', 'n')<cr>
+cnoremap !1 silent !
 map <leader>5 :%!
 
 vnoremap . :normal .<cr>
@@ -292,6 +297,7 @@ nmap <Leader>fR :Greplace!<cr>
 " map <m-e> <Plug>CamelCaseMotion_e
 " map <m-g><m-e> <Plug>CamelCaseMotion_ge
 
+nmap <leader>-- @:
 nmap <leader>-b :call DeleteHiddenBuffers()<cr>
 nmap <leader>-u :call ClearUndos()<cr>
 nmap <leader>-k :call ResetProject()<cr>
@@ -1301,7 +1307,7 @@ augroup end
 if exists('$TMUX')
   augroup tmux_title
     autocmd!
-    autocmd VimEnter * call system("tmux rename-window '" . GetCwd() . "'")
+    autocmd VimEnter * call system("tmux rename-window -t $TMUX_PANE '" . GetCwd() . "'")
     autocmd VimLeave * call system('tmux setw automatic-rename')
   augroup end
 endif

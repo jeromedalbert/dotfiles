@@ -1179,6 +1179,13 @@
 			<key>Text</key>
 			<string>0x13 0x22</string>
 		</dict>
+		<key>0x45-0x120000</key>
+		<dict>
+			<key>Action</key>
+			<integer>13</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
 		<key>0x46-0x120000</key>
 		<dict>
 			<key>Action</key>
@@ -1245,9 +1252,9 @@
 		<key>0x67-0x100000</key>
 		<dict>
 			<key>Action</key>
-			<integer>13</integer>
+			<integer>11</integer>
 			<key>Text</key>
-			<string></string>
+			<string>0x13 0x5b 0x67</string>
 		</dict>
 		<key>0x68-0x180000</key>
 		<dict>
@@ -1297,6 +1304,13 @@
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x63</string>
+		</dict>
+		<key>0x75-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x75</string>
 		</dict>
 		<key>0x77-0x100000</key>
 		<dict>
@@ -1530,7 +1544,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 117 700 622 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>43 290 796 473 0 0 1280 777 </string>
+	<string>43 238 937 465 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3295,7 +3309,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-08-10T10:46:43Z</date>
+	<date>2016-08-13T11:03:01Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -3354,7 +3368,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.5</string>
+	<string>3.0.7</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

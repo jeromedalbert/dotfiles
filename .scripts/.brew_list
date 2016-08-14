@@ -76,15 +76,16 @@ q
 rbenv
 readline
 ruby-build
+screenfetch
 sdl2
 sdl2_image
 sl
 sqlite
 ssh-copy-id
+tcl-tk
 terminal-notifier
 the_silver_searcher
 tidy-html5
-tmux
 trash
 tree
 unixodbc

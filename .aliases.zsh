@@ -50,16 +50,16 @@ alias tn='tmux new-session -s'
 alias td='tmux detach'
 tk() {
   if [ $# -eq 0 ]; then
-    tmux kill-session -t `tmux display-message -p "#S"`
+    tmux kill-session
   else
     tmux kill-session -t "$*"
   fi
 }
 ts() {
   if [ $# -eq 0 ]; then
-    tmux source ~/.tmux.conf
+    tmux start-server \; source ~/.tmux.conf
   else
-    tmux source ~/.tmux/sessions/$1.conf
+    tmux start-server \; source ~/.tmux/sessions/$1.conf
   fi
 }
 ta() {
@@ -75,6 +75,7 @@ tg() {
 alias tw='ta work || ts work'
 alias tb='ta blog || ts blog'
 alias tp='ta pokefarm || ts pokefarm'
+alias kt='killall tmux'
 psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }
