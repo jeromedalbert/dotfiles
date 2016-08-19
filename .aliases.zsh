@@ -43,38 +43,64 @@ alias vdiff=vimdiff
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
-alias t='tmux'
-alias tls='tmux ls'
-alias tl='tls'
-alias tn='tmux new-session -s'
+alias tl='tmux ls'
 alias td='tmux detach'
+t() {
+  if [ $# -eq 0 ]; then
+    tmux new -As base
+  else
+    tmux "$*"
+  fi
+}
+tn() {
+  if [ $# -eq 0 ]; then
+    tmux new-session
+  else
+    tmux new-session -s $1
+  fi
+}
 tk() {
   if [ $# -eq 0 ]; then
     tmux kill-session
   else
-    tmux kill-session -t "$*"
+    tmux kill-session -t $1
+  fi
+}
+ta() {
+  if [ $# -eq 0 ]; then; tmux attach; fi
+
+  if [ -z $TMUX ]; then
+    tmux attach -t $1
+  else
+    tmux switch -t $1
   fi
 }
 ts() {
   if [ $# -eq 0 ]; then
     tmux start-server \; source ~/.tmux.conf
-  else
+    return
+  fi
+
+  if ! tmux has-session -t $1 &> /dev/null; then;
     tmux start-server \; source ~/.tmux/sessions/$1.conf
   fi
+  ta $1
 }
-ta() {
-  if [ $# -eq 0 ]; then
-    tmux attach
+to() {
+  if [ $# -ne 1 ]; then; return; fi
+  ta $1 2> /dev/null && return
+
+  local session_file=~/.tmux/sessions/$1.conf
+  if [ -f $session_file ]; then
+    ts $1
   else
-    tmux attach -t "$*"
+    tmux new -d -s $1
+    ta $1
   fi
 }
-tg() {
-  tmux attach -t "$*" || tmux new -s "$*"
-}
-alias tw='ta work || ts work'
-alias tb='ta blog || ts blog'
-alias tp='ta pokefarm || ts pokefarm'
+alias tw='to work'
+alias tb='to blog'
+alias tp='to pokefarm'
 alias kt='killall tmux'
 psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)
@@ -213,6 +239,9 @@ grebase() {
 alias gt='git tag'
 alias gcp='git cherry-pick'
 alias gcp-='git cherry-pick -'
+fix() {
+  vim +/"<<<<<<<" `git diff --name-only --diff-filter=U | xargs`
+}
 
 # Github
 hc() {
@@ -359,6 +388,7 @@ spring() {
 alias r='rails'
 alias rs='rails server'
 alias rg='rails generate'
+alias rgm='rails generate migration'
 alias rd='rails destroy'
 alias rc='rails c'
 alias rr='rake routes'

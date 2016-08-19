@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" use a tmux shortcut to open a new session "other" or "projects" in the same dir
 " use c-l to clear screens when spec'ing or REPL'ing
 " Restrain/normalize tab size
 " Use syntastic / neomake especially JS linter
@@ -86,9 +87,9 @@ nmap d0 d^
 map Y y$
 noremap Q <nop>
 
-map <silent> <leader>q :q<CR>
-map <leader>w :w<CR>
-map <leader>z :x<CR>
+map <silent> <leader>q :q<cr>
+map <leader>w :w<cr>
+map <leader>z :x<cr>
 
 nmap <leader>`q :q!<CR>
 nmap <leader>`a :qa!<CR>
@@ -135,6 +136,9 @@ cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 
 map <c-t> <esc>:tabnew<cr>
+map <m-t> <esc>:tabnew<cr>
+map <silent> <m-q> :q<cr>
+map <silent> <m-w> :q<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
@@ -181,6 +185,7 @@ map @- @:
 
 map <leader>rr :e config/routes.rb<cr>
 map <leader>rs :e db/schema.rb<cr>
+map <leader>rg :e Gemfile<cr>
 
 noremap g; g;zz
 noremap g, g,zz
@@ -240,6 +245,7 @@ map <Leader>fmv <leader>fmo
 map <Leader>fde :call DeleteCurrentFile()<cr>
 map <Leader>fdu :call DuplicateCurrentFile()<cr>
 map <Leader>fcp :call CopyCurrentFilePath()<cr>
+map <Leader>fcfp :call CopyCurrentFileFullPath()<cr>
 map <Leader>fcn :call CopyCurrentFileName()<cr>
 map <Leader>fn :call CreateNewFileInCurrentDir()<cr>
 map <Leader>fN :call CreateNewFile()<cr>
@@ -257,8 +263,10 @@ nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
-map <m-t> :call ToggleQuotes()<cr>
-imap <m-t> <c-o>:call ToggleQuotes()<cr>
+" map <m-t> :call ToggleQuotes()<cr>
+" imap <m-t> <c-o>:call ToggleQuotes()<cr>
+map <m-o> :call ToggleQuotes()<cr>
+imap <m-o> <c-o>:call ToggleQuotes()<cr>
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -711,6 +719,10 @@ endfunction
 
 function! CopyCurrentFilePath()
   let @+=expand('%')
+endfunction
+
+function! CopyCurrentFileFullPath()
+  let @+=expand('%:p')
 endfunction
 
 function! CopyCurrentFileName()

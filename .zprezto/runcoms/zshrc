@@ -34,6 +34,7 @@ if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 unsetopt NOCLOBBER
 setopt NO_BEEP
 unset GREP_OPTIONS
+setopt interactivecomments
 
 expand-or-complete-with-dots() {
   echo -n "\e[31m......\e[0m"
@@ -48,7 +49,7 @@ insert-last-command-output() { LBUFFER+="$(eval $history[$((HISTCMD-1))])" }
 zle -N insert-last-command-output
 bindkey "^X^L" insert-last-command-output
 
-fancy-ctrl-z () {
+fancy-ctrl-z() {
   if [[ $#BUFFER -eq 0 ]]; then
     BUFFER="fg"
     zle accept-line
@@ -67,4 +68,4 @@ bindkey '^Z' fancy-ctrl-z
 eval "$(rbenv init - --no-rehash)"
 stty -ixon
 unalias d
-
+if [ -z $TMUX ]; then; tmux new -As base; fi

@@ -5,3 +5,4 @@
 .tmux/resurrect
 .tmux/sessions/work.conf
 .tmux/sessions/pokefarm.conf
+.bin/tmux
