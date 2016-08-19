@@ -43,8 +43,20 @@ alias vdiff=vimdiff
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
+psgrep() {
+  grep $@ =(pstree | cut -c-$COLUMNS)
+}
+elinks='elinks -no-connect'
+
+# Confs
+alias reload=". ~/.zshrc"
+alias conf="$MAIN_EDITOR ~/.zshrc"
+alias al="$MAIN_EDITOR ~/.aliases.zsh"
+
+# Tmux
 alias tl='tmux ls'
 alias td='tmux detach'
+alias kt='killall tmux'
 t() {
   if [ $# -eq 0 ]; then
     tmux new -As base
@@ -101,16 +113,7 @@ to() {
 alias tw='to work'
 alias tb='to blog'
 alias tp='to pokefarm'
-alias kt='killall tmux'
-psgrep() {
-  grep $@ =(pstree | cut -c-$COLUMNS)
-}
-elinks='elinks -no-connect'
-
-# Confs
-alias reload=". ~/.zshrc"
-alias conf="$MAIN_EDITOR ~/.zshrc"
-alias al="$MAIN_EDITOR ~/.aliases.zsh"
+alias tc='to code'
 
 # Git
 alias gi='git init'

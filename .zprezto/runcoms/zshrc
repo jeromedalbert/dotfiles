@@ -61,6 +61,18 @@ fancy-ctrl-z() {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
+clear-iterm() {
+  printf '\e]50;ClearScrollback\a'
+}
+zle -N clear-iterm-scrollback
+bindkey '^Sr' clear-iterm-scrollback
+
+exit-shell() {
+  exit
+}
+zle -N exit-shell
+bindkey '^Sx' exit-shell
+
 #############
 ### OTHER ###
 #############

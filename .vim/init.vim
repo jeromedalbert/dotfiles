@@ -1,7 +1,8 @@
 "############
 "### TODO ###
 "############
-" use a tmux shortcut to open a new session "other" or "projects" in the same dir
+" Learn elinks
+" use vim :jumps effectively
 " use c-l to clear screens when spec'ing or REPL'ing
 " Restrain/normalize tab size
 " Use syntastic / neomake especially JS linter
@@ -198,9 +199,9 @@ map <leader>0 a<space><esc>h
 
 map <leader>2 @
 map <leader>22 @@
-map <leader>1 :!
-" cabbrev ! <esc>:call feedkeys(':silent !', 'n')<cr>
-cnoremap !1 silent !
+" map <leader>1 :!
+" cnoremap !1 silent !
+map <leader>1 :silent !
 map <leader>5 :%!
 
 vnoremap . :normal .<cr>
@@ -593,6 +594,8 @@ let s:repls = {
       \ }
 
 let s:custom_backup_dir='~/.vim_custom_backups'
+
+let g:goyo_width='100%'
 
 "#################
 "### Functions ###
@@ -1262,6 +1265,14 @@ function! ExecuteMacroOnSelection()
   exe ":'<,'>normal @" . nr2char(getchar())
 endfunction
 
+function! OnGoyoEnter()
+  silent !tmux set status off
+endfunction
+
+function! OnGoyoLeave()
+  silent !tmux set status on
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1328,6 +1339,12 @@ augroup custom_close_tab
   autocmd!
   autocmd TabEnter * call SaveCurrentTabNumber()
   autocmd TabClosed * call CustomCloseTab()
+augroup end
+
+augroup goyo_events
+  autocmd!
+  autocmd User GoyoEnter nested call OnGoyoEnter()
+  autocmd User GoyoLeave nested call OnGoyoLeave()
 augroup end
 
 augroup general_autocommands

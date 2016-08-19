@@ -1200,13 +1200,6 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x4b-0x120000</key>
-		<dict>
-			<key>Action</key>
-			<integer>25</integer>
-			<key>Text</key>
-			<string>Clear Buffer</string>
-		</dict>
 		<key>0x4c-0x120000</key>
 		<dict>
 			<key>Action</key>
@@ -1235,6 +1228,13 @@
 			<key>Text</key>
 			<string>0x13 0x3e</string>
 		</dict>
+		<key>0x60-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x60</string>
+		</dict>
 		<key>0x64-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1248,6 +1248,13 @@
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x5b 0x2f</string>
+		</dict>
+		<key>0x66-0x140000</key>
+		<dict>
+			<key>Action</key>
+			<integer>23</integer>
+			<key>Text</key>
+			<string></string>
 		</dict>
 		<key>0x67-0x100000</key>
 		<dict>
@@ -1283,6 +1290,13 @@
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x6e</string>
+		</dict>
+		<key>0x6f-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x73</string>
 		</dict>
 		<key>0x70-0x100000</key>
 		<dict>
@@ -1558,7 +1572,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 117 700 622 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>81 224 796 473 0 0 1280 777 </string>
+	<string>81 256 796 473 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3323,7 +3337,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-08-18T18:41:37Z</date>
+	<date>2016-08-19T21:45:39Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
