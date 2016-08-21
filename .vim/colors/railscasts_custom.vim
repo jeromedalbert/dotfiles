@@ -37,7 +37,8 @@ hi Visual ctermfg=NONE ctermbg=59 cterm=NONE guifg=NONE guibg=#336699 gui=NONE
 hi Cursorline gui=NONE guibg=NONE
 hi CursorColumn ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guibg=#454545
-hi FoldColumn guifg=#8A8885 guibg=#E3E3E3
+" hi FoldColumn guifg=#8A8885 guibg=#E3E3E3
+hi FoldColumn guifg=#8A8885 guibg=#2f2f2f
 hi LineNr guifg=#8A8885 guibg=#E3E3E3
 hi CursorLineNr guifg=#8A8885 guibg=#E3E3E3 gui=none
 hi MatchParen ctermfg=173 ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=underline

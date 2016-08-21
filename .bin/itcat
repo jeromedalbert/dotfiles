@@ -1,32 +1,27 @@
 #!/bin/bash
 
-# tmux requires unrecognized OSC sequences to be wrapped with DCS tmux;
-# <sequence> ST, and for all ESCs in <sequence> to be replaced with ESC ESC. It
-# only accepts ESC backslash for ST.
+# ITcat: Imgcat for plain-old Tmux.
+# See https://gitlab.com/gnachman/iterm2/issues/3898
+
 function print_osc() {
-    if [[ $TERM == screen* ]] ; then
-        printf "\033Ptmux;\033\033]"
-    else
-        printf "\033]"
-    fi
+    printf "\033Ptmux;\033\033]"
 }
 
-# More of the tmux workaround described above.
+function print_csi() {
+    printf "\033["
+}
+
 function print_st() {
-    if [[ $TERM == screen* ]] ; then
-        printf "\a\033\\"
-    else
-        printf "\a"
-    fi
+    printf "\a\033\\"
 }
 
-# print_image filename inline base64contents print_filename
-#   filename: Filename to convey to client
-#   inline: 0 or 1
-#   base64contents: Base64-encoded contents
-#   print_filename: If non-empty, print the filename
-#                   before outputting the image
 function print_image() {
+    local fixed_height=20
+    for i in `seq 1 $fixed_height`; do printf "\n"; done
+    print_csi
+    printf "?25l"
+    print_csi
+    printf "${fixed_height}F"
     print_osc
     printf '1337;File='
     if [[ -n "$1" ]]; then
@@ -40,6 +35,7 @@ function print_image() {
     fi
     echo -n "$3" | base64 $BASE64ARG | wc -c | awk '{printf "size=%d",$1}'
     printf ";inline=$2"
+    printf ";height=$fixed_height"
     printf ":"
     echo -n "$3"
     print_st
@@ -47,6 +43,10 @@ function print_image() {
     if [[ -n "$4" ]]; then
       echo $1
     fi
+    print_csi
+    printf "${fixed_height}E"
+    print_csi
+    printf "?25h"
 }
 
 function error() {
@@ -66,13 +66,11 @@ else
     has_stdin=t
 fi
 
-# Show help if no arguments and no stdin.
 if [ $has_stdin = f -a $# -eq 0 ]; then
     show_help
     exit
 fi
 
-# Look for command line flags.
 while [ $# -gt 0 ]; do
     case "$1" in
     -h|--h|--help)
@@ -100,7 +98,6 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-# Read and print stdin
 if [ $has_stdin = t ]; then
     print_image "" 1 "$(cat | base64)" ""
 fi

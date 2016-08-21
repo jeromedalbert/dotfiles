@@ -1228,13 +1228,6 @@
 			<key>Text</key>
 			<string>0x13 0x3e</string>
 		</dict>
-		<key>0x60-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x13 0x60</string>
-		</dict>
 		<key>0x64-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1566,13 +1559,13 @@
 	<key>NSWindow Frame NSColorPanel</key>
 	<string>310 174 228 349 0 0 1280 777 </string>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>490 140 445 77 0 0 1280 777 </string>
+	<string>471 133 445 77 0 0 1280 777 </string>
 	<key>NSWindow Frame Preferences</key>
 	<string>269 308 606 456 0 0 1280 777 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 117 700 622 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>81 256 796 473 0 0 1280 777 </string>
+	<string>81 228 796 473 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -2413,7 +2406,7 @@
 			<key>Use Tab Color</key>
 			<false/>
 			<key>Vertical Spacing</key>
-			<real>1</real>
+			<real>1.1000000000000001</real>
 			<key>Visual Bell</key>
 			<false/>
 			<key>Window Type</key>
@@ -3372,7 +3365,7 @@
 	<key>TripleClickSelectsFullWrappedLines</key>
 	<false/>
 	<key>UKCrashReporterLastCrashReportDate</key>
-	<real>1471217920</real>
+	<real>1471698048</real>
 	<key>URLHandlersByGuid</key>
 	<dict/>
 	<key>UseBorder</key>

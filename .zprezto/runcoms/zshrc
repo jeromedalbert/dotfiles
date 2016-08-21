@@ -64,8 +64,8 @@ bindkey '^Z' fancy-ctrl-z
 clear-iterm() {
   printf '\e]50;ClearScrollback\a'
 }
-zle -N clear-iterm-scrollback
-bindkey '^Sr' clear-iterm-scrollback
+zle -N clear-iterm
+bindkey '^Sr' clear-iterm
 
 exit-shell() {
   exit

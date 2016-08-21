@@ -46,7 +46,7 @@ alias path='echo $PATH | tr -s ":" "\n"'
 psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }
-elinks='elinks -no-connect'
+alias elinks='elinks -no-connect'
 
 # Confs
 alias reload=". ~/.zshrc"

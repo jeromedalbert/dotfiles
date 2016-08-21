@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" handy shortcut to kill session
 " Learn elinks
 " use vim :jumps effectively
 " use c-l to clear screens when spec'ing or REPL'ing
@@ -49,6 +50,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'skwp/greplace.vim'
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'sickill/vim-pasta'
+Plug 'sjl/gundo.vim'
 Plug 'kassio/neoterm'
 Plug 'kurkale6ka/vim-pairs'
 " Plug 'wellle/targets.vim'
@@ -216,6 +218,10 @@ for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <c-q>' . i . ' <nop>'
 endfor
 
+map m, mO
+map `, `O
+map ', `O
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -230,8 +236,9 @@ nmap <leader>k :call OpenNERDTreeBuffer()<CR>
 nmap <silent> <f1> :NERDTreeToggle<CR>
 nmap <silent> <leader><f1> :silent! NERDTreeFind<CR>
 
-nnoremap <silent> <f2> :TagbarToggle<CR>
-nnoremap <silent> <f3> :call BrowseCustomBackups()<cr>
+map <silent> <f2> :TagbarToggle<CR>
+map <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+map <silent> <f4> :call BrowseCustomBackups()<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -357,7 +364,6 @@ nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <Esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <Esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
-map <f5> :call SaveOrLoadCurrentBuffer()<cr>
 command! Gmodified :call GitOpenModifiedFiles()
 
 cabbrev plugi PlugInstall
@@ -429,6 +435,13 @@ set statusline+=%=
 set statusline+=%-14.(%l,%c%)
 set statusline+=\ %P
 set statusline+=\ %{GetTimePeriodEmoji()}
+
+let undodir = expand('~/.vim/tmp/undo')
+if !isdirectory(undodir)
+  call mkdir(undodir, 'p')
+endif
+set undodir=~/.vim/tmp/undo
+
 let g:terminal_scrollback_buffer_size = 10000
 set tabline=%!GetTabLine()
 set pumheight=8
@@ -595,8 +608,6 @@ let s:repls = {
 
 let s:custom_backup_dir='~/.vim_custom_backups'
 
-let g:goyo_width='100%'
-
 "#################
 "### Functions ###
 "#################
@@ -646,7 +657,7 @@ function! ShowAllHighlights()
 endfunction
 
 function! ChooseColorScheme()
-  if &filetype =~ 'qf\|diff\|nerdtree\|tagbar' || expand('%') =~ '^['
+  if &filetype =~ 'qf\|diff\|gundo\|nerdtree\|tagbar' || expand('%') =~ '^['
     return
   endif
 
@@ -860,7 +871,7 @@ endfunction
 
 function! OnExtraditeDisplayed()
   if exists('s:browsing_custom_backups')
-    map <silent><buffer> <f3> q:q<cr>
+    map <silent><buffer> <f4> q:q<cr>
     unlet s:browsing_custom_backups
   endif
   setlocal norelativenumber
@@ -961,6 +972,19 @@ function! GetTimePeriodEmoji()
     return (period == 'day') ? '🔆 ' : '🌙 '
   else
     return (period == 'day') ? '😎 ' : '🔮 '
+  endif
+endfunction
+
+function! WriteUndoFile()
+  let undofile = escape(undofile(expand('%')), '%')
+  exec 'wundo ' . undofile
+endfunction
+
+function! ReadUndoFile()
+  let undofile = undofile(expand('%'))
+  if filereadable(undofile)
+    let undofile = escape(undofile,'%')
+    exec 'rundo ' . undofile
   endif
 endfunction
 
@@ -1252,25 +1276,20 @@ function! PreserveView(cmd)
   call winrestview(view)
 endfunction
 
-function! SaveOrLoadCurrentBuffer()
-  if exists('s:saved_buffer')
-    exe 'b ' . s:saved_buffer
-    unlet s:saved_buffer
-  else
-    let s:saved_buffer = @%
-  endif
-endfunction
-
 function! ExecuteMacroOnSelection()
   exe ":'<,'>normal @" . nr2char(getchar())
 endfunction
 
 function! OnGoyoEnter()
   silent !tmux set status off
+  setlocal foldcolumn=0
 endfunction
 
 function! OnGoyoLeave()
   silent !tmux set status on
+  if &filetype == 'markdown'
+    setlocal foldcolumn=5
+  endif
 endfunction
 
 "####################
@@ -1308,6 +1327,11 @@ augroup end
 augroup custom_backup
   autocmd!
   autocmd BufWritePost * call BackupCurrentFile()
+augroup end
+
+augroup custom_undofile
+  autocmd!
+  autocmd BufWritePost * call WriteUndoFile()
 augroup end
 
 augroup on_display_events

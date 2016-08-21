@@ -1,4 +1,6 @@
-set wrap
-set linebreak
-" set textwidth=80
-" set colorcolumn=
+setlocal wrap
+setlocal linebreak
+setlocal colorcolumn=
+
+setlocal nonumber norelativenumber
+setlocal foldcolumn=5
