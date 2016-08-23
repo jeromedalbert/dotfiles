@@ -4,6 +4,7 @@ autoconf
 automake
 aws-elasticbeanstalk
 awscli
+bdw-gc
 bison
 boost
 cloc
@@ -46,7 +47,9 @@ icu4c
 jpeg
 jq
 libevent
+libexif
 libpng
+libssh
 libtiff
 libtool
 libxml2
@@ -55,6 +58,7 @@ libzip
 memcached
 mercurial
 mpfr
+msgpack
 mysql
 neovim
 netcat
@@ -80,12 +84,15 @@ screenfetch
 sdl2
 sdl2_image
 sl
+spark
 sqlite
 ssh-copy-id
 tcl-tk
 terminal-notifier
 the_silver_searcher
 tidy-html5
+tig
+tmate
 trash
 tree
 unixodbc

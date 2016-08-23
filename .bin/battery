@@ -1,0 +1,54 @@
+#!/bin/bash
+
+setDefaults() {
+  output_tmux=0
+  warn_color="0;31"
+}
+setDefaults
+
+battery_charge() {
+  if [ "$(pmset -g batt | grep -o 'AC Power')" ]; then
+    BATT_CONNECTED=1
+  else
+    BATT_CONNECTED=0
+  fi
+  BATT_PCT=$(pmset -g batt | grep -o '[0-9]*%' | tr -d %)
+}
+
+apply_colors() {
+if [[ $BATT_PCT -le 10 ]]; then
+  if ((output_tmux)); then
+    COLOR="#[fg=$warn_color]"
+  else
+    COLOR=$warn_color
+  fi
+fi
+}
+
+print_status() {
+  if ((BATT_CONNECTED)); then
+    GRAPH="⚡"
+  else
+    sparks=$(spark 0 ${BATT_PCT} 100)
+    GRAPH=${sparks:1:1}
+  fi
+
+  if ((output_tmux)); then
+    printf "%s%s %s%s" "$COLOR" "$BATT_PCT%" "$GRAPH" "#[default]"
+  else
+    printf "\e[0;%sm%s %s \e[m\n"  "$COLOR" "[$BATT_PCT%]"  "$GRAPH"
+  fi
+}
+
+while getopts ":t" opt; do
+  case $opt in
+    t)
+      output_tmux=1
+      warn_color="red"
+      ;;
+  esac
+done
+
+battery_charge
+apply_colors
+print_status

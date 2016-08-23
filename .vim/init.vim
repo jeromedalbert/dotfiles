@@ -1,8 +1,12 @@
 "############
 "### TODO ###
 "############
+" elinks copy url, or open url to browser
+" ask if possible to scroll when not in line and stuff
+" use elinks ruby hook to write google searches directly, omnibar style
+" use use.css for elinks? http://ruderich.org/simon/config/elinks
+" move emojis from Vim status bar to Tmux status bar
 " handy shortcut to kill session
-" Learn elinks
 " use vim :jumps effectively
 " use c-l to clear screens when spec'ing or REPL'ing
 " Restrain/normalize tab size
@@ -139,7 +143,7 @@ cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 
 map <c-t> <esc>:tabnew<cr>
-map <m-t> <esc>:tabnew<cr>
+" map <m-t> <esc>:tabnew<cr>
 map <silent> <m-q> :q<cr>
 map <silent> <m-w> :q<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -271,10 +275,10 @@ nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
-" map <m-t> :call ToggleQuotes()<cr>
-" imap <m-t> <c-o>:call ToggleQuotes()<cr>
-map <m-o> :call ToggleQuotes()<cr>
-imap <m-o> <c-o>:call ToggleQuotes()<cr>
+map <m-t> :call ToggleQuotes()<cr>
+imap <m-t> <c-o>:call ToggleQuotes()<cr>
+" map <m-o> :call ToggleQuotes()<cr>
+" imap <m-o> <c-o>:call ToggleQuotes()<cr>
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -383,6 +387,9 @@ cabbrev qf copen
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
+
+noremap zx zt
+map <leader>gx :silent !gx -- %<cr>
 
 "#############################
 "### General configuration ###
