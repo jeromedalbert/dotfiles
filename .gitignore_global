@@ -8,3 +8,4 @@ custom_plan.rb
 zeus.json
 
 .current.tasks
+.byebug_history

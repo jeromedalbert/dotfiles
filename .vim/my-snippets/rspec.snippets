@@ -59,13 +59,29 @@ abbr it 'does something' do .. end
     ${0}
   end
 
+snippet itd
+abbr it do .. end
+  it do
+    ${0}
+  end
+
 snippet let
 abbr let(:object) { .. }
   let(:${1:object}) { ${0} }
 
+snippet let!
+abbr let!(:object) { .. }
+  let!(:${1:object}) { ${0} }
+
 snippet lett
 abbr let(:object) do .. end
   let(:${1:object}) do
+    ${0}
+  end
+
+snippet lett!
+abbr let!(:object) do .. end
+  let!(:${1:object}) do
     ${0}
   end
 

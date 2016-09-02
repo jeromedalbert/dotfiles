@@ -2,9 +2,8 @@
 .vim/plugged
 .secrets.zsh
 .tmux/plugins
-.tmux/resurrect
-.tmux/sessions/work.conf
-.tmux/sessions/pokefarm.conf
+.tmux/sessions/*
+!.tmux/sessions/blog.conf
 .bin/tmux
 .elinks/*
 !.elinks/elinks.conf

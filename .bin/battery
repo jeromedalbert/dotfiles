@@ -16,7 +16,7 @@ battery_charge() {
 }
 
 apply_colors() {
-if [[ $BATT_PCT -le 10 ]]; then
+if [[ $BATT_PCT -le 8 ]]; then
   if ((output_tmux)); then
     COLOR="#[fg=$warn_color]"
   else

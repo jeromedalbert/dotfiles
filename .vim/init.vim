@@ -1,14 +1,12 @@
 "############
 "### TODO ###
 "############
-" elinks copy url, or open url to browser
-" ask if possible to scroll when not in line and stuff
-" use elinks ruby hook to write google searches directly, omnibar style
-" use use.css for elinks? http://ruderich.org/simon/config/elinks
-" move emojis from Vim status bar to Tmux status bar
-" handy shortcut to kill session
+" shortcut to move tabs left/right
+" elinks: copy url, or open url to browser
+" elinks: ruby hook to write google searches directly, omnibar style
+" elinks: use use.css? http://ruderich.org/simon/config/elinks
 " use vim :jumps effectively
-" use c-l to clear screens when spec'ing or REPL'ing
+" use c-l to clear screens when REPL'ing
 " Restrain/normalize tab size
 " Use syntastic / neomake especially JS linter
 " Figure out why some es6 end parentheses are highlighted in red
@@ -90,7 +88,7 @@ nnoremap k gk
 xnoremap j gj
 xnoremap k gk
 nmap 0 ^
-nmap d0 d^
+nnoremap d0 d^
 map Y y$
 noremap Q <nop>
 
@@ -178,15 +176,16 @@ tnoremap <Esc> <C-\><C-n>
 
 map <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 map <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
-map <leader>of <leader>od
-map <silent> <leader>oo :silent! exe '!open %'<cr>
+map <silent> <leader>of :silent! exe '!open %'<cr>
 
 map <silent> <leader>j mC:join<cr>`C
 
 map $ $ze
 
-map <m-[> 20zh
-map <m-]> 20zl
+map <silent> <m-]> :set virtualedit=all<cr>20zl
+map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
+noremap <silent> ^ ^:set virtualedit=<cr>
+noremap <silent> $ $:set virtualedit=<cr>
 
 map @- @:
 
@@ -225,6 +224,7 @@ endfor
 map m, mO
 map `, `O
 map ', `O
+map <leader>, `O
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -310,7 +310,6 @@ nmap <leader>fW <leader>yfiW
 vmap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 nmap <leader>fo :Gqfopen<cr>
-nmap <Leader>fR :Greplace!<cr>
 
 " map <m-w> <Plug>CamelCaseMotion_w
 " map <m-b> <Plug>CamelCaseMotion_b
@@ -388,8 +387,11 @@ cabbrev qf copen
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
 
-noremap zx zt
+map zs zt
+noremap z0 zs
 map <leader>gx :silent !gx -- %<cr>
+map gs gS
+map gj gJ
 
 "#############################
 "### General configuration ###
@@ -1296,6 +1298,19 @@ function! OnGoyoLeave()
   silent !tmux set status on
   if &filetype == 'markdown'
     setlocal foldcolumn=5
+  endif
+endfunction
+
+function! SetVirtualEdit()
+  let absolute_col = virtcol('.') + pyeval('vim.current.window.col')
+  let absolute_col += &foldcolumn + (&number ? &numberwidth : 0)
+
+  let is_on_leftmost_screen = screencol() == absolute_col
+
+  if is_on_leftmost_screen
+    setlocal virtualedit=
+  else
+    setlocal virtualedit=all
   endif
 endfunction
 
