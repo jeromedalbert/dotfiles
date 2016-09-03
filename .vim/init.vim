@@ -1,13 +1,11 @@
 "############
 "### TODO ###
 "############
-" shortcut to move tabs left/right
 " elinks: copy url, or open url to browser
 " elinks: ruby hook to write google searches directly, omnibar style
 " elinks: use use.css? http://ruderich.org/simon/config/elinks
 " use vim :jumps effectively
 " use c-l to clear screens when REPL'ing
-" Restrain/normalize tab size
 " Use syntastic / neomake especially JS linter
 " Figure out why some es6 end parentheses are highlighted in red
 " Detect : in ruby symbol syntax
@@ -149,9 +147,15 @@ for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
 endfor
 " <bs> is set as c-h in my iTerm2
 map <bs> gT
-map <m-h> gT
 map <c-l> gt
-map <m-l> gt
+" f17 is c-[ in my iTerm2
+map <f17> gT
+" f18 is c-] in my iTerm2
+map <f18> gt
+" f19 is c-s-[ in my iTerm2
+noremap <silent> <f19> :-tabmove<cr>
+" f20 is c-s-] in my iTerm2
+noremap <silent> <f20> :+tabmove<cr>
 
 nmap <leader>e :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
@@ -184,8 +188,8 @@ map $ $ze
 
 map <silent> <m-]> :set virtualedit=all<cr>20zl
 map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
-noremap <silent> ^ ^:set virtualedit=<cr>
-noremap <silent> $ $:set virtualedit=<cr>
+nnoremap <silent> ^ ^:set virtualedit=<cr>
+nnoremap <silent> $ $:set virtualedit=<cr>
 
 map @- @:
 
