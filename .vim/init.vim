@@ -1,12 +1,13 @@
 "############
 "### TODO ###
 "############
+" do not launch a tmux base session when one is already running
+" Use syntastic / neomake especially JS linter
 " elinks: copy url, or open url to browser
 " elinks: ruby hook to write google searches directly, omnibar style
 " elinks: use use.css? http://ruderich.org/simon/config/elinks
 " use vim :jumps effectively
 " use c-l to clear screens when REPL'ing
-" Use syntastic / neomake especially JS linter
 " Figure out why some es6 end parentheses are highlighted in red
 " Detect : in ruby symbol syntax
 " Replace REPLs by something like http://goo.gl/0obV2s or rcodetools xmpfilter?
@@ -230,6 +231,8 @@ map `, `O
 map ', `O
 map <leader>, `O
 
+map <leader>ft :set filetype=
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -245,7 +248,7 @@ nmap <silent> <f1> :NERDTreeToggle<CR>
 nmap <silent> <leader><f1> :silent! NERDTreeFind<CR>
 
 map <silent> <f2> :TagbarToggle<CR>
-map <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+map <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 map <silent> <f4> :call BrowseCustomBackups()<cr>
 
 nmap cm <Plug>Commentary
@@ -266,7 +269,7 @@ map <Leader>fcn :call CopyCurrentFileName()<cr>
 map <Leader>fn :call CreateNewFileInCurrentDir()<cr>
 map <Leader>fN :call CreateNewFile()<cr>
 
-map <leader>fj :%!jq '.'<cr>
+map <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
 vmap <leader>fj :!jq '.'<cr>
 map <leader>fh :silent %!tidy -qi --show-errors 0<cr>
 map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
@@ -1377,7 +1380,7 @@ augroup nerdtree_original_buffer
   autocmd BufEnter * call RestoreNerdtreeOriginalBuffer()
 augroup end
 
-if exists('$TMUX')
+if exists('$TMUX') && !exists('$DISABLE_VIM_WINDOW_RENAME')
   augroup tmux_title
     autocmd!
     autocmd VimEnter * call system("tmux rename-window -t $TMUX_PANE '" . GetCwd() . "'")
@@ -1413,5 +1416,5 @@ augroup end
 "### Other ###
 "#############
 
-" autocmd! BufWritePost * Neomake
+" autocmd! BufWritePost,BufEnter * Neomake
 " let g:neomake_javascript_enabled_makers = ['eslint']
