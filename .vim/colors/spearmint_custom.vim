@@ -38,6 +38,7 @@ hi CursorLine cterm=NONE guibg=#CEEBE7
 hi CursorColumn ctermfg=NONE ctermbg=188 cterm=NONE guifg=NONE guibg=#d6e7e5 gui=NONE
 hi ColorColumn ctermfg=NONE ctermbg=188 cterm=NONE guifg=NONE guibg=#d6e7e5 gui=NONE
 hi ColorColumn guibg=#C5D9D7
+hi SignColumn guibg=#e1f0ee
 hi LineNr ctermfg=145 ctermbg=188 cterm=NONE guifg=#a9c3c0 guibg=#e1f0ee gui=NONE
 hi CursorLineNr guifg=#A9C3C0 guibg=#ceebe7 gui=NONE
 hi MatchParen ctermfg=73 ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=underline
@@ -129,7 +130,11 @@ hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 " Custom
 hi Identifier gui=NONE
 hi jsFunction guifg=#69adb5 gui=italic
-hi link jsClass jsFunction
 hi jsArrowFunction guifg=#69adb5 gui=italic
 hi jsObjectKey guifg=#4dd7e0
 hi jsGlobalObjects guifg=#199fa8 gui=italic
+hi link jsClass Keyword
+hi link jsClassKeywords jsClass
+hi link jsThis Identifier
+hi link jsTemplateVar String
+hi link jsTemplateBraces String

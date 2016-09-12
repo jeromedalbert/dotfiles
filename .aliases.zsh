@@ -196,11 +196,11 @@ alias gabort="git rebase --abort"
 alias gab="gabort"
 alias gskip="git rebase --skip"
 alias gb='git branch'
-alias gbs="git branch sav"
+alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbDs="git branch | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
-alias gbS="gbDs && gbs"
+alias gbDA='git branch | egrep -v "(master|\*)" | xargs git branch -D'
 alias gignore="git update-index --assume-unchanged"
 alias gunignore="git update-index --no-assume-unchanged"
 alias gignored="git ignored"
@@ -401,7 +401,7 @@ alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
 alias migr='rake db:migrate db:rollback && rake db:migrate && RAILS_ENV=test rake db:migrate'
 alias ro='rake db:rollback'
 alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
-alias roll='rake db:rollback && RAILS_ENV=test rake db:rollback'
+alias roll='ro2'
 alias rT='rake -T'
 alias zs='zeus start'
 alias zs!='rm -f .zeus.sock; zs'

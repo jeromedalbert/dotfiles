@@ -39,6 +39,7 @@ hi CursorColumn ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3e3d3d gui
 hi ColorColumn guibg=#454545
 " hi FoldColumn guifg=#8A8885 guibg=#E3E3E3
 hi FoldColumn guifg=#8A8885 guibg=#2f2f2f
+hi SignColumn guibg=#e3e3e3
 hi LineNr guifg=#8A8885 guibg=#E3E3E3
 hi CursorLineNr guifg=#8A8885 guibg=#E3E3E3 gui=none
 hi MatchParen ctermfg=173 ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=underline
@@ -181,3 +182,8 @@ hi diffAdded guifg=#118714 guibg=#eae3ca
 hi link jsonQuote String
 
 hi pythonBuiltIn guifg=#6d9cbe
+
+hi NeomakeErrorSign guibg=#e3e3e3
+hi NeomakeWarningSign guibg=#e3e3e3
+hi NeomakeMessageSign guibg=#e3e3e3
+hi NeomakeInfoSign guibg=#e3e3e3

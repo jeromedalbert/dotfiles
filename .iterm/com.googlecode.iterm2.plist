@@ -1338,7 +1338,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x30</string>
+			<string>0x13 0x6f</string>
 		</dict>
 		<key>0x70-0x100000</key>
 		<dict>
@@ -1636,7 +1636,7 @@
 	<key>NSWindow Frame NSColorPanel</key>
 	<string>310 174 228 349 0 0 1280 777 </string>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>471 133 445 77 0 0 1280 777 </string>
+	<string>471 37 445 77 0 0 1280 777 </string>
 	<key>NSWindow Frame Preferences</key>
 	<string>269 308 606 456 0 0 1280 777 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
@@ -1644,7 +1644,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 139 606 456 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>216 274 796 473 0 0 1280 800 </string>
+	<string>246 174 796 473 0 0 1280 800 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -2456,6 +2456,8 @@
 			<key>Use Canonical Parser</key>
 			<false/>
 			<key>Use Cursor Guide</key>
+			<false/>
+			<key>Use HFS Plus Mapping</key>
 			<false/>
 			<key>Use Italic Font</key>
 			<true/>
@@ -3374,7 +3376,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-09-03T20:09:11Z</date>
+	<date>2016-09-12T00:08:57Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -3433,7 +3435,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.8</string>
+	<string>3.0.9</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

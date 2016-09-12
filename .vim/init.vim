@@ -2,13 +2,11 @@
 "### TODO ###
 "############
 " do not launch a tmux base session when one is already running
-" Use syntastic / neomake especially JS linter
 " elinks: copy url, or open url to browser
 " elinks: ruby hook to write google searches directly, omnibar style
 " elinks: use use.css? http://ruderich.org/simon/config/elinks
 " use vim :jumps effectively
 " use c-l to clear screens when REPL'ing
-" Figure out why some es6 end parentheses are highlighted in red
 " Detect : in ruby symbol syntax
 " Replace REPLs by something like http://goo.gl/0obV2s or rcodetools xmpfilter?
 " Textobj function that works for ES6 JS
@@ -29,7 +27,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree'
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'pangloss/vim-javascript'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
@@ -59,7 +57,6 @@ Plug 'Julian/vim-textobj-variable-segment'
 Plug 'bkad/CamelCaseMotion'
 Plug 'mattn/emmet-vim'
 " Plug 'thinca/vim-textobj-function-javascript'
-" Plug 'benekastah/neomake'
 " Plug 'unblevable/quick-scope'
 Plug 'valloric/MatchTagAlways'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -69,6 +66,7 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+Plug 'neomake/neomake'
 
 call plug#end()
 
@@ -163,7 +161,7 @@ nmap <leader>E :source $MYVIMRC<CR><esc>
 
 nnoremap <leader><leader> <C-^>
 
-nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:ccl<cr>:silent! Tclose<cr>
+nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:ccl<cr>:lcl<cr>:silent! Tclose<cr>
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
@@ -191,6 +189,8 @@ map <silent> <m-]> :set virtualedit=all<cr>20zl
 map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
 nnoremap <silent> ^ ^:set virtualedit=<cr>
 nnoremap <silent> $ $:set virtualedit=<cr>
+vmap <silent> <m-]> 20zl
+vmap <silent> <m-[> 20zh
 
 map @- @:
 
@@ -374,7 +374,9 @@ nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <Esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <Esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
-command! Gmodified :call GitOpenModifiedFiles()
+command! -nargs=+ -complete=file FullSearch call FullSearch(<q-args>)
+command! Gmodified call GitOpenModifiedFiles()
+command! Lint call Lint()
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -390,6 +392,8 @@ cabbrev gmodif Gmodified
 cabbrev gm Gmodified
 cabbrev co copen
 cabbrev qf copen
+cabbrev lo lopen
+cabbrev lint Lint
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -440,15 +444,16 @@ set fillchars+=vert:\ "
 set complete=.,w
 set grepprg=ag
 set nofoldenable
-command! -nargs=+ -complete=file FullSearch call FullSearch(<q-args>)
 set gdefault
 
 set statusline=%{GetDecorativeEmoji()}
 set statusline+=\ %<%f
+" set statusline+=\ %{GetLintCount()>0?'[!]':''}
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
 set statusline+=%=
-set statusline+=%-14.(%l,%c%)
+set statusline+=%{GetLintMsg()}
+set statusline+=\ \ %-14.(%l,%c%)
 set statusline+=\ %P
 set statusline+=\ %{GetTimePeriodEmoji()}
 
@@ -624,6 +629,10 @@ let s:repls = {
 
 let s:custom_backup_dir='~/.vim_custom_backups'
 
+let g:neomake_verbose = 0
+let g:neomake_error_sign = {'text': '❌', 'texthl': 'NeomakeErrorSign'}
+let g:neomake_warning_sign = {'text': '❌', 'texthl': 'NeomakeWarningSign'}
+
 "#################
 "### Functions ###
 "#################
@@ -713,6 +722,7 @@ function! MoveCurrentFile()
   if new_file != '' && new_file != old_file
     let alternate_buffer = @#
     if bufexists(new_file) | exec 'bd! ' . new_file | endif
+    exec ':silent !mkdir -p `dirname ' . new_file . '`'
     exec ':silent !mv ' . old_file . ' ' . new_file
     exec ':edit! ' . new_file
     exec 'bd! ' . old_file
@@ -946,7 +956,7 @@ function! FullSearch(search_options)
 endfunction
 
 function! ResetProject()
-  silent bufdo if bufname('%') != 'NERD_tree_1' | bd! | endif
+  silent bufdo if bufname('%') != 'NERD_tree_1' | silent bd! | endif
   call OpenNERDTreeBuffer()
   silent! let @# = ''
   normal ggX^
@@ -989,6 +999,23 @@ function! GetTimePeriodEmoji()
   else
     return (period == 'day') ? '😎 ' : '🔮 '
   endif
+endfunction
+
+function! GetLintCount()
+  let counts = neomake#statusline#LoclistCounts()
+  return get(counts, 'E', 0) + get(counts, 'W', 0)
+endfunction
+
+function! GetLintMsg()
+  let counts = neomake#statusline#LoclistCounts()
+  let error_count = get(counts, 'E', 0)
+  let warning_count = get(counts, 'W', 0)
+  if error_count + warning_count == 0 | return '' | endif
+
+  let count_msgs = []
+  if error_count > 0 | call add(count_msgs, 'E:' . error_count) | endif
+  if warning_count > 0 | call add(count_msgs, 'W:' . warning_count) | endif
+  return '[' . join(count_msgs, ',') . ']'
 endfunction
 
 function! WriteUndoFile()
@@ -1321,6 +1348,14 @@ function! SetVirtualEdit()
   endif
 endfunction
 
+function! Lint()
+  if &filetype =~ 'javascript'
+    Neomake eslint
+  else
+    Neomake
+  end
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1400,6 +1435,11 @@ augroup goyo_events
   autocmd User GoyoLeave nested call OnGoyoLeave()
 augroup end
 
+augroup lint_events
+  autocmd!
+  autocmd BufWritePost * call Lint()
+augroup end
+
 augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call TrimTrailingWhitespace()
@@ -1411,10 +1451,3 @@ augroup general_autocommands
   autocmd BufRead * call ConfigureLargeFiles()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 augroup end
-
-"#############
-"### Other ###
-"#############
-
-" autocmd! BufWritePost,BufEnter * Neomake
-" let g:neomake_javascript_enabled_makers = ['eslint']

@@ -80,4 +80,5 @@ bindkey '^Sx' exit-shell
 eval "$(rbenv init - --no-rehash)"
 stty -ixon
 unalias d
+
 if [ -z $TMUX ]; then; tmux new -As base; fi
