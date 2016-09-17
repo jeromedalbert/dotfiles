@@ -1,7 +1,7 @@
 "############
 "### TODO ###
 "############
-" do not launch a tmux base session when one is already running
+" tmux prune numbered sessions
 " elinks: copy url, or open url to browser
 " elinks: ruby hook to write google searches directly, omnibar style
 " elinks: use use.css? http://ruderich.org/simon/config/elinks
@@ -52,12 +52,9 @@ Plug 'sickill/vim-pasta'
 Plug 'sjl/gundo.vim'
 Plug 'kassio/neoterm'
 Plug 'kurkale6ka/vim-pairs'
-" Plug 'wellle/targets.vim'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'bkad/CamelCaseMotion'
 Plug 'mattn/emmet-vim'
-" Plug 'thinca/vim-textobj-function-javascript'
-" Plug 'unblevable/quick-scope'
 Plug 'valloric/MatchTagAlways'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'Shougo/neosnippet.vim'
@@ -67,6 +64,8 @@ Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'neomake/neomake'
+" Plug 'wellle/targets.vim'
+" Plug 'thinca/vim-textobj-function-javascript'
 
 call plug#end()
 
@@ -86,7 +85,7 @@ xnoremap j gj
 xnoremap k gk
 nmap 0 ^
 nnoremap d0 d^
-map Y y$
+noremap Y y$
 noremap Q <nop>
 
 map <silent> <leader>q :q<cr>
@@ -183,7 +182,7 @@ map <silent> <leader>of :silent! exe '!open %'<cr>
 
 map <silent> <leader>j mC:join<cr>`C
 
-map $ $ze
+noremap $ $ze
 
 map <silent> <m-]> :set virtualedit=all<cr>20zl
 map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
@@ -632,6 +631,7 @@ let s:custom_backup_dir='~/.vim_custom_backups'
 let g:neomake_verbose = 0
 let g:neomake_error_sign = {'text': '❌', 'texthl': 'NeomakeErrorSign'}
 let g:neomake_warning_sign = {'text': '❌', 'texthl': 'NeomakeWarningSign'}
+let g:neomake_place_signs = 0
 
 "#################
 "### Functions ###

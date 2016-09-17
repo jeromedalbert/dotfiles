@@ -81,4 +81,4 @@ eval "$(rbenv init - --no-rehash)"
 stty -ixon
 unalias d
 
-if [ -z $TMUX ]; then; tmux new -As base; fi
+if [ -z $TMUX ]; then; tstart; fi

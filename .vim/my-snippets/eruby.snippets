@@ -61,6 +61,12 @@ abbr content_for .. end
     ${0}
   <% end %>
 
+snippet cfj
+abbr content_for :javascripts .. end
+  <% content_for :javascripts do %>
+    ${0}
+  <% end %>
+
 snippet js
 alias jav
 abbr javascript_include_tag
@@ -71,8 +77,8 @@ alias sty
 abbr stylesheet_link_tag
   <%= stylesheet_link_tag '${0}', media: 'all' %>
 
-snippet ass
-alias boil
+snippet cfa
+alias boil ass
 abbr CSS and JS assets
   <% content_for :stylesheets do %>
     <%= stylesheet_link_tag '${1}', media: 'all' %>

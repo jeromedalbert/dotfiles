@@ -60,9 +60,16 @@ alias td='tmux detach'
 alias kt='killall tmux'
 t() {
   if [ $# -eq 0 ]; then
-    tmux new -As base
+    tstart
   else
     tmux "$*"
+  fi
+}
+tstart() {
+  if (tmux ls | grep base | grep attached &> /dev/null); then
+    tmux new
+  else
+    tmux new -As base
   fi
 }
 tn() {
@@ -94,10 +101,15 @@ ts() {
     return
   fi
 
-  if ! tmux has-session -t $1 &> /dev/null; then;
-    tmux start-server \; source ~/.tmux/sessions/$1.conf
-  fi
+  tmux start-server \; source ~/.tmux/sessions/$1.conf
   ta $1
+}
+tgo() {
+  tmux new-session -d -s go
+  tmux send-keys -t go "cd `pwd`" C-m
+  tmux send-keys -t go 'ts rails' C-m
+  tmux send-keys -t go 'ggo' C-m
+  ta go
 }
 to() {
   if [ $# -ne 1 ]; then; return; fi
@@ -127,7 +139,6 @@ alias gaa='git add --all'
 alias gaac='gaa && gc'
 alias gbr='gb -r'
 alias gca='gc --amend'
-gcamm() { gca -m "$*" }
 alias gca!='gca --no-edit'
 alias gaaca='gaa && gca'
 alias gaaca!='gaa && gca!'
@@ -160,6 +171,7 @@ gcm() {
     gc -m "$*"
   fi
 }
+gcam() { gca -m "$*" }
 alias gclean="git clean -fd"
 alias grhhc="grhh && gclean"
 alias gd='git diff'
@@ -200,7 +212,7 @@ alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbDs="git branch | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
-alias gbDA='git branch | egrep -v "(master|\*)" | xargs git branch -D'
+alias gbDa='git branch | egrep -v "(master|\*)" | xargs git branch -D'
 alias gignore="git update-index --assume-unchanged"
 alias gunignore="git update-index --no-assume-unchanged"
 alias gignored="git ignored"
@@ -220,9 +232,7 @@ alias gshow="git show"
 alias git-branch-previous='git check-ref-format --branch "@{-1}"'
 ggo() {
   git-branch-current > .git/previous_branch
-
   gaacm "current work"
-
   gcm
 }
 gback() {
