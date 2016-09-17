@@ -1,17 +1,13 @@
 "############
 "### TODO ###
 "############
-" tmux prune numbered sessions
+" Textobj function that works for ES6 JS
+" Detect : in ruby symbol syntax
+" Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet?
+" Bug with the <`0 stuff sometimes still displaying (ex: con snippet) - has to do with (tmux) session loading?
 " elinks: copy url, or open url to browser
 " elinks: ruby hook to write google searches directly, omnibar style
 " elinks: use use.css? http://ruderich.org/simon/config/elinks
-" use vim :jumps effectively
-" use c-l to clear screens when REPL'ing
-" Detect : in ruby symbol syntax
-" Replace REPLs by something like http://goo.gl/0obV2s or rcodetools xmpfilter?
-" Textobj function that works for ES6 JS
-" Bug with the <`0 stuff sometimes still displaying (ex: con snippet) - has to do with (tmux) session loading?
-" Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet?
 
 "###############
 "### Plugins ###
@@ -64,6 +60,8 @@ Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'neomake/neomake'
+Plug 'tpope/vim-abolish'
+Plug 'vim-scripts/mru.vim'
 " Plug 'wellle/targets.vim'
 " Plug 'thinca/vim-textobj-function-javascript'
 
@@ -276,6 +274,8 @@ map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 map <leader>fb :%!js-beautify<cr>
 vmap <leader>fb :!js-beautify<cr>
 
+map <silent> <leader>fru :MRU<cr>
+
 nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
 nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
 
@@ -331,7 +331,8 @@ map <leader>rm :call ShowLatestMigration()<cr>
 vmap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 
 map <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
-map <leader>u :call PreserveView('Topen')<cr>:TREPLSendFile<cr>
+" map <leader>u :call PreserveView('Topen')<cr>:TREPLSendFile<cr>
+map <leader>u :call EvaluateCode()<cr>
 
 map gR gr$
 
@@ -412,6 +413,7 @@ if !exists('syntax_on')
   syntax on
 endif
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+" set termguicolors
 set completeopt+=noinsert
 set fileformat=unix
 set number relativenumber numberwidth=5
@@ -632,6 +634,9 @@ let g:neomake_verbose = 0
 let g:neomake_error_sign = {'text': '❌', 'texthl': 'NeomakeErrorSign'}
 let g:neomake_warning_sign = {'text': '❌', 'texthl': 'NeomakeWarningSign'}
 let g:neomake_place_signs = 0
+
+let MRU_Window_Height = 10
+hi link MRUFileName String
 
 "#################
 "### Functions ###
@@ -922,6 +927,10 @@ function! OnBufExplorerDisplayed()
     map <buffer> <esc> q
     let b:mappings_defined = 1
   endif
+endfunction
+
+function! OnMRUDisplayed()
+  map <buffer> <esc> q
 endfunction
 
 function! PreviewNERDTreeNode()
@@ -1356,6 +1365,12 @@ function! Lint()
   end
 endfunction
 
+function! EvaluateCode()
+  call PreserveView('Topen')
+  wincmd w
+  call feedkeys("i\<c-l>\<esc>\<c-w>w:TREPLSendFile\<cr>")
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1404,6 +1419,7 @@ augroup on_display_events
   autocmd filetype qf call OnQuickFixDisplayed()
   autocmd filetype nerdtree call OnNERDTreeDisplayed()
   autocmd filetype extradite call OnExtraditeDisplayed()
+  autocmd filetype mru call OnMRUDisplayed()
   autocmd TermOpen *neoterm* call OnNeotermDisplayed()
   autocmd TermOpen *ag\ * call OnFullSearchDisplayed()
   autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
@@ -1437,7 +1453,7 @@ augroup end
 
 augroup lint_events
   autocmd!
-  autocmd BufWritePost * call Lint()
+  autocmd BufWritePost,BufEnter,FocusLost * call Lint()
 augroup end
 
 augroup general_autocommands

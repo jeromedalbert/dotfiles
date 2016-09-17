@@ -60,23 +60,28 @@ alias td='tmux detach'
 alias kt='killall tmux'
 t() {
   if [ $# -eq 0 ]; then
-    tstart
+    tmux-start
   else
     tmux "$*"
   fi
 }
-tstart() {
-  if (tmux ls | grep base | grep attached &> /dev/null); then
-    tmux new
+tmux-start() {
+  if (tmux ls 2> /dev/null | grep base | grep attached &> /dev/null); then
+    tmux-new-unnamed-session
   else
     tmux new -As base
   fi
 }
+tmux-new-unnamed-session() {
+  local i=1
+  while (tmux has-session -t $i 2> /dev/null); do; let i=i+1; done
+  tmux new -s $i
+}
 tn() {
   if [ $# -eq 0 ]; then
-    tmux new-session
+    tmux new
   else
-    tmux new-session -s $1
+    tmux new -s $1
   fi
 }
 tk() {
