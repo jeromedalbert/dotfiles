@@ -1,6 +1,11 @@
 "############
 "### TODO ###
 "############
+" When recovering a session, focus lost events do not work any more
+" Change html contrast
+" Is there a way in vim to know the number of entries in the popup menu (maybe see deoplete source?)
+" Integrate ctags seamlessly
+" Re-evaluate tab completion. Maybe use C-N and/or C-Y depending on completion autoselection
 " Textobj function that works for ES6 JS
 " Detect : in ruby symbol syntax
 " Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet?
@@ -223,10 +228,10 @@ for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <c-q>' . i . ' <nop>'
 endfor
 
-map m, mO
-map `, `O
-map ', `O
-map <leader>, `O
+" map m, mO
+" map `, `O
+" map ', `O
+" map <leader>, `O
 
 map <leader>ft :set filetype=
 
@@ -271,10 +276,8 @@ vmap <leader>fj :!jq '.'<cr>
 map <leader>fh :silent %!tidy -qi --show-errors 0<cr>
 map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 " https://github.com/beautify-web/js-beautify
-map <leader>fb :%!js-beautify<cr>
+map <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
 vmap <leader>fb :!js-beautify<cr>
-
-map <silent> <leader>fru :MRU<cr>
 
 nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
 nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
@@ -443,6 +446,7 @@ set nostartofline
 set wildmenu
 set fillchars+=vert:\ "
 set complete=.,w
+" set complete=.,w,b,u,t
 set grepprg=ag
 set nofoldenable
 set gdefault
@@ -488,6 +492,7 @@ let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
 
+let g:netrw_altfile = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeIgnore = [
@@ -501,15 +506,15 @@ let NERDTreeIgnore = [
       \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$'
       \ ]
 let NERDTreeQuitOnOpen=1
-let g:netrw_altfile = 1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
 
 let g:incsearch#auto_nohlsearch = 1
 
 let g:deoplete#enable_at_startup = 1
-
-let g:SuperTabDefaultCompletionType = '<c-n>'
-let g:SuperTabCrMapping = 0
-let g:SuperTabClosePreviewOnPopupClose = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 0
+" call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
 
 let g:neoterm_rspec_lib_cmd = 'clear && echo && bin/rspec'
 let g:neoterm_keep_term_open = 1
@@ -1140,10 +1145,20 @@ function! GetCwd()
 endfunction
 
 function! BufEnterConfig()
-  if bufname('%') == '[Global Replace]'
+  let buffer_name = bufname('%')
+
+  if buffer_name == '[Global Replace]'
     map <buffer><Leader>fr :Greplace<cr>
   else
     map <buffer><Leader>fre :call RenameCurrentFile()<cr>
+    map <buffer><silent> <leader>fru :MRU<cr>
+  endif
+
+  if buffer_name !~ 'NERD_tree'
+    map <buffer> m, mO
+    map <buffer> `, `O
+    map <buffer> ', `O
+    map <buffer> <leader>, `O
   endif
 
   exe ':match'

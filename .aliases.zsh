@@ -261,6 +261,7 @@ alias gcp-='git cherry-pick -'
 fix() {
   vim +/"<<<<<<<" `git diff --name-only --diff-filter=U | xargs`
 }
+alias gsh='git show'
 
 # Github
 hc() {
@@ -382,8 +383,8 @@ snow() {
 
 # Directories
 alias blog='cd ~/c/blog'
-alias vc='cd ~/c/vicinity'
-alias vc2='cd ~/c/vicinity2'
+alias gr='cd ~/c/gratify'
+alias gr2='cd ~/c/gratify2'
 alias pi='cd ~/c/pitchbattle'
 
 # Ruby / Rails
@@ -424,6 +425,7 @@ alias zc='zeus c'
 alias debug='pry-remote'
 alias st='spring stop'
 alias irb='pry'
+alias pr='powder restart'
 
 # Python
 gpip() {

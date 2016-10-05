@@ -1382,6 +1382,13 @@
 			<key>Text</key>
 			<string>0x13 0x78</string>
 		</dict>
+		<key>0x7a-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x7a</string>
+		</dict>
 		<key>0x7b-0x120000</key>
 		<dict>
 			<key>Action</key>
@@ -1644,7 +1651,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 139 606 456 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>246 174 796 473 0 0 1280 800 </string>
+	<string>213 253 796 473 0 0 1280 800 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3376,7 +3383,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-09-12T00:08:57Z</date>
+	<date>2016-10-02T01:52:15Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -3435,7 +3442,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.9</string>
+	<string>3.0.10</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

@@ -1,10 +1,10 @@
 [user]
-  name = Jerome Dalbert
-  email = jerome.dalbert@gmail.com
+	name = 
+	email = 
 
 [core]
   ignorecase = false
-  excludesfile = /Users/jerome/.gitignore_global
+	excludesfile = /Users/jerome/.gitignore_global
   attributesfile = /Users/jerome/.gitattributes
 
 [color]
