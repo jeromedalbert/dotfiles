@@ -1,6 +1,19 @@
 "############
 "### TODO ###
 "############
+" improve resetproject speed
+" map cmd+I to tab os x wide, as well as tab to esc
+" investigate slow writes
+" Make 0 scroll left?
+" Make resetProject faster
+" Use alt instead of control keys as much as possible (tab mgmt, etc). Decide
+" which commands should belong to alt or leader. Or maybe map alt to ctrl.
+" Reg 123456789 and paste
+" User leader , and ; for semicolon insertion?
+" Previous tab ctrl+. shortcut
+" Make a 'all' version of fr replace like fR or fa
+" Find an easy way to paste something that has been yanked (y or yy) before
+" Maybe remove all marks when escaping from insert mode
 " When recovering a session, focus lost events do not work any more
 " Change html contrast
 " Is there a way in vim to know the number of entries in the popup menu (maybe see deoplete source?)
@@ -79,6 +92,9 @@ let mapleader = " "
 
 map - :
 imap jj <esc>
+map ' "
+map '' :reg "0123456789<cr>
+map '" :reg<cr>
 
 map J 5j
 map K 5k
@@ -148,24 +164,34 @@ for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
 endfor
 " <bs> is set as c-h in my iTerm2
 map <bs> gT
+map <m-h> gT
 map <c-l> gt
+map <m-l> gt
 " f17 is c-[ in my iTerm2
 map <f17> gT
 " f18 is c-] in my iTerm2
 map <f18> gt
 " f19 is c-s-[ in my iTerm2
 noremap <silent> <f19> :-tabmove<cr>
+" noremap <silent> <m-{> :-tabmove<cr>
+noremap <silent> <m-H> :-tabmove<cr>
 " f20 is c-s-] in my iTerm2
 noremap <silent> <f20> :+tabmove<cr>
+" noremap <silent> <m-}> :+tabmove<cr>
+noremap <silent> <m-L> :+tabmove<cr>
+map <silent> <leader>tq :tabclose<cr>
+
+map <silent> <m-d> <c-d>
+map <silent> <m-u> <c-u>
 
 nmap <leader>e :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
 
 nnoremap <leader><leader> <C-^>
 
-nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:ccl<cr>:lcl<cr>:silent! Tclose<cr>
-
-nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
+nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:<cr>:ccl<cr>:lcl<cr>:silent! Tclose<cr>
+inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
+snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
 " f13 is c-; in my iTerm2
 noremap <f13> mCA;<Esc>`C
@@ -182,6 +208,7 @@ tnoremap <Esc> <C-\><C-n>
 map <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 map <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 map <silent> <leader>of :silent! exe '!open %'<cr>
+map <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
 
 map <silent> <leader>j mC:join<cr>`C
 
@@ -228,11 +255,6 @@ for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <c-q>' . i . ' <nop>'
 endfor
 
-" map m, mO
-" map `, `O
-" map ', `O
-" map <leader>, `O
-
 map <leader>ft :set filetype=
 
 "######################################
@@ -261,15 +283,15 @@ map <leader>A :call neoterm#test#run('all')<cr>
 map <leader>c :w<cr>:call neoterm#test#run('current')<cr>
 map <leader>l :w<cr>:call neoterm#test#rerun()<cr>
 
-map <Leader>fmo :call MoveCurrentFile()<cr>
-map <Leader>fmv <leader>fmo
-map <Leader>fde :call DeleteCurrentFile()<cr>
-map <Leader>fdu :call DuplicateCurrentFile()<cr>
-map <Leader>fcp :call CopyCurrentFilePath()<cr>
-map <Leader>fcfp :call CopyCurrentFileFullPath()<cr>
-map <Leader>fcn :call CopyCurrentFileName()<cr>
-map <Leader>fn :call CreateNewFileInCurrentDir()<cr>
-map <Leader>fN :call CreateNewFile()<cr>
+map <leader>fmo :call MoveCurrentFile()<cr>
+map <leader>fmv <leader>fmo
+map <leader>fde :call DeleteCurrentFile()<cr>
+map <leader>fdu :call DuplicateCurrentFile()<cr>
+map <leader>fcp :call CopyCurrentFilePath()<cr>
+map <leader>fcfp :call CopyCurrentFileFullPath()<cr>
+map <leader>fcn :call CopyCurrentFileName()<cr>
+map <leader>fn :call CreateNewFileInCurrentDir()<cr>
+map <leader>fN :call CreateNewFile()<cr>
 
 map <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
 vmap <leader>fj :!jq '.'<cr>
@@ -318,6 +340,7 @@ nmap <leader>fw <leader>yfiw
 nmap <leader>fW <leader>yfiW
 vmap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <c-l> <end><space>-G '\.'<space><left><left>
+cnoremap <c-g> <end><space>-G ''<space><left><left>
 nmap <leader>fo :Gqfopen<cr>
 
 " map <m-w> <Plug>CamelCaseMotion_w
@@ -331,6 +354,7 @@ nmap <leader>-u :call ClearUndos()<cr>
 nmap <leader>-k :call ResetProject()<cr>
 
 map <leader>rm :call ShowLatestMigration()<cr>
+map <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
 vmap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 
 map <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
@@ -371,7 +395,7 @@ nmap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
 vmap <leader>s :s/\%V
 
-nnoremap <leader>8 *
+nmap <leader>8 *
 xmap <leader>8 *
 nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <Esc>/<c-r>=GetSelectionForSearches()<cr><cr>
@@ -407,6 +431,9 @@ map <leader>gx :silent !gx -- %<cr>
 map gs gS
 map gj gJ
 
+noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
+nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
+
 "#############################
 "### General configuration ###
 "#############################
@@ -415,8 +442,8 @@ filetype plugin indent on
 if !exists('syntax_on')
   syntax on
 endif
-let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-" set termguicolors
+" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+set termguicolors
 set completeopt+=noinsert
 set fileformat=unix
 set number relativenumber numberwidth=5
@@ -642,6 +669,8 @@ let g:neomake_place_signs = 0
 
 let MRU_Window_Height = 10
 hi link MRUFileName String
+
+let s:last_active_tab_number = 1
 
 "#################
 "### Functions ###
@@ -1150,7 +1179,8 @@ function! BufEnterConfig()
   if buffer_name == '[Global Replace]'
     map <buffer><Leader>fr :Greplace<cr>
   else
-    map <buffer><Leader>fre :call RenameCurrentFile()<cr>
+    map <buffer><leader>fre :call RenameCurrentFile()<cr>
+    map <buffer><leader>frm <buffer><leader>fde
     map <buffer><silent> <leader>fru :MRU<cr>
   endif
 
@@ -1260,6 +1290,10 @@ endfunction
 function! CustomCloseTab()
   if s:current_tab_number == 1 | return | endif
   exe 'tabnext' . (s:current_tab_number - 1)
+endfunction
+
+function! GoToLastActiveTab()
+  exe 'tabnext' . s:last_active_tab_number
 endfunction
 
 function! HighlightOccurencesVerb(type)
@@ -1454,10 +1488,11 @@ if exists('$TMUX') && !exists('$DISABLE_VIM_WINDOW_RENAME')
   augroup end
 endif
 
-augroup custom_close_tab
+augroup custom_tab_behavior
   autocmd!
-  autocmd TabEnter * call SaveCurrentTabNumber()
+  autocmd TabEnter * let s:current_tab_number = tabpagenr()
   autocmd TabClosed * call CustomCloseTab()
+  autocmd TabLeave * let s:last_active_tab_number = tabpagenr()
 augroup end
 
 augroup goyo_events

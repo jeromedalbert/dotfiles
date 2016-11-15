@@ -5,6 +5,7 @@
 .bundle
 .sass-cache
 .DS_Store
+.keep
 
 tmp
 log

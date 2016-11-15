@@ -1,14 +1,13 @@
 [user]
-	name = 
-	email = 
+	name = Jerome Dalbert
+	email = jerome.dalbert@gmail.com
 
 [core]
   ignorecase = false
 	excludesfile = /Users/jerome/.gitignore_global
-  attributesfile = /Users/jerome/.gitattributes
 
 [color]
-  ui = true
+  ui = always
 
 [alias]
   ignore = !git update-index --assume-unchanged
@@ -17,6 +16,9 @@
 
 [push]
   default = simple
+
+[diff]
+  noprefix = true
 
 [merge "bundlelock"]
   name = bundle lock
@@ -32,3 +34,6 @@
     end\n\
     File.open(%(%A), %(w)) {|f| f.write(b)}\n\
     exit 1 if b.include?(%(<)*%L)'"
+
+[diff-so-fancy]
+	markEmptyLines = false

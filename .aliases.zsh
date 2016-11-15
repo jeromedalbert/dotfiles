@@ -18,9 +18,6 @@ alias llrt="ll -rt"
 alias rm="rm"
 alias rmrf="rm -rf"
 alias grep='grep --color=auto'
-fw() { grep -inr "$@" . }
-hs() { history | grep $* }
-alias hsi='hs -i'
 alias cpr='cp -r'
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -62,7 +59,7 @@ t() {
   if [ $# -eq 0 ]; then
     tmux-start
   else
-    tmux "$*"
+    tmux "$@"
   fi
 }
 tmux-start() {
@@ -179,10 +176,17 @@ gcm() {
 gcam() { gca -m "$*" }
 alias gclean="git clean -fd"
 alias grhhc="grhh && gclean"
-alias gd='git diff'
+gd() {
+  git diff "$@" | _format-git-diff
+}
+_format-git-diff() {
+  sed -r "s/^([^-+ ]*)[-+ ]/\\1/"
+}
+gsh() {
+  git show "$@" | _format-git-diff
+}
 alias gdc="gd --cached"
 alias "gdh^"="gd 'HEAD^'"
-alias gshow="git show"
 alias glog="git log"
 alias glo="git log --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 alias gdt="git difftool"
@@ -205,6 +209,7 @@ alias grb="git rebase"
 alias grb-="git rebase -"
 alias grbm="git rebase master"
 alias grbi="git rebase -i"
+alias grbim="git rebase -i master"
 alias grbir="git rebase -i --root"
 alias gcontinue="git rebase --continue"
 alias gcont="gcontinue"
@@ -233,7 +238,6 @@ gpu() {
 }
 alias gclo-"git clone"
 alias gx="gitx"
-alias gshow="git show"
 alias git-branch-previous='git check-ref-format --branch "@{-1}"'
 ggo() {
   git-branch-current > .git/previous_branch
@@ -261,7 +265,6 @@ alias gcp-='git cherry-pick -'
 fix() {
   vim +/"<<<<<<<" `git diff --name-only --diff-filter=U | xargs`
 }
-alias gsh='git show'
 
 # Github
 hc() {
@@ -314,14 +317,17 @@ alias dcud='docker-compose up -d'
 alias dcs='docker-compose stop'
 alias dcps='docker-compose ps'
 
-# Folders/Directories
+# Directories
 alias st2='cd ~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
 alias st3='cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages'
-alias stproj='cd ~/.sublime/projects'
 alias .vim='cd ~/.vim'
 alias c='cd ~/c'
 alias desk='cd ~/Desktop'
 alias work='cd ~/Documents/Vicinity'
+alias blog='cd ~/c/blog'
+alias g='cd ~/c/gratify'
+alias g2='cd ~/c/gratify2'
+alias down='cd ~/Downloads'
 
 # SSH
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
@@ -381,12 +387,6 @@ snow() {
   clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|awk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
 }
 
-# Directories
-alias blog='cd ~/c/blog'
-alias gr='cd ~/c/gratify'
-alias gr2='cd ~/c/gratify2'
-alias pi='cd ~/c/pitchbattle'
-
 # Ruby / Rails
 alias b='bundle'
 alias be='bundle exec'
@@ -412,12 +412,12 @@ alias rgm='rails generate migration'
 alias rd='rails destroy'
 alias rc='rails c'
 alias rr='rake routes'
-alias mi='rake db:migrate'
+alias mi1='rake db:migrate'
 alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
-alias migr='rake db:migrate db:rollback && rake db:migrate && RAILS_ENV=test rake db:migrate'
-alias ro='rake db:rollback'
+alias mi='rake db:migrate db:rollback && mi2'
+alias ro1='rake db:rollback'
 alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
-alias roll='ro2'
+alias ro='ro2'
 alias rT='rake -T'
 alias zs='zeus start'
 alias zs!='rm -f .zeus.sock; zs'
