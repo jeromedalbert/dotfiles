@@ -10,10 +10,12 @@ boost
 cloc
 cmake
 cmatrix
+coreutils
 cowsay
 cscope
 ctags
 curl
+diff-so-fancy
 docker
 docker-compose
 docker-machine
@@ -79,6 +81,7 @@ python3
 q
 rbenv
 readline
+reattach-to-user-namespace
 ruby-build
 screenfetch
 sdl2
@@ -97,6 +100,7 @@ trash
 tree
 unixodbc
 unrar
+watch
 webp
 wget
 wrk

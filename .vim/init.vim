@@ -1,11 +1,10 @@
 "############
 "### TODO ###
 "############
-" improve resetproject speed
+" orange ca783b to cc7833?
 " map cmd+I to tab os x wide, as well as tab to esc
 " investigate slow writes
 " Make 0 scroll left?
-" Make resetProject faster
 " Use alt instead of control keys as much as possible (tab mgmt, etc). Decide
 " which commands should belong to alt or leader. Or maybe map alt to ctrl.
 " Reg 123456789 and paste
@@ -72,7 +71,7 @@ Plug 'mattn/emmet-vim'
 Plug 'valloric/MatchTagAlways'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'Shougo/neosnippet.vim'
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -126,8 +125,8 @@ cmap <up> <nop>
 cmap <down> <nop>
 cmap <left> <nop>
 cmap <right> <nop>
-cmap <M-left> <nop>
-cmap <M-right> <nop>
+cmap <m-left> <nop>
+cmap <m-right> <nop>
 map <del> <nop>
 imap <del> <nop>
 cmap <del> <nop>
@@ -156,35 +155,28 @@ cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 
 map <c-t> <esc>:tabnew<cr>
-" map <m-t> <esc>:tabnew<cr>
+map <m-n> <esc>:tabnew<cr>
 map <silent> <m-q> :q<cr>
-map <silent> <m-w> :q<cr>
+map <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
 " <bs> is set as c-h in my iTerm2
-map <bs> gT
+" map <bs> gT
 map <m-h> gT
-map <c-l> gt
+" map <c-l> gt
 map <m-l> gt
-" f17 is c-[ in my iTerm2
-map <f17> gT
-" f18 is c-] in my iTerm2
-map <f18> gt
-" f19 is c-s-[ in my iTerm2
-noremap <silent> <f19> :-tabmove<cr>
-" noremap <silent> <m-{> :-tabmove<cr>
-noremap <silent> <m-H> :-tabmove<cr>
-" f20 is c-s-] in my iTerm2
-noremap <silent> <f20> :+tabmove<cr>
-" noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-L> :+tabmove<cr>
-map <silent> <leader>tq :tabclose<cr>
+map <silent> <leader>tc :tabclose<cr>
+map <silent> <m-c> :tabclose<cr>
+map <silent> <leader>tp :call MoveToPrevTab()<cr>
+map <silent> <leader>tn :call MoveToNextTab()<cr>
 
 map <silent> <m-d> <c-d>
 map <silent> <m-u> <c-u>
 
 nmap <leader>e :e $MYVIMRC<CR>
+nmap <m-e> :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
 
 nnoremap <leader><leader> <C-^>
@@ -202,6 +194,8 @@ inoremap <f14> <C-o>A,
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
+" map <m-j> <c-w>w
+" map <m-k> <c-w>W
 
 tnoremap <Esc> <C-\><C-n>
 
@@ -225,6 +219,7 @@ map @- @:
 
 map <leader>rr :e config/routes.rb<cr>
 map <leader>rs :e db/schema.rb<cr>
+map <leader>rS :vnew<cr>:e db/schema.rb<cr>
 map <leader>rg :e Gemfile<cr>
 
 noremap g; g;zz
@@ -256,6 +251,9 @@ for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
 endfor
 
 map <leader>ft :set filetype=
+
+" map <m-v> :vsplit<cr>
+" map <m-s> :split<cr>
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -308,6 +306,7 @@ noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<c
 
 map <m-t> :call ToggleQuotes()<cr>
 imap <m-t> <c-o>:call ToggleQuotes()<cr>
+cnoremap <m-t> <c-e><c-w>"" <left><left>
 " map <m-o> :call ToggleQuotes()<cr>
 " imap <m-o> <c-o>:call ToggleQuotes()<cr>
 
@@ -433,6 +432,8 @@ map gj gJ
 
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
+
+map <m-p> :CtrlP<cr>
 
 "#############################
 "### General configuration ###
@@ -999,7 +1000,12 @@ function! FullSearch(search_options)
 endfunction
 
 function! ResetProject()
-  silent bufdo if bufname('%') != 'NERD_tree_1' | silent bd! | endif
+  for num in range(1, bufnr('$'))
+    if buflisted(num) && bufname(num) != 'NERD_tree_1'
+      silent exec 'bd! ' . num
+    endif
+  endfor
+
   call OpenNERDTreeBuffer()
   silent! let @# = ''
   normal ggX^
@@ -1419,6 +1425,44 @@ function! EvaluateCode()
   wincmd w
   call feedkeys("i\<c-l>\<esc>\<c-w>w:TREPLSendFile\<cr>")
 endfunction
+
+function! MoveToPrevTab()
+  if tabpagenr('$') == 1 && winnr('$') == 1
+    return
+  endif
+  let l:tab_nr = tabpagenr('$')
+  let l:cur_buf = bufnr('%')
+  if tabpagenr() != 1
+    close!
+    if l:tab_nr == tabpagenr('$')
+      tabprev
+    endif
+    vsplit
+  else
+    close!
+    exe "0tabnew"
+  endif
+  exe "b".l:cur_buf
+endfunction
+
+function! MoveToNextTab()
+  if tabpagenr('$') == 1 && winnr('$') == 1
+    return
+  endif
+  let l:tab_nr = tabpagenr('$')
+  let l:cur_buf = bufnr('%')
+  if tabpagenr() < tab_nr
+    close!
+    if l:tab_nr == tabpagenr('$')
+      tabnext
+    endif
+    vsplit
+  else
+    close!
+    tabnew
+  endif
+  exe "b".l:cur_buf
+endfunc
 
 "####################
 "### Autocommands ###
