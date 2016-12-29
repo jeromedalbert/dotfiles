@@ -17,7 +17,7 @@ alias lld="ll -d"
 alias llrt="ll -rt"
 alias rm="rm"
 alias rmrf="rm -rf"
-alias grep='grep --color=auto'
+# alias grep='grep --color=auto'
 alias cpr='cp -r'
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -426,6 +426,9 @@ alias debug='pry-remote'
 alias st='spring stop'
 alias irb='pry'
 alias pr='powder restart'
+alias ir='invoker reload getgratify'
+alias il='invoker list'
+alias is='invoker start'
 
 # Python
 gpip() {

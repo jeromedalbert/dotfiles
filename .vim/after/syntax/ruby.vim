@@ -19,3 +19,5 @@ syn match rubyConstantCustom "\<\%(\(class\|module\)\s\+.\+\)\@<!\u\w*\>\%(\.\|:
 
 syn keyword rubyNew new
 hi link rubyNew Keyword
+
+syntax region rubyHereDocText matchgroup=String start=+<<[-~.]*\z([A-Z]\+\)+ end=+^\s*\z1+ contains=NONE

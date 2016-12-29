@@ -1,30 +1,18 @@
 "############
 "### TODO ###
 "############
-" orange ca783b to cc7833?
-" map cmd+I to tab os x wide, as well as tab to esc
-" investigate slow writes
-" Make 0 scroll left?
-" Use alt instead of control keys as much as possible (tab mgmt, etc). Decide
-" which commands should belong to alt or leader. Or maybe map alt to ctrl.
-" Reg 123456789 and paste
-" User leader , and ; for semicolon insertion?
-" Previous tab ctrl+. shortcut
-" Make a 'all' version of fr replace like fR or fa
-" Find an easy way to paste something that has been yanked (y or yy) before
-" Maybe remove all marks when escaping from insert mode
+" orange ca783b to cc7833
+" Make a 'all' version of fr Greplace like fR or fa
 " When recovering a session, focus lost events do not work any more
 " Change html contrast
+" Use alt for tab related stuff
 " Is there a way in vim to know the number of entries in the popup menu (maybe see deoplete source?)
 " Integrate ctags seamlessly
 " Re-evaluate tab completion. Maybe use C-N and/or C-Y depending on completion autoselection
+" map cmd+I to tab os x wide, as well as tab to esc
 " Textobj function that works for ES6 JS
 " Detect : in ruby symbol syntax
 " Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet?
-" Bug with the <`0 stuff sometimes still displaying (ex: con snippet) - has to do with (tmux) session loading?
-" elinks: copy url, or open url to browser
-" elinks: ruby hook to write google searches directly, omnibar style
-" elinks: use use.css? http://ruderich.org/simon/config/elinks
 
 "###############
 "### Plugins ###
@@ -210,8 +198,8 @@ noremap $ $ze
 
 map <silent> <m-]> :set virtualedit=all<cr>20zl
 map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
-nnoremap <silent> ^ ^:set virtualedit=<cr>
-nnoremap <silent> $ $:set virtualedit=<cr>
+nnoremap <silent> ^ ^:set virtualedit=<cr>ze
+nnoremap <silent> $ $:set virtualedit=<cr>ze
 vmap <silent> <m-]> 20zl
 vmap <silent> <m-[> 20zh
 
@@ -369,8 +357,9 @@ vnoremap <m-g> :call FindAllMultipleCursors(1)<cr>
 
 map <leader>yq :call MakeSession()<cr>:qa<cr>
 map <leader>yl :call LoadSession()<cr>
-map <leader>yc :SaveSession!<space>
-map <leader>yo :OpenSession<space>
+
+" map <leader>yp "0p
+" map <leader>yP "0P
 
 nmap <silent> <leader>h <leader>yghiw
 nmap <silent> <leader>H <leader>yhiW
@@ -504,6 +493,8 @@ set conceallevel=2 concealcursor=niv
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
+
+" set inccommand=nosplit
 
 "#############################
 "### Plugins configuration ###
@@ -1286,6 +1277,7 @@ endfunction
 
 function! LoadSession()
   exe ':silent OpenSession ' . GetCwd()
+  set conceallevel=2 concealcursor=niv
   echo 'Session loaded.'
 endfunction
 

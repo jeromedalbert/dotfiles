@@ -136,7 +136,9 @@ hi cssCommonAttr ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gu
 hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 hi helpHyperTextJump guifg=#cc7833
 hi rubyStringEscape guifg=#519f50
+
 hi link rubyRegexpSpecial String
+hi link rubyHereDocText String
 
 hi link cssIdentifier Tag
 hi cssVendor guifg=NONE
@@ -157,11 +159,13 @@ hi scssFunctionName guifg=NONE
 
 hi link htmlTagN htmlTag
 hi link htmlLink NONE
+hi link htmlSpecialTagName htmlTag
 
 hi erubyRailsHelperMethod guifg=#e6e1dc
 syn keyword erubyRender render
 hi link erubyRender rubyDefine
 hi erubyDelimiter guifg=NONE
+hi erubyExpression guifg=NONE
 
 hi link yamlBlockMappingKey Tag
 hi link yamlKeyValueDelimiter Tag
