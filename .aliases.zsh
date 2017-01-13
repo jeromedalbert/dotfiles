@@ -221,8 +221,11 @@ alias gb='git branch'
 alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
-alias gbDs="git branch | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
-alias gbDa='git branch | egrep -v "(master|\*)" | xargs git branch -D'
+alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
+alias gbDa='git-list-branches | grep -v "master\|`git-branch-current`" | xargs git branch -D'
+git-list-branches() {
+  git for-each-ref --format="%(refname:short)" HEAD refs/heads
+}
 alias gignore="git update-index --assume-unchanged"
 alias gunignore="git update-index --no-assume-unchanged"
 alias gignored="git ignored"

@@ -969,7 +969,7 @@ function! PreviewNERDTreeNode()
 endfunction
 
 function! FullSearch(search_options)
-  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C '
+  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree'
     enew
   else
     tabnew
@@ -1000,6 +1000,7 @@ function! ResetProject()
   call OpenNERDTreeBuffer()
   silent! let @# = ''
   normal ggX^
+  call ChangeColorScheme('railscasts_custom')
 endfunction
 
 function! ClearUndos()
