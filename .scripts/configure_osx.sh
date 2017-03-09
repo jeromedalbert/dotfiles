@@ -126,6 +126,9 @@ defaults write com.apple.dock mineffect -string scale
 # Show the user library folder
 chflags nohidden ~/Library/
 
+# Disable Creation of Metadata Files on USB Volumes
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################

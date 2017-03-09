@@ -1,18 +1,14 @@
 "############
 "### TODO ###
 "############
-" orange ca783b to cc7833
-" Make a 'all' version of fr Greplace like fR or fa
-" When recovering a session, focus lost events do not work any more
-" Change html contrast
-" Use alt for tab related stuff
-" Is there a way in vim to know the number of entries in the popup menu (maybe see deoplete source?)
+" Watch https://robots.thoughtbot.com/how-to-do-90-of-what-plugins-do-with-just-vim
 " Integrate ctags seamlessly
-" Re-evaluate tab completion. Maybe use C-N and/or C-Y depending on completion autoselection
-" map cmd+I to tab os x wide, as well as tab to esc
+" Switch to Vim 8?
+" Why doesn't the unnamed register work after completing with a snippet?
+" Map cmd+I to tab os x wide, as well as tab to esc
 " Textobj function that works for ES6 JS
 " Detect : in ruby symbol syntax
-" Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet?
+" Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet
 
 "###############
 "### Plugins ###
@@ -169,7 +165,7 @@ nmap <leader>E :source $MYVIMRC<CR><esc>
 
 nnoremap <leader><leader> <C-^>
 
-nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:<cr>:ccl<cr>:lcl<cr>:silent! Tclose<cr>
+nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:<cr>:ccl<cr>:lcl<cr>:silent! Tclose<cr>:NERDTreeClose<cr>
 inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
@@ -206,15 +202,21 @@ vmap <silent> <m-[> 20zh
 map @- @:
 
 map <leader>rr :e config/routes.rb<cr>
+map <leader>rR :vnew config/routes.rb<cr>
 map <leader>rs :e db/schema.rb<cr>
 map <leader>rS :vnew<cr>:e db/schema.rb<cr>
 map <leader>rg :e Gemfile<cr>
+map <leader>rG :vnew Gemfile<cr>
 
 noremap g; g;zz
 noremap g, g,zz
 noremap gi gi<c-o>zz
 
 " inoremap <cr> <c-e><cr>
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function() abort
+  return deoplete#close_popup() . "\<CR>"
+endfunction
 
 map <leader>9 i<space><esc>l
 map <leader>0 a<space><esc>h
@@ -409,13 +411,16 @@ cabbrev co copen
 cabbrev qf copen
 cabbrev lo lopen
 cabbrev lint Lint
+cabbrev vn vnew
+cabbrev en enew
+cabbrev ne new
+cabbrev hn new
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
 
 map zs zt
 noremap z0 zs
-map <leader>gx :silent !gx -- %<cr>
 map gs gS
 map gj gJ
 
@@ -434,7 +439,7 @@ if !exists('syntax_on')
 endif
 " let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 set termguicolors
-set completeopt+=noinsert
+" set completeopt+=noinsert
 set fileformat=unix
 set number relativenumber numberwidth=5
 set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
@@ -468,8 +473,7 @@ set grepprg=ag
 set nofoldenable
 set gdefault
 
-set statusline=%{GetDecorativeEmoji()}
-set statusline+=\ %<%f
+set statusline=\ %<%f
 " set statusline+=\ %{GetLintCount()>0?'[!]':''}
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
@@ -477,7 +481,6 @@ set statusline+=%=
 set statusline+=%{GetLintMsg()}
 set statusline+=\ \ %-14.(%l,%c%)
 set statusline+=\ %P
-set statusline+=\ %{GetTimePeriodEmoji()}
 
 let undodir = expand('~/.vim/tmp/undo')
 if !isdirectory(undodir)
@@ -507,6 +510,12 @@ let g:ctrlp_reuse_window = 'nerdtree\|netrw'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+" let g:ctrlp_lazy_update = 100
+let g:ctrlp_prompt_mappings = {
+      \ 'PrtHistory(1)':        ['<c-p>', '<m-p>'],
+      \ 'PrtHistory(-1)':       ['<c-n>', '<m-n>'],
+      \ 'AcceptSelection("t")': ['<c-t>', '<m-t>']
+      \ }
 
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
@@ -655,9 +664,9 @@ let s:repls = {
 let s:custom_backup_dir='~/.vim_custom_backups'
 
 let g:neomake_verbose = 0
-let g:neomake_error_sign = {'text': '❌', 'texthl': 'NeomakeErrorSign'}
-let g:neomake_warning_sign = {'text': '❌', 'texthl': 'NeomakeWarningSign'}
 let g:neomake_place_signs = 0
+let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+let g:neomake_highlight_columns = 0
 
 let MRU_Window_Height = 10
 hi link MRUFileName String
@@ -672,8 +681,6 @@ function! TabComplete()
     return "\<Plug>(neosnippet_expand_or_jump)"
   elseif IsEmmetExpandable()
     return "\<plug>(emmet-expand-abbr)"
-  elseif pumvisible()
-    return "\<c-y>\<esc>a"
   else
     return "\<tab>"
   endif
@@ -835,6 +842,7 @@ function! ToggleTestForCurrentFile()
              \ || match(current_file, '\<helpers\>') != -1
              \ || match(current_file, '\<jobs\>') != -1
              \ || match(current_file, '\<mailers\>') != -1
+             \ || match(current_file, '\<services\>') != -1
   if going_to_spec
     let new_file = substitute(new_file, '^app/', '', '')
     let new_file = substitute(new_file, '\.e\?rb$', '_spec.rb', '')
@@ -1022,26 +1030,6 @@ function! DeleteHiddenBuffers()
   endfor
 endfunction
 
-function! GetDecorativeEmoji()
-  if g:colors_name == 'railscasts_custom'
-    return '🍺 '
-  else
-    return '🍔 '
-  endif
-endfunction
-
-function! GetTimePeriodEmoji()
-  let hour = strftime('%H')
-  let zone = strftime('%H')
-  let offset = (zone == 'PST' || zone == 'CET' || zone == 'GMT') ? 0 : 1
-  let period = (hour > 8-offset && hour < 18+offset) ? 'day' : 'night'
-  if g:colors_name == 'railscasts_custom'
-    return (period == 'day') ? '🔆 ' : '🌙 '
-  else
-    return (period == 'day') ? '😎 ' : '🔮 '
-  endif
-endfunction
-
 function! GetLintCount()
   let counts = neomake#statusline#LoclistCounts()
   return get(counts, 'E', 0) + get(counts, 'W', 0)
@@ -1146,20 +1134,21 @@ function! OpenFullSearchResult(new_tab)
 endfunction
 
 function! GetTabLine()
-  let s = ''
+  let line = ''
   for i in range(tabpagenr('$'))
-    let s .= (i+1 == tabpagenr()) ? '%#TabLineSel#' : '%#TabLine#'
-    let s .= '%' . (i + 1) . 'T'
-    let s .= ' %{GetTabLabel(' . (i + 1) . ')} '
+    let line .= (i+1 == tabpagenr()) ? '%#TabLineSel#' : '%#TabLine#'
+    let line .= '%' . (i + 1) . 'T'
+    let line .= ' %{GetTabLabel(' . (i + 1) . ')} '
   endfor
-  let s .= '%#TabLineFill#%T'
-  return s
+  let line .= '%#TabLineFill#%T'
+  return line
 endfunction
 
 function! GetTabLabel(n)
   let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let file = bufname(buflist[winnr - 1])
+  " let winnr = tabpagewinnr(a:n)
+  " let file = bufname(buflist[winnr - 1])
+  let file = bufname(buflist[0])
   let file = fnamemodify(file, ':p:t')
   if file == ''
     let file = '[No Name]'
@@ -1176,6 +1165,7 @@ function! BufEnterConfig()
 
   if buffer_name == '[Global Replace]'
     map <buffer><Leader>fr :Greplace<cr>
+    map <buffer><Leader>fR :call feedkeys("\<space>fra")<cr>
   else
     map <buffer><leader>fre :call RenameCurrentFile()<cr>
     map <buffer><leader>frm <buffer><leader>fde
@@ -1406,6 +1396,8 @@ function! SetVirtualEdit()
 endfunction
 
 function! Lint()
+  if &buftype != '' | return | endif
+
   if &filetype =~ 'javascript'
     Neomake eslint
   else
