@@ -1212,7 +1212,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x5b 0x3f</string>
+			<string>0x13 0x3f</string>
 		</dict>
 		<key>0x47-0x120000</key>
 		<dict>
@@ -1268,7 +1268,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x66</string>
+			<string>0x13 0x2f</string>
 		</dict>
 		<key>0x66-0x140000</key>
 		<dict>
@@ -1282,7 +1282,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x46</string>
+			<string>0x13 0x67</string>
 		</dict>
 		<key>0x68-0x180000</key>
 		<dict>

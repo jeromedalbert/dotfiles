@@ -1,7 +1,7 @@
 "############
 "### TODO ###
 "############
-" Watch https://robots.thoughtbot.com/how-to-do-90-of-what-plugins-do-with-just-vim
+" check on neomake deprecation
 " Integrate ctags seamlessly
 " Switch to Vim 8?
 " Why doesn't the unnamed register work after completing with a snippet?
@@ -55,7 +55,6 @@ Plug 'mattn/emmet-vim'
 Plug 'valloric/MatchTagAlways'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'Shougo/neosnippet.vim'
-" Plug 'terryma/vim-multiple-cursors'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -65,6 +64,8 @@ Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/mru.vim'
 " Plug 'wellle/targets.vim'
 " Plug 'thinca/vim-textobj-function-javascript'
+" Plug 'tpope/vim-eunuch'
+Plug 'Christoomey/vim-titlecase'
 
 call plug#end()
 
@@ -244,6 +245,12 @@ map <leader>ft :set filetype=
 
 " map <m-v> :vsplit<cr>
 " map <m-s> :split<cr>
+
+nnoremap gV `[V`]
+
+" vnoremap <silent> y y`]
+" vnoremap <silent> p p`]
+" nnoremap <silent> p p`]
 
 "######################################
 "### Plugins/functions key mappings ###
