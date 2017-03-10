@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" map hjkl to move both around buffers and tmux panes? Or rather cmd-hjkl, so that m-h can be used to delete instead
 " check on neomake deprecation
 " Integrate ctags seamlessly
 " Switch to Vim 8?
@@ -45,7 +46,7 @@ Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'skwp/greplace.vim'
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
-Plug 'sickill/vim-pasta'
+" Plug 'sickill/vim-pasta'
 Plug 'sjl/gundo.vim'
 Plug 'kassio/neoterm'
 Plug 'kurkale6ka/vim-pairs'
@@ -65,7 +66,7 @@ Plug 'vim-scripts/mru.vim'
 " Plug 'wellle/targets.vim'
 " Plug 'thinca/vim-textobj-function-javascript'
 " Plug 'tpope/vim-eunuch'
-Plug 'Christoomey/vim-titlecase'
+Plug 'christoomey/vim-titlecase'
 
 call plug#end()
 
@@ -94,9 +95,7 @@ noremap Q <nop>
 map <silent> <leader>q :q<cr>
 map <leader>w :w<cr>
 map <leader>z :x<cr>
-
-nmap <leader>`q :q!<CR>
-nmap <leader>`a :qa!<CR>
+nmap <leader>`q :qa!<CR>
 
 map <up> <nop>
 map <down> <nop>
@@ -139,17 +138,13 @@ cnoremap <m-bs> <c-w>
 cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 
-map <c-t> <esc>:tabnew<cr>
 map <m-n> <esc>:tabnew<cr>
 map <silent> <m-q> :q<cr>
 map <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
-" <bs> is set as c-h in my iTerm2
-" map <bs> gT
 map <m-h> gT
-" map <c-l> gt
 map <m-l> gt
 noremap <silent> <m-L> :+tabmove<cr>
 map <silent> <leader>tc :tabclose<cr>
@@ -159,9 +154,22 @@ map <silent> <leader>tn :call MoveToNextTab()<cr>
 
 map <silent> <m-d> <c-d>
 map <silent> <m-u> <c-u>
+map <silent> <m-e> <c-e>
+map <silent> <m-y> <c-y>
+map <silent> <m-f> <c-f>
+map <silent> <m-b> <c-b>
+map <silent> <m-w> <c-w>
+imap <m-i> <c-i>
+imap <m-n> <c-n>
+imap <m-p> <c-p>
+map <m-g> :=<cr>
+map <m-o> <c-o>
+map <m-i> <c-i>
+map <m-a> <c-a>
+map <m-x> <c-x>
+map <m-v> <c-v>
 
 nmap <leader>e :e $MYVIMRC<CR>
-nmap <m-e> :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
 
 nnoremap <leader><leader> <C-^>
@@ -170,17 +178,13 @@ nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:<cr>:ccl<cr>:lcl<cr>:silent! T
 inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
-" f13 is c-; in my iTerm2
-noremap <f13> mCA;<Esc>`C
-inoremap <f13> <C-o>A;
-" f14 is c-, in my iTerm2
-noremap <f14> mCA,<Esc>`C
-inoremap <f14> <C-o>A,
+noremap <m-;> mCA;<Esc>`C
+inoremap <m-;> <C-o>A;
+noremap <m-,> mCA,<Esc>`C
+inoremap <m-,> <C-o>A,
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
-" map <m-j> <c-w>w
-" map <m-k> <c-w>W
 
 tnoremap <Esc> <C-\><C-n>
 
@@ -213,7 +217,6 @@ noremap g; g;zz
 noremap g, g,zz
 noremap gi gi<c-o>zz
 
-" inoremap <cr> <c-e><cr>
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function() abort
   return deoplete#close_popup() . "\<CR>"
@@ -229,9 +232,7 @@ map <leader>22 @@
 map <leader>1 :silent !
 map <leader>5 :%!
 
-vnoremap . :normal .<cr>
-
-nnoremap <c-g> :=<cr>
+" vnoremap . :normal .<cr>
 
 map <c-q> <nop>
 map <c-q>x <nop>
@@ -243,14 +244,28 @@ endfor
 
 map <leader>ft :set filetype=
 
-" map <m-v> :vsplit<cr>
-" map <m-s> :split<cr>
-
 nnoremap gV `[V`]
 
 " vnoremap <silent> y y`]
 " vnoremap <silent> p p`]
 " nnoremap <silent> p p`]
+
+cabbrev tnew Tnew
+cabbrev co copen
+cabbrev qf copen
+cabbrev lo lopen
+cabbrev vn vnew
+cabbrev en enew
+cabbrev ne new
+cabbrev hn new
+
+map zs zt
+noremap z0 zs
+map gs gS
+map gj gJ
+
+nnoremap p p=`]
+nnoremap P P=`]
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -259,8 +274,8 @@ imap <expr> <tab> TabComplete()
 smap <expr> <tab> TabComplete()
 xmap <expr> <tab> TabComplete()
 
-nmap <c-s><c-g> :call ShowHighlightsUnderCursor()<CR>
-nmap <c-s><c-a> :call ShowAllHighlights()<CR>
+nmap <m-s><m-g> :call ShowHighlightsUnderCursor()<CR>
+nmap <m-s><m-a> :call ShowAllHighlights()<CR>
 
 nmap <leader>k :call OpenNERDTreeBuffer()<CR>
 nmap <silent> <f1> :NERDTreeToggle<CR>
@@ -304,8 +319,6 @@ noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<c
 map <m-t> :call ToggleQuotes()<cr>
 imap <m-t> <c-o>:call ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
-" map <m-o> :call ToggleQuotes()<cr>
-" imap <m-o> <c-o>:call ToggleQuotes()<cr>
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -318,10 +331,10 @@ map g# <Plug>(incsearch-nohl-g#)
 
 map <leader>i :CtrlPBufTag<cr>
 
-map <c-j> ]e
-map <c-k> [e
-xmap <c-j> ]egv
-xmap <c-k> [egv
+map <m-j> ]e
+map <m-k> [e
+xmap <m-j> ]egv
+xmap <m-k> [egv
 
 " f15 is c-cr in my iTerm2
 map <f15> ]<space>
@@ -339,11 +352,6 @@ cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
 nmap <leader>fo :Gqfopen<cr>
 
-" map <m-w> <Plug>CamelCaseMotion_w
-" map <m-b> <Plug>CamelCaseMotion_b
-" map <m-e> <Plug>CamelCaseMotion_e
-" map <m-g><m-e> <Plug>CamelCaseMotion_ge
-
 nmap <leader>-- @:
 nmap <leader>-b :call DeleteHiddenBuffers()<cr>
 nmap <leader>-u :call ClearUndos()<cr>
@@ -360,9 +368,6 @@ map <leader>u :call EvaluateCode()<cr>
 map gR gr$
 
 map <silent> <leader>om :call OpenMarkdownPreview()<cr>
-
-nnoremap <m-g> :call FindAllMultipleCursors(0)<cr>
-vnoremap <m-g> :call FindAllMultipleCursors(1)<cr>
 
 map <leader>yq :call MakeSession()<cr>:qa<cr>
 map <leader>yl :call LoadSession()<cr>
@@ -406,7 +411,6 @@ cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
 cabbrev plugu PlugUpdate
 cabbrev goyo Goyo
-cabbrev tnew Tnew
 cabbrev gblame Gblame
 cabbrev gb Gblame
 cabbrev glog Glog
@@ -414,27 +418,19 @@ cabbrev gdiff Gdiff
 cabbrev gd Gdiff
 cabbrev gmodif Gmodified
 cabbrev gm Gmodified
-cabbrev co copen
-cabbrev qf copen
-cabbrev lo lopen
 cabbrev lint Lint
-cabbrev vn vnew
-cabbrev en enew
-cabbrev ne new
-cabbrev hn new
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
-
-map zs zt
-noremap z0 zs
-map gs gS
-map gj gJ
 
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
 map <m-p> :CtrlP<cr>
+
+nmap <leader>yt <Plug>Titlecase
+vmap <leader>yt <Plug>Titlecase
+nmap <leader>yT <Plug>TitlecaseLine
 
 "#############################
 "### General configuration ###
@@ -519,9 +515,9 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 " let g:ctrlp_lazy_update = 100
 let g:ctrlp_prompt_mappings = {
-      \ 'PrtHistory(1)':        ['<c-p>', '<m-p>'],
-      \ 'PrtHistory(-1)':       ['<c-n>', '<m-n>'],
-      \ 'AcceptSelection("t")': ['<c-t>', '<m-t>']
+      \ 'PrtHistory(1)':        ['<m-p>', '<c-p>'],
+      \ 'PrtHistory(-1)':       ['<m-n>', '<c-n>'],
+      \ 'AcceptSelection("t")': ['<m-t>', '<c-t>']
       \ }
 
 let delimitMate_expand_cr = 1
@@ -655,8 +651,6 @@ let g:bufExplorerShowTabBuffer = 1
 let g:bufExplorerShowNoName = 1
 hi link bufExplorerAltBuf bufExplorerCurBuf
 
-let g:multi_cursor_insert_maps = { 'j': 1 }
-
 let g:session_directory = '~/.vim/tmp/sessions'
 let g:session_lock_enabled = 0
 let g:session_autosave = 'no'
@@ -679,6 +673,15 @@ let MRU_Window_Height = 10
 hi link MRUFileName String
 
 let s:last_active_tab_number = 1
+
+call textobj#user#plugin('previous', {
+      \   '-': {
+      \     'select-function': 'GetLastChangeTextObject',
+      \     'select': ['ac', 'ic'],
+      \   },
+      \ })
+
+let g:titlecase_map_keys = 0
 
 "#################
 "### Functions ###
@@ -1240,18 +1243,6 @@ function! OpenMarkdownPreview()
   silent exec '!open http://localhost:6419/' . expand('%')
 endfunction
 
-function! FindAllMultipleCursors(visual_mode)
-  let search = ''
-
-  if a:visual_mode
-    let search = GetSelectionForSearches()
-  else
-    let search = expand('<cword>')
-  endif
-
-  exe 'MultipleCursorsFind ' . search
-endfunction
-
 function! NewPlaygroundBuffer(file_type)
   if bufexists('[playground]')
     bd! \[playground\]
@@ -1455,6 +1446,10 @@ function! MoveToNextTab()
   endif
   exe "b".l:cur_buf
 endfunc
+
+function! GetLastChangeTextObject()
+  return ['v', getpos("'["), getpos("']")]
+endfunction
 
 "####################
 "### Autocommands ###
