@@ -1,12 +1,19 @@
 "############
 "### TODO ###
 "############
+" neovim random crashes caused by python?
+" shortcut to remove last char at end of line? (usually trailing commas)
+" navigate up/down easily between buffers
+" make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
+" make alt f/b stop at / in command mode
+" don't press enter twice on popup
+" refresh nerdtree after renaming
+" investigate why vim is randomly freezing (because of neomake?)
+" check on neoterm deprecation
 " map hjkl to move both around buffers and tmux panes? Or rather cmd-hjkl, so that m-h can be used to delete instead
-" check on neomake deprecation
 " Integrate ctags seamlessly
 " Switch to Vim 8?
-" Why doesn't the unnamed register work after completing with a snippet?
-" Map cmd+I to tab os x wide, as well as tab to esc
+" Why doesn't the unnamed register work after completing with neosnippet?
 " Textobj function that works for ES6 JS
 " Detect : in ruby symbol syntax
 " Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet
@@ -51,7 +58,6 @@ Plug 'sjl/gundo.vim'
 Plug 'kassio/neoterm'
 Plug 'kurkale6ka/vim-pairs'
 Plug 'Julian/vim-textobj-variable-segment'
-Plug 'bkad/CamelCaseMotion'
 Plug 'mattn/emmet-vim'
 Plug 'valloric/MatchTagAlways'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -67,7 +73,7 @@ Plug 'vim-scripts/mru.vim'
 " Plug 'thinca/vim-textobj-function-javascript'
 " Plug 'tpope/vim-eunuch'
 Plug 'christoomey/vim-titlecase'
-
+Plug 'vim-scripts/closetag.vim'
 call plug#end()
 
 "############################
@@ -78,8 +84,6 @@ let mapleader = " "
 map - :
 imap jj <esc>
 map ' "
-map '' :reg "0123456789<cr>
-map '" :reg<cr>
 
 map J 5j
 map K 5k
@@ -126,31 +130,9 @@ cnoremap <c-f> <right>
 inoremap <c-d> <del>
 cnoremap <c-d> <del>
 inoremap <c-k> <c-o>D
-cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
-inoremap <m-b> <s-left>
-cnoremap <m-b> <s-left>
-inoremap <m-f> <s-right>
-cnoremap <m-f> <s-right>
-inoremap <m-d> <c-o>dw
-cnoremap <m-d> <s-right><c-w>
-inoremap <m-bs> <c-w>
-cnoremap <m-bs> <c-w>
 cnoremap <c-p> <up>
 cnoremap <c-n> <down>
-
-map <m-n> <esc>:tabnew<cr>
-map <silent> <m-q> :q<cr>
-map <silent> <m-w> :w<cr>
-for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
-endfor
-map <m-h> gT
-map <m-l> gt
-noremap <silent> <m-L> :+tabmove<cr>
-map <silent> <leader>tc :tabclose<cr>
-map <silent> <m-c> :tabclose<cr>
-map <silent> <leader>tp :call MoveToPrevTab()<cr>
-map <silent> <leader>tn :call MoveToNextTab()<cr>
+cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 
 map <silent> <m-d> <c-d>
 map <silent> <m-u> <c-u>
@@ -159,15 +141,35 @@ map <silent> <m-y> <c-y>
 map <silent> <m-f> <c-f>
 map <silent> <m-b> <c-b>
 map <silent> <m-w> <c-w>
-imap <m-i> <c-i>
-imap <m-n> <c-n>
-imap <m-p> <c-p>
 map <m-g> :=<cr>
 map <m-o> <c-o>
-map <m-i> <c-i>
-map <m-a> <c-a>
 map <m-x> <c-x>
 map <m-v> <c-v>
+map <m-r> <c-r>
+inoremap <m-bs> <c-w>
+cnoremap <m-bs> <c-w>
+cnoremap <m-r><m-w> <c-r><c-w>
+" imap <m-i> <c-i>
+" map <m-i> <c-i>
+cmap <m-k> <c-k>
+inoremap <m-b> <s-left>
+inoremap <m-f> <s-right>
+inoremap <m-d> <c-o>dw
+
+map <c-n> <esc>:tabnew<cr>
+map <silent> <m-q> :q<cr>
+map <silent> <m-w> :w<cr>
+for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
+endfor
+map <m-h> gT
+map <bs> gT
+map <m-l> gt
+noremap <silent> <m-L> :+tabmove<cr>
+map <silent> <leader>tc :tabclose<cr>
+map <silent> <m-c> :tabclose<cr>
+map <silent> <leader>tp :call MoveToPrevTab()<cr>
+map <silent> <leader>tn :call MoveToNextTab()<cr>
 
 nmap <leader>e :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
@@ -217,10 +219,17 @@ noremap g; g;zz
 noremap g, g,zz
 noremap gi gi<c-o>zz
 
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function() abort
-  return deoplete#close_popup() . "\<CR>"
-endfunction
+" imap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" function! s:my_cr_function() abort
+"   return deoplete#close_popup() . "\<CR>"
+" endfunction
+" imap <expr> <CR> pumvisible() ? deoplete#close_popup() . "\<CR>"  : '<Plug>delimitMateCR'
+" imap <expr> <CR> pumvisible() ? deoplete#close_popup() : '<Plug>delimitMateCR'
+" imap <expr> <CR> pumvisible() ? deoplete#close_popup() . "\<CR>"
+"                 \: '<Plug>delimitMateCR'
+" inoremap <expr> <CR> delimitMate#WithinEmptyPair() ?
+"       \ "<Plug>delimitMateCR" :
+"       \ "external_mapping"
 
 map <leader>9 i<space><esc>l
 map <leader>0 a<space><esc>h
@@ -234,13 +243,13 @@ map <leader>5 :%!
 
 " vnoremap . :normal .<cr>
 
-map <c-q> <nop>
-map <c-q>x <nop>
-map <c-q>" <nop>
-map <c-q>% <nop>
-for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  execute 'map <c-q>' . i . ' <nop>'
-endfor
+" map <c-q> <nop>
+" map <c-q>x <nop>
+" map <c-q>" <nop>
+" map <c-q>% <nop>
+" for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
+"   execute 'map <c-q>' . i . ' <nop>'
+" endfor
 
 map <leader>ft :set filetype=
 
@@ -274,8 +283,12 @@ imap <expr> <tab> TabComplete()
 smap <expr> <tab> TabComplete()
 xmap <expr> <tab> TabComplete()
 
+map <silent> '' :call DisplayRegisters()<cr>
+
 nmap <m-s><m-g> :call ShowHighlightsUnderCursor()<CR>
-nmap <m-s><m-a> :call ShowAllHighlights()<CR>
+nmap <c-s><c-a> :call ShowAllHighlights()<CR>
+nmap <m-s><m-a> <c-s><c-a>
+nmap <m-s><c-a> <c-s><c-a>
 
 nmap <leader>k :call OpenNERDTreeBuffer()<CR>
 nmap <silent> <f1> :NERDTreeToggle<CR>
@@ -333,6 +346,7 @@ map <leader>i :CtrlPBufTag<cr>
 
 map <m-j> ]e
 map <m-k> [e
+map <c-k> <m-k>
 xmap <m-j> ]egv
 xmap <m-k> [egv
 
@@ -348,8 +362,8 @@ nmap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
 nmap <leader>fw <leader>yfiw
 nmap <leader>fW <leader>yfiW
 vmap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
-cnoremap <c-l> <end><space>-G '\.'<space><left><left>
-cnoremap <c-g> <end><space>-G ''<space><left><left>
+cnoremap <m-l> <end><space>-G '\.'<space><left><left>
+cnoremap <m-g> <end><space>-G ''<space><left><left>
 nmap <leader>fo :Gqfopen<cr>
 
 nmap <leader>-- @:
@@ -431,6 +445,11 @@ map <m-p> :CtrlP<cr>
 nmap <leader>yt <Plug>Titlecase
 vmap <leader>yt <Plug>Titlecase
 nmap <leader>yT <Plug>TitlecaseLine
+
+cnoremap <expr> <m-b> EnhancedMetaLeft()
+cnoremap <expr> <m-f> EnhancedMetaRight()
+cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
+imap <m--> <c-_>
 
 "#############################
 "### General configuration ###
@@ -515,9 +534,11 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 " let g:ctrlp_lazy_update = 100
 let g:ctrlp_prompt_mappings = {
-      \ 'PrtHistory(1)':        ['<m-p>', '<c-p>'],
-      \ 'PrtHistory(-1)':       ['<m-n>', '<c-n>'],
-      \ 'AcceptSelection("t")': ['<m-t>', '<c-t>']
+      \ 'PrtHistory(1)':        ['<c-p>', '<m-p>'],
+      \ 'PrtHistory(-1)':       ['<c-n>', '<m-n>'],
+      \ 'AcceptSelection("t")': ['<c-t>', '<m-t>'],
+      \ 'PrtSelectMove("j")':   ['<c-j>', '<m-j>', '<down>'],
+      \ 'PrtSelectMove("k")':   ['<c-k>', '<m-k>', '<up>']
       \ }
 
 let delimitMate_expand_cr = 1
@@ -705,6 +726,21 @@ function! IsEmmetExpandable()
   return expr =~ '[.#>+*]' || index(s:emmetElements, expr) >= 0
 endfunction
 
+function! DisplayRegisters()
+  redir => output
+  silent exe 'reg "0123456789'
+  redir END
+  new
+  silent file [Registers]
+  setlocal nonumber norelativenumber colorcolumn=
+  setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+  silent put =output
+  silent normal gg"_d2j
+  exe 'resize' . line('$')
+  map <silent> <buffer> q :q<cr>
+  map <silent> <buffer> <esc> q
+endfunction
+
 function! TrimTrailingWhitespace()
   if &filetype == 'markdown' | return | endif
   let l = line(".")
@@ -762,6 +798,14 @@ function! DeleteCurrentFile()
   if answer == 'y'
     exec ':silent !rm ' . expand('%')
   endif
+endfunction
+
+function! RefreshNERDTree()
+  " NERDTreeFind
+  " NERDTreeClose
+  " call g:NERDTree.ForCurrentTab().getRoot().refresh()
+  " call g:NERDTree.ForCurrentTab().getRoot().refresh()
+  " call nerdtree#ui_glue#invokeKeyMap('o')
 endfunction
 
 function! MoveCurrentFile()
@@ -912,6 +956,7 @@ function! OnHelpDisplayed()
 endfunction
 
 function! OnQuickFixDisplayed()
+  setlocal colorcolumn=
   map <buffer> <cr> <cr>:ccl<cr>
   noremap <buffer> <f30> <cr>
   map <buffer> o <f30><c-w><c-w>
@@ -967,9 +1012,10 @@ function! OnFullSearchDisplayed()
 endfunction
 
 function! OnBufExplorerDisplayed()
-  if !exists('b:mappings_defined')
+  if !exists('b:config_defined')
+    setlocal colorcolumn=
     map <buffer> <esc> q
-    let b:mappings_defined = 1
+    let b:config_defined = 1
   endif
 endfunction
 
@@ -1449,6 +1495,40 @@ endfunc
 
 function! GetLastChangeTextObject()
   return ['v', getpos("'["), getpos("']")]
+endfunction
+
+function! EnhancedMetaLeft()
+  let line = getcmdline()
+  let pos = getcmdpos()
+  let next = 1
+  let nextnext = 1
+  let i = 2
+  while nextnext < pos
+    let next = nextnext
+    let nextnext = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let i += 1
+  endwhile
+  return repeat("\<Left>", pos - next)
+endfunction
+
+function! EnhancedMetaRight()
+  return AbstractRight("\<Right>")
+endfunction
+
+function! AbstractRight(command)
+  let line = getcmdline()
+  let pos = getcmdpos()
+  let next = 1
+  let i = 2
+  while next <= pos && next > 0
+    let next = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let i += 1
+  endwhile
+  return repeat(a:command, next - pos)
+endfunction
+
+function! EnhancedMetaDeleteRight()
+  return AbstractRight("\<Right>\<BS>")
 endfunction
 
 "####################
