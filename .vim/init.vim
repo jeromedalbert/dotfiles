@@ -1,9 +1,9 @@
 "############
 "### TODO ###
 "############
-" neovim random crashes caused by python?
-" shortcut to remove last char at end of line? (usually trailing commas)
-" navigate up/down easily between buffers
+" make c-e in term work. maybe do esc mappings (for left alt)
+" investigate neovim random crashes (caused by tmux-focus-events or python?). Maybe comment out all plugins and do a binary search
+" shortcut to paste as is
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " make alt f/b stop at / in command mode
 " don't press enter twice on popup
@@ -74,6 +74,7 @@ Plug 'vim-scripts/mru.vim'
 " Plug 'tpope/vim-eunuch'
 Plug 'christoomey/vim-titlecase'
 Plug 'vim-scripts/closetag.vim'
+" Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 "############################
@@ -155,6 +156,7 @@ cmap <m-k> <c-k>
 inoremap <m-b> <s-left>
 inoremap <m-f> <s-right>
 inoremap <m-d> <c-o>dw
+inoremap <m-o> <c-o>
 
 map <c-n> <esc>:tabnew<cr>
 map <silent> <m-q> :q<cr>
@@ -184,6 +186,10 @@ noremap <m-;> mCA;<Esc>`C
 inoremap <m-;> <C-o>A;
 noremap <m-,> mCA,<Esc>`C
 inoremap <m-,> <C-o>A,
+noremap <m-c> mC$x<esc>`C
+inoremap <m-c> <c-o>$<bs>
+map <c-c> <m-c>
+imap <c-c> <m-c>
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
@@ -275,6 +281,8 @@ map gj gJ
 
 nnoremap p p=`]
 nnoremap P P=`]
+" nnoremap <leader>p p
+" nnoremap <leader>P P
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -450,6 +458,12 @@ cnoremap <expr> <m-b> EnhancedMetaLeft()
 cnoremap <expr> <m-f> EnhancedMetaRight()
 cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
 imap <m--> <c-_>
+
+" nnoremap <silent> <m-s>h :TmuxNavigateLeft<cr>
+" nnoremap <silent> <m-s>j :TmuxNavigateDown<cr>
+" nnoremap <silent> <m-s>k :TmuxNavigateUp<cr>
+" nnoremap <silent> <m-s>l :TmuxNavigateRight<cr>
+" nnoremap <silent> <m-s>p :TmuxNavigatePrevious<cr>
 
 "#############################
 "### General configuration ###
@@ -703,6 +717,8 @@ call textobj#user#plugin('previous', {
       \ })
 
 let g:titlecase_map_keys = 0
+
+let g:tmux_navigator_no_mappings = 1
 
 "#################
 "### Functions ###

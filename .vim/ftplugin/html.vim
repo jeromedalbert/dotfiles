@@ -1,6 +1,7 @@
-let b:delimitMate_matchpairs = "(:),[:],{:}"
+imap <silent> <buffer> <expr> / CloseTag()
 
-imap <buffer> <expr> / CloseTag()
+let b:delimitMate_matchpairs = "(:),[:],{:}"
+let b:unaryTagsStack = ""
 
 function! CloseTag()
   let previous_char = getline('.')[col('.')-2]
