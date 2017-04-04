@@ -1109,6 +1109,13 @@
 	<real>1</real>
 	<key>GlobalKeyMap</key>
 	<dict>
+		<key>0x1b-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x64</string>
+		</dict>
 		<key>0x2e-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1312,6 +1319,13 @@
 			<key>Text</key>
 			<string>0x9</string>
 		</dict>
+		<key>0x6a-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x13 0x1B 0x5B 0x42</string>
+		</dict>
 		<key>0x6b-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1338,7 +1352,7 @@
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
-			<string>0x13 0x64</string>
+			<string>0x13 0x1B 0x5B 0x43</string>
 		</dict>
 		<key>0x6c-0x180000</key>
 		<dict>
@@ -1364,9 +1378,9 @@
 		<key>0x70-0x100000</key>
 		<dict>
 			<key>Action</key>
-			<integer>11</integer>
+			<integer>13</integer>
 			<key>Text</key>
-			<string>0x13 0x70</string>
+			<string></string>
 		</dict>
 		<key>0x70-0x80000</key>
 		<dict>
@@ -1381,6 +1395,13 @@
 			<integer>13</integer>
 			<key>Text</key>
 			<string></string>
+		</dict>
+		<key>0x72-0x80000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x12</string>
 		</dict>
 		<key>0x73-0x100000</key>
 		<dict>
@@ -1402,6 +1423,13 @@
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x75</string>
+		</dict>
+		<key>0x75-0x80000</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x15</string>
 		</dict>
 		<key>0x77-0x100000</key>
 		<dict>
@@ -1692,7 +1720,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 139 606 456 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>246 296 796 473 0 0 1280 800 </string>
+	<string>246 284 796 473 0 0 1280 800 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3426,7 +3454,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-03-14T17:08:38Z</date>
+	<date>2017-04-04T05:38:44Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>

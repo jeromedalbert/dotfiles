@@ -1,22 +1,24 @@
 "############
 "### TODO ###
 "############
-" make c-e in term work. maybe do esc mappings (for left alt)
-" investigate neovim random crashes (caused by tmux-focus-events or python?). Maybe comment out all plugins and do a binary search
+" use one command (cmd-l probably) to swith to the next pane (and maybe previous pane, although not used a lot)
+" don't make space space center text
+" execute a one-off command in tmux that immediately closes the pane afterwards
+" combine backtraces of two exceptions in ruby
+" ask about c-x-l line autocompletion
+" browsing mode when you can use d/u
+" try differentiating iterm left and right alt mappings
 " shortcut to paste as is
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " make alt f/b stop at / in command mode
 " don't press enter twice on popup
 " refresh nerdtree after renaming
-" investigate why vim is randomly freezing (because of neomake?)
-" check on neoterm deprecation
-" map hjkl to move both around buffers and tmux panes? Or rather cmd-hjkl, so that m-h can be used to delete instead
+" check neoterm deprecation
 " Integrate ctags seamlessly
 " Switch to Vim 8?
 " Why doesn't the unnamed register work after completing with neosnippet?
 " Textobj function that works for ES6 JS
 " Detect : in ruby symbol syntax
-" Repro and fix FullSearch bug when huge amount of results. May have to do with deoplete or neosnippet
 
 "###############
 "### Plugins ###
@@ -166,6 +168,7 @@ for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
 endfor
 map <m-h> gT
 map <bs> gT
+map <c-h> gT
 map <m-l> gt
 noremap <silent> <m-L> :+tabmove<cr>
 map <silent> <leader>tc :tabclose<cr>
@@ -281,8 +284,8 @@ map gj gJ
 
 nnoremap p p=`]
 nnoremap P P=`]
-" nnoremap <leader>p p
-" nnoremap <leader>P P
+nnoremap <leader>yp p
+nnoremap <leader>YP P
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -465,6 +468,8 @@ imap <m--> <c-_>
 " nnoremap <silent> <m-s>l :TmuxNavigateRight<cr>
 " nnoremap <silent> <m-s>p :TmuxNavigatePrevious<cr>
 
+" map <leader>yb :call ToggleBrowseMode()<cr>
+
 "#############################
 "### General configuration ###
 "#############################
@@ -473,7 +478,7 @@ filetype plugin indent on
 if !exists('syntax_on')
   syntax on
 endif
-" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set termguicolors
 " set completeopt+=noinsert
 set fileformat=unix
@@ -510,7 +515,6 @@ set nofoldenable
 set gdefault
 
 set statusline=\ %<%f
-" set statusline+=\ %{GetLintCount()>0?'[!]':''}
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
 set statusline+=%=
@@ -532,8 +536,6 @@ set conceallevel=2 concealcursor=niv
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-
-" set inccommand=nosplit
 
 "#############################
 "### Plugins configuration ###
@@ -1256,7 +1258,7 @@ endfunction
 
 function! GitOpenModifiedFiles()
   silent only
-  let status = system('git status -s | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
+  let status = system('git status -s | remove_colors | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
   let filenames = split(status, "\n")
   if empty(filenames) | echo 'No modified files!' | return | endif
   exec "edit " . filenames[0]
@@ -1457,6 +1459,8 @@ endfunction
 
 function! Lint()
   if &buftype != '' | return | endif
+  if !filereadable(expand('%:p')) | return | endif
+  " if &filetype !~ 'ruby\|javascript\|css|\html' | return 0 | endif
 
   if &filetype =~ 'javascript'
     Neomake eslint
@@ -1546,6 +1550,22 @@ endfunction
 function! EnhancedMetaDeleteRight()
   return AbstractRight("\<Right>\<BS>")
 endfunction
+
+" function! ToggleBrowseMode()
+"   if !exists('s:browse_mode') | let s:browse_mode = 0 | endif
+
+"   if s:browse_mode
+"     nunmap d
+"     nnoremap d0 d^
+"     nunmap u
+"     let s:browse_mode = 0
+"   else
+"     nnoremap d <c-d>
+"     nunmap d0
+"     nnoremap u <c-d>
+"     let s:browse_mode = 1
+"   endif
+" endfunction
 
 "####################
 "### Autocommands ###

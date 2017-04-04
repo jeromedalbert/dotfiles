@@ -45,6 +45,9 @@ psgrep() {
 }
 alias el=elinks
 # alias elinks='elinks -no-connect'
+remove_colors() {
+  sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+}
 
 # Confs
 alias reload=". ~/.zshrc"
@@ -63,7 +66,7 @@ t() {
   fi
 }
 tmux-start() {
-  if (tmux ls 2> /dev/null | grep base | grep attached &> /dev/null); then
+  if (tmux ls | grep base | grep attached) &> /dev/null; then
     tmux-new-unnamed-session
   else
     tmux new -As base
