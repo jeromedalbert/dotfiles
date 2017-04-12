@@ -8,11 +8,7 @@ export EDITOR=$MAIN_EDITOR
 export VISUAL=$EDITOR
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
-export NPM_HOME=/usr/local/share/npm
-export VICE_HOME=/Applications/VICE
 export CLASSPATH=/Applications/KickAssembler/KickAss.jar:$CLASSPATH
-export GITLAB_VAGRANT_MEMORY=2048
-export GITLAB_VAGRANT_CORES=4
 export HOMEBREW_NO_ANALYTICS=1
 export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.99.100:2376"
@@ -25,8 +21,7 @@ export GREP_COLORS=auto
 export GREP_COLOR=auto
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.bin:$PATH
-export PATH=$NPM_HOME/bin:$PATH
-export PATH=$VICE_HOME/tools:$PATH
+export PATH=./node_modules/.bin:$PATH
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 
 #########################

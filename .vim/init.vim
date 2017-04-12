@@ -35,6 +35,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree'
 Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
@@ -54,6 +55,7 @@ Plug 'nishigori/increment-activator'
 Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'skwp/greplace.vim'
+Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 " Plug 'sickill/vim-pasta'
 Plug 'sjl/gundo.vim'
@@ -564,14 +566,13 @@ let g:netrw_altfile = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeIgnore = [
-      \
       \ '\.tags$', '\.tags_sorted_by_file$', '\.gemtags$', '\.pyc$', '\.pyo$',
       \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
       \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
       \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep',
       \
       \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
-      \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$'
+      \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
       \ ]
 let NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrowExpandable = '▸'
@@ -656,6 +657,9 @@ let g:user_emmet_settings = {
       \     'us': 'user-select:|;',
       \   },
       \ },
+      \ 'javascript.jsx' : {
+      \   'extends' : 'jsx'
+      \ },
       \ }
 let s:emmetElements = [
       \ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article',
@@ -722,6 +726,16 @@ let g:titlecase_map_keys = 0
 
 let g:tmux_navigator_no_mappings = 1
 
+let g:jsx_ext_required = 0
+
+let g:mta_filetypes = {
+      \ 'html' : 1,
+      \ 'xhtml' : 1,
+      \ 'xml' : 1,
+      \ 'jinja' : 1,
+      \ 'javascript.jsx' : 1
+      \}
+
 "#################
 "### Functions ###
 "#################
@@ -736,7 +750,7 @@ function! TabComplete()
 endfunction
 
 function! IsEmmetExpandable()
-  if &filetype !~ 'html\|css' | return 0 | endif
+  if &filetype !~ 'html\|css\|jsx' | return 0 | endif
   if !emmet#isExpandable() | return 0 | endif
   if &filetype =~ 'css' | return 1 | endif
 
@@ -1051,7 +1065,7 @@ function! PreviewNERDTreeNode()
 endfunction
 
 function! FullSearch(search_options)
-  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree'
+  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree_1'
     enew
   else
     tabnew
@@ -1664,3 +1678,6 @@ augroup general_autocommands
   autocmd BufRead * call ConfigureLargeFiles()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 augroup end
+
+set exrc
+set secure

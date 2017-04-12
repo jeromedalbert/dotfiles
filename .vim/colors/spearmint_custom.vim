@@ -138,3 +138,6 @@ hi link jsClassKeywords jsClass
 hi link jsThis Identifier
 hi link jsTemplateVar String
 hi link jsTemplateBraces String
+
+" hi jsxRegion guibg=#2f2f2f guifg=#719692
+hi link xmlEndTag xmlTag
