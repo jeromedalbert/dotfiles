@@ -1,3 +1,5 @@
+if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
+
 ###########################
 ### ALIASES / FUNCTIONS ###
 ###########################
@@ -129,8 +131,8 @@ to() {
   fi
 }
 alias tw='to work'
+alias tp='to purchase'
 alias tb='to blog'
-alias tp='to pokefarm'
 alias tc='to code'
 
 # Git
@@ -192,6 +194,7 @@ alias gdc="gd --cached"
 alias "gdh^"="gd 'HEAD^'"
 alias glog="git log"
 alias glo="git log --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias gloo="git log --all --oneline --no-merges"
 alias gloS="glo -S"
 alias gdt="git difftool"
 alias gdtc="git difftool --cached"
@@ -225,11 +228,13 @@ alias gb='git branch'
 alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
-alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
-alias gbDa='git-list-branches | grep -v "master\|`git-branch-current`" | xargs git branch -D'
-git-list-branches() {
-  git for-each-ref --format="%(refname:short)" HEAD refs/heads
-}
+alias gbDs="git branch | remove_colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
+alias gbDa='git branch | remove_colors | egrep -v "master|\*" | xargs git branch -D'
+# alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
+# alias gbDa='git-list-branches | grep -v "master\|`git-branch-current`" | xargs git branch -D'
+# git-list-branches() {
+#   git for-each-ref --format="%(refname:short)" HEAD refs/heads
+# }
 alias gignore="git update-index --assume-unchanged"
 alias gunignore="git update-index --no-assume-unchanged"
 alias gignored="git ignored"
@@ -272,6 +277,7 @@ alias gcp-='git cherry-pick -'
 fix() {
   vim +/"<<<<<<<" `git diff --name-only --diff-filter=U | xargs`
 }
+alias gstats='git shortlog -sn'
 
 # Github
 hc() {
@@ -330,11 +336,7 @@ alias st3='cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages'
 alias .vim='cd ~/.vim'
 alias c='cd ~/c'
 alias desk='cd ~/Desktop'
-alias work='cd ~/Documents/Vicinity'
-alias blog='cd ~/c/blog'
-alias g='cd ~/c/gratify'
-alias g2='cd ~/c/gratify2'
-alias down='cd ~/Downloads'
+alias de='desk'
 
 # SSH
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
@@ -359,13 +361,12 @@ ip() {
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
-external_ip() {
+public_ip() {
   local ip=`dig +short myip.opendns.com @resolver1.opendns.com`
 
   echo $ip | pbcopy
   echo $ip
 }
-alias public_ip="external_ip"
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
 function cdf() {
   cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
@@ -385,7 +386,6 @@ sman() { man "${1}" | col -b | subl }
 alias rtop="top -o rsize"
 alias ctop="top -o cpu"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
-alias pow_restart='touch ~/.pow/restart.txt'
 alias sub='filebot -get-subtitles'
 
 # Entertainment
@@ -419,6 +419,7 @@ alias r='rails'
 alias rs='rails server'
 alias rg='rails generate'
 alias rgm='rails generate migration'
+alias rdm='rails destroy migration'
 alias rd='rails destroy'
 alias rc='rails c'
 alias rr='rake routes'

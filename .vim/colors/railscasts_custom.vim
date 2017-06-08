@@ -32,7 +32,8 @@ endif
 
 let g:colors_name = "railscasts_custom"
 
-hi Cursor ctermfg=235 ctermbg=15 cterm=NONE guifg=#2b2b2b guibg=#ffffff gui=NONE
+hi Cursor ctermfg=235 ctermbg=15 cterm=NONE guifg=#000000 guibg=#ebebeb gui=NONE
+" hi Cursor ctermfg=235 ctermbg=15 cterm=NONE guifg=#ffffff guibg=#ff0000 gui=NONE
 hi Visual ctermfg=NONE ctermbg=59 cterm=NONE guifg=NONE guibg=#336699 gui=NONE
 hi Cursorline gui=NONE guibg=NONE
 hi CursorColumn ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3e3d3d gui=NONE
@@ -156,15 +157,17 @@ hi link scssAmpersand cssTagName
 hi link scssSelectorName Tag
 hi link scssSelectorChar Tag
 hi scssFunctionName guifg=NONE
+" hi link scssDefinition cssProp
 
 hi link htmlTagN htmlTag
-hi link htmlLink NONE
+" hi link htmlLink NONE
 hi link htmlSpecialTagName htmlTag
 
 hi erubyRailsHelperMethod guifg=#e6e1dc
 syn keyword erubyRender render
 hi link erubyRender rubyDefine
-hi erubyDelimiter guifg=NONE
+hi link erubyDelimiter NONE
+" hi erubyDelimiter guifg=NONE
 hi erubyExpression guifg=NONE
 
 hi link yamlBlockMappingKey Tag
@@ -179,6 +182,17 @@ hi markdownHeadingDelimiter guifg=#cb4b14
 hi markdownBold guifg=#586e75 gui=bold
 hi markdownItalic guifg=#586e75 gui=italic
 hi markdownLineBreak guibg=#A57706
+hi link markdownLinkText String
+" hi markdownOrderedListMarker guifg=#647b84
+hi markdownLinkTextDelimiter guifg=#647b84
+hi link markdownLinkDelimiter markdownLinkTextDelimiter
+hi markdownUrl guifg=#829496
+" hi markdownH1 gui=bold
+" hi link markdownH2 markdownH1
+" hi link markdownH3 markdownH1
+" hi link markdownH4 markdownH1
+" hi link markdownH5 markdownH1
+" hi link markdownH6 markdownH1
 
 hi diffRemoved guifg=#d32020 guibg=#eae3ca
 hi diffAdded guifg=#118714 guibg=#eae3ca
@@ -191,3 +205,49 @@ hi NeomakeErrorSign guibg=#e3e3e3
 hi NeomakeWarningSign guibg=#e3e3e3
 hi NeomakeMessageSign guibg=#e3e3e3
 hi NeomakeInfoSign guibg=#e3e3e3
+
+hi link xmlEndTag xmlTag
+
+hi link shRange NONE
+hi link shQuote String
+hi shShellVariables guifg=#d0d0ff
+
+" hi jsKeyword2 guifg=#a1617a
+hi jsKeyword2 gui=italic
+hi jsClassKeyword guifg=#cc7833
+hi link jsClassDefinition NONE
+hi jsComment guifg=#797979
+hi jsCommentTodo guifg=#797979 gui=inverse,bold,italic
+hi link jsFunction jsKeyword2
+hi link jsStorageClass jsKeyword2
+hi link jsImport NONE
+" hi jsImport gui=italic
+hi link jsFrom NONE
+" hi link jsExport jsStorageClass
+hi link jsExport NONE
+hi link jsExportDefault NONE
+" hi jsThis guifg=#d0d0ff
+" hi link jsSuper jsThis
+hi link xmlTag htmlTag
+hi link xmlTagName htmlTag
+hi link xmlAttrib xmlTag
+hi link xmlEqual xmlTag
+hi link jsTernaryIfOperator NONE
+hi link jsTemplateBraces rubyInterpolationDelimiter
+" hi link jsTemplateExpression rubyInterpolation
+hi link jsArrowFunction jsOperator
+hi link jsObject rubySymbol
+hi link jsObjectKey jsObject
+hi link jsNull jsObject
+hi link jsUndefined jsNull
+hi link jsSpreadOperator NONE
+hi link jsGlobalNodeObjects NONE
+hi link jsGlobalObjects NONE
+hi jsBuiltins NONE
+" hi jsBuiltins gui=italic
+" hi link jsSwitchCase Keyword
+hi link jsModuleAs NONE
+hi link jsRegexpCharClass String
+hi link jsRegexpBoundary String
+hi link jsRegexpQuantifier String
+hi link jsSpecial String

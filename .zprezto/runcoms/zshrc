@@ -10,19 +10,15 @@ export LSCOLORS="exfxcxdxbxegedabagacad"
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 export CLASSPATH=/Applications/KickAssembler/KickAss.jar:$CLASSPATH
 export HOMEBREW_NO_ANALYTICS=1
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://192.168.99.100:2376"
-export DOCKER_CERT_PATH="/Users/jerome/.docker/machine/machines/default"
-export DOCKER_MACHINE_NAME="default"
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export GREP_COLORS=auto
 export GREP_COLOR=auto
+export NVM_DIR=$HOME/.nvm
 export PATH=/usr/local/bin:$PATH
-export PATH=$HOME/.bin:$PATH
 export PATH=./node_modules/.bin:$PATH
-if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
+export PATH=$HOME/.bin:$PATH
 
 #########################
 ### ZSH CONFIGURATION ###
@@ -75,7 +71,9 @@ bindkey '^Sx' exit-shell
 #############
 
 eval "$(rbenv init - --no-rehash)"
+# . "/usr/local/opt/nvm/nvm.sh"
 stty -ixon
 unalias d
+unset _JAVA_OPTIONS
 
 if [ -z $TMUX ]; then; tmux-start; fi

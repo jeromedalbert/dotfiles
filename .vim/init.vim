@@ -1,6 +1,11 @@
 "############
 "### TODO ###
 "############
+" tests
+" map ]] to `]
+" shortcuts for `], and =`]
+" redraw when focus out or in
+" make the 'SEARCH HIT BOTTOM' wrapper more obvious
 " use one command (cmd-l probably) to swith to the next pane (and maybe previous pane, although not used a lot)
 " don't make space space center text
 " execute a one-off command in tmux that immediately closes the pane afterwards
@@ -57,7 +62,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'skwp/greplace.vim'
 Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
-" Plug 'sickill/vim-pasta'
+Plug 'sickill/vim-pasta'
 Plug 'sjl/gundo.vim'
 Plug 'kassio/neoterm'
 Plug 'kurkale6ka/vim-pairs'
@@ -88,7 +93,6 @@ let mapleader = " "
 
 map - :
 imap jj <esc>
-map ' "
 
 map J 5j
 map K 5k
@@ -105,6 +109,12 @@ map <silent> <leader>q :q<cr>
 map <leader>w :w<cr>
 map <leader>z :x<cr>
 nmap <leader>`q :qa!<CR>
+
+map ' "
+" noremap '[ '[
+" noremap '] ']
+" nmap ]] `]
+" nmap [[ `[
 
 map <up> <nop>
 map <down> <nop>
@@ -172,11 +182,17 @@ map <m-h> gT
 map <bs> gT
 map <c-h> gT
 map <m-l> gt
+noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-L> :+tabmove<cr>
-map <silent> <leader>tc :tabclose<cr>
+noremap <silent> <m-{> :-tabmove<cr>
+noremap <silent> <m-H> :-tabmove<cr>
 map <silent> <m-c> :tabclose<cr>
+map <silent> <leader>tc :tabclose<cr>
 map <silent> <leader>tp :call MoveToPrevTab()<cr>
+map <silent> <leader>th <leader>tp
 map <silent> <leader>tn :call MoveToNextTab()<cr>
+map <silent> <leader>tl <leader>tn
+map <silent> <leader>tr :call RenameTab()<cr>
 
 nmap <leader>e :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
@@ -284,10 +300,17 @@ noremap z0 zs
 map gs gS
 map gj gJ
 
-nnoremap p p=`]
-nnoremap P P=`]
-nnoremap <leader>yp p
-nnoremap <leader>YP P
+" nnoremap p p=`]
+" nnoremap P P=`]
+" nnoremap <leader>yp p
+" nnoremap <leader>YP P
+
+" map <silent> <m-E> 5<c-e>
+" map <silent> <m-Y> 5<c-y>
+" nnoremap <silent> zT :exec 'set scrolloff='.(&scroll/2)<cr>zt:set scrolloff=0<cr>
+nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
+" map <expr> <m-D> &scroll . "\<c-e>"
+" map <expr> <m-U> &scroll . "\<c-y>"
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -305,6 +328,7 @@ nmap <m-s><c-a> <c-s><c-a>
 
 nmap <leader>k :call OpenNERDTreeBuffer()<CR>
 nmap <silent> <f1> :NERDTreeToggle<CR>
+" nmap <silent> <f1> :NERDTreeMirrorToggle<CR>
 nmap <silent> <leader><f1> :silent! NERDTreeFind<CR>
 
 map <silent> <f2> :TagbarToggle<CR>
@@ -324,7 +348,7 @@ map <leader>fmv <leader>fmo
 map <leader>fde :call DeleteCurrentFile()<cr>
 map <leader>fdu :call DuplicateCurrentFile()<cr>
 map <leader>fcp :call CopyCurrentFilePath()<cr>
-map <leader>fcfp :call CopyCurrentFileFullPath()<cr>
+map <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
 map <leader>fcn :call CopyCurrentFileName()<cr>
 map <leader>fn :call CreateNewFileInCurrentDir()<cr>
 map <leader>fN :call CreateNewFile()<cr>
@@ -480,9 +504,12 @@ filetype plugin indent on
 if !exists('syntax_on')
   syntax on
 endif
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
+if !exists('g:colors_name')
+  colorscheme railscasts_custom
+endif
 set termguicolors
-" set completeopt+=noinsert
+set guicursor=a:block-blinkon0
+set lazyredraw
 set fileformat=unix
 set number relativenumber numberwidth=5
 set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
@@ -516,13 +543,15 @@ set grepprg=ag
 set nofoldenable
 set gdefault
 
-set statusline=\ %<%f
+set statusline=
+set statusline+=\ %<%f
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
 set statusline+=%=
 set statusline+=%{GetLintMsg()}
-set statusline+=\ \ %-14.(%l,%c%)
-set statusline+=\ %P
+set statusline+=\ \ %-14(%l,%c%)
+set statusline+=\ %-10(%LL%)
+set statusline+=\ \ %P
 
 let undodir = expand('~/.vim/tmp/undo')
 if !isdirectory(undodir)
@@ -538,6 +567,9 @@ set conceallevel=2 concealcursor=niv
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
+
+let html_no_rendering = 1
+let g:html_indent_inctags = 'p,main'
 
 "#############################
 "### Plugins configuration ###
@@ -668,7 +700,7 @@ let s:emmetElements = [
       \ 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details',
       \ 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset',
       \ 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset',
-      \ 'h1', 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input',
+      \ 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input',
       \ 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map',
       \ 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noframes',
       \ 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p',
@@ -677,6 +709,7 @@ let s:emmetElements = [
       \ 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
       \ 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track',
       \ 'tt', 'u', 'ul', 'var', 'video', 'wbr',
+      \ 'h1', 'h2', 'h3', 'h4', 'h6',
       \
       \ 'emb', 'btn', 'sty', 'dlg', 'fst', 'fig', 'leg', 'tarea', 'hdr', 'cmd',
       \ 'colg', 'art', 'fset', 'src', 'prog', 'bq', 'kg', 'adr' , 'cap',
@@ -714,13 +747,6 @@ let MRU_Window_Height = 10
 hi link MRUFileName String
 
 let s:last_active_tab_number = 1
-
-call textobj#user#plugin('previous', {
-      \   '-': {
-      \     'select-function': 'GetLastChangeTextObject',
-      \     'select': ['ac', 'ic'],
-      \   },
-      \ })
 
 let g:titlecase_map_keys = 0
 
@@ -797,24 +823,6 @@ function! ShowAllHighlights()
   normal "zpdd
 endfunction
 
-function! ChooseColorScheme()
-  if &filetype =~ 'qf\|diff\|gundo\|nerdtree\|tagbar' || expand('%') =~ '^['
-    return
-  endif
-
-  if &filetype =~ 'javascript'
-    call ChangeColorScheme('spearmint_custom')
-  else
-    call ChangeColorScheme('railscasts_custom')
-  end
-endfunction
-
-function! ChangeColorScheme(target_color_scheme)
-  if !exists('g:colors_name') || a:target_color_scheme != g:colors_name
-    exec 'colorscheme ' . a:target_color_scheme
-  endif
-endfunction
-
 function! OpenNERDTreeBuffer()
   if bufexists('NERD_tree_1')
     buffer NERD_tree_1
@@ -885,7 +893,7 @@ function! CopyCurrentFilePath()
   let @+=expand('%')
 endfunction
 
-function! CopyCurrentFileFullPath()
+function! CopyCurrentFileAbsolutePath()
   let @+=expand('%:p')
 endfunction
 
@@ -1096,7 +1104,6 @@ function! ResetProject()
   call OpenNERDTreeBuffer()
   silent! let @# = ''
   normal ggX^
-  call ChangeColorScheme('railscasts_custom')
 endfunction
 
 function! ClearUndos()
@@ -1232,16 +1239,64 @@ function! GetTabLine()
   return line
 endfunction
 
-function! GetTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  " let winnr = tabpagewinnr(a:n)
-  " let file = bufname(buflist[winnr - 1])
-  let file = bufname(buflist[0])
-  let file = fnamemodify(file, ':p:t')
-  if file == ''
-    let file = '[No Name]'
+function! GetTabLabel(tab_number)
+  let custom_tab_name = gettabvar(a:tab_number, 'tab_name')
+  if custom_tab_name != '' | return custom_tab_name | endif
+
+  let buflist = tabpagebuflist(a:tab_number)
+  let file_path = bufname(buflist[0])
+  if file_path == ''
+    return '[No Name]'
+  else
+    return fnamemodify(file_path, ':p:t')
+    return GetFileLabel(file_path, a:tab_number)
+  end
+endfunction
+
+function! GetTabLabels()
+  let tabs = []
+  for i in range(tabpagenr('$'))
+    let path = bufname(tabpagebuflist(i)[0])
+    let name = fnamemodify(path, ':p:t')
+    call add(tabs, { 'path': path, 'name': name, 'name_suffix': '' })
+  endfor
+  for i in range(tabpagenr('$'))
+    for j in range(i, tabpagenr('$') - 1)
+      call Disambiguate(tabs, i, j)
+    endfor
+  endfor
+  return tabs
+endfunction
+
+function! Disambiguate(tabs, i, j)
+  let tab1 = a:tabs[a:i]
+  let tab2 = a:tabs[a:j]
+  if tab1.name != tab2.name | return | endif
+  if tab1.path == tab2.path | return | endif
+
+  """ Find root for all same name nodes
+
+  if tab1.name_suffix == tab2.name_suffix
+    " tab1.name = 1
   endif
-  return file
+  " a:tabs[a:i] = 1
+  " let a:tabs[a:i] = 1
+endfunction
+
+function! GetFileLabel(file_path, tab_number)
+  let file_label = fnamemodify(file_path, ':p:t')
+  for i in range(a:tab_number + 1, tabpagenr('$') + 1)
+    let other_file_path = tabpagebuflist(a:tab_number)[0]
+    let ambiguous_labels = file_path == other_file_path ? 0 : 1
+    while ambiguous_labels
+      let other_file_label = fnamemodify(other_file_path, ':p:t')
+      if file_label == other_file_label
+
+      else
+        same_labels = 0
+      endif
+    endwhile
+  endfor
 endfunction
 
 function! GetCwd()
@@ -1348,10 +1403,6 @@ function! LoadSession()
   echo 'Session loaded.'
 endfunction
 
-function! SaveCurrentTabNumber()
-  let s:current_tab_number = tabpagenr()
-endfunction
-
 function! CustomCloseTab()
   if s:current_tab_number == 1 | return | endif
   exe 'tabnext' . (s:current_tab_number - 1)
@@ -1448,14 +1499,10 @@ endfunction
 
 function! OnGoyoEnter()
   silent !tmux set status off
-  setlocal foldcolumn=0
 endfunction
 
 function! OnGoyoLeave()
   silent !tmux set status on
-  if &filetype == 'markdown'
-    setlocal foldcolumn=5
-  endif
 endfunction
 
 function! SetVirtualEdit()
@@ -1527,10 +1574,6 @@ function! MoveToNextTab()
   exe "b".l:cur_buf
 endfunc
 
-function! GetLastChangeTextObject()
-  return ['v', getpos("'["), getpos("']")]
-endfunction
-
 function! EnhancedMetaLeft()
   let line = getcmdline()
   let pos = getcmdpos()
@@ -1580,6 +1623,26 @@ endfunction
 "     let s:browse_mode = 1
 "   endif
 " endfunction
+
+function! neomake#makers#ft#ruby#mri()
+  let errorformat =
+        \ '%-G%\%.%\%.%\%.%.%#,'.
+        \ '%-GSyntax OK,'.
+        \ '%E%f:%l: syntax error\, %m,'.
+        \ '%Z%p^'
+
+  return {
+        \ 'exe': 'ruby',
+        \ 'args': ['-c', '-T1', '-w'],
+        \ 'errorformat': errorformat
+        \ }
+endfunction
+
+function! RenameTab()
+  let tab_name = input('Tab name: ', '')
+  call settabvar(tabpagenr(), 'tab_name', tab_name)
+  set showtabline=1
+endfunction
 
 "####################
 "### Autocommands ###
@@ -1671,7 +1734,6 @@ augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
-  autocmd BufEnter,Filetype * call ChooseColorScheme()
   autocmd InsertLeave * silent! set nopaste
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call BufEnterConfig()
