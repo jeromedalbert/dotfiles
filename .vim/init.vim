@@ -176,7 +176,7 @@ map <c-n> <esc>:tabnew<cr>
 map <silent> <m-q> :q<cr>
 map <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  execute 'map <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
+  execute 'map <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
 map <m-h> gT
 map <bs> gT
@@ -193,6 +193,7 @@ map <silent> <leader>th <leader>tp
 map <silent> <leader>tn :call MoveToNextTab()<cr>
 map <silent> <leader>tl <leader>tn
 map <silent> <leader>tr :call RenameTab()<cr>
+map <silent> <leader>to :tabonly<cr>
 
 nmap <leader>e :e $MYVIMRC<CR>
 nmap <leader>E :source $MYVIMRC<CR><esc>
@@ -221,8 +222,6 @@ map <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 map <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 map <silent> <leader>of :silent! exe '!open %'<cr>
 map <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
-
-map <silent> <leader>j mC:join<cr>`C
 
 noremap $ $ze
 
@@ -495,6 +494,8 @@ imap <m--> <c-_>
 " nnoremap <silent> <m-s>p :TmuxNavigatePrevious<cr>
 
 " map <leader>yb :call ToggleBrowseMode()<cr>
+
+map <silent> <leader>j :call Join()<cr>
 
 "#############################
 "### General configuration ###
@@ -1065,7 +1066,7 @@ endfunction
 
 function! PreviewNERDTreeNode()
   let line = getline('.')
-  if line =~ '\(▸\|▾\)'
+  if line =~ '▸\|▾'
     call nerdtree#ui_glue#invokeKeyMap('o')
   elseif line !~ '^/'
     normal go
@@ -1508,7 +1509,7 @@ endfunction
 function! SetVirtualEdit()
   let absolute_col = virtcol('.') + pyeval('vim.current.window.col')
   let absolute_col += &foldcolumn + (&number ? &numberwidth : 0)
-
+  " echo screencol() . ' - ' . absolute_col
   let is_on_leftmost_screen = screencol() == absolute_col
 
   if is_on_leftmost_screen
@@ -1642,6 +1643,16 @@ function! RenameTab()
   let tab_name = input('Tab name: ', '')
   call settabvar(tabpagenr(), 'tab_name', tab_name)
   set showtabline=1
+endfunction
+
+function! Join()
+  let last_char = getline('.')[col('$')-2]
+  " normal! mCJ
+  normal! J
+  if last_char == '('
+    normal x
+  endif
+  " normal `C
 endfunction
 
 "####################

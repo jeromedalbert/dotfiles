@@ -1,11 +1,15 @@
 1password
+atom
 bartender
 calibre
 colloquy
 cyberduck
 disk-inventory-x
-dockertoolbox (!)
+docker
+dockertoolbox
 dropbox
+electrum
+electrum-ltc
 evernote
 filebot
 firefox
@@ -21,6 +25,8 @@ keepingyouawake
 key-codes
 keyboard-maestro
 kindle
+kitematic
+mamp
 ngrok
 nosleep
 omnigraffle
@@ -41,7 +47,7 @@ sublime-text
 trailer
 transmission-remote-gui
 vagrant
-virtualbox
+vimr
 vlc
 wireshark
 xld
