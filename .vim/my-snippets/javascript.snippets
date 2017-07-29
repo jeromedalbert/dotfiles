@@ -1,19 +1,3 @@
-snippet ajax
-alias aja
-abbr ajax call
-options indent
-  $.ajax({
-    type: 'POST',
-    url: $form.attr('action'),
-    data: $form.serialize(),
-    success: function (response) {
-      ${0}
-    },
-    error: function (response) {
-
-    }
-  });
-
 snippet al
 abbr alert
   alert(${0});
@@ -22,19 +6,21 @@ snippet cl
 abbr console.log
   console.log(${0});
 
-snippet ea
-abbr each
-options word
-  each(function() {
-    ${0}
-  });
+snippet cll
+abbr console.log('...')
+  console.log('${0}');
 
-snippet eai
-abbr each index
-options word
-  each(function(i) {
-    ${0}
-  });
+snippet ce
+abbr console.error
+  console.error(${0});
+
+snippet ci
+abbr console.info
+  console.info(${0});
+
+snippet cw
+abbr console.warn
+  console.warn(${0});
 
 snippet if
 abbr if
@@ -43,6 +29,7 @@ abbr if
   }
 
 snippet else
+alias el
 abbr else
   else {
     ${0}
@@ -57,55 +44,13 @@ abbr if { .. } else { .. }
 
   }
 
-snippet f
-abbr function
-  function(${1}) {
-    ${0}
-  }
-
-snippet fn
-abbr function
-  function ${1:functionName}(${2}) {
-    ${0}
-  }
-
-snippet jk
-abbr $()
-  $(${1})${2}
-
-snippet ss
-abbr $('')
-  $('${1}')${2}
-
 snippet len
 abbr length
   length
 
-snippet on
-abbr on event
-options word
-  on('${1}', function(${2:e}) {
-    ${0}
-  });
-
 snippet preven
 abbr e.preventDefault()
   e.preventDefault();
-
-snippet re
-abbr $(document).ready
-  $(function() {
-    ${0}
-  });
-
-snippet stt
-abbr setTimeout
-  setTimeout(function() {${0}}, 1000);
-
-snippet this
-abbr $(this)
-options word
-  $(this)
 
 snippet try
 abbr try catch
@@ -116,10 +61,186 @@ abbr try catch
 
   }
 
+snippet f
+options word
+abbr function
+  (${1}) => {
+    ${0}
+  }
+
+snippet m
+abbr method
+  ${1:methodName}(${2}) {
+    ${0}
+  }
+
+snippet stt
+abbr setTimeout
+  setTimeout(() => {${0}}, 1000);
+
 snippet iife
 abbr Immediately Invoked Function Expression
-  (function() {
+  (() => {
 
     ${0}
 
   })();
+
+snippet cla
+abbr class { .. }
+  class ${1}{
+
+    ${0}
+
+  }
+
+snippet clai
+abbr class { .. constructor .. }
+  class ${1}{
+
+    constructor() {
+      ${0}
+    }
+
+  }
+
+snippet con
+abbr constructor
+  constructor() {
+    ${0}
+  }
+
+snippet doc
+abbr document
+  document
+
+snippet ea
+alias fe fea
+abbr forEach
+options word
+  forEach((${1:e}) => {
+    ${0}
+  });
+
+snippet map
+abbr map
+options word
+  map((${1:e}) => {
+    ${0}
+  });
+
+snippet red
+alias reduce
+abbr reduce
+options word
+  reduce((${1:acc}, ${2:e}) => {
+    ${0}
+  });
+
+snippet fil
+alias filter
+abbr filter
+options word
+  filter((${1:e}) => {
+    ${0}
+  });
+
+snippet fin
+alias find
+abbr find
+options word
+  find((${1:e}) => {
+    ${0}
+  });
+
+snippet p
+abbr new Promise
+  new Promise((resolve, reject) => {
+    ${0}
+  })
+
+snippet then
+abbr then
+options word
+  then((${1:e}) => {
+    ${0}
+  });
+
+snippet catch
+abbr catch
+options word
+  catch((${1:e}) => {
+    ${0}
+  });
+
+snippet im
+abbr imp import
+abbr import
+  import ${1} from '${0}';
+
+snippet ex
+abbr exp
+abbr export
+  export ${0};
+
+snippet exd
+abbr expd
+abbr export default
+  export default ${0};
+
+snippet ae
+alias ad ade add adde
+abbr addEventListener
+options word
+  addEventListener('${1}', (${2:e}) => {
+    ${0}
+  });
+
+snippet gi
+abbr getElementById
+options word
+  getElementById('${0}')
+
+snippet dgi
+abbr document.getElementById
+  document.getElementById('${0}')
+
+snippet q
+alias qs s
+abbr querySelector
+options word
+  querySelector('${1}')${0}
+
+snippet qq
+alias dqs ds dq
+abbr document.querySelector
+options word
+  document.querySelector('${1}')${0}
+
+snippet a
+alias sa qsa qa
+abbr querySelectorAll
+options word
+  querySelectorAll('${1}')${0}
+
+snippet aa
+alias da dsa dqsa dqa
+abbr document.querySelectorAll
+options word
+  document.querySelectorAll('${1}')${0}
+
+snippet re
+alias req
+abbr require
+  require('${0}');
+
+snippet me
+alias mex mexp
+abbr module.exports = ...
+  module.exports = ${0};
+
+snippet str
+abbr use strict
+  'use strict';
+
+  ${0}

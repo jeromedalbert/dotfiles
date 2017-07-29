@@ -17,130 +17,137 @@
 " Maintainer:   Jerome Dalbert (jerome.dalbert@gmail.com)
 " License:      MIT
 "
-" Based on the RailsCasts TextMate theme [1] converted with Coloration 0.3.2
-" [2]. Optimized for true color terminal Vim/Neovim and tailored to my taste.
-"
-" [1] http://railscasts.com/about
-" [2] https://github.com/sickill/coloration
+" Originally based on the RailsCasts TextMate theme (http://railscasts.com/about).
+" Designed to work on 24-bit color terminals, with termguicolors on.
 
 set background=dark
 highlight clear
+if exists('syntax_on') | syntax reset | endif
+let g:colors_name = 'railscasts_custom'
 
-if exists("syntax_on")
-  syntax reset
-endif
-
-let g:colors_name = "railscasts_custom"
-
-hi Cursor ctermfg=235 ctermbg=15 cterm=NONE guifg=#000000 guibg=#ebebeb gui=NONE
-" hi Cursor ctermfg=235 ctermbg=15 cterm=NONE guifg=#ffffff guibg=#ff0000 gui=NONE
-hi Visual ctermfg=NONE ctermbg=59 cterm=NONE guifg=NONE guibg=#336699 gui=NONE
+hi Normal guifg=#e6e1dc guibg=#2f2f2f gui=NONE
+hi Cursor guifg=#000000 guibg=#ebebeb gui=NONE
+hi Visual guifg=NONE guibg=#336699 gui=NONE
 hi Cursorline gui=NONE guibg=NONE
-hi CursorColumn ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3e3d3d gui=NONE
+hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guibg=#454545
-" hi FoldColumn guifg=#8A8885 guibg=#E3E3E3
-hi FoldColumn guifg=#8A8885 guibg=#2f2f2f
+hi FoldColumn guifg=#8A8885 guibg=#e3e3e3
 hi SignColumn guibg=#e3e3e3
-hi LineNr guifg=#8A8885 guibg=#E3E3E3
-hi CursorLineNr guifg=#8A8885 guibg=#E3E3E3 gui=none
-hi MatchParen ctermfg=173 ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=underline
-hi StatusLine ctermfg=188 ctermbg=241 cterm=bold guifg=#e6e1dc guibg=#61605e gui=bold
-hi StatusLineNC ctermfg=188 ctermbg=241 cterm=NONE guifg=#e6e1dc guibg=#61605e gui=NONE
-hi Pmenu ctermfg=15 ctermbg=NONE cterm=NONE guifg=#333333 guibg=#ffffff gui=NONE
-hi PmenuSel ctermfg=NONE ctermbg=59 cterm=NONE guifg=#ffffff guibg=#5d90cf gui=bold
+hi LineNr guifg=#8A8885 guibg=#e3e3e3
+hi CursorLineNr guifg=#8A8885 guibg=#e3e3e3 gui=none
+hi MatchParen guifg=NONE guibg=NONE gui=underline
+hi StatusLine guifg=fg guibg=#61605e gui=bold
+hi StatusLineNC guifg=fg guibg=#61605e gui=NONE
+hi Pmenu guifg=#333333 guibg=#ffffff gui=NONE
+hi PmenuSel guifg=#ffffff guibg=#5d90cf gui=bold
 hi PmenuThumb guibg=#999999
 hi PmenuSbar guibg=#d6d6d6
+hi IncSearch guifg=#000000 guibg=#ffe792 gui=NONE
+hi Search guifg=NONE guibg=#336699 gui=NONE
+hi Directory guifg=#6d9cbe guibg=NONE gui=NONE
+" hi Folded guifg=#bc9458 guibg=NONE
+hi Folded guifg=fg guibg=NONE
+hi VertSplit guifg=bg guibg=NONE
 
-hi IncSearch ctermfg=235 ctermbg=143 cterm=NONE guifg=#000000 guibg=#ffe792 gui=NONE
-hi Search ctermfg=NONE ctermbg=NONE cterm=underline guifg=NONE guibg=#336699 gui=NONE
-hi Directory ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6d9cbe guibg=NONE gui=NONE
-hi Folded ctermfg=137 ctermbg=235 cterm=NONE guifg=#bc9458 guibg=#2b2b2b gui=NONE
-hi VertSplit guifg=#2f2f2f guibg=#2f2f2f
+hi Boolean guifg=#6e9cbe guibg=NONE gui=NONE
+hi Character guifg=#6d9cbe guibg=NONE gui=NONE
+hi Comment guifg=#bc9458 guibg=NONE gui=italic
+hi Conditional guifg=#cc7833 guibg=NONE gui=NONE
+hi Constant guifg=#6d9cbe guibg=NONE gui=NONE
+hi Define guifg=#cc7833 guibg=NONE gui=NONE
+hi DiffAdd guifg=fg guibg=#47840d gui=bold
+hi DiffDelete guifg=#8c0909 guibg=NONE gui=NONE
+hi DiffChange guifg=fg guibg=#263b59 gui=NONE
+hi DiffText guifg=fg guibg=#204a87 gui=bold
+hi ErrorMsg guifg=#ffffff guibg=#990000 gui=NONE
+hi WarningMsg guifg=#ffffff guibg=#990000 gui=NONE
+hi Float guifg=#a5c261 guibg=NONE gui=NONE
+hi Function guifg=#ffc66d guibg=NONE gui=NONE
+hi Identifier guifg=NONE guibg=NONE gui=NONE
+hi Keyword guifg=#cc7833 guibg=NONE gui=NONE
+hi Label guifg=#a5c261 guibg=NONE gui=NONE
+hi NonText guifg=#404040 guibg=NONE gui=NONE
+hi Number guifg=#a5c261 guibg=NONE gui=NONE
+hi Operator guifg=#cc7833 guibg=NONE gui=NONE
+hi PreProc guifg=#cc7833 guibg=NONE gui=NONE
+hi Special guifg=fg guibg=NONE gui=NONE
+hi SpecialKey guifg=#404040 guibg=#3e3d3d gui=NONE
+hi Statement guifg=#cc7833 guibg=NONE gui=NONE
+hi StorageClass guifg=#cc7833 guibg=NONE gui=NONE
+hi String guifg=#a5c261 guibg=NONE gui=NONE
+hi Tag guifg=#e8bf6a guibg=NONE gui=NONE
+hi Title guifg=NONE guibg=NONE gui=NONE
+hi Todo cterm=inverse,bold guifg=#bc9458 guibg=NONE gui=inverse,bold,italic
+hi Type guifg=#ffffff guibg=NONE gui=NONE
+hi Underlined guifg=NONE guibg=NONE gui=underline
 
-hi Normal ctermfg=188 ctermbg=235 cterm=NONE guifg=#e6e1dc guibg=#2f2f2f gui=NONE
-hi Boolean ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6e9cbe guibg=NONE gui=NONE
-hi Character ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6d9cbe guibg=NONE gui=NONE
-hi Comment ctermfg=137 ctermbg=NONE cterm=NONE guifg=#bc9458 guibg=NONE gui=italic
-hi Conditional ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi Constant ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6d9cbe guibg=NONE gui=NONE
-hi Define ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi DiffAdd ctermfg=188 ctermbg=64 cterm=bold guifg=#e6e1dc guibg=#47840d gui=bold
-hi DiffDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#8c0909 guibg=NONE gui=NONE
-hi DiffChange ctermfg=188 ctermbg=23 cterm=NONE guifg=#e6e1dc guibg=#263b59 gui=NONE
-hi DiffText ctermfg=188 ctermbg=24 cterm=bold guifg=#e6e1dc guibg=#204a87 gui=bold
-hi ErrorMsg ctermfg=15 ctermbg=88 cterm=NONE guifg=#ffffff guibg=#990000 gui=NONE
-hi WarningMsg ctermfg=15 ctermbg=88 cterm=NONE guifg=#ffffff guibg=#990000 gui=NONE
-hi Float ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi Function ctermfg=221 ctermbg=NONE cterm=NONE guifg=#ffc66d guibg=NONE gui=NONE
-hi Identifier ctermfg=173 ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi Keyword ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi Label ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi NonText ctermfg=238 ctermbg=236 cterm=NONE guifg=#404040 guibg=#2f2f2f gui=NONE
-hi Number ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi Operator ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi PreProc ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi Special ctermfg=188 ctermbg=NONE cterm=NONE guifg=#e6e1dc guibg=NONE gui=NONE
-hi SpecialKey ctermfg=238 ctermbg=237 cterm=NONE guifg=#404040 guibg=#3e3d3d gui=NONE
-hi Statement ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi StorageClass ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi String ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi Tag ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi Title ctermfg=188 ctermbg=NONE cterm=bold guifg=NONE guibg=NONE gui=NONE
-hi Todo ctermfg=137 ctermbg=NONE cterm=inverse,bold guifg=#bc9458 guibg=NONE gui=inverse,bold,italic
-hi Type ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NONE gui=NONE
-hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=underline
-hi rubyClass ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi rubyFunction ctermfg=221 ctermbg=NONE cterm=NONE guifg=#ffc66d guibg=NONE gui=NONE
-hi rubyInterpolationDelimiter ctermfg=NONE ctermbg=NONE cterm=NONE guifg=#519f50 guibg=NONE gui=NONE
-hi rubyInterpolation ctermfg=NONE ctermbg=NONE cterm=NONE guifg=#519f50 guibg=NONE gui=NONE
-hi rubySymbol ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6d9cbe guibg=NONE gui=NONE
-hi rubyConstant ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi rubyConstantCustom ctermfg=NONE ctermbg=NONE cterm=NONE guifg=#da4a39 guibg=NONE gui=NONE
-hi rubyStringDelimiter ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi rubyBlockParameter ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi rubyInstanceVariable ctermfg=189 ctermbg=NONE cterm=NONE guifg=#d0d0ff guibg=NONE gui=NONE
-hi rubyInclude ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi rubyGlobalVariable ctermfg=189 ctermbg=NONE cterm=NONE guifg=#d0d0ff guibg=NONE gui=NONE
-hi rubyRegexp ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi rubyRegexpDelimiter ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi rubyEscape ctermfg=71 ctermbg=NONE cterm=NONE guifg=#519f50 guibg=NONE gui=NONE
-hi rubyControl ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi rubyClassVariable ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi rubyOperator ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi rubyException ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi rubyPseudoVariable ctermfg=189 ctermbg=NONE cterm=NONE guifg=#d0d0ff guibg=NONE gui=NONE
-hi rubyRailsUserClass ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi rubyRailsARAssociationMethod ctermfg=167 ctermbg=NONE cterm=NONE guifg=#da4939 guibg=NONE gui=NONE
-hi rubyRailsARMethod ctermfg=167 ctermbg=NONE cterm=NONE guifg=#da4939 guibg=NONE gui=NONE
-hi rubyRailsRenderMethod ctermfg=167 ctermbg=NONE cterm=NONE guifg=#da4939 guibg=NONE gui=NONE
-hi erubyComment ctermfg=137 ctermbg=NONE cterm=NONE guifg=#bc9458 guibg=NONE gui=italic
-hi erubyRailsMethod ctermfg=167 ctermbg=NONE cterm=NONE guifg=#da4939 guibg=NONE gui=NONE
-hi htmlTag ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi htmlEndTag ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi htmlTagName ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi htmlArg ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi htmlSpecialChar ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6d9cbe guibg=NONE gui=NONE
-hi javaScriptFunction ctermfg=173 ctermbg=NONE cterm=NONE guifg=#cc7833 guibg=NONE gui=NONE
-hi javaScriptRailsFunction ctermfg=167 ctermbg=NONE cterm=NONE guifg=#da4939 guibg=NONE gui=NONE
-hi javaScriptBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi yamlKey ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi yamlAnchor ctermfg=189 ctermbg=NONE cterm=NONE guifg=#d0d0ff guibg=NONE gui=NONE
-hi yamlAlias ctermfg=189 ctermbg=NONE cterm=NONE guifg=#d0d0ff guibg=NONE gui=NONE
-hi yamlDocumentHeader ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi cssURL ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi cssFunctionName ctermfg=167 ctermbg=NONE cterm=NONE guifg=#da4939 guibg=NONE gui=NONE
-hi cssColor ctermfg=73 ctermbg=NONE cterm=NONE guifg=#6d9cbe guibg=NONE gui=NONE
-hi cssPseudoClassId ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi cssClassName ctermfg=179 ctermbg=NONE cterm=NONE guifg=#e8bf6a guibg=NONE gui=NONE
-hi cssValueLength ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi cssCommonAttr ctermfg=143 ctermbg=NONE cterm=NONE guifg=#a5c261 guibg=NONE gui=NONE
-hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
-hi helpHyperTextJump guifg=#cc7833
+hi rubyClass guifg=#cc7833 guibg=NONE gui=NONE
+hi rubyFunction guifg=#ffc66d guibg=NONE gui=NONE
+hi rubyInterpolationDelimiter guifg=#519f50 guibg=NONE gui=NONE
+hi rubyInterpolation guifg=#519f50 guibg=NONE gui=NONE
+hi rubySymbol guifg=#6d9cbe guibg=NONE gui=NONE
+hi rubyConstant guifg=NONE guibg=NONE gui=NONE
+hi rubyConstantCustom guifg=#da4a39 guibg=NONE gui=NONE
+hi rubyStringDelimiter guifg=#a5c261 guibg=NONE gui=NONE
+hi rubyBlockParameter guifg=NONE guibg=NONE gui=NONE
+hi rubyInstanceVariable guifg=#d0d0ff guibg=NONE gui=NONE
+hi rubyInclude guifg=#cc7833 guibg=NONE gui=NONE
+hi rubyGlobalVariable guifg=#d0d0ff guibg=NONE gui=NONE
+hi rubyRegexp guifg=#a5c261 guibg=NONE gui=NONE
+hi rubyRegexpDelimiter guifg=#a5c261 guibg=NONE gui=NONE
+hi rubyEscape guifg=#519f50 guibg=NONE gui=NONE
+hi rubyControl guifg=#cc7833 guibg=NONE gui=NONE
+hi rubyClassVariable guifg=NONE guibg=NONE gui=NONE
+hi rubyOperator guifg=#cc7833 guibg=NONE gui=NONE
+hi rubyException guifg=#cc7833 guibg=NONE gui=NONE
+hi rubyPseudoVariable guifg=#d0d0ff guibg=NONE gui=NONE
+hi rubyRailsUserClass guifg=NONE guibg=NONE gui=NONE
+hi rubyRailsARAssociationMethod guifg=#da4939 guibg=NONE gui=NONE
+hi rubyRailsARMethod guifg=#da4939 guibg=NONE gui=NONE
+hi rubyRailsRenderMethod guifg=#da4939 guibg=NONE gui=NONE
 hi rubyStringEscape guifg=#519f50
-
 hi link rubyRegexpSpecial String
 hi link rubyHereDocText String
 
+hi erubyComment guifg=#bc9458 guibg=NONE gui=italic
+hi erubyRailsMethod guifg=#da4939 guibg=NONE gui=NONE
+hi erubyRailsHelperMethod guifg=fg
+syn keyword erubyRender render
+hi link erubyRender rubyDefine
+hi link erubyDelimiter NONE
+hi erubyExpression guifg=NONE
+
+hi htmlTag guifg=#e8bf6a guibg=NONE gui=NONE
+hi htmlEndTag guifg=#e8bf6a guibg=NONE gui=NONE
+hi htmlTagName guifg=#e8bf6a guibg=NONE gui=NONE
+hi htmlArg guifg=#e8bf6a guibg=NONE gui=NONE
+hi htmlSpecialChar guifg=#6d9cbe guibg=NONE gui=NONE
+hi link htmlTagN htmlTag
+hi link htmlSpecialTagName htmlTag
+
+hi link xmlEndTag xmlTag
+hi link xmlTag htmlTag
+hi link xmlTagName htmlTag
+hi link xmlAttrib xmlTag
+hi link xmlEqual xmlTag
+
+hi yamlKey guifg=#e8bf6a guibg=NONE gui=NONE
+hi yamlAnchor guifg=#d0d0ff guibg=NONE gui=NONE
+hi yamlAlias guifg=#d0d0ff guibg=NONE gui=NONE
+hi yamlDocumentHeader guifg=#a5c261 guibg=NONE gui=NONE
+hi link yamlBlockMappingKey Tag
+hi link yamlKeyValueDelimiter Tag
+hi link yamlPlainScalar String
+hi link yamlBool String
+
+hi cssURL guifg=NONE guibg=NONE gui=NONE
+hi cssFunctionName guifg=#da4939 guibg=NONE gui=NONE
+hi cssColor guifg=#6d9cbe guibg=NONE gui=NONE
+hi cssPseudoClassId guifg=#e8bf6a guibg=NONE gui=NONE
+hi cssClassName guifg=#e8bf6a guibg=NONE gui=NONE
+hi cssValueLength guifg=#a5c261 guibg=NONE gui=NONE
+hi cssCommonAttr guifg=#a5c261 guibg=NONE gui=NONE
+hi cssBraces guifg=NONE guibg=NONE gui=NONE
 hi link cssIdentifier Tag
 hi cssVendor guifg=NONE
 hi cssInclude guifg=NONE
@@ -157,62 +164,19 @@ hi link scssAmpersand cssTagName
 hi link scssSelectorName Tag
 hi link scssSelectorChar Tag
 hi scssFunctionName guifg=NONE
-" hi link scssDefinition cssProp
-
-hi link htmlTagN htmlTag
-" hi link htmlLink NONE
-hi link htmlSpecialTagName htmlTag
-
-hi erubyRailsHelperMethod guifg=#e6e1dc
-syn keyword erubyRender render
-hi link erubyRender rubyDefine
-hi link erubyDelimiter NONE
-" hi erubyDelimiter guifg=NONE
-hi erubyExpression guifg=NONE
-
-hi link yamlBlockMappingKey Tag
-hi link yamlKeyValueDelimiter Tag
-hi link yamlPlainScalar String
-hi link yamlBool String
-
-hi CtrlPMatch guifg=#cc7833
-hi link bufExplorerCurBuf String
 
 hi markdownHeadingDelimiter guifg=#cb4b14
 hi markdownBold guifg=#586e75 gui=bold
 hi markdownItalic guifg=#586e75 gui=italic
 hi markdownLineBreak guibg=#A57706
 hi link markdownLinkText String
-" hi markdownOrderedListMarker guifg=#647b84
 hi markdownLinkTextDelimiter guifg=#647b84
 hi link markdownLinkDelimiter markdownLinkTextDelimiter
 hi markdownUrl guifg=#829496
-" hi markdownH1 gui=bold
-" hi link markdownH2 markdownH1
-" hi link markdownH3 markdownH1
-" hi link markdownH4 markdownH1
-" hi link markdownH5 markdownH1
-" hi link markdownH6 markdownH1
 
-hi diffRemoved guifg=#d32020 guibg=#eae3ca
-hi diffAdded guifg=#118714 guibg=#eae3ca
-
-hi link jsonQuote String
-
-hi pythonBuiltIn guifg=#6d9cbe
-
-hi NeomakeErrorSign guibg=#e3e3e3
-hi NeomakeWarningSign guibg=#e3e3e3
-hi NeomakeMessageSign guibg=#e3e3e3
-hi NeomakeInfoSign guibg=#e3e3e3
-
-hi link xmlEndTag xmlTag
-
-hi link shRange NONE
-hi link shQuote String
-hi shShellVariables guifg=#d0d0ff
-
-" hi jsKeyword2 guifg=#a1617a
+hi javaScriptFunction guifg=#cc7833 guibg=NONE gui=NONE
+hi javaScriptRailsFunction guifg=#da4939 guibg=NONE gui=NONE
+hi javaScriptBraces guifg=NONE guibg=NONE gui=NONE
 hi jsKeyword2 gui=italic
 hi jsClassKeyword guifg=#cc7833
 hi link jsClassDefinition NONE
@@ -221,20 +185,11 @@ hi jsCommentTodo guifg=#797979 gui=inverse,bold,italic
 hi link jsFunction jsKeyword2
 hi link jsStorageClass jsKeyword2
 hi link jsImport NONE
-" hi jsImport gui=italic
 hi link jsFrom NONE
-" hi link jsExport jsStorageClass
 hi link jsExport NONE
 hi link jsExportDefault NONE
-" hi jsThis guifg=#d0d0ff
-" hi link jsSuper jsThis
-hi link xmlTag htmlTag
-hi link xmlTagName htmlTag
-hi link xmlAttrib xmlTag
-hi link xmlEqual xmlTag
 hi link jsTernaryIfOperator NONE
 hi link jsTemplateBraces rubyInterpolationDelimiter
-" hi link jsTemplateExpression rubyInterpolation
 hi link jsArrowFunction jsOperator
 hi link jsObject rubySymbol
 hi link jsObjectKey jsObject
@@ -244,10 +199,27 @@ hi link jsSpreadOperator NONE
 hi link jsGlobalNodeObjects NONE
 hi link jsGlobalObjects NONE
 hi jsBuiltins NONE
-" hi jsBuiltins gui=italic
-" hi link jsSwitchCase Keyword
 hi link jsModuleAs NONE
 hi link jsRegexpCharClass String
 hi link jsRegexpBoundary String
 hi link jsRegexpQuantifier String
 hi link jsSpecial String
+hi link jsLabel Statement
+
+hi link shRange NONE
+hi link shQuote String
+hi shShellVariables guifg=#d0d0ff
+
+hi diffRemoved guifg=#d32020 guibg=#eae3ca
+hi diffAdded guifg=#118714 guibg=#eae3ca
+
+hi NeomakeErrorSign guibg=#e3e3e3
+hi NeomakeWarningSign guibg=#e3e3e3
+hi NeomakeMessageSign guibg=#e3e3e3
+hi NeomakeInfoSign guibg=#e3e3e3
+
+hi helpHyperTextJump guifg=#cc7833
+hi CtrlPMatch guifg=#cc7833
+hi link bufExplorerCurBuf String
+hi link jsonQuote String
+hi pythonBuiltIn guifg=#6d9cbe

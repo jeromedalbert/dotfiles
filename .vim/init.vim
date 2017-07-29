@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" via tmux binding + shell script + keyboard maestro, make cmd+q detach all attached sessions
 " tests
 " map ]] to `]
 " shortcuts for `], and =`]
@@ -44,7 +45,6 @@ Plug 'mxw/vim-jsx'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
-Plug 'int3/vim-extradite'
 Plug 'gregsexton/gitv'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'kana/vim-textobj-user'
@@ -78,12 +78,8 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'neomake/neomake'
 Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/mru.vim'
-" Plug 'wellle/targets.vim'
-" Plug 'thinca/vim-textobj-function-javascript'
-" Plug 'tpope/vim-eunuch'
-Plug 'christoomey/vim-titlecase'
 Plug 'vim-scripts/closetag.vim'
-" Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-markdown'
 call plug#end()
 
 "############################
@@ -186,8 +182,8 @@ noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-L> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <m-H> :-tabmove<cr>
-map <silent> <m-c> :tabclose<cr>
 map <silent> <leader>tc :tabclose<cr>
+map <silent> <leader>tq :tabclose<cr>
 map <silent> <leader>tp :call MoveToPrevTab()<cr>
 map <silent> <leader>th <leader>tp
 map <silent> <leader>tn :call MoveToNextTab()<cr>
@@ -208,10 +204,11 @@ noremap <m-;> mCA;<Esc>`C
 inoremap <m-;> <C-o>A;
 noremap <m-,> mCA,<Esc>`C
 inoremap <m-,> <C-o>A,
-noremap <m-c> mC$x<esc>`C
-inoremap <m-c> <c-o>$<bs>
-map <c-c> <m-c>
-imap <c-c> <m-c>
+noremap <m->> mCA.<Esc>`C
+inoremap <m-.> <C-o>A.
+inoremap <m->> <C-o>A.
+noremap <m-:> mCA:<Esc>`C
+inoremap <m-:> <C-o>A:
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
@@ -257,6 +254,8 @@ noremap gi gi<c-o>zz
 "       \ "<Plug>delimitMateCR" :
 "       \ "external_mapping"
 
+imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
+
 map <leader>9 i<space><esc>l
 map <leader>0 a<space><esc>h
 
@@ -294,7 +293,7 @@ cabbrev en enew
 cabbrev ne new
 cabbrev hn new
 
-map zs zt
+noremap zs zt
 noremap z0 zs
 map gs gS
 map gj gJ
@@ -310,6 +309,8 @@ map gj gJ
 nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
 " map <expr> <m-D> &scroll . "\<c-e>"
 " map <expr> <m-U> &scroll . "\<c-y>"
+
+noremap z<Space> za
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -329,10 +330,10 @@ nmap <leader>k :call OpenNERDTreeBuffer()<CR>
 nmap <silent> <f1> :NERDTreeToggle<CR>
 " nmap <silent> <f1> :NERDTreeMirrorToggle<CR>
 nmap <silent> <leader><f1> :silent! NERDTreeFind<CR>
+noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
 
 map <silent> <f2> :TagbarToggle<CR>
 map <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
-map <silent> <f4> :call BrowseCustomBackups()<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -349,6 +350,7 @@ map <leader>fdu :call DuplicateCurrentFile()<cr>
 map <leader>fcp :call CopyCurrentFilePath()<cr>
 map <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
 map <leader>fcn :call CopyCurrentFileName()<cr>
+map <leader>fcb :call CopyCurrentFileBackupPath()<cr>
 map <leader>fn :call CreateNewFileInCurrentDir()<cr>
 map <leader>fN :call CreateNewFile()<cr>
 
@@ -389,6 +391,8 @@ xmap <m-k> [egv
 " f15 is c-cr in my iTerm2
 map <f15> ]<space>
 imap <f15> <end><cr>
+map <m-cr> ]<space>
+imap <m-cr> <end><cr>
 " f16 is s-cr in my iTerm2
 map <f16> [<space>
 imap <f16> <esc>O
@@ -452,6 +456,7 @@ xmap <leader>8 *
 nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <Esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <Esc>?<c-r>=GetSelectionForSearches()<cr><cr>
+map <m-m> %
 
 command! -nargs=+ -complete=file FullSearch call FullSearch(<q-args>)
 command! Gmodified call GitOpenModifiedFiles()
@@ -497,6 +502,8 @@ imap <m--> <c-_>
 
 map <silent> <leader>j :call Join()<cr>
 
+nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
+
 "#############################
 "### General configuration ###
 "#############################
@@ -537,12 +544,16 @@ set showcmd
 set autoread
 set nostartofline
 set wildmenu
-set fillchars+=vert:\ "
 set complete=.,w
 " set complete=.,w,b,u,t
 set grepprg=ag
-set nofoldenable
 set gdefault
+set fillchars+=vert:\ "
+set nofoldenable
+set foldtext=GetFoldText()
+" set foldmethod=indent
+" set foldlevelstart=1
+" set foldlevelstart=99
 
 set statusline=
 set statusline+=\ %<%f
@@ -571,6 +582,8 @@ set wildignorecase
 
 let html_no_rendering = 1
 let g:html_indent_inctags = 'p,main'
+let g:html_indent_script1 = 'inc'
+let g:html_indent_style1 = 'inc'
 
 "#############################
 "### Plugins configuration ###
@@ -763,6 +776,8 @@ let g:mta_filetypes = {
       \ 'javascript.jsx' : 1
       \}
 
+let g:markdown_syntax_conceal = 0
+
 "#################
 "### Functions ###
 "#################
@@ -801,7 +816,7 @@ function! DisplayRegisters()
 endfunction
 
 function! TrimTrailingWhitespace()
-  if &filetype == 'markdown' | return | endif
+  if &filetype =~ 'markdown\|neosnippet' | return | endif
   let l = line(".")
   let c = col(".")
   %s/\s\+$//e
@@ -832,6 +847,29 @@ function! OpenNERDTreeBuffer()
     silent edit .
     if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
   end
+endfunction
+
+function! RevealInNERDTreeBuffer()
+  try
+    let p = g:NERDTreePath.New(expand('%:p'))
+  catch /^NERDTree.InvalidArgumentsError/
+    call nerdtree#echo('no file for the current buffer')
+    return
+  endtry
+  if p.isUnixHiddenPath()
+    let showhidden=g:NERDTreeShowHidden
+    let g:NERDTreeShowHidden = 1
+  endif
+
+  call OpenNERDTreeBuffer()
+
+  let node = b:NERDTree.root.reveal(p)
+  call b:NERDTree.render()
+  call node.putCursorHere(1,0)
+
+  if p.isUnixHiddenFile()
+    let g:NERDTreeShowHidden = showhidden
+  endif
 endfunction
 
 function! DeleteCurrentFile()
@@ -1030,14 +1068,6 @@ function! RestoreNerdtreeOriginalBuffer()
   if exists('t:escaped_nerdtree') | unlet t:escaped_nerdtree | endif
 endfunction
 
-function! OnExtraditeDisplayed()
-  if exists('s:browsing_custom_backups')
-    map <silent><buffer> <f4> q:q<cr>
-    unlet s:browsing_custom_backups
-  endif
-  setlocal norelativenumber
-endfunction
-
 function! OnNeotermDisplayed()
   nmap <silent><buffer> <esc> <c-w>p:Tclose<cr>
   nmap <buffer> q <esc>
@@ -1164,6 +1194,7 @@ function! BackupCurrentFile()
     call system(cmd)
   endif
   let file = expand('%:p')
+  if file =~ fnamemodify(s:custom_backup_dir, ':t') | return | endif
   let file_dir = s:custom_backup_dir . expand('%:p:h')
   let backup_file = s:custom_backup_dir . file
   let cmd = ''
@@ -1177,13 +1208,8 @@ function! BackupCurrentFile()
   call system(cmd)
 endfunction
 
-function! BrowseCustomBackups()
-  exe 'vsplit ' . s:custom_backup_dir . expand('%:p')
-  set ro
-  map <buffer> q :q<cr>
-  wincmd r
-  let s:browsing_custom_backups = 1
-  silent! Extradite
+function! CopyCurrentFileBackupPath()
+  let @+=expand(s:custom_backup_dir . expand('%:p'))
 endfunction
 
 function! OpenFileInPreviousWindow(highlight_line)
@@ -1655,6 +1681,23 @@ function! Join()
   " normal `C
 endfunction
 
+function! GetFoldText()
+  let text = getline(v:foldstart)
+  let width = winwidth(0) - &foldcolumn - strwidth(text)
+  return text . repeat(' ', width)
+endfunction
+
+function! ToggleFoldSyntax()
+  if &foldmethod == 'manual'
+    setl foldenable
+    setl foldlevel=1
+    setl foldmethod=syntax
+  else
+    setl foldmethod=manual
+    normal zR
+  endif
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1682,9 +1725,10 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *spec.rb set ft=ruby.rspec
   autocmd BufRead,BufNewFile *.html.erb set ft=eruby.html
   autocmd BufRead,BufNewFile *.js.erb set ft=eruby.javascript
-  autocmd BufRead,BufNewFile *.js.es6 set ft=javascript.es6
-  autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript.es6
   autocmd BufRead,BufNewFile *.nfo,*.NFO set ft=nfo
+  autocmd BufRead,BufNewFile *.js.es6 set ft=javascript
+  autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
+  autocmd BufRead,BufNewFile *.env.* set ft=sh
 augroup end
 
 augroup custom_backup
@@ -1702,7 +1746,6 @@ augroup on_display_events
   autocmd filetype help call OnHelpDisplayed()
   autocmd filetype qf call OnQuickFixDisplayed()
   autocmd filetype nerdtree call OnNERDTreeDisplayed()
-  autocmd filetype extradite call OnExtraditeDisplayed()
   autocmd filetype mru call OnMRUDisplayed()
   autocmd TermOpen *neoterm* call OnNeotermDisplayed()
   autocmd TermOpen *ag\ * call OnFullSearchDisplayed()

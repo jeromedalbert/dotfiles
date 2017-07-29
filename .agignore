@@ -6,6 +6,7 @@
 .sass-cache
 .DS_Store
 .keep
+*.pyc
 
 tmp
 log
@@ -13,5 +14,6 @@ CVS
 node_modules
 bower_components
 coverage
-
-*.pyc
+public/assets
+public/packs
+vendor

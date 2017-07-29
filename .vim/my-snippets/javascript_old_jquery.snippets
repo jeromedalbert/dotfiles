@@ -1,0 +1,52 @@
+snippet ajax
+alias aja
+abbr ajax call
+options indent
+  $.ajax({
+    type: 'POST',
+    url: $form.attr('action'),
+    data: $form.serialize(),
+    success: function (response) {
+      ${0}
+    },
+    error: function (response) {
+
+    }
+  });
+
+snippet ea
+abbr each
+options word
+  each(function() {
+    ${0}
+  });
+
+snippet eai
+abbr each index
+options word
+  each(function(i) {
+    ${0}
+  });
+
+snippet ss
+abbr $('')
+options word
+  $('${1}')${2}
+
+snippet on
+abbr on event
+options word
+  on('${1}', function(${2:e}) {
+    ${0}
+  });
+
+snippet re
+abbr $(document).ready
+  $(function() {
+    ${0}
+  });
+
+snippet this
+abbr $(this)
+options word
+  $(this)

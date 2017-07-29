@@ -1,0 +1,65 @@
+snippet ajax
+alias aja
+abbr ajax call
+options indent
+  $.ajax({
+    type: 'POST',
+    url: $form.attr('action'),
+    data: $form.serialize(),
+    success: (response) => {
+      ${0}
+    },
+    error: (response) => {
+
+    }
+  });
+
+snippet ea
+abbr each
+options word
+  each(() => {
+    ${0}
+  });
+
+snippet eai
+abbr each index
+options word
+  each((i) => {
+    ${0}
+  });
+
+snippet on
+abbr on event
+options word
+  on('${1}', (${2:e}) => {
+    ${0}
+  });
+
+snippet rea
+abbr $(document).ready
+  $(() => {
+    ${0}
+  });
+
+snippet reap
+alias clap
+abbr $(document).ready ... new Page
+  class Page {
+
+    constructor() {
+      ${0}
+    }
+
+  }
+
+  $(() => new Page());
+
+snippet reac
+abbr $(document).ready ... new class
+  $(() => new class {
+
+    constructor() {
+      ${0}
+    }
+
+  });

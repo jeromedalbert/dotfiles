@@ -64,9 +64,12 @@ abbr content_for :javascripts .. end
   <% end %>
 
 snippet js
-alias jav
 abbr javascript_include_tag
   <%= javascript_include_tag '${0}' %>
+
+snippet jsp
+abbr javascript_pack_tag
+  <%= javascript_pack_tag '${0}' %>
 
 snippet css
 alias sty

@@ -6,8 +6,6 @@ if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 
 # Utility variables
 export VIM_EDITOR=nvim
-export SUBLIME_EDITOR=subl
-export SUBLIME_COMMAND_LINE="subl --wait"
 export MAIN_EDITOR=$VIM_EDITOR
 
 # Unix
@@ -50,6 +48,8 @@ alias el=elinks
 remove_colors() {
   sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
+alias md5sum=md5
+alias wcl='wc -l'
 
 # Confs
 alias reload=". ~/.zshrc"
@@ -151,6 +151,8 @@ alias gaaca='gaa && gca'
 alias gaaca!='gaa && gca!'
 alias gaacapf!='gaaca! && gpf'
 alias gaacm='gaa && gcm'
+alias gic='gaacm Initial commit'
+alias gci='gic'
 alias gco='git checkout'
 alias gcob='gco -b'
 alias gc-='gco -'
@@ -202,7 +204,8 @@ alias gdtc="git difftool --cached"
 alias gmt="git mergetool"
 alias grm="git rm"
 alias grmc="git rm --cached"
-alias grs="git remote show"
+alias grv="git remote -v"
+alias gre='grv'
 alias gr="git reset"
 alias grh='git reset HEAD'
 alias "grh^"="git reset 'HEAD^'"
@@ -219,6 +222,8 @@ alias grbm="git rebase master"
 alias grbi="git rebase -i"
 alias grbi2="git rebase -i HEAD~2"
 alias grbi3="git rebase -i HEAD~3"
+alias grbi4="git rebase -i HEAD~4"
+alias grbi5="git rebase -i HEAD~5"
 alias grbim="git rebase -i master"
 alias grbir="git rebase -i --root"
 alias gcontinue="git rebase --continue"
@@ -246,9 +251,16 @@ alias gpf="gp -f"
 alias gbm="gb -m"
 gpu() {
   if [ $# -eq 0 ]; then
-    gpu origin `git-branch-current`
+    gp -u origin `git-branch-current`
   else
     gp -u "$@"
+  fi
+}
+gpuf() {
+  if [ $# -eq 0 ]; then
+    gp -u -f origin `git-branch-current`
+  else
+    gp -u -f "$@"
   fi
 }
 alias gclo-"git clone"
@@ -338,14 +350,17 @@ alias st2='cd ~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
 alias st3='cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages'
 alias .vim='cd ~/.vim'
 alias c='cd ~/c'
+alias ctmp='cd ~/c/tmp'
+alias ct='ctmp'
 alias desk='cd ~/Desktop'
 alias de='desk'
+alias backups='cd ~/.vim_custom_backups/Users/jerome'
 
 # SSH
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
 alias ssh_key="cat ~/.ssh/id_rsa.pub | pbcopy"
 
-# Apps
+# Apps / Binaries
 alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
 alias s="subl"
 alias s.="subl ."
@@ -360,13 +375,11 @@ alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simu
 timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
 ip() {
   local ip=`ipconfig getifaddr en0`
-
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
 public_ip() {
   local ip=`dig +short myip.opendns.com @resolver1.opendns.com`
-
   echo $ip | pbcopy
   echo $ip
 }
@@ -390,6 +403,7 @@ alias rtop="top -o rsize"
 alias ctop="top -o cpu"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 alias sub='filebot -get-subtitles'
+alias pw="openssl rand -base64 32 | tr -d '=/+'"
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -440,9 +454,9 @@ alias debug='pry-remote'
 alias st='spring stop'
 alias irb='pry'
 alias pr='powder restart'
-alias ir='invoker reload getgratify'
 alias il='invoker list'
 alias is='invoker start'
+alias fs='foreman start'
 
 # Python
 gpip() {
@@ -452,3 +466,11 @@ alias venv='virtualenv --python=/usr/local/bin/python'
 alias vac='source bin/activate'
 alias va='vac'
 alias pir='pip install -r requirements.txt'
+
+# Javascript
+alias y='yarn'
+alias yr='yarn run'
+alias ys='yarn run server'
+alias ya='yarn add'
+alias yrm='yarn remove'
+alias yre='yrm'
