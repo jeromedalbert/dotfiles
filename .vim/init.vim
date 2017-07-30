@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" migrate to ALE?
 " via tmux binding + shell script + keyboard maestro, make cmd+q detach all attached sessions
 " tests
 " map ]] to `]
