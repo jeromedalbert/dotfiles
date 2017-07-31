@@ -3,7 +3,7 @@ if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 ###########################
 ### ALIASES / FUNCTIONS ###
 ###########################
-# Aliases are in .zshenv to make them work in non-interactive shells like VIM
+# Aliases are in this .zshenv file to make them work in VIM's non-interactive shell
 
 VIM_EDITOR=nvim
 MAIN_EDITOR=$VIM_EDITOR
@@ -50,12 +50,24 @@ remove-colors() {
 }
 alias md5sum=md5
 alias wcl='wc -l'
-alias dirs='dirs -v'
 
 # Confs
 alias reload=". ~/.zshrc"
 alias conf="$MAIN_EDITOR ~/.zshrc"
-alias al="$MAIN_EDITOR ~/.aliases.zsh"
+alias al="$MAIN_EDITOR ~/.zshenv"
+
+# Zsh
+alias dirs='dirs -v'
+alias '1'='cd -'
+alias '2'='cd -2'
+alias '3'='cd -3'
+alias '4'='cd -4'
+alias '5'='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+alias '--' -='cd -'
 
 # Tmux
 alias tl='tmux ls'
@@ -114,7 +126,7 @@ ts() {
 }
 tgo() {
   tmux new-session -d -s go
-  tmux send-keys -t go "cd `pwd`" C-m
+  tmux send-keys -t go "cd $(pwd)" C-m
   tmux send-keys -t go 'ts rails' C-m
   tmux send-keys -t go 'ggo' C-m
   ta go
@@ -162,11 +174,11 @@ alias gcl='git clone'
 alias gclone='git clone'
 gg() {
  local last_command=$history[$((HISTCMD-1))]
- local git_repo=`echo $last_command | awk -F/ '{print $NF}' | sed 's/.git$//'`
+ local git_repo=$(echo $last_command | awk -F/ '{print $NF}' | sed 's/.git$//')
  cd $git_repo
 }
 ggcl() {
-  local git_repo=`echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//'`
+  local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
   gcl "$@"
   cd $git_repo
 }
@@ -240,7 +252,7 @@ alias gbD="git branch -D"
 alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
 alias gbDa='git branch | remove-colors | egrep -v "master|\*" | xargs git branch -D'
 # alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
-# alias gbDa='git-list-branches | grep -v "master\|`git-branch-current`" | xargs git branch -D'
+# alias gbDa='git-list-branches | grep -v "master\|$(current-git-branch)" | xargs git branch -D'
 # git-list-branches() {
 #   git for-each-ref --format="%(refname:short)" HEAD refs/heads
 # }
@@ -252,14 +264,14 @@ alias gpf="gp -f"
 alias gbm="gb -m"
 gpu() {
   if [ $# -eq 0 ]; then
-    gp -u origin `git-branch-current`
+    gp -u origin $(current-git-branch)
   else
     gp -u "$@"
   fi
 }
 gpuf() {
   if [ $# -eq 0 ]; then
-    gp -u -f origin `git-branch-current`
+    gp -u -f origin $(current-git-branch)
   else
     gp -u -f "$@"
   fi
@@ -268,17 +280,17 @@ alias gclo-"git clone"
 alias gx="gitx"
 alias git-branch-previous='git check-ref-format --branch "@{-1}"'
 ggo() {
-  git-branch-current > .git/previous_branch
+  current-git-branch > .git/previous_branch
   gaacm "current work"
   gcm
 }
 gback() {
   if [ -e '.git/previous_branch' ]; then
-    gco `cat .git/previous_branch`
+    gco $(cat .git/previous_branch)
     rm .git/previous_branch
   fi
 
-  last_commit_message=`git log -1 --pretty=%B`
+  last_commit_message=$(git log -1 --pretty=%B)
   if [ $last_commit_message = 'current work' ]; then; grh^; fi
   unset last_commit_message
 }
@@ -291,16 +303,16 @@ alias gt='git tag'
 alias gcp='git cherry-pick'
 alias gcp-='git cherry-pick -'
 fix() {
-  vim +/"<<<<<<<" `git diff --name-only --diff-filter=U | xargs`
+  vim +/"<<<<<<<" $(git diff --name-only --diff-filter=U | xargs)
 }
 alias gstats='git shortlog -sn'
 
 # Github
 hc() {
   case $# in
-  0)  hub compare `git-branch-current`
+  0)  hub compare $(current-git-branch)
       ;;
-  1)  hub compare $1..`git-branch-current`
+  1)  hub compare $1..$(current-git-branch)
       ;;
   2)  hub compare $1..$2
       ;;
@@ -308,7 +320,7 @@ hc() {
       ;;
   esac
 }
-alias hc-='hc `git-branch-previous`'
+alias hc-='hc $(git-branch-previous)'
 alias hb="hub browse"
 alias hp="hb -- pulls"
 alias hw="hb -- wiki"
@@ -333,7 +345,7 @@ alias dh='docker history'
 alias dm='docker-machine'
 alias dms='docker-machine start'
 dmip() {
-  local ip=`docker-machine ip`
+  local ip=$(docker-machine ip)
 
   echo $ip | pbcopy
   echo $ip
@@ -375,12 +387,12 @@ alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.
 alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
 timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
 ip() {
-  local ip=`ipconfig getifaddr en0`
+  local ip=$(ipconfig getifaddr en0)
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
 public-ip() {
-  local ip=`dig +short myip.opendns.com @resolver1.opendns.com`
+  local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
   echo $ip | pbcopy
   echo $ip
 }

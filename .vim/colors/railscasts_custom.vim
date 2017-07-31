@@ -208,7 +208,8 @@ hi link jsLabel Statement
 
 hi link shRange NONE
 hi link shQuote String
-hi shShellVariables guifg=#d0d0ff
+" hi shShellVariables guifg=#d0d0ff
+" hi zshDereferencing guifg=#d0cfff
 
 hi diffRemoved guifg=#d32020 guibg=#eae3ca
 hi diffAdded guifg=#118714 guibg=#eae3ca

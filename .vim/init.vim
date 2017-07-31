@@ -1,6 +1,7 @@
 "############
 "### TODO ###
 "############
+" use fzf for command line day to day things
 " migrate to ALE?
 " via tmux binding + shell script + keyboard maestro, make cmd+q detach all attached sessions
 " tests
@@ -390,8 +391,8 @@ xmap <m-j> ]egv
 xmap <m-k> [egv
 
 " f15 is c-cr in my iTerm2
-map <f15> ]<space>
-imap <f15> <end><cr>
+" map <f15> ]<space>
+" imap <f15> <end><cr>
 map <m-cr> ]<space>
 imap <m-cr> <end><cr>
 " f16 is s-cr in my iTerm2
@@ -1038,8 +1039,8 @@ endfunction
 function! OnQuickFixDisplayed()
   setlocal colorcolumn=
   map <buffer> <cr> <cr>:ccl<cr>
-  noremap <buffer> <f30> <cr>
-  map <buffer> o <f30><c-w><c-w>
+  noremap <buffer> <f21> <cr>
+  map <buffer> o <f21><c-w><c-w>
   map <buffer> q :q<cr>
 endfunction
 

@@ -1,0 +1,7 @@
+#env
+LESS = -i -R
+
+#line-edit
+\e abort
+^P up
+^N down

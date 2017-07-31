@@ -1,1 +1,0 @@
-/Users/jerome/.dotfiles/.zsh/.zshenv
