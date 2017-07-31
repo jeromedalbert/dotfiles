@@ -22,6 +22,7 @@ figlet
 findutils
 fortune
 freetype
+fzf
 gawk
 gdbm
 gettext
@@ -46,6 +47,7 @@ icu4c
 jemalloc
 jpeg
 jq
+less
 libevent
 libexif
 libpng
@@ -72,9 +74,12 @@ node
 nvm
 oniguruma
 openssl
+openssl@1.1
 ossp-uuid
 p7zip
 pcre
+pcre2
+perl
 pkg-config
 postgresql
 protobuf
@@ -87,11 +92,13 @@ readline
 reattach-to-user-namespace
 rename
 ripgrep
+ruby
 ruby-build
 scons
 screenfetch
 sdl2
 sdl2_image
+shellcheck
 sl
 spark
 sqlite
@@ -107,6 +114,7 @@ tree
 unibilium
 unixodbc
 unrar
+vim
 watch
 webp
 wget

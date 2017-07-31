@@ -96,7 +96,7 @@ bindkey -M menuselect '\eb' reverse-menu-complete
 zle -N insert-last-command-output
 bindkey '^x^l' insert-last-command-output
 
-autoload -Uz copy-earlier-word
+autoload -U copy-earlier-word
 zle -N copy-earlier-word
 bindkey '^[m' copy-earlier-word
 
