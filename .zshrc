@@ -120,6 +120,15 @@ bindkey '^z' fancy-ctrl-z
 zle -N exit-shell
 bindkey '^Sx' exit-shell
 
+bindkey -N paste
+zle -N start-paste
+bindkey '^[[200~' start-paste
+zle -N end-paste
+bindkey -M paste '^[[201~' end-paste
+zle -N paste-insert paste-insert
+bindkey -R -M paste "^@"-"\M-^?" paste-insert
+bindkey -M paste -s '^M' '^J'
+
 #################
 ### FUNCTIONS ###
 #################
@@ -167,8 +176,18 @@ exit-shell() {
   exit
 }
 
-clear-iterm() {
-  printf '\e]50;ClearScrollback\a'
+start-paste() {
+  bindkey -A paste main
+}
+
+end-paste() {
+  bindkey -e
+  LBUFFER+=$_paste_content
+  unset _paste_content
+}
+
+paste-insert() {
+  _paste_content+=$KEYS
 }
 
 #############
