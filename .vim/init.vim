@@ -314,6 +314,8 @@ nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
 
 noremap z<Space> za
 
+map <m-m> %
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -341,7 +343,6 @@ nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
 
 map <leader>a :w<cr>:call neoterm#test#run('file')<cr>
-map <leader>A :call neoterm#test#run('all')<cr>
 map <leader>c :w<cr>:call neoterm#test#run('current')<cr>
 map <leader>l :w<cr>:call neoterm#test#rerun()<cr>
 
@@ -364,8 +365,10 @@ map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 map <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
 vmap <leader>fb :!js-beautify<cr>
 
-nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
-nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
+nnoremap <leader>, :call ToggleTestInCurrentWindow()<cr>
+nmap <leader>g <leader>,
+nnoremap <leader>. :call ToggleTestInSplitWindow()<cr>
+nmap <leader>v <leader>.
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
@@ -453,12 +456,11 @@ nmap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
 vmap <leader>s :s/\%V
 
-nmap <leader>8 *
-xmap <leader>8 *
-nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
+nmap <leader>m *
+xmap <leader>m *
+nnoremap <silent> <leader>ym :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <Esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <Esc>?<c-r>=GetSelectionForSearches()<cr><cr>
-map <m-m> %
 
 command! -nargs=+ -complete=file FullSearch call FullSearch(<q-args>)
 command! Gmodified call GitOpenModifiedFiles()
@@ -1348,7 +1350,6 @@ function! BufEnterConfig()
     map <buffer> m, mO
     map <buffer> `, `O
     map <buffer> ', `O
-    map <buffer> <leader>, `O
   endif
 
   exe ':match'

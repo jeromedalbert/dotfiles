@@ -6,7 +6,7 @@ export EDITOR=$MAIN_EDITOR
 export VISUAL=$EDITOR
 export LSCOLORS='exfxcxdxbxegedabagacad'
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
-export PROMPT='%~$(git-info)$ '
+export PROMPT='%~$(git-prompt-info)$ '
 export WORDCHARS='*?_[]~=&;!#$%^(){}'
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
@@ -53,6 +53,7 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt share_history
 
+setopt hup
 setopt long_list_jobs
 setopt notify
 
@@ -133,14 +134,14 @@ bindkey -M paste -s '^M' '^J'
 ### FUNCTIONS ###
 #################
 
-git-info() {
+git-prompt-info() {
   git rev-parse --is-inside-work-tree &>/dev/null || return
 
   echo " %F{green}($(current-git-branch)%f $(git-dirty)%F{green})%f"
 }
 
 current-git-branch() {
-  git rev-parse --abbrev-ref HEAD
+  git symbolic-ref --short -q HEAD
 }
 
 git-dirty() {
