@@ -224,3 +224,7 @@ hi CtrlPMatch guifg=#cc7833
 hi link bufExplorerCurBuf String
 hi link jsonQuote String
 hi pythonBuiltIn guifg=#6d9cbe
+
+hi xxdAddress guifg=#bc9458
+hi link xxdSep xxdAddress
+hi link xxdAscii NONE

@@ -417,6 +417,11 @@ alias ctop="top -o cpu"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 alias sub='filebot -get-subtitles'
 alias pw="openssl rand -base64 32 | tr -d '=/+'"
+minivim() {
+  local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
+  echo $conf | pbcopy
+  echo $conf
+}
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"

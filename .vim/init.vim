@@ -1,15 +1,13 @@
 "############
 "### TODO ###
 "############
+" convert most maps to noremaps
+" check neoterm deprecation
 " use fzf for command line day to day things
-" migrate to ALE?
+" replace neomake with ALE?
 " via tmux binding + shell script + keyboard maestro, make cmd+q detach all attached sessions
 " tests
-" map ]] to `]
-" shortcuts for `], and =`]
-" redraw when focus out or in
 " make the 'SEARCH HIT BOTTOM' wrapper more obvious
-" use one command (cmd-l probably) to swith to the next pane (and maybe previous pane, although not used a lot)
 " don't make space space center text
 " execute a one-off command in tmux that immediately closes the pane afterwards
 " combine backtraces of two exceptions in ruby
@@ -21,7 +19,6 @@
 " make alt f/b stop at / in command mode
 " don't press enter twice on popup
 " refresh nerdtree after renaming
-" check neoterm deprecation
 " Integrate ctags seamlessly
 " Switch to Vim 8?
 " Why doesn't the unnamed register work after completing with neosnippet?
@@ -32,14 +29,13 @@
 "### Plugins ###
 "###############
 call plug#begin('~/.vim/plugged')
-
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'FelikZ/ctrlp-py-matcher'
+set rtp+=/usr/local/opt/fzf
+Plug 'junegunn/fzf.vim'
 Plug 'jeromedalbert/vim-rails'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'vim-ruby/vim-ruby'
-Plug 'tpope/vim-unimpaired'
+Plug 'jeromedalbert/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree'
 Plug 'pangloss/vim-javascript'
@@ -82,6 +78,9 @@ Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/mru.vim'
 Plug 'vim-scripts/closetag.vim'
 Plug 'tpope/vim-markdown'
+Plug 'janko-m/vim-test'
+" Plug 'christoomey/vim-tmux-navigator'
+Plug 'fidian/hexmode'
 call plug#end()
 
 "############################
@@ -106,9 +105,26 @@ noremap Q <nop>
 map <silent> <leader>q :q<cr>
 map <leader>w :w<cr>
 map <leader>z :x<cr>
-nmap <leader>`q :qa!<CR>
+nmap <leader>`q :qa!<cr>
 
-map ' "
+noremap ' "
+noremap '] `]
+noremap '[ `[
+noremap =] `[=`]
+noremap v] `[v`]
+noremap <] `[<`]
+noremap >] `[>`]
+noremap ]o `]o
+noremap ]O `]O
+noremap ]a `]a
+noremap ]A `]A
+noremap [a `[a
+noremap [A `[A
+noremap ]i `]i
+noremap ]I `]I
+noremap [i `[i
+noremap [I `[I
+" map v]
 " noremap '[ '[
 " noremap '] ']
 " nmap ]] `]
@@ -176,14 +192,16 @@ map <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute 'map <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
-map <m-h> gT
-map <bs> gT
+" map <m-h> gT
+" map <bs> gT
 map <c-h> gT
 map <m-l> gt
+" map <m-[> gT
+" map <m-]> gt
 noremap <silent> <m-}> :+tabmove<cr>
-noremap <silent> <m-L> :+tabmove<cr>
+" noremap <silent> <m-L> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
-noremap <silent> <m-H> :-tabmove<cr>
+" noremap <silent> <m-H> :-tabmove<cr>
 map <silent> <leader>tc :tabclose<cr>
 map <silent> <leader>tq :tabclose<cr>
 map <silent> <leader>tp :call MoveToPrevTab()<cr>
@@ -202,20 +220,32 @@ nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:<cr>:ccl<cr>:lcl<cr>:silent! T
 inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
-noremap <m-;> mCA;<Esc>`C
+noremap <m-;> mCA;<esc>`C
 inoremap <m-;> <C-o>A;
-noremap <m-,> mCA,<Esc>`C
+noremap <m-,> mCA,<esc>`C
 inoremap <m-,> <C-o>A,
-noremap <m->> mCA.<Esc>`C
+noremap <m->> mCA.<esc>`C
 inoremap <m-.> <C-o>A.
 inoremap <m->> <C-o>A.
-noremap <m-:> mCA:<Esc>`C
+noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
 
-tnoremap <Esc> <C-\><C-n>
+" noremap <m-j> <c-w>j
+" noremap <m-k> <c-w>k
+" noremap <m-l> <c-w>l
+" noremap <c-h> <c-w>h
+
+" noremap <m-j> <c-w>w
+" noremap <c-k> <c-w>W
+
+" let g:tmux_navigator_no_mappings = 1
+" noremap <silent> <m-j> :TmuxNavigateDown<cr>
+" noremap <silent> <c-k> :TmuxNavigateUp<cr>
+" noremap <silent> <m-l> :TmuxNavigateRight<cr>
+" noremap <silent> <c-h> :TmuxNavigateLeft<cr>
 
 map <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 map <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
@@ -226,10 +256,14 @@ noremap $ $ze
 
 map <silent> <m-]> :set virtualedit=all<cr>20zl
 map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
+map <silent> <m--> :set virtualedit=all<cr>20zl
+map <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
 vmap <silent> <m-]> 20zl
 vmap <silent> <m-[> 20zh
+" vmap <silent> <m--> 20zl
+" vmap <silent> <m-0> 20zh
 
 map @- @:
 
@@ -330,6 +364,11 @@ nmap <c-s><c-a> :call ShowAllHighlights()<CR>
 nmap <m-s><m-a> <c-s><c-a>
 nmap <m-s><c-a> <c-s><c-a>
 
+noremap <c-p> :Files<cr>
+noremap <leader>i :BTags<cr>
+
+tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
+
 nmap <leader>k :call OpenNERDTreeBuffer()<CR>
 nmap <silent> <f1> :NERDTreeToggle<CR>
 " nmap <silent> <f1> :NERDTreeMirrorToggle<CR>
@@ -365,10 +404,8 @@ map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 map <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
 vmap <leader>fb :!js-beautify<cr>
 
-nnoremap <leader>, :call ToggleTestInCurrentWindow()<cr>
-nmap <leader>g <leader>,
-nnoremap <leader>. :call ToggleTestInSplitWindow()<cr>
-nmap <leader>v <leader>.
+nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
+nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
@@ -385,13 +422,17 @@ map #  <Plug>(incsearch-nohl-#)zz
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-map <leader>i :CtrlPBufTag<cr>
-
 map <m-j> ]e
-map <m-k> [e
-map <c-k> <m-k>
+map <c-k> [e
 xmap <m-j> ]egv
-xmap <m-k> [egv
+xmap <c-k> [egv
+
+" map <leader>] <Plug>unimpairedBlankDown
+" map <leader>[ <Plug>unimpairedBlankUp
+" map ]<space> `]<Plug>unimpairedBlankDown
+" map [<space> `[<Plug>unimpairedBlankUp
+map <leader>; `]<Plug>unimpairedBlankDown
+map <leader>; `]<Plug>unimpairedBlankDown
 
 " f15 is c-cr in my iTerm2
 " map <f15> ]<space>
@@ -448,7 +489,7 @@ nmap <leader>x :%s/
 nmap <leader>X <leader>yxiw
 nmap <silent> <leader>yx :set opfunc=GlobalSubstituteVerb<CR>g@
 nmap <leader>yX <leader>yxiW
-vmap <leader>x <Esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
+vmap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
 
 nmap <leader>s :s/
 nmap <leader>S <leader>ysiw
@@ -456,15 +497,17 @@ nmap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
 vmap <leader>s :s/\%V
 
-nmap <leader>m *
-xmap <leader>m *
-nnoremap <silent> <leader>ym :set opfunc=SearchNextOccurenceVerb<cr>g@
-xnoremap * <Esc>/<c-r>=GetSelectionForSearches()<cr><cr>
-xnoremap # <Esc>?<c-r>=GetSelectionForSearches()<cr><cr>
+nmap <leader>8 *
+xmap <leader>8 *
+nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
+xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
+xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
 command! -nargs=+ -complete=file FullSearch call FullSearch(<q-args>)
 command! Gmodified call GitOpenModifiedFiles()
 command! Lint call Lint()
+command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': $FZF_DEFAULT_OPTS})
+command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, {'options': $FZF_DEFAULT_OPTS})
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -485,24 +528,10 @@ xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
-map <m-p> :CtrlP<cr>
-
-nmap <leader>yt <Plug>Titlecase
-vmap <leader>yt <Plug>Titlecase
-nmap <leader>yT <Plug>TitlecaseLine
-
 cnoremap <expr> <m-b> EnhancedMetaLeft()
 cnoremap <expr> <m-f> EnhancedMetaRight()
 cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
 imap <m--> <c-_>
-
-" nnoremap <silent> <m-s>h :TmuxNavigateLeft<cr>
-" nnoremap <silent> <m-s>j :TmuxNavigateDown<cr>
-" nnoremap <silent> <m-s>k :TmuxNavigateUp<cr>
-" nnoremap <silent> <m-s>l :TmuxNavigateRight<cr>
-" nnoremap <silent> <m-s>p :TmuxNavigatePrevious<cr>
-
-" map <leader>yb :call ToggleBrowseMode()<cr>
 
 map <silent> <leader>j :call Join()<cr>
 
@@ -521,7 +550,7 @@ if !exists('g:colors_name')
 endif
 set termguicolors
 set guicursor=a:block-blinkon0
-set lazyredraw
+" set lazyredraw
 set fileformat=unix
 set number relativenumber numberwidth=5
 set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
@@ -592,22 +621,25 @@ let g:html_indent_style1 = 'inc'
 "#############################
 "### Plugins configuration ###
 "#############################
-let g:ctrlp_user_command = 'ag %s -l --skip-vcs-ignores --hidden --nocolor -g ""'
-let g:ctrlp_use_caching = 0
-let g:ctrlp_match_window = 'top,order:ttb,min:45,max:45'
-let g:ctrlp_max_height = 45
-let g:ctrlp_reuse_window = 'nerdtree\|netrw'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-" let g:ctrlp_lazy_update = 100
-let g:ctrlp_prompt_mappings = {
-      \ 'PrtHistory(1)':        ['<c-p>', '<m-p>'],
-      \ 'PrtHistory(-1)':       ['<c-n>', '<m-n>'],
-      \ 'AcceptSelection("t")': ['<c-t>', '<m-t>'],
-      \ 'PrtSelectMove("j")':   ['<c-j>', '<m-j>', '<down>'],
-      \ 'PrtSelectMove("k")':   ['<c-k>', '<m-k>', '<up>']
+let g:fzf_layout = { 'up': '100%' }
+let g:fzf_colors = {
+      \ 'fg':        ['fg', 'Normal'],
+      \ 'bg':        ['bg', 'Normal'],
+      \ 'hl':        ['fg', 'Keyword'],
+      \ 'fg+':       ['fg', 'Normal'],
+      \ 'bg+':       ['bg', 'Normal'],
+      \ 'hl+':       ['fg', 'Keyword'],
+      \ 'pointer':   ['fg', 'Keyword']
       \ }
+let g:fzf_action = {
+      \ 'alt-t': 'tab split',
+      \ 'alt-x': 'split',
+      \ 'alt-v': 'vsplit'
+      \ }
+let g:fzf_history_dir = '~/.fzf_history'
+let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
+let $FZF_DEFAULT_OPTS .=
+      \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
 
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
@@ -639,6 +671,8 @@ let g:neoterm_rspec_lib_cmd = 'clear && echo && bin/rspec'
 let g:neoterm_keep_term_open = 1
 let g:neoterm_size = 11
 let g:neoterm_focus_when_tests_fail = 1
+
+let test#strategy = 'neovim'
 
 let g:tagbar_sort = 0
 
@@ -766,8 +800,6 @@ hi link MRUFileName String
 
 let s:last_active_tab_number = 1
 
-let g:titlecase_map_keys = 0
-
 let g:tmux_navigator_no_mappings = 1
 
 let g:jsx_ext_required = 0
@@ -781,6 +813,8 @@ let g:mta_filetypes = {
       \}
 
 let g:markdown_syntax_conceal = 0
+
+let g:hexmode_autodetect = 1
 
 "#################
 "### Functions ###
@@ -1098,6 +1132,10 @@ function! OnMRUDisplayed()
   map <buffer> <esc> q
 endfunction
 
+function! OnFzfDisplayed()
+  " tnoremap <nowait><buffer> <esc> <esc>
+endfunction
+
 function! PreviewNERDTreeNode()
   let line = getline('.')
   if line =~ '▸\|▾'
@@ -1352,12 +1390,14 @@ function! BufEnterConfig()
     map <buffer> ', `O
   endif
 
+  call ConfigureLargeFiles()
+
   exe ':match'
 endfunction
 
 function! GitOpenModifiedFiles()
   silent only
-  let status = system('git status -s | remove_colors | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
+  let status = system('git status -s | remove-colors | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
   let filenames = split(status, "\n")
   if empty(filenames) | echo 'No modified files!' | return | endif
   exec "edit " . filenames[0]
@@ -1369,9 +1409,15 @@ endfunction
 
 function! ConfigureLargeFiles()
   let max_line_length = max(map(range(1, line('$')), "col([v:val, '$'])")) - 1
-
   if max_line_length > 1000
     setlocal synmaxcol=153
+  endif
+
+  let nb_lines = line('$')
+  if nb_lines < 500 |
+    set nolazyredraw
+  else
+    set lazyredraw
   endif
 endfunction
 
@@ -1638,22 +1684,6 @@ function! EnhancedMetaDeleteRight()
   return AbstractRight("\<Right>\<BS>")
 endfunction
 
-" function! ToggleBrowseMode()
-"   if !exists('s:browse_mode') | let s:browse_mode = 0 | endif
-
-"   if s:browse_mode
-"     nunmap d
-"     nnoremap d0 d^
-"     nunmap u
-"     let s:browse_mode = 0
-"   else
-"     nnoremap d <c-d>
-"     nunmap d0
-"     nnoremap u <c-d>
-"     let s:browse_mode = 1
-"   endif
-" endfunction
-
 function! neomake#makers#ft#ruby#mri()
   let errorformat =
         \ '%-G%\%.%\%.%\%.%.%#,'.
@@ -1748,11 +1778,12 @@ augroup on_display_events
   autocmd!
   autocmd filetype help call OnHelpDisplayed()
   autocmd filetype qf call OnQuickFixDisplayed()
-  autocmd filetype nerdtree call OnNERDTreeDisplayed()
-  autocmd filetype mru call OnMRUDisplayed()
-  autocmd TermOpen *neoterm* call OnNeotermDisplayed()
-  autocmd TermOpen *ag\ * call OnFullSearchDisplayed()
-  autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
+	autocmd filetype nerdtree call OnNERDTreeDisplayed()
+	autocmd filetype mru call OnMRUDisplayed()
+	autocmd filetype fzf call OnFzfDisplayed()
+	autocmd TermOpen *neoterm* call OnNeotermDisplayed()
+	autocmd TermOpen *ag\ * call OnFullSearchDisplayed()
+	autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
 augroup end
 
 augroup nerdtree_original_buffer
@@ -1794,8 +1825,8 @@ augroup general_autocommands
   autocmd InsertLeave * silent! set nopaste
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call BufEnterConfig()
-  autocmd BufRead * call ConfigureLargeFiles()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
+  autocmd User FzfStatusLine setlocal statusline=\ "
 augroup end
 
 set exrc

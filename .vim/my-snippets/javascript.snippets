@@ -115,8 +115,13 @@ abbr document
   document
 
 snippet ea
-alias fe fea
 abbr forEach
+options word
+  forEach(${1:e} => ${0});
+
+snippet eaa
+alias fee feaa
+abbr forEach multiline
 options word
   forEach((${1:e}) => {
     ${0}
@@ -125,21 +130,36 @@ options word
 snippet map
 abbr map
 options word
+  map(${1:e} => ${0});
+
+snippet mapp
+abbr map multiline
+options word
   map((${1:e}) => {
     ${0}
   });
 
 snippet red
-alias reduce
 abbr reduce
+options word
+  reduce((${1:acc}, ${2:e}) => ${0});
+
+snippet redd
+abbr reduce multiline
 options word
   reduce((${1:acc}, ${2:e}) => {
     ${0}
   });
 
 snippet fil
-alias filter
+alias filt
 abbr filter
+options word
+  filter(${1:e} => ${0});
+
+snippet fill
+alias filtt
+abbr filter multiline
 options word
   filter((${1:e}) => {
     ${0}
@@ -147,6 +167,12 @@ options word
 
 snippet fin
 alias find
+abbr find multiline
+options word
+  filter(${1:e} => ${0});
+
+snippet finn
+alias findd
 abbr find
 options word
   find((${1:e}) => {

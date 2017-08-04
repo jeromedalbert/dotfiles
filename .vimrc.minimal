@@ -1,0 +1,47 @@
+set expandtab tabstop=2 shiftwidth=2 smarttab
+set incsearch ignorecase smartcase hlsearch
+set hidden
+set wildmenu
+
+let mapleader=" "
+map - :
+inoremap jj <esc>
+
+map J 5j
+map K 5k
+nmap 0 ^
+map Y y$
+noremap Q <nop>
+
+map <leader>q :q<cr>
+map <leader>w :w<cr>
+map <leader>z :x<cr>
+nmap <leader>`q :qa!<cr>
+
+noremap ' "
+
+map <silent> <m-d> <c-d>
+map <silent> <m-u> <c-u>
+map <silent> <m-e> <c-e>
+map <silent> <m-y> <c-y>
+map <m-o> <c-o>
+
+map <c-n> <esc>:tabnew<cr>
+map <silent> <m-q> :q<cr>
+map <silent> <m-w> :w<cr>
+map <c-h> gT
+map <m-l> gt
+
+nnoremap <leader><leader> <C-^>
+
+noremap <leader>n <c-w><c-w>
+noremap <m-]> 20zl
+noremap <m-[> 20zh
+
+map <c-p> :e */**/*
+
+inoremap <c-e> <end>
+inoremap <c-f> <right>
+inoremap <c-b> <left>
+cnoremap <c-f> <right>
+cnoremap <c-b> <left>
