@@ -48,6 +48,7 @@ hi Directory guifg=#6d9cbe guibg=NONE gui=NONE
 " hi Folded guifg=#bc9458 guibg=NONE
 hi Folded guifg=fg guibg=NONE
 hi VertSplit guifg=bg guibg=NONE
+hi Error guibg=#902020 gui=NONE
 
 hi Boolean guifg=#6e9cbe guibg=NONE gui=NONE
 hi Character guifg=#6d9cbe guibg=NONE gui=NONE

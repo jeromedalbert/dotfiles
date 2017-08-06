@@ -1,29 +1,20 @@
 "############
 "### TODO ###
 "############
-" convert most maps to noremaps
-" check neoterm deprecation
-" use fzf for command line day to day things
+" replace neoterm with vim-test
+" make custom 'search hit bottom'
+" use fzf for command line git, tmux session switching, etc
 " replace neomake with ALE?
-" via tmux binding + shell script + keyboard maestro, make cmd+q detach all attached sessions
-" tests
-" make the 'SEARCH HIT BOTTOM' wrapper more obvious
-" don't make space space center text
-" execute a one-off command in tmux that immediately closes the pane afterwards
-" combine backtraces of two exceptions in ruby
-" ask about c-x-l line autocompletion
-" browsing mode when you can use d/u
-" try differentiating iterm left and right alt mappings
-" shortcut to paste as is
+" Ask about c-x-l line autocompletion
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
-" make alt f/b stop at / in command mode
-" don't press enter twice on popup
+" fix bug when sometimes closing an html tag switches to previous buffer
+" don't press enter twice on completion popup
 " refresh nerdtree after renaming
 " Integrate ctags seamlessly
-" Switch to Vim 8?
-" Why doesn't the unnamed register work after completing with neosnippet?
+" Ask why unnamed register doesn't work after completing with neosnippet
 " Textobj function that works for ES6 JS
 " Detect : in ruby symbol syntax
+" Switch to Vim 8?
 
 "###############
 "### Plugins ###
@@ -63,6 +54,7 @@ Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'sickill/vim-pasta'
 Plug 'sjl/gundo.vim'
 Plug 'kassio/neoterm'
+Plug 'janko-m/vim-test'
 Plug 'kurkale6ka/vim-pairs'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'mattn/emmet-vim'
@@ -78,18 +70,16 @@ Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/mru.vim'
 Plug 'vim-scripts/closetag.vim'
 Plug 'tpope/vim-markdown'
-Plug 'janko-m/vim-test'
-" Plug 'christoomey/vim-tmux-navigator'
 Plug 'fidian/hexmode'
 call plug#end()
 
 "############################
 "### General key mappings ###
 "############################
-let mapleader = " "
 
-map - :
-imap jj <esc>
+let mapleader = " "
+noremap - :
+inoremap jj <esc>
 
 map J 5j
 map K 5k
@@ -97,15 +87,15 @@ nnoremap j gj
 nnoremap k gk
 xnoremap j gj
 xnoremap k gk
-nmap 0 ^
+nnoremap 0 ^
 nnoremap d0 d^
 noremap Y y$
 noremap Q <nop>
 
-map <silent> <leader>q :q<cr>
-map <leader>w :w<cr>
-map <leader>z :x<cr>
-nmap <leader>`q :qa!<cr>
+noremap <silent> <leader>q :q<cr>
+noremap <leader>w :w<cr>
+noremap <leader>z :x<cr>
+noremap <leader>`q :qa!<cr>
 
 noremap ' "
 noremap '] `]
@@ -124,29 +114,24 @@ noremap ]i `]i
 noremap ]I `]I
 noremap [i `[i
 noremap [I `[I
-" map v]
-" noremap '[ '[
-" noremap '] ']
-" nmap ]] `]
-" nmap [[ `[
 
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
-cmap <up> <nop>
-cmap <down> <nop>
-cmap <left> <nop>
-cmap <right> <nop>
-cmap <m-left> <nop>
-cmap <m-right> <nop>
-map <del> <nop>
-imap <del> <nop>
-cmap <del> <nop>
+noremap <up> <nop>
+noremap <down> <nop>
+noremap <left> <nop>
+noremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+cnoremap <up> <nop>
+cnoremap <down> <nop>
+cnoremap <left> <nop>
+cnoremap <right> <nop>
+cnoremap <m-left> <nop>
+cnoremap <m-right> <nop>
+noremap <del> <nop>
+inoremap <del> <nop>
+cnoremap <del> <nop>
 
 inoremap <c-a> <home>
 cnoremap <c-a> <home>
@@ -163,60 +148,51 @@ cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 
-map <silent> <m-d> <c-d>
-map <silent> <m-u> <c-u>
-map <silent> <m-e> <c-e>
-map <silent> <m-y> <c-y>
-map <silent> <m-f> <c-f>
-map <silent> <m-b> <c-b>
-map <silent> <m-w> <c-w>
-map <m-g> :=<cr>
-map <m-o> <c-o>
-map <m-x> <c-x>
-map <m-v> <c-v>
-map <m-r> <c-r>
+noremap <silent> <m-d> <c-d>
+noremap <silent> <m-u> <c-u>
+noremap <silent> <m-e> <c-e>
+noremap <silent> <m-y> <c-y>
+noremap <silent> <m-f> <c-f>
+noremap <silent> <m-b> <c-b>
+noremap <silent> <m-w> <c-w>
+noremap <m-g> :=<cr>
+noremap <m-o> <c-o>
+noremap <m-x> <c-x>
+noremap <m-v> <c-v>
+noremap <m-r> <c-r>
 inoremap <m-bs> <c-w>
 cnoremap <m-bs> <c-w>
 cnoremap <m-r><m-w> <c-r><c-w>
-" imap <m-i> <c-i>
-" map <m-i> <c-i>
-cmap <m-k> <c-k>
+cnoremap <m-k> <c-k>
 inoremap <m-b> <s-left>
 inoremap <m-f> <s-right>
 inoremap <m-d> <c-o>dw
 inoremap <m-o> <c-o>
 
-map <c-n> <esc>:tabnew<cr>
-map <silent> <m-q> :q<cr>
-map <silent> <m-w> :w<cr>
+noremap <c-n> <esc>:tabnew<cr>
+noremap <silent> <m-q> :q<cr>
+noremap <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  execute 'map <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
+  execute 'noremap <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
-" map <m-h> gT
-" map <bs> gT
-map <c-h> gT
-map <m-l> gt
-" map <m-[> gT
-" map <m-]> gt
+noremap <c-h> gT
+noremap <m-l> gt
 noremap <silent> <m-}> :+tabmove<cr>
-" noremap <silent> <m-L> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
-" noremap <silent> <m-H> :-tabmove<cr>
-map <silent> <leader>tc :tabclose<cr>
-map <silent> <leader>tq :tabclose<cr>
-map <silent> <leader>tp :call MoveToPrevTab()<cr>
+noremap <silent> <leader>tc :tabclose<cr>
+noremap <silent> <leader>tq :tabclose<cr>
+noremap <silent> <leader>tp :call MoveToPrevTab()<cr>
 map <silent> <leader>th <leader>tp
-map <silent> <leader>tn :call MoveToNextTab()<cr>
+noremap <silent> <leader>tn :call MoveToNextTab()<cr>
 map <silent> <leader>tl <leader>tn
-map <silent> <leader>tr :call RenameTab()<cr>
-map <silent> <leader>to :tabonly<cr>
+noremap <silent> <leader>tr :call RenameTab()<cr>
+noremap <silent> <leader>to :tabonly<cr>
 
-nmap <leader>e :e $MYVIMRC<CR>
-nmap <leader>E :source $MYVIMRC<CR><esc>
+noremap <leader>e :e $MYVIMRC<CR>
+noremap <leader>E :source $MYVIMRC<CR><esc>
 
-nnoremap <leader><leader> <C-^>
+noremap <leader><leader> <C-^>
 
-nnoremap <silent> <esc> :nohlsearch<cr>:match<cr>:<cr>:ccl<cr>:lcl<cr>:silent! Tclose<cr>:NERDTreeClose<cr>
 inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
@@ -233,46 +209,30 @@ inoremap <m-:> <C-o>A:
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
 
-" noremap <m-j> <c-w>j
-" noremap <m-k> <c-w>k
-" noremap <m-l> <c-w>l
-" noremap <c-h> <c-w>h
-
-" noremap <m-j> <c-w>w
-" noremap <c-k> <c-w>W
-
-" let g:tmux_navigator_no_mappings = 1
-" noremap <silent> <m-j> :TmuxNavigateDown<cr>
-" noremap <silent> <c-k> :TmuxNavigateUp<cr>
-" noremap <silent> <m-l> :TmuxNavigateRight<cr>
-" noremap <silent> <c-h> :TmuxNavigateLeft<cr>
-
-map <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
-map <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
-map <silent> <leader>of :silent! exe '!open %'<cr>
-map <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
+noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
+noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
+noremap <silent> <leader>of :silent! exe '!open %'<cr>
+noremap <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
 
 noremap $ $ze
 
-map <silent> <m-]> :set virtualedit=all<cr>20zl
-map <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
-map <silent> <m--> :set virtualedit=all<cr>20zl
-map <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
+noremap <silent> <m-]> :set virtualedit=all<cr>20zl
+noremap <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
+noremap <silent> <m--> :set virtualedit=all<cr>20zl
+noremap <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
-vmap <silent> <m-]> 20zl
-vmap <silent> <m-[> 20zh
-" vmap <silent> <m--> 20zl
-" vmap <silent> <m-0> 20zh
+vnoremap <silent> <m-]> 20zl
+vnoremap <silent> <m-[> 20zh
 
-map @- @:
+noremap @- @:
 
-map <leader>rr :e config/routes.rb<cr>
-map <leader>rR :vnew config/routes.rb<cr>
-map <leader>rs :e db/schema.rb<cr>
-map <leader>rS :vnew<cr>:e db/schema.rb<cr>
-map <leader>rg :e Gemfile<cr>
-map <leader>rG :vnew Gemfile<cr>
+noremap <leader>rr :e config/routes.rb<cr>
+noremap <leader>rR :vnew config/routes.rb<cr>
+noremap <leader>rs :e db/schema.rb<cr>
+noremap <leader>rS :vnew<cr>:e db/schema.rb<cr>
+noremap <leader>rg :e Gemfile<cr>
+noremap <leader>rG :vnew Gemfile<cr>
 
 noremap g; g;zz
 noremap g, g,zz
@@ -292,33 +252,17 @@ noremap gi gi<c-o>zz
 
 imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
 
-map <leader>9 i<space><esc>l
-map <leader>0 a<space><esc>h
+noremap <leader>9 i<space><esc>l
+noremap <leader>0 a<space><esc>h
 
-map <leader>2 @
-map <leader>22 @@
-" map <leader>1 :!
-" cnoremap !1 silent !
-map <leader>1 :silent !
-map <leader>5 :%!
+noremap <leader>2 @
+noremap <leader>22 @@
+noremap <leader>1 :silent !
+noremap <leader>5 :%!
 
-" vnoremap . :normal .<cr>
-
-" map <c-q> <nop>
-" map <c-q>x <nop>
-" map <c-q>" <nop>
-" map <c-q>% <nop>
-" for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
-"   execute 'map <c-q>' . i . ' <nop>'
-" endfor
-
-map <leader>ft :set filetype=
+noremap <leader>ft :set filetype=
 
 nnoremap gV `[V`]
-
-" vnoremap <silent> y y`]
-" vnoremap <silent> p p`]
-" nnoremap <silent> p p`]
 
 cabbrev tnew Tnew
 cabbrev co copen
@@ -331,94 +275,86 @@ cabbrev hn new
 
 noremap zs zt
 noremap z0 zs
-map gs gS
-map gj gJ
+noremap gs gS
+noremap gj gJ
 
-" nnoremap p p=`]
-" nnoremap P P=`]
-" nnoremap <leader>yp p
-" nnoremap <leader>YP P
-
-" map <silent> <m-E> 5<c-e>
-" map <silent> <m-Y> 5<c-y>
-" nnoremap <silent> zT :exec 'set scrolloff='.(&scroll/2)<cr>zt:set scrolloff=0<cr>
 nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
-" map <expr> <m-D> &scroll . "\<c-e>"
-" map <expr> <m-U> &scroll . "\<c-y>"
 
 noremap z<Space> za
 
-map <m-m> %
+noremap <m-m> %
 
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
-imap <expr> <tab> TabComplete()
-smap <expr> <tab> TabComplete()
-xmap <expr> <tab> TabComplete()
 
-map <silent> '' :call DisplayRegisters()<cr>
+inoremap <expr> <tab> TabComplete()
+snoremap <expr> <tab> TabComplete()
+xnoremap <expr> <tab> TabComplete()
 
-nmap <m-s><m-g> :call ShowHighlightsUnderCursor()<CR>
-nmap <c-s><c-a> :call ShowAllHighlights()<CR>
-nmap <m-s><m-a> <c-s><c-a>
-nmap <m-s><c-a> <c-s><c-a>
+nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
+
+noremap <silent> '' :call DisplayRegisters()<cr>
+
+noremap <m-s><m-g> :call ShowHighlightsUnderCursor()<CR>
+noremap <c-s><c-a> :call ShowAllHighlights()<CR>
+noremap <m-s><m-a> <c-s><c-a>
+noremap <m-s><c-a> <c-s><c-a>
 
 noremap <c-p> :Files<cr>
 noremap <leader>i :BTags<cr>
 
 tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
 
-nmap <leader>k :call OpenNERDTreeBuffer()<CR>
-nmap <silent> <f1> :NERDTreeToggle<CR>
-" nmap <silent> <f1> :NERDTreeMirrorToggle<CR>
-nmap <silent> <leader><f1> :silent! NERDTreeFind<CR>
+noremap <leader>k :call OpenNERDTreeBuffer()<CR>
+noremap <silent> <f1> :NERDTreeToggle<CR>
+noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
 noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
 
-map <silent> <f2> :TagbarToggle<CR>
-map <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+noremap <silent> <f2> :TagbarToggle<CR>
+noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 
-nmap cm <Plug>Commentary
-nmap cmm <Plug>CommentaryLine
+map cm <Plug>Commentary
+map cmm <Plug>CommentaryLine
 
-map <leader>a :w<cr>:call neoterm#test#run('file')<cr>
-map <leader>c :w<cr>:call neoterm#test#run('current')<cr>
-map <leader>l :w<cr>:call neoterm#test#rerun()<cr>
+noremap <leader>a :w<cr>:call neoterm#test#run('file')<cr>
+noremap <leader>c :w<cr>:call neoterm#test#run('current')<cr>
+noremap <leader>l :w<cr>:call neoterm#test#rerun()<cr>
 
-map <leader>fmo :call MoveCurrentFile()<cr>
+noremap <leader>fmo :call MoveCurrentFile()<cr>
 map <leader>fmv <leader>fmo
-map <leader>fde :call DeleteCurrentFile()<cr>
-map <leader>fdu :call DuplicateCurrentFile()<cr>
-map <leader>fcp :call CopyCurrentFilePath()<cr>
-map <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
-map <leader>fcn :call CopyCurrentFileName()<cr>
-map <leader>fcb :call CopyCurrentFileBackupPath()<cr>
-map <leader>fn :call CreateNewFileInCurrentDir()<cr>
-map <leader>fN :call CreateNewFile()<cr>
+noremap <leader>fde :call DeleteCurrentFile()<cr>
+noremap <leader>fdu :call DuplicateCurrentFile()<cr>
+noremap <leader>fcp :call CopyCurrentFilePath()<cr>
+noremap <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
+noremap <leader>fcn :call CopyCurrentFileName()<cr>
+noremap <leader>fcb :call CopyCurrentFileBackupPath()<cr>
+noremap <leader>fn :call CreateNewFileInCurrentDir()<cr>
+noremap <leader>fN :call CreateNewFile()<cr>
 
-map <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
-vmap <leader>fj :!jq '.'<cr>
-map <leader>fh :silent %!tidy -qi --show-errors 0<cr>
-map <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
+noremap <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
+vnoremap <leader>fj :!jq '.'<cr>
+noremap <leader>fh :silent %!tidy -qi --show-errors 0<cr>
+noremap <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 " https://github.com/beautify-web/js-beautify
-map <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
-vmap <leader>fb :!js-beautify<cr>
+noremap <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
+vnoremap <leader>fb :!js-beautify<cr>
 
 nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
 nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
-map <m-t> :call ToggleQuotes()<cr>
-imap <m-t> <c-o>:call ToggleQuotes()<cr>
+noremap <m-t> :call ToggleQuotes()<cr>
+inoremap <m-t> <c-o>:call ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
-map n  <Plug>(incsearch-nohl-n)zz
-map N  <Plug>(incsearch-nohl-N)zz
-map *  <Plug>(incsearch-nohl-*)zz
-map #  <Plug>(incsearch-nohl-#)zz
+map <silent> n <Plug>(incsearch-nohl-n)zz
+map <silent> N <Plug>(incsearch-nohl-N)zz
+map * <Plug>(incsearch-nohl-*)zz
+map # <Plug>(incsearch-nohl-#)zz
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
@@ -427,75 +363,62 @@ map <c-k> [e
 xmap <m-j> ]egv
 xmap <c-k> [egv
 
-" map <leader>] <Plug>unimpairedBlankDown
-" map <leader>[ <Plug>unimpairedBlankUp
-" map ]<space> `]<Plug>unimpairedBlankDown
-" map [<space> `[<Plug>unimpairedBlankUp
-map <leader>; `]<Plug>unimpairedBlankDown
-map <leader>; `]<Plug>unimpairedBlankDown
-
-" f15 is c-cr in my iTerm2
-" map <f15> ]<space>
-" imap <f15> <end><cr>
+map <leader>; `]]<space>
 map <m-cr> ]<space>
-imap <m-cr> <end><cr>
+inoremap <m-cr> <end><cr>
 " f16 is s-cr in my iTerm2
 map <f16> [<space>
-imap <f16> <esc>O
+inoremap <f16> <esc>O
 
-nnoremap <leader>ff :FullSearch -Q -i '' <left><left>
-nmap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
-nmap <leader>fw <leader>yfiw
-nmap <leader>fW <leader>yfiW
-vmap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
+noremap <leader>ff :FullSearch -Q -i '' <left><left>
+noremap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
+noremap <leader>fw <leader>yfiw
+noremap <leader>fW <leader>yfiW
+vnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <m-l> <end><space>-G '\.'<space><left><left>
 cnoremap <m-g> <end><space>-G ''<space><left><left>
-nmap <leader>fo :Gqfopen<cr>
+noremap <leader>fo :Gqfopen<cr>
 
-nmap <leader>-- @:
-nmap <leader>-b :call DeleteHiddenBuffers()<cr>
-nmap <leader>-u :call ClearUndos()<cr>
-nmap <leader>-k :call ResetProject()<cr>
+noremap <leader>-- @:
+noremap <leader>-b :call DeleteHiddenBuffers()<cr>
+noremap <leader>-u :call ClearUndos()<cr>
+noremap <leader>-k :call ResetProject()<cr>
 
-map <leader>rm :call ShowLatestMigration()<cr>
-map <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
-vmap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
+noremap <leader>rm :call ShowLatestMigration()<cr>
+noremap <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
+vnoremap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 
-map <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
-" map <leader>u :call PreserveView('Topen')<cr>:TREPLSendFile<cr>
-map <leader>u :call EvaluateCode()<cr>
+noremap <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
+noremap <leader>u :call EvaluateCode()<cr>
 
 map gR gr$
 
-map <silent> <leader>om :call OpenMarkdownPreview()<cr>
+noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 
-map <leader>yq :call MakeSession()<cr>:qa<cr>
-map <leader>yl :call LoadSession()<cr>
-
-" map <leader>yp "0p
-" map <leader>yP "0P
+noremap <leader>yq :call MakeSession()<cr>:qa<cr>
+noremap <leader>yl :call LoadSession()<cr>
 
 nmap <silent> <leader>h <leader>yghiw
 nmap <silent> <leader>H <leader>yhiW
-nmap <silent> <leader>yh :set opfunc=HighlightOccurencesVerb<CR>g@
-nmap <silent> <leader>ygh :set opfunc=HighlightWholeOccurencesVerb<CR>g@
+nnoremap <silent> <leader>yh :set opfunc=HighlightOccurencesVerb<CR>g@
+nnoremap <silent> <leader>ygh :set opfunc=HighlightWholeOccurencesVerb<CR>g@
 
 nmap <silent> <leader>d <leader>ygdiw
 nmap <silent> <leader>D <leader>ydiW
-nmap <silent> <leader>yd :set opfunc=ChangeOccurenceVerb<CR>g@
-nmap <silent> <leader>ygd :set opfunc=ChangeWholeOccurenceVerb<CR>g@
+nnoremap <silent> <leader>yd :set opfunc=ChangeOccurenceVerb<CR>g@
+nnoremap <silent> <leader>ygd :set opfunc=ChangeWholeOccurenceVerb<CR>g@
 
-nmap <leader>x :%s/
+nnoremap <leader>x :%s/
 nmap <leader>X <leader>yxiw
-nmap <silent> <leader>yx :set opfunc=GlobalSubstituteVerb<CR>g@
+nnoremap <silent> <leader>yx :set opfunc=GlobalSubstituteVerb<CR>g@
 nmap <leader>yX <leader>yxiW
-vmap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
+vnoremap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
 
-nmap <leader>s :s/
+nnoremap <leader>s :s/
 nmap <leader>S <leader>ysiw
-nmap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
+nnoremap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
-vmap <leader>s :s/\%V
+vnoremap <leader>s :s/\%V
 
 nmap <leader>8 *
 xmap <leader>8 *
@@ -531,15 +454,17 @@ nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 cnoremap <expr> <m-b> EnhancedMetaLeft()
 cnoremap <expr> <m-f> EnhancedMetaRight()
 cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
+
 imap <m--> <c-_>
 
-map <silent> <leader>j :call Join()<cr>
+noremap <silent> <leader>j :call Join()<cr>
 
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 
 "#############################
 "### General configuration ###
 "#############################
+
 set nocompatible
 filetype plugin indent on
 if !exists('syntax_on')
@@ -550,7 +475,6 @@ if !exists('g:colors_name')
 endif
 set termguicolors
 set guicursor=a:block-blinkon0
-" set lazyredraw
 set fileformat=unix
 set number relativenumber numberwidth=5
 set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
@@ -621,6 +545,7 @@ let g:html_indent_style1 = 'inc'
 "#############################
 "### Plugins configuration ###
 "#############################
+
 let g:fzf_layout = { 'up': '100%' }
 let g:fzf_colors = {
       \ 'fg':        ['fg', 'Normal'],
@@ -672,7 +597,7 @@ let g:neoterm_keep_term_open = 1
 let g:neoterm_size = 11
 let g:neoterm_focus_when_tests_fail = 1
 
-let test#strategy = 'neovim'
+let g:test#strategy = 'custom'
 
 let g:tagbar_sort = 0
 
@@ -819,6 +744,7 @@ let g:hexmode_autodetect = 1
 "#################
 "### Functions ###
 "#################
+
 function! TabComplete()
   if neosnippet#expandable_or_jumpable()
     return "\<Plug>(neosnippet_expand_or_jump)"
@@ -836,6 +762,19 @@ function! IsEmmetExpandable()
 
   let expr = matchstr(getline('.')[:col('.')], '\(\S\+\)$')
   return expr =~ '[.#>+*]' || index(s:emmetElements, expr) >= 0
+endfunction
+
+function! ClearEverything()
+  match
+  ccl
+  lcl
+  silent! Tclose
+  NERDTreeClose
+  call ClearMessages()
+endfunction
+
+function! ClearMessages()
+  call feedkeys(":\<bs>")
 endfunction
 
 function! DisplayRegisters()
@@ -1111,7 +1050,6 @@ function! OnNeotermDisplayed()
   nmap <buffer> q <esc>
   noremap <silent><buffer> <cr> :call OpenFileInPreviousWindow(0)<cr>
   noremap <silent><buffer> o :call OpenFileInPreviousWindow(1)<cr><c-w>p
-  noremap <buffer> <f15> ^f.<c-w>gF
 endfunction
 
 function! OnFullSearchDisplayed()
@@ -1731,6 +1669,51 @@ function! ToggleFoldSyntax()
   endif
 endfunction
 
+function! SaveBufferScroll()
+  if !exists('w:saved_buf_view') | let w:saved_buf_view = {} | endif
+  let w:saved_buf_view[bufnr('%')] = winsaveview()
+endfunction
+
+function! RestoreBufferScroll()
+  let buf = bufnr('%')
+  if exists('w:saved_buf_view') && has_key(w:saved_buf_view, buf)
+    let v = winsaveview()
+    let at_start_of_file = v.lnum == 1 && v.col == 0
+    if at_start_of_file && !&diff
+      call winrestview(w:saved_buf_view[buf])
+    endif
+    unlet w:saved_buf_view[buf]
+  endif
+endfunction
+
+function! CustomTestStrategy(cmd) abort
+  " let opts = {'suffix': ' # vim-test'}
+  " botright new
+  " resize 11
+  " call termopen(a:cmd . ' # vim-test', opts)
+  " wincmd p
+
+  " let opts = {'suffix': ' # vim-test'}
+  " function! opts.close_terminal(job_id, data)
+  "   echo hi
+  "   " echom data
+  "   " if bufnr(self.suffix) != -1
+  "   "   execute 'bdelete!' bufnr(self.suffix)
+  "   " end
+  " endfunction
+  " " call opts.close_terminal()
+
+  let opts = {}
+  function! opts.on_exit(job_id, data, event)
+    echom 'ok now' . a:data
+  endfunction
+
+  botright new
+  resize 11
+  call termopen(a:cmd, opts)
+endfunction
+let g:test#custom_strategies = {'custom': function('CustomTestStrategy')}
+
 "####################
 "### Autocommands ###
 "####################
@@ -1816,6 +1799,11 @@ augroup end
 augroup lint_events
   autocmd!
   autocmd BufWritePost,BufEnter,FocusLost * call Lint()
+augroup end
+
+augroup preserve_buffer_scroll
+  autocmd BufLeave * call SaveBufferScroll()
+  autocmd BufEnter * call RestoreBufferScroll()
 augroup end
 
 augroup general_autocommands

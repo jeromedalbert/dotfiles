@@ -45,3 +45,5 @@ inoremap <c-f> <right>
 inoremap <c-b> <left>
 cnoremap <c-f> <right>
 cnoremap <c-b> <left>
+
+echo 'Config loaded!'
