@@ -60,8 +60,10 @@ hi DiffAdd guifg=fg guibg=#47840d gui=bold
 hi DiffDelete guifg=#8c0909 guibg=NONE gui=NONE
 hi DiffChange guifg=fg guibg=#263b59 gui=NONE
 hi DiffText guifg=fg guibg=#204a87 gui=bold
-hi ErrorMsg guifg=#ffffff guibg=#990000 gui=NONE
-hi WarningMsg guifg=#ffffff guibg=#990000 gui=NONE
+" hi ErrorMsg guifg=#ffffff guibg=#990000 gui=NONE
+hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
+" hi WarningMsg guifg=#ffffff guibg=#990000 gui=NONE
+hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
 hi Float guifg=#a5c261 guibg=NONE gui=NONE
 hi Function guifg=#ffc66d guibg=NONE gui=NONE
 hi Identifier guifg=NONE guibg=NONE gui=NONE

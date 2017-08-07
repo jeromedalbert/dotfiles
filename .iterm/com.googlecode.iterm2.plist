@@ -1253,7 +1253,7 @@
 			<key>Action</key>
 			<integer>12</integer>
 			<key>Text</key>
-			<string>:let mapleader=" "\n :map - :\n :inoremap jj &lt;esc&gt;\n :map J 5j\n :map K 5k\n :nmap 0 ^\n :map Y y$\n :map &lt;c-t&gt; &lt;esc&gt;:tabnew&lt;cr&gt;\n :map &lt;bs&gt; gT\n :map &lt;c-l&gt; gt\n :nnoremap &lt;leader&gt;&lt;leader&gt; &lt;C-^&gt;\n :map &lt;c-q&gt; :q&lt;CR&gt;\n :map &lt;leader&gt;q :q&lt;cr&gt;\n :map &lt;leader&gt;w :w&lt;cr&gt;\n :map &lt;leader&gt;z :x&lt;cr&gt;\n :nmap &lt;leader&gt;`q :qa!&lt;cr&gt;\n :noremap &lt;leader&gt;n &lt;c-w&gt;&lt;c-w&gt;\n :noremap &lt;leader&gt;[ 20zh\n :noremap &lt;leader&gt;] 20zl\n :map &lt;c-p&gt; :e */**/*\n :map &lt;m-p&gt; &lt;c-p&gt;\n :inoremap &lt;c-e&gt; &lt;end&gt;\n :inoremap &lt;c-f&gt; &lt;right&gt;\n :inoremap &lt;c-b&gt; &lt;left&gt;\n :cnoremap &lt;c-f&gt; &lt;right&gt;\n :cnoremap &lt;c-b&gt; &lt;left&gt;\n :noremap &lt;leader&gt;n &lt;c-w&gt;&lt;c-w&gt;\n :set expandtab tabstop=2 shiftwidth=2 smarttab\n :set incsearch ignorecase smartcase hlsearch\n :set hidden\n :set wildmenu\n :echo 'Config loaded!'\n</string>
+			<string>:set expandtab tabstop=2 shiftwidth=2 smarttab\n:set incsearch ignorecase smartcase hlsearch\n:set hidden\n:set wildmenu\n:let mapleader=" "\n:map - :\n:inoremap jj &lt;esc&gt;\n:map J 5j\n:map K 5k\n:nmap 0 ^\n:map Y y$\n:noremap Q &lt;nop&gt;\n:map &lt;leader&gt;q :q&lt;cr&gt;\n:map &lt;leader&gt;w :w&lt;cr&gt;\n:map &lt;leader&gt;z :x&lt;cr&gt;\n:nmap &lt;leader&gt;`q :qa!&lt;cr&gt;\n:noremap ' "\n:map &lt;silent&gt; &lt;m-d&gt; &lt;c-d&gt;\n:map &lt;silent&gt; &lt;m-u&gt; &lt;c-u&gt;\n:map &lt;silent&gt; &lt;m-e&gt; &lt;c-e&gt;\n:map &lt;silent&gt; &lt;m-y&gt; &lt;c-y&gt;\n:map &lt;m-o&gt; &lt;c-o&gt;\n:map &lt;c-n&gt; &lt;esc&gt;:tabnew&lt;cr&gt;\n:map &lt;silent&gt; &lt;m-q&gt; :q&lt;cr&gt;\n:map &lt;silent&gt; &lt;m-w&gt; :w&lt;cr&gt;\n:map &lt;c-h&gt; gT\n:map &lt;m-l&gt; gt\n:nnoremap &lt;leader&gt;&lt;leader&gt; &lt;C-^&gt;\n:noremap &lt;leader&gt;n &lt;c-w&gt;&lt;c-w&gt;\n:noremap &lt;m-]&gt; 20zl\n:noremap &lt;m-[&gt; 20zh\n:map &lt;c-p&gt; :e */**/*\n:inoremap &lt;c-e&gt; &lt;end&gt;\n:inoremap &lt;c-f&gt; &lt;right&gt;\n:inoremap &lt;c-b&gt; &lt;left&gt;\n:cnoremap &lt;c-f&gt; &lt;right&gt;\n:cnoremap &lt;c-b&gt; &lt;left&gt;\n:echo 'Config loaded!'\n</string>
 		</dict>
 		<key>0x57-0x120000</key>
 		<dict>
@@ -1763,7 +1763,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 139 606 469 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>303 183 1016 512 0 0 1280 777 </string>
+	<string>303 343 958 433 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -3455,7 +3455,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-08-04T07:27:49Z</date>
+	<date>2017-08-06T08:38:35Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>

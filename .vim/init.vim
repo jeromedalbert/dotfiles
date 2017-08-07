@@ -1,7 +1,6 @@
 "############
 "### TODO ###
 "############
-" replace neoterm with vim-test
 " make custom 'search hit bottom'
 " use fzf for command line git, tmux session switching, etc
 " replace neomake with ALE?
@@ -53,7 +52,6 @@ Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'sickill/vim-pasta'
 Plug 'sjl/gundo.vim'
-Plug 'kassio/neoterm'
 Plug 'janko-m/vim-test'
 Plug 'kurkale6ka/vim-pairs'
 Plug 'Julian/vim-textobj-variable-segment'
@@ -87,7 +85,7 @@ nnoremap j gj
 nnoremap k gk
 xnoremap j gj
 xnoremap k gk
-nnoremap 0 ^
+map 0 ^
 nnoremap d0 d^
 noremap Y y$
 noremap Q <nop>
@@ -100,10 +98,10 @@ noremap <leader>`q :qa!<cr>
 noremap ' "
 noremap '] `]
 noremap '[ `[
-noremap =] `[=`]
+" noremap =] `[=`]
 noremap v] `[v`]
-noremap <] `[<`]
-noremap >] `[>`]
+" map <] `[<`]
+" map >] `[>`]
 noremap ]o `]o
 noremap ]O `]O
 noremap ]a `]a
@@ -275,22 +273,22 @@ cabbrev hn new
 
 noremap zs zt
 noremap z0 zs
-noremap gs gS
-noremap gj gJ
+map gs gS
+map gj gJ
 
 nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
 
 noremap z<Space> za
 
-noremap <m-m> %
+map <m-m> %
 
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
 
-inoremap <expr> <tab> TabComplete()
-snoremap <expr> <tab> TabComplete()
-xnoremap <expr> <tab> TabComplete()
+imap <expr> <tab> TabComplete()
+smap <expr> <tab> TabComplete()
+xmap <expr> <tab> TabComplete()
 
 nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
 
@@ -314,12 +312,12 @@ noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
 noremap <silent> <f2> :TagbarToggle<CR>
 noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 
-map cm <Plug>Commentary
-map cmm <Plug>CommentaryLine
+nmap cm <Plug>Commentary
+nmap cmm <Plug>CommentaryLine
 
-noremap <leader>a :w<cr>:call neoterm#test#run('file')<cr>
-noremap <leader>c :w<cr>:call neoterm#test#run('current')<cr>
-noremap <leader>l :w<cr>:call neoterm#test#rerun()<cr>
+noremap <leader>a :w<cr>:TestFile<cr>
+noremap <leader>c :w<cr>:TestNearest<cr>
+noremap <leader>l :w<cr>:TestLast<cr>
 
 noremap <leader>fmo :call MoveCurrentFile()<cr>
 map <leader>fmv <leader>fmo
@@ -372,8 +370,8 @@ inoremap <f16> <esc>O
 
 noremap <leader>ff :FullSearch -Q -i '' <left><left>
 noremap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
-noremap <leader>fw <leader>yfiw
-noremap <leader>fW <leader>yfiW
+map <leader>fw <leader>yfiw
+map <leader>fW <leader>yfiW
 vnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <m-l> <end><space>-G '\.'<space><left><left>
 cnoremap <m-g> <end><space>-G ''<space><left><left>
@@ -389,7 +387,6 @@ noremap <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
 vnoremap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 
 noremap <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
-noremap <leader>u :call EvaluateCode()<cr>
 
 map gR gr$
 
@@ -592,11 +589,6 @@ let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
 " call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
 
-let g:neoterm_rspec_lib_cmd = 'clear && echo && bin/rspec'
-let g:neoterm_keep_term_open = 1
-let g:neoterm_size = 11
-let g:neoterm_focus_when_tests_fail = 1
-
 let g:test#strategy = 'custom'
 
 let g:tagbar_sort = 0
@@ -768,7 +760,7 @@ function! ClearEverything()
   match
   ccl
   lcl
-  silent! Tclose
+  silent! call CloseTests()
   NERDTreeClose
   call ClearMessages()
 endfunction
@@ -1045,9 +1037,10 @@ function! RestoreNerdtreeOriginalBuffer()
   if exists('t:escaped_nerdtree') | unlet t:escaped_nerdtree | endif
 endfunction
 
-function! OnNeotermDisplayed()
-  nmap <silent><buffer> <esc> <c-w>p:Tclose<cr>
-  nmap <buffer> q <esc>
+function! OnTestDisplayed()
+  noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
+  map <silent><buffer> <esc> <leader>q
+  map <silent><buffer> q <esc>
   noremap <silent><buffer> <cr> :call OpenFileInPreviousWindow(0)<cr>
   noremap <silent><buffer> o :call OpenFileInPreviousWindow(1)<cr><c-w>p
 endfunction
@@ -1190,6 +1183,30 @@ endfunction
 
 function! CopyCurrentFileBackupPath()
   let @+=expand(s:custom_backup_dir . expand('%:p'))
+endfunction
+
+function! CustomTestStrategy(cmd) abort
+  let opts = {}
+  function! opts.on_exit(job_id, data, event)
+    if a:data != 0
+      exe bufwinnr(t:term_test_bufnum) . 'wincmd w'
+    end
+  endfunction
+
+  call CloseTests()
+  botright new
+  let t:term_test_bufnum = bufnr('%')
+  resize 11
+  call termopen(a:cmd . ' #test', opts)
+  wincmd p
+endfunction
+let g:test#custom_strategies = {'custom': function('CustomTestStrategy')}
+
+function! CloseTests()
+  if exists('t:term_test_bufnum') && bufexists(t:term_test_bufnum)
+    exe 'bd! ' . t:term_test_bufnum
+    unlet t:term_test_bufnum
+  endif
 endfunction
 
 function! OpenFileInPreviousWindow(highlight_line)
@@ -1402,8 +1419,6 @@ function! NewPlaygroundBuffer(file_type)
   file [playground]
   setlocal buftype=nofile
   exe 'set filetype=' . a:file_type
-
-  call neoterm#repl#set('clear && ' . s:repls[a:file_type])
 endfunction
 
 function! MakeSession()
@@ -1544,12 +1559,6 @@ function! Lint()
   end
 endfunction
 
-function! EvaluateCode()
-  call PreserveView('Topen')
-  wincmd w
-  call feedkeys("i\<c-l>\<esc>\<c-w>w:TREPLSendFile\<cr>")
-endfunction
-
 function! MoveToPrevTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
@@ -1686,34 +1695,6 @@ function! RestoreBufferScroll()
   endif
 endfunction
 
-function! CustomTestStrategy(cmd) abort
-  " let opts = {'suffix': ' # vim-test'}
-  " botright new
-  " resize 11
-  " call termopen(a:cmd . ' # vim-test', opts)
-  " wincmd p
-
-  " let opts = {'suffix': ' # vim-test'}
-  " function! opts.close_terminal(job_id, data)
-  "   echo hi
-  "   " echom data
-  "   " if bufnr(self.suffix) != -1
-  "   "   execute 'bdelete!' bufnr(self.suffix)
-  "   " end
-  " endfunction
-  " " call opts.close_terminal()
-
-  let opts = {}
-  function! opts.on_exit(job_id, data, event)
-    echom 'ok now' . a:data
-  endfunction
-
-  botright new
-  resize 11
-  call termopen(a:cmd, opts)
-endfunction
-let g:test#custom_strategies = {'custom': function('CustomTestStrategy')}
-
 "####################
 "### Autocommands ###
 "####################
@@ -1764,7 +1745,7 @@ augroup on_display_events
 	autocmd filetype nerdtree call OnNERDTreeDisplayed()
 	autocmd filetype mru call OnMRUDisplayed()
 	autocmd filetype fzf call OnFzfDisplayed()
-	autocmd TermOpen *neoterm* call OnNeotermDisplayed()
+	autocmd TermOpen *test* call OnTestDisplayed()
 	autocmd TermOpen *ag\ * call OnFullSearchDisplayed()
 	autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
 augroup end
