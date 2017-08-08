@@ -1129,14 +1129,9 @@ function! DeleteHiddenBuffers()
   endfor
 endfunction
 
-function! GetLintCount()
-  let counts = neomake#statusline#LoclistCounts()
-  return get(counts, 'E', 0) + get(counts, 'W', 0)
-endfunction
-
 function! GetLintMsg()
   let counts = neomake#statusline#LoclistCounts()
-  let error_count = get(counts, 'E', 0)
+  let error_count = get(counts, 'E', 0) + get(counts, 'I', 0)
   let warning_count = get(counts, 'W', 0)
   if error_count + warning_count == 0 | return '' | endif
 
