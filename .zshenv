@@ -177,10 +177,14 @@ gg() {
  local git_repo=$(echo $last_command | awk -F/ '{print $NF}' | sed 's/.git$//')
  cd $git_repo
 }
-ggcl() {
+gclg() {
   local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
   gcl "$@"
   cd $git_repo
+}
+gclv() {
+  gclg "$@"
+  v.
 }
 alias gm="git merge"
 alias gm-="git merge -"
@@ -197,13 +201,13 @@ gcam() { gca -m "$*" }
 alias gclean="git clean -fd"
 alias grhhc="grhh && gclean"
 gd() {
-  git diff "$@" | _format-git-diff
+  git diff "$@" | _format-git-diff | eval $GIT_PAGER
 }
 _format-git-diff() {
   sed -r "s/^([^-+ ]*)[-+ ]/\\1/"
 }
 gsh() {
-  git show "$@" | _format-git-diff
+  git show "$@" | _format-git-diff | eval $GIT_PAGER
 }
 alias gdc="gd --cached"
 alias "gdh^"="gd 'HEAD^'"

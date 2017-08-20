@@ -1,19 +1,27 @@
 "############
 "### TODO ###
 "############
+" when <cr>ing in a filesearch, rewind quickfix to closest previous match
+" consider renaming fullsearch to filesearch
+" display '195474 matches across 392 files' somewhere
+" consider using a special buffer?
+" make filesearch mapping to ctrl-c/exit if still pending
+" fix filesearch search term broken when it has a space
+" make tests shortcut o go to the right window if there is one open for that file
 " make custom 'search hit bottom'
 " use fzf for command line git, tmux session switching, etc
-" replace neomake with ALE?
-" Ask about c-x-l line autocompletion
+" maybe switch to completor if c-x c-l works?
+" figure out what is preventing ]] mapping
+" highlight line when window unfocused
+" fix * register getting overridden when selecting in neosnippet
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " fix bug when sometimes closing an html tag switches to previous buffer
 " don't press enter twice on completion popup
 " refresh nerdtree after renaming
-" Integrate ctags seamlessly
-" Ask why unnamed register doesn't work after completing with neosnippet
-" Textobj function that works for ES6 JS
-" Detect : in ruby symbol syntax
-" Switch to Vim 8?
+" integrate ctags seamlessly
+" textobj function that works for ES6 JS
+" detect : in ruby symbol syntax
+" switch to Vim 8?
 
 "###############
 "### Plugins ###
@@ -69,13 +77,14 @@ Plug 'vim-scripts/mru.vim'
 Plug 'vim-scripts/closetag.vim'
 Plug 'tpope/vim-markdown'
 Plug 'fidian/hexmode'
+Plug 'ddrscott/vim-side-search'
 call plug#end()
 
 "############################
 "### General key mappings ###
 "############################
 
-let mapleader = " "
+let mapleader = ' '
 noremap - :
 inoremap jj <esc>
 
@@ -179,20 +188,12 @@ noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :tabclose<cr>
 noremap <silent> <leader>tq :tabclose<cr>
-noremap <silent> <leader>tp :call MoveToPrevTab()<cr>
-map <silent> <leader>th <leader>tp
-noremap <silent> <leader>tn :call MoveToNextTab()<cr>
-map <silent> <leader>tl <leader>tn
-noremap <silent> <leader>tr :call RenameTab()<cr>
 noremap <silent> <leader>to :tabonly<cr>
 
 noremap <leader>e :e $MYVIMRC<CR>
 noremap <leader>E :source $MYVIMRC<CR><esc>
 
 noremap <leader><leader> <C-^>
-
-inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
-snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
 noremap <m-;> mCA;<esc>`C
 inoremap <m-;> <C-o>A;
@@ -213,15 +214,6 @@ noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
 
 noremap $ $ze
-
-noremap <silent> <m-]> :set virtualedit=all<cr>20zl
-noremap <silent> <m-[> 20zh:call SetVirtualEdit()<cr>
-noremap <silent> <m--> :set virtualedit=all<cr>20zl
-noremap <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
-nnoremap <silent> ^ ^:set virtualedit=<cr>ze
-nnoremap <silent> $ $:set virtualedit=<cr>ze
-vnoremap <silent> <m-]> 20zl
-vnoremap <silent> <m-[> 20zh
 
 noremap @- @:
 
@@ -248,8 +240,6 @@ noremap gi gi<c-o>zz
 "       \ "<Plug>delimitMateCR" :
 "       \ "external_mapping"
 
-imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
-
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
 
@@ -270,6 +260,7 @@ cabbrev vn vnew
 cabbrev en enew
 cabbrev ne new
 cabbrev hn new
+cabbrev v# vnew #
 
 noremap zs zt
 noremap z0 zs
@@ -291,6 +282,10 @@ smap <expr> <tab> TabComplete()
 xmap <expr> <tab> TabComplete()
 
 nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
+inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
+snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
+
+imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
 
 noremap <silent> '' :call DisplayRegisters()<cr>
 
@@ -315,9 +310,11 @@ noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
 
-noremap <leader>a :w<cr>:TestFile<cr>
-noremap <leader>c :w<cr>:TestNearest<cr>
-noremap <leader>l :w<cr>:TestLast<cr>
+noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
+noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
+noremap <silent> <leader>l :silent w<cr>:TestLast<cr>
+nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
+nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
 
 noremap <leader>fmo :call MoveCurrentFile()<cr>
 map <leader>fmv <leader>fmo
@@ -338,8 +335,12 @@ noremap <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 noremap <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
 vnoremap <leader>fb :!js-beautify<cr>
 
-nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
-nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
+noremap <silent> <m--> :set virtualedit=all<cr>20zl
+noremap <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
+nnoremap <silent> ^ ^:set virtualedit=<cr>ze
+nnoremap <silent> $ $:set virtualedit=<cr>ze
+vnoremap <silent> <m--> 20zl
+vnoremap <silent> <m-0> 20zh
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
@@ -390,6 +391,8 @@ noremap <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
 
 map gR gr$
 
+noremap <leader>oo :OldFiles<cr>
+noremap <leader>oh :Helptags<cr>
 noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa<cr>
@@ -428,6 +431,7 @@ command! Gmodified call GitOpenModifiedFiles()
 command! Lint call Lint()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': $FZF_DEFAULT_OPTS})
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, {'options': $FZF_DEFAULT_OPTS})
+command! -nargs=* OldFiles call fzf#vim#history({'options': ' --prompt="OldFiles> "'})
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -445,7 +449,11 @@ cabbrev lint Lint
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
 
+noremap <silent> <leader>th :call MoveToPrevTab()<cr>
+noremap <silent> <leader>tl :call MoveToNextTab()<cr>
+noremap <silent> <leader>tr :call RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
+
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
 cnoremap <expr> <m-b> EnhancedMetaLeft()
@@ -525,7 +533,8 @@ if !isdirectory(undodir)
 endif
 set undodir=~/.vim/tmp/undo
 
-let g:terminal_scrollback_buffer_size = 10000
+set scrollback=-1
+
 set tabline=%!GetTabLine()
 set pumheight=8
 set nojoinspaces
@@ -554,9 +563,11 @@ let g:fzf_colors = {
       \ 'pointer':   ['fg', 'Keyword']
       \ }
 let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
       \ 'alt-t': 'tab split',
-      \ 'alt-x': 'split',
-      \ 'alt-v': 'vsplit'
+      \ 'ctrl-v': 'vsplit',
+      \ 'alt-v': 'vsplit',
+      \ 'alt-x': 'split'
       \ }
 let g:fzf_history_dir = '~/.fzf_history'
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
@@ -731,7 +742,7 @@ let g:mta_filetypes = {
 
 let g:markdown_syntax_conceal = 0
 
-let g:hexmode_autodetect = 1
+" let g:hexmode_autodetect = 1
 
 "#################
 "### Functions ###
@@ -1092,10 +1103,30 @@ function! FullSearch(search_options)
     let i = i + 1
   endwhile
   let search_text = substitute(search_text, '^.\(.*\).$', '\1', '')
-
   let @/ = EscapeStringForSearches(search_text)
-  exe ':silent grep! ' . a:search_options
-  call termopen('ag -C ' . a:search_options)
+
+  let query = 'ag -C ' . a:search_options
+  call setqflist([], ' ', {'title': query})
+  let opts = {}
+  let opts.file = ''
+  function! opts.on_stdout(job_id, data, event)
+    for line in a:data
+      let escaped_line = substitute(line, '\(\e\[\(\d\{1,2}\(;\d\{1,2}\)\?\)\?[mK]\|\r\)', '', 'g')
+      if line =~ '^\e\[1;32m'
+        let self.file = escaped_line
+      else
+        let matches = matchlist(escaped_line, '^\(\d\+\):\s*\(.*\)')
+        if len(matches)
+          call setqflist([{
+                \ 'filename': self.file,
+                \ 'lnum': matches[1],
+                \ 'text': matches[2]
+                \ }], 'a')
+        endif
+      endif
+    endfor
+  endfunction
+  call termopen(query, opts)
 endfunction
 
 function! ResetProject()
@@ -1183,11 +1214,10 @@ endfunction
 function! CustomTestStrategy(cmd) abort
   let opts = {}
   function! opts.on_exit(job_id, data, event)
-    if a:data != 0
+    if a:data != 0 && exists('t:term_test_bufnum')
       exe bufwinnr(t:term_test_bufnum) . 'wincmd w'
     end
   endfunction
-
   call CloseTests()
   botright new
   let t:term_test_bufnum = bufnr('%')
@@ -1266,10 +1296,11 @@ function! GetTabLabel(tab_number)
   let file_path = bufname(buflist[0])
   if file_path == ''
     return '[No Name]'
-  else
-    return fnamemodify(file_path, ':p:t')
-    return GetFileLabel(file_path, a:tab_number)
+  elseif file_path =~ 'fzf'
+    return 'FZF'
   end
+  return fnamemodify(file_path, ':p:t')
+  " return GetFileLabel(file_path, a:tab_number)
 endfunction
 
 function! GetTabLabels()
