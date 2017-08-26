@@ -1,83 +1,83 @@
 "############
 "### TODO ###
 "############
+" make tests shortcut go to the right window if there is one open for that file
 " when <cr>ing in a filesearch, rewind quickfix to closest previous match
-" consider renaming fullsearch to filesearch
-" display '195474 matches across 392 files' somewhere
-" consider using a special buffer?
-" make filesearch mapping to ctrl-c/exit if still pending
-" fix filesearch search term broken when it has a space
-" make tests shortcut o go to the right window if there is one open for that file
 " make custom 'search hit bottom'
-" use fzf for command line git, tmux session switching, etc
-" maybe switch to completor if c-x c-l works?
-" figure out what is preventing ]] mapping
-" highlight line when window unfocused
+" fix filesearch search term broken when it has a space
 " fix * register getting overridden when selecting in neosnippet
+" Limit overlinting when quickly switching buffers (especially :cdo and replaces)
+" improve greplace speed by not redrawing or using cdo
+" use fzf for command line git, tmux session switching, etc
+" maybe switch to a completer where c-x c-l works (completor, mucomplete, etc)
+" highlight line when window unfocused
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " fix bug when sometimes closing an html tag switches to previous buffer
 " don't press enter twice on completion popup
 " refresh nerdtree after renaming
 " integrate ctags seamlessly
-" textobj function that works for ES6 JS
-" detect : in ruby symbol syntax
-" switch to Vim 8?
+" switch to Vim 8 when terminal support is released
 
 "###############
 "### Plugins ###
 "###############
 call plug#begin('~/.vim/plugged')
-set rtp+=/usr/local/opt/fzf
-Plug 'junegunn/fzf.vim'
-Plug 'jeromedalbert/vim-rails'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'vim-ruby/vim-ruby'
-Plug 'jeromedalbert/vim-unimpaired'
-Plug 'tpope/vim-repeat'
+
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/deoplete.nvim'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'neomake/neomake'
+Plug 'janko-m/vim-test'
+Plug 'mattn/emmet-vim'
+
+Plug 'vim-ruby/vim-ruby'
+Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
+Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'Raimondi/delimitMate'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive'
-Plug 'gregsexton/gitv'
-Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'tpope/vim-markdown'
+
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'tek/vim-textobj-ruby'
 Plug 'kana/vim-textobj-function'
-Plug 'tommcdo/vim-exchange'
-Plug 'haya14busa/incsearch.vim'
-Plug 'Shougo/deoplete.nvim'
-Plug 'nishigori/increment-activator'
-Plug 'othree/html5.vim', { 'for': 'html' }
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'skwp/greplace.vim'
-Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
-Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
-Plug 'sickill/vim-pasta'
-Plug 'sjl/gundo.vim'
-Plug 'janko-m/vim-test'
-Plug 'kurkale6ka/vim-pairs'
+Plug 'haya14busa/vim-textobj-function-syntax'
 Plug 'Julian/vim-textobj-variable-segment'
-Plug 'mattn/emmet-vim'
+
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'jeromedalbert/vim-rails'
+Plug 'jeromedalbert/vim-unimpaired'
+
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'tommcdo/vim-exchange'
+Plug 'skwp/greplace.vim'
+Plug 'Raimondi/delimitMate'
+Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways'
+Plug 'vim-scripts/closetag.vim'
+Plug 'sjl/gundo.vim'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'haya14busa/incsearch.vim'
+Plug 'nishigori/increment-activator'
+Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'Shougo/neosnippet.vim'
-Plug 'jlanzarotta/bufexplorer'
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-Plug 'neomake/neomake'
-Plug 'tpope/vim-abolish'
-Plug 'vim-scripts/mru.vim'
-Plug 'vim-scripts/closetag.vim'
-Plug 'tpope/vim-markdown'
 Plug 'fidian/hexmode'
-Plug 'ddrscott/vim-side-search'
+Plug 'christoomey/vim-tmux-runner'
+Plug 'vim-scripts/mru.vim'
+Plug 'gregsexton/gitv'
 call plug#end()
 
 "############################
@@ -245,6 +245,7 @@ noremap <leader>0 a<space><esc>h
 
 noremap <leader>2 @
 noremap <leader>22 @@
+noremap <leader>2- @:
 noremap <leader>1 :silent !
 noremap <leader>5 :%!
 
@@ -291,8 +292,7 @@ noremap <silent> '' :call DisplayRegisters()<cr>
 
 noremap <m-s><m-g> :call ShowHighlightsUnderCursor()<CR>
 noremap <c-s><c-a> :call ShowAllHighlights()<CR>
-noremap <m-s><m-a> <c-s><c-a>
-noremap <m-s><c-a> <c-s><c-a>
+map <m-s><c-a> <c-s><c-a>
 
 noremap <c-p> :Files<cr>
 noremap <leader>i :BTags<cr>
@@ -369,8 +369,8 @@ inoremap <m-cr> <end><cr>
 map <f16> [<space>
 inoremap <f16> <esc>O
 
-noremap <leader>ff :FullSearch -Q -i '' <left><left>
-noremap <silent> <leader>yf :set opfunc=FullSearchVerb<CR>g@
+noremap <leader>ff :FileSearch -Q -i '' <left><left>
+noremap <silent> <leader>yf :set opfunc=FileSearchVerb<CR>g@
 map <leader>fw <leader>yfiw
 map <leader>fW <leader>yfiW
 vnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
@@ -426,7 +426,7 @@ nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
-command! -nargs=+ -complete=file FullSearch call FullSearch(<q-args>)
+command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! Gmodified call GitOpenModifiedFiles()
 command! Lint call Lint()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': $FZF_DEFAULT_OPTS})
@@ -437,12 +437,10 @@ cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
 cabbrev plugu PlugUpdate
 cabbrev goyo Goyo
-cabbrev gblame Gblame
 cabbrev gb Gblame
 cabbrev glog Glog
 cabbrev gdiff Gdiff
 cabbrev gd Gdiff
-cabbrev gmodif Gmodified
 cabbrev gm Gmodified
 cabbrev lint Lint
 
@@ -465,6 +463,9 @@ imap <m--> <c-_>
 noremap <silent> <leader>j :call Join()<cr>
 
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
+
+nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
+imap <silent> <f4> <esc><f4>
 
 "#############################
 "### General configuration ###
@@ -523,6 +524,7 @@ set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
 set statusline+=%=
 set statusline+=%{GetLintMsg()}
+set statusline+=%{GetCustomStatusMsg()}
 set statusline+=\ \ %-14(%l,%c%)
 set statusline+=\ %-10(%LL%)
 set statusline+=\ \ %P
@@ -1056,10 +1058,10 @@ function! OnTestDisplayed()
   noremap <silent><buffer> o :call OpenFileInPreviousWindow(1)<cr><c-w>p
 endfunction
 
-function! OnFullSearchDisplayed()
-  noremap <silent><buffer> <cr> :call OpenFullSearchResult(0)<cr>
+function! OnFileSearchDisplayed()
+  noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
   nmap <buffer> o <cr>
-  noremap <silent><buffer> t :call OpenFullSearchResult(1)<cr>
+  noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
 endfunction
 
 function! OnBufExplorerDisplayed()
@@ -1087,45 +1089,58 @@ function! PreviewNERDTreeNode()
   endif
 endfunction
 
-function! FullSearch(search_options)
+function! FileSearch(search_options)
   if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree_1'
     enew
   else
     tabnew
   endif
 
-  let search_options = split(a:search_options)
-  let search_options_count = len(search_options)
-  let search_text = search_options[0]
-  let i = 1
-  while search_text =~ '^-' && i < search_options_count
-    let search_text = search_options[i]
-    let i = i + 1
-  endwhile
-  let search_text = substitute(search_text, '^.\(.*\).$', '\1', '')
-  let @/ = EscapeStringForSearches(search_text)
+  let single_quote_pos = match(a:search_options, "'")
+  let double_quote_pos = match(a:search_options, '"')
+  let single_quote_search = single_quote_pos >= 0
+  if single_quote_pos >=0 && double_quote_pos >= 0
+    let single_quote_search = single_quote_pos < double_quote_pos
+  endif
+  let search_text = ''
+  if single_quote_search
+    let search_text = matchstr(a:search_options, "\\v'\\zs.{-}\\ze'")
+  else
+    let search_text = matchstr(a:search_options, "\\v\"\\zs.{-}\\ze(\\\\)\@<!\"")
+  endif
+  let @/ = search_text
 
   let query = 'ag -C ' . a:search_options
   call setqflist([], ' ', {'title': query})
   let opts = {}
   let opts.file = ''
+  let opts.files_matched = 0
+  let opts.lines_matched = 0
   function! opts.on_stdout(job_id, data, event)
     for line in a:data
       let escaped_line = substitute(line, '\(\e\[\(\d\{1,2}\(;\d\{1,2}\)\?\)\?[mK]\|\r\)', '', 'g')
       if line =~ '^\e\[1;32m'
         let self.file = escaped_line
-      else
-        let matches = matchlist(escaped_line, '^\(\d\+\):\s*\(.*\)')
-        if len(matches)
-          call setqflist([{
-                \ 'filename': self.file,
-                \ 'lnum': matches[1],
-                \ 'text': matches[2]
-                \ }], 'a')
-        endif
+        let self.files_matched += 1
+        continue
+      end
+      let matches = matchlist(escaped_line, '^\(\d\+\):\(.*\)')
+      if len(matches)
+        call setqflist([{
+              \ 'filename': self.file,
+              \ 'lnum': matches[1],
+              \ 'text': matches[2]
+              \ }], 'a')
+        let self.lines_matched += 1
       endif
+      let b:custom_status_msg =
+            \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
     endfor
   endfunction
+  " function! opts.on_exit(job_id, data, event)
+  "   let b:custom_status_msg =
+  "         \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
+  " endfunction
   call termopen(query, opts)
 endfunction
 
@@ -1170,6 +1185,11 @@ function! GetLintMsg()
   if error_count > 0 | call add(count_msgs, 'E:' . error_count) | endif
   if warning_count > 0 | call add(count_msgs, 'W:' . warning_count) | endif
   return '[' . join(count_msgs, ',') . ']'
+endfunction
+
+function! GetCustomStatusMsg()
+  if !exists('b:custom_status_msg') | return '' | endif
+  return '[' . b:custom_status_msg . ']'
 endfunction
 
 function! WriteUndoFile()
@@ -1248,6 +1268,7 @@ function! OpenFileInPreviousWindow(highlight_line)
 endfunction
 
 function! GetFileAndLineUnderCursor()
+  " let matches = matchlist(getline('.'), '\([\S^:]\+\):\(\d*\)')
   normal mC^f:
   let items = split(expand('<cWORD>'), ':')
   normal `C
@@ -1256,7 +1277,7 @@ function! GetFileAndLineUnderCursor()
   endif
 endfunction
 
-function! OpenFullSearchResult(new_tab)
+function! OpenFileSearchResult(new_tab)
   if getline('.') == '' | return | endif
   let line = matchstr(getline('.'), '^\d\+')
   normal mC
@@ -1357,8 +1378,8 @@ function! BufEnterConfig()
   let buffer_name = bufname('%')
 
   if buffer_name == '[Global Replace]'
-    map <buffer><Leader>fr :Greplace<cr>
-    map <buffer><Leader>fR :call feedkeys("\<space>fra")<cr>
+    map <buffer><Leader>fr :call feedkeys("\<space>fRa")<cr>
+    map <buffer><Leader>fR :Greplace<cr>
   else
     map <buffer><leader>fre :call RenameCurrentFile()<cr>
     map <buffer><leader>frm <buffer><leader>fde
@@ -1493,10 +1514,10 @@ function! ChangeWholeOccurenceVerb(type)
   call feedkeys('cgn', 'n')
 endfunction
 
-function! FullSearchVerb(type, ...)
+function! FileSearchVerb(type, ...)
   exe 'normal! `[v`]y'
   let @/ = @"
-  let cmd = ":FullSearch -i -Q '" . @/ . "' \<left>\<left>"
+  let cmd = ":FileSearch -i -Q '" . @/ . "' \<left>\<left>"
   call feedkeys(cmd, 'n')
 endfunction
 
@@ -1721,6 +1742,12 @@ function! RestoreBufferScroll()
   endif
 endfunction
 
+function! DetectBinaryFile()
+  if &filetype == '' && !!search('\%u0000', 'wn')
+    Hexmode
+  endif
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1754,6 +1781,11 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.env.* set ft=sh
 augroup end
 
+augroup detect_binary_files
+  autocmd!
+  autocmd BufRead * call DetectBinaryFile()
+augroup end
+
 augroup custom_backup
   autocmd!
   autocmd BufWritePost * call BackupCurrentFile()
@@ -1772,7 +1804,7 @@ augroup on_display_events
 	autocmd filetype mru call OnMRUDisplayed()
 	autocmd filetype fzf call OnFzfDisplayed()
 	autocmd TermOpen *test* call OnTestDisplayed()
-	autocmd TermOpen *ag\ * call OnFullSearchDisplayed()
+	autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
 	autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
 augroup end
 

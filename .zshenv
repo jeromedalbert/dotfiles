@@ -213,7 +213,9 @@ alias gdc="gd --cached"
 alias "gdh^"="gd 'HEAD^'"
 alias glog="git log"
 alias glo="git log --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
-alias glop="glo -p"
+glop() {
+  glo -p "$@" | _format-git-diff | eval $GIT_PAGER
+}
 alias gloo="git log --all --oneline --no-merges"
 alias gloS="glo -S"
 alias gdt="git difftool"

@@ -84,6 +84,8 @@ hi Todo cterm=inverse,bold guifg=#bc9458 guibg=NONE gui=inverse,bold,italic
 hi Type guifg=#ffffff guibg=NONE gui=NONE
 hi Underlined guifg=NONE guibg=NONE gui=underline
 
+hi qfLineNr guifg=#8A8885 guibg=NONE
+
 hi rubyClass guifg=#cc7833 guibg=NONE gui=NONE
 hi rubyFunction guifg=#ffc66d guibg=NONE gui=NONE
 hi rubyInterpolationDelimiter guifg=#519f50 guibg=NONE gui=NONE
@@ -231,3 +233,5 @@ hi pythonBuiltIn guifg=#6d9cbe
 hi xxdAddress guifg=#bc9458
 hi link xxdSep xxdAddress
 hi link xxdAscii NONE
+
+hi link stString String
