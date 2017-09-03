@@ -36,7 +36,8 @@ alias vi.=v.
 alias vim=v
 alias vim.=v.
 alias vimdiff="$VIM_EDITOR -d"
-alias vdiff=vimdiff
+alias vd=vimdiff
+dif() { colordiff -u $@ | less }
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'

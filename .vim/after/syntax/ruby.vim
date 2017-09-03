@@ -15,7 +15,7 @@ syn match rubyOperator "\%(do\s*\)\@<!|"
 syn match rubyNil "nil[?!]\@!"
 hi link rubyNil rubyBoolean
 
-syn match rubyConstantCustom "\<\%(\(class\|module\)\s\+.\+\)\@<!\u\w*\>\%(\.\|::\)\@!"
+syn match rubyConstantOther "\<\%(\(class\|module\)\s\+.\+\)\@<!\u\w*\>\%(\.\|::\)\@!"
 
 syn keyword rubyNew new
 hi link rubyNew Keyword

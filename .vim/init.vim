@@ -1,21 +1,20 @@
 "############
 "### TODO ###
 "############
-" make tests shortcut go to the right window if there is one open for that file
+" optimize slow vim start (DEOPLETE, neomake#makers#ft#ruby#mri)
+" maybe use p for preview and o for preview+go to the file
 " when <cr>ing in a filesearch, rewind quickfix to closest previous match
-" make custom 'search hit bottom'
-" fix filesearch search term broken when it has a space
-" fix * register getting overridden when selecting in neosnippet
-" Limit overlinting when quickly switching buffers (especially :cdo and replaces)
-" improve greplace speed by not redrawing or using cdo
+" make tests shortcut go to the right window if there is one open for that file
+" make custom 'search hit bottom' (or use a search count custom function or plugin)
 " use fzf for command line git, tmux session switching, etc
-" maybe switch to a completer where c-x c-l works (completor, mucomplete, etc)
-" highlight line when window unfocused
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " fix bug when sometimes closing an html tag switches to previous buffer
-" don't press enter twice on completion popup
+" fix * register getting overridden when selecting in neosnippet (or try different snippet plugin)
+" maybe switch to a completer where c-x c-l works (completor, mucomplete, etc)
+" don't press enter twice on completion popup (or try different completion plugin)
 " refresh nerdtree after renaming
-" integrate ctags seamlessly
+" Limit overlinting when quickly switching buffers (especially :cdo and replaces)
+" improve greplace speed by not redrawing or using cdo
 " switch to Vim 8 when terminal support is released
 
 "###############
@@ -32,22 +31,23 @@ Plug 'neomake/neomake'
 Plug 'janko-m/vim-test'
 Plug 'mattn/emmet-vim'
 
-Plug 'vim-ruby/vim-ruby'
+Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'tpope/vim-markdown'
+Plug 'wavded/vim-stylus', { 'for': 'stylus' }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html', 'eruby'] }
+Plug 'mxw/vim-jsx', { 'for': 'javascript' }
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 
 Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-function'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'tek/vim-textobj-ruby'
-Plug 'kana/vim-textobj-function'
-Plug 'haya14busa/vim-textobj-function-syntax'
 Plug 'Julian/vim-textobj-variable-segment'
+Plug 'haya14busa/vim-textobj-function-syntax'
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -55,7 +55,7 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
-Plug 'jeromedalbert/vim-rails'
+Plug 'jeromedalbert/vim-rails', { 'for': 'ruby' }
 Plug 'jeromedalbert/vim-unimpaired'
 
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -76,8 +76,6 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode'
 Plug 'christoomey/vim-tmux-runner'
-Plug 'vim-scripts/mru.vim'
-Plug 'gregsexton/gitv'
 call plug#end()
 
 "############################
@@ -265,14 +263,16 @@ cabbrev v# vnew #
 
 noremap zs zt
 noremap z0 zs
+nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
+noremap z<Space> za
+
 map gs gS
 map gj gJ
 
-nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
-
-noremap z<Space> za
-
 map <m-m> %
+
+map <m-]> <c-]>
+map <m-[> <c-t>
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -390,12 +390,14 @@ vnoremap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 noremap <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
 
 map gR gr$
+nmap cX cx$
+nnoremap cc cc
 
 noremap <leader>oo :OldFiles<cr>
 noremap <leader>oh :Helptags<cr>
 noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 
-noremap <leader>yq :call MakeSession()<cr>:qa<cr>
+noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
 
 nmap <silent> <leader>h <leader>yghiw
@@ -429,9 +431,9 @@ xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! Gmodified call GitOpenModifiedFiles()
 command! Lint call Lint()
-command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': $FZF_DEFAULT_OPTS})
-command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, {'options': $FZF_DEFAULT_OPTS})
-command! -nargs=* OldFiles call fzf#vim#history({'options': ' --prompt="OldFiles> "'})
+command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
+command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
+command! -nargs=* OldFiles call fzf#vim#history({ 'options': ' --prompt="OldFiles> "' })
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -517,6 +519,16 @@ set foldtext=GetFoldText()
 " set foldmethod=indent
 " set foldlevelstart=1
 " set foldlevelstart=99
+set tags=./.tags;
+set scrollback=-1
+set tabline=%!GetTabLine()
+set pumheight=8
+set nojoinspaces
+set conceallevel=2 concealcursor=niv
+set sessionoptions-=options
+set sidescroll=1 sidescrolloff=3
+set wildignorecase
+set diffopt=filler,foldcolumn:0
 
 set statusline=
 set statusline+=\ %<%f
@@ -535,16 +547,6 @@ if !isdirectory(undodir)
 endif
 set undodir=~/.vim/tmp/undo
 
-set scrollback=-1
-
-set tabline=%!GetTabLine()
-set pumheight=8
-set nojoinspaces
-set conceallevel=2 concealcursor=niv
-set sessionoptions-=options
-set sidescroll=1 sidescrolloff=3
-set wildignorecase
-
 let html_no_rendering = 1
 let g:html_indent_inctags = 'p,main'
 let g:html_indent_script1 = 'inc'
@@ -558,11 +560,11 @@ let g:fzf_layout = { 'up': '100%' }
 let g:fzf_colors = {
       \ 'fg':        ['fg', 'Normal'],
       \ 'bg':        ['bg', 'Normal'],
-      \ 'hl':        ['fg', 'Keyword'],
+      \ 'hl':        ['fg', 'Statement'],
       \ 'fg+':       ['fg', 'Normal'],
       \ 'bg+':       ['bg', 'Normal'],
-      \ 'hl+':       ['fg', 'Keyword'],
-      \ 'pointer':   ['fg', 'Keyword']
+      \ 'hl+':       ['fg', 'Statement'],
+      \ 'pointer':   ['fg', 'Statement']
       \ }
 let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
@@ -591,7 +593,8 @@ let NERDTreeIgnore = [
       \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
       \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
       \ ]
-let NERDTreeQuitOnOpen=1
+let NERDTreeQuitOnOpen = 1
+let NERDTreeHighlightCursorline = 0
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 
@@ -600,7 +603,6 @@ let g:incsearch#auto_nohlsearch = 1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
-" call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
 
 let g:test#strategy = 'custom'
 
@@ -739,12 +741,11 @@ let g:mta_filetypes = {
       \ 'xhtml' : 1,
       \ 'xml' : 1,
       \ 'jinja' : 1,
-      \ 'javascript.jsx' : 1
+      \ 'javascript.jsx' : 1,
+      \ 'eruby.html' : 1
       \}
 
 let g:markdown_syntax_conceal = 0
-
-" let g:hexmode_autodetect = 1
 
 "#################
 "### Functions ###
@@ -1028,6 +1029,7 @@ function! OnNERDTreeDisplayed()
   map <buffer> J 5j
   map <buffer> K 5k
   map <buffer> <silent> o :call PreviewNERDTreeNode()<cr>
+  map <buffer> <silent> p :call PreviewNERDTreeNode()<cr>
   map <buffer> <esc> :let t:escaped_nerdtree = 1<cr>q
   map <buffer> <f1> q
 
@@ -1076,10 +1078,6 @@ function! OnMRUDisplayed()
   map <buffer> <esc> q
 endfunction
 
-function! OnFzfDisplayed()
-  " tnoremap <nowait><buffer> <esc> <esc>
-endfunction
-
 function! PreviewNERDTreeNode()
   let line = getline('.')
   if line =~ '▸\|▾'
@@ -1111,7 +1109,7 @@ function! FileSearch(search_options)
   let @/ = search_text
 
   let query = 'ag -C ' . a:search_options
-  call setqflist([], ' ', {'title': query})
+  call setqflist([], ' ', { 'title': query })
   let opts = {}
   let opts.file = ''
   let opts.files_matched = 0
@@ -1245,7 +1243,7 @@ function! CustomTestStrategy(cmd) abort
   call termopen(a:cmd . ' #test', opts)
   wincmd p
 endfunction
-let g:test#custom_strategies = {'custom': function('CustomTestStrategy')}
+let g:test#custom_strategies = { 'custom': function('CustomTestStrategy') }
 
 function! CloseTests()
   if exists('t:term_test_bufnum') && bufexists(t:term_test_bufnum)
@@ -1581,10 +1579,10 @@ function! OnGoyoLeave()
   silent !tmux set status on
 endfunction
 
+python import vim
 function! SetVirtualEdit()
   let absolute_col = virtcol('.') + pyeval('vim.current.window.col')
   let absolute_col += &foldcolumn + (&number ? &numberwidth : 0)
-  " echo screencol() . ' - ' . absolute_col
   let is_on_leftmost_screen = screencol() == absolute_col
 
   if is_on_leftmost_screen
@@ -1678,19 +1676,19 @@ function! EnhancedMetaDeleteRight()
   return AbstractRight("\<Right>\<BS>")
 endfunction
 
-function! neomake#makers#ft#ruby#mri()
-  let errorformat =
-        \ '%-G%\%.%\%.%\%.%.%#,'.
-        \ '%-GSyntax OK,'.
-        \ '%E%f:%l: syntax error\, %m,'.
-        \ '%Z%p^'
+" function! neomake#makers#ft#ruby#mri()
+"   let errorformat =
+"         \ '%-G%\%.%\%.%\%.%.%#,'.
+"         \ '%-GSyntax OK,'.
+"         \ '%E%f:%l: syntax error\, %m,'.
+"         \ '%Z%p^'
 
-  return {
-        \ 'exe': 'ruby',
-        \ 'args': ['-c', '-T1', '-w'],
-        \ 'errorformat': errorformat
-        \ }
-endfunction
+"   return {
+"         \ 'exe': 'ruby',
+"         \ 'args': ['-c', '-T1', '-w'],
+"         \ 'errorformat': errorformat
+"         \ }
+" endfunction
 
 function! RenameTab()
   let tab_name = input('Tab name: ', '')
@@ -1802,7 +1800,6 @@ augroup on_display_events
   autocmd filetype qf call OnQuickFixDisplayed()
 	autocmd filetype nerdtree call OnNERDTreeDisplayed()
 	autocmd filetype mru call OnMRUDisplayed()
-	autocmd filetype fzf call OnFzfDisplayed()
 	autocmd TermOpen *test* call OnTestDisplayed()
 	autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
 	autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
@@ -1853,6 +1850,7 @@ augroup general_autocommands
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call BufEnterConfig()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
+  autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
 augroup end
 

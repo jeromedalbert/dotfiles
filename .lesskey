@@ -1,5 +1,5 @@
 #env
-LESS = -i -R
+LESS = -i -R -Q
 
 #line-edit
 \e abort
