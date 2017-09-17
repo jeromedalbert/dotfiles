@@ -254,6 +254,8 @@ hi link jsLabel Statement
 
 hi link jsonQuote String
 hi link jsonKeyword String
+hi link jsonNull Constant
+hi link jsonEscape rubyInterpolation
 
 hi link shRange NONE
 hi link shQuote String
@@ -279,3 +281,5 @@ hi link stString String
 
 hi link gitcommitSummary NONE
 hi link gitcommitHeader gitcommitComment
+
+hi link swiftMethod NONE

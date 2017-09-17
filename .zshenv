@@ -45,7 +45,6 @@ psgrep() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }
 alias el=elinks
-# alias elinks='elinks -no-connect'
 remove-colors() {
   sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
@@ -313,6 +312,7 @@ fix() {
   vim +/"<<<<<<<" $(git diff --name-only --diff-filter=U | xargs)
 }
 alias gstats='git shortlog -sn'
+alias gsa='git submodule add'
 
 # Github
 hc() {
@@ -374,7 +374,6 @@ alias ctmp='cd ~/c/tmp'
 alias ct='ctmp'
 alias desk='cd ~/Desktop'
 alias de='desk'
-alias backups='cd ~/.vim_custom_backups/Users/jerome'
 
 # SSH
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
@@ -428,6 +427,11 @@ minivim() {
   local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
   echo $conf | pbcopy
   echo $conf
+}
+killui() {
+  for app in "Dock" "Finder" "SystemUIServer"; do
+    killall "${app}"
+  done
 }
 
 # Entertainment

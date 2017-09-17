@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+
+main() {
+  MODE=$1
+  INPUT_FILE=$2
+  WIDTH=${3:-800}
+  OUTPUT_FILE="${INPUT_FILE%.*}.gif"
+
+  rm -rf $OUTPUT_FILE
+
+  case $MODE in
+    basic) perform_basic_conversion;;
+    normal) perform_normal_conversion;;
+    best) perform_best_conversion;;
+    *) main normal $1 $2;;
+  esac
+}
+
+perform_basic_conversion() {
+  ffmpeg -i $INPUT_FILE -vf "scale=$WIDTH:-1" -pix_fmt rgb24 -r 10 -f gif - \
+    | gifsicle --optimize=3 --delay=5 > $OUTPUT_FILE
+}
+
+perform_normal_conversion() {
+  ffmpeg -i $INPUT_FILE -r 10 -vcodec png out-static-%05d.png
+  time convert -verbose +dither -layers Optimize -resize $WIDTH\> out-static*.png  GIF:- \
+    | gifsicle --colors 128 --delay=5 --loop --optimize=3 --multifile - > $OUTPUT_FILE
+  rm out-static*.png
+}
+
+perform_best_conversion() {
+  ffmpeg -y -i $INPUT_FILE -vf fps=10,palettegen palette.png
+  ffmpeg -i $INPUT_FILE -i palette.png -filter_complex "fps=10,paletteuse" $OUTPUT_FILE
+  rm palette.png
+}
+
+main "$@"

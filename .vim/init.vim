@@ -1,7 +1,9 @@
 "############
 "### TODO ###
 "############
-" optimize slow vim start (DEOPLETE, neomake#makers#ft#ruby#mri)
+" have a shortcut for notes per project
+" use universal ctags
+" list instance variables with <leader>I
 " maybe use p for preview and o for preview+go to the file
 " when <cr>ing in a filesearch, rewind quickfix to closest previous match
 " make tests shortcut go to the right window if there is one open for that file
@@ -10,8 +12,8 @@
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " fix bug when sometimes closing an html tag switches to previous buffer
 " fix * register getting overridden when selecting in neosnippet (or try different snippet plugin)
-" maybe switch to a completer where c-x c-l works (completor, mucomplete, etc)
 " don't press enter twice on completion popup (or try different completion plugin)
+" optimize or replace nerdtree for large projects
 " refresh nerdtree after renaming
 " Limit overlinting when quickly switching buffers (especially :cdo and replaces)
 " improve greplace speed by not redrawing or using cdo
@@ -26,55 +28,59 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/deoplete.nvim'
-Plug 'jlanzarotta/bufexplorer'
 Plug 'neomake/neomake'
-Plug 'janko-m/vim-test'
-Plug 'mattn/emmet-vim'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
+Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx'] }
 
-Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
-Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'eruby'] }
+Plug 'othree/html5.vim', { 'for': ['html', 'eruby.html'] }
 Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'wavded/vim-stylus', { 'for': 'stylus' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html', 'eruby'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html', 'eruby.html'] }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'tpope/vim-markdown', { 'for': 'markdown' }
+Plug 'keith/swift.vim', { 'for': 'swift' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
-Plug 'tek/vim-textobj-ruby'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'haya14busa/vim-textobj-function-syntax'
+Plug 'inkarkat/argtextobj.vim'
+Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }
+Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive', { 'on': ['Gdiff', 'Glog', 'Gblame'] }
 Plug 'jeromedalbert/vim-rails', { 'for': 'ruby' }
 Plug 'jeromedalbert/vim-unimpaired'
 
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
-Plug 'skwp/greplace.vim'
+Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
 Plug 'Raimondi/delimitMate'
 Plug 'kurkale6ka/vim-pairs'
-Plug 'valloric/MatchTagAlways'
-Plug 'vim-scripts/closetag.vim'
-Plug 'sjl/gundo.vim'
+Plug 'valloric/MatchTagAlways', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
+Plug 'vim-scripts/closetag.vim', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'haya14busa/incsearch.vim'
 Plug 'nishigori/increment-activator'
 Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'xolox/vim-misc' | Plug 'xolox/vim-session'
 Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'xolox/vim-misc', { 'on': ['SaveSession', 'OpenSession'] }
+Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-Plug 'fidian/hexmode'
+Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'christoomey/vim-tmux-runner'
 call plug#end()
 
@@ -84,7 +90,7 @@ call plug#end()
 
 let mapleader = ' '
 noremap - :
-inoremap jj <esc>
+" inoremap jj <esc>
 
 map J 5j
 map K 5k
@@ -226,18 +232,6 @@ noremap g; g;zz
 noremap g, g,zz
 noremap gi gi<c-o>zz
 
-" imap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-" function! s:my_cr_function() abort
-"   return deoplete#close_popup() . "\<CR>"
-" endfunction
-" imap <expr> <CR> pumvisible() ? deoplete#close_popup() . "\<CR>"  : '<Plug>delimitMateCR'
-" imap <expr> <CR> pumvisible() ? deoplete#close_popup() : '<Plug>delimitMateCR'
-" imap <expr> <CR> pumvisible() ? deoplete#close_popup() . "\<CR>"
-"                 \: '<Plug>delimitMateCR'
-" inoremap <expr> <CR> delimitMate#WithinEmptyPair() ?
-"       \ "<Plug>delimitMateCR" :
-"       \ "external_mapping"
-
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
 
@@ -258,6 +252,7 @@ cabbrev lo lopen
 cabbrev vn vnew
 cabbrev en enew
 cabbrev ne new
+cabbrev sn new
 cabbrev hn new
 cabbrev v# vnew #
 
@@ -434,15 +429,18 @@ command! Lint call Lint()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* OldFiles call fzf#vim#history({ 'options': ' --prompt="OldFiles> "' })
+command! MakePlugSnapshot call MakePlugSnapshot()
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
 cabbrev plugu PlugUpdate
+cabbrev plugst PlugStatus
+cabbrev plugs MakePlugSnapshot
 cabbrev goyo Goyo
-cabbrev gb Gblame
-cabbrev glog Glog
 cabbrev gdiff Gdiff
 cabbrev gd Gdiff
+cabbrev glog Glog
+cabbrev gb Gblame
 cabbrev gm Gmodified
 cabbrev lint Lint
 
@@ -460,7 +458,7 @@ cnoremap <expr> <m-b> EnhancedMetaLeft()
 cnoremap <expr> <m-f> EnhancedMetaRight()
 cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
 
-imap <m--> <c-_>
+imap <m-_> <c-_>
 
 noremap <silent> <leader>j :call Join()<cr>
 
@@ -468,6 +466,8 @@ nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 
 nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
 imap <silent> <f4> <esc><f4>
+
+noremap <silent> <m-=> :call ToggleZoom()<cr>
 
 "#############################
 "### General configuration ###
@@ -528,7 +528,7 @@ set conceallevel=2 concealcursor=niv
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-set diffopt=filler,foldcolumn:0
+set diffopt=vertical,filler,foldcolumn:0
 
 set statusline=
 set statusline+=\ %<%f
@@ -551,6 +551,9 @@ let html_no_rendering = 1
 let g:html_indent_inctags = 'p,main'
 let g:html_indent_script1 = 'inc'
 let g:html_indent_style1 = 'inc'
+
+let g:python_host_prog  = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 "#############################
 "### Plugins configuration ###
@@ -581,7 +584,14 @@ let $FZF_DEFAULT_OPTS .=
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
 
+" let g:netrw_banner=0
 let g:netrw_altfile = 1
+
+" let g:netrw_winsize = -28
+let g:netrw_liststyle = 3
+" let g:netrw_sort_sequence = '[\/]$,*'
+" let g:netrw_browse_split = 3
+
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeIgnore = [
@@ -600,7 +610,7 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 
 let g:incsearch#auto_nohlsearch = 1
 
-let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 0
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
 
@@ -738,11 +748,9 @@ let g:jsx_ext_required = 0
 
 let g:mta_filetypes = {
       \ 'html' : 1,
-      \ 'xhtml' : 1,
+      \ 'eruby.html' : 1,
       \ 'xml' : 1,
-      \ 'jinja' : 1,
-      \ 'javascript.jsx' : 1,
-      \ 'eruby.html' : 1
+      \ 'javascript.jsx' : 1
       \}
 
 let g:markdown_syntax_conceal = 0
@@ -776,6 +784,7 @@ function! ClearEverything()
   lcl
   silent! call CloseTests()
   NERDTreeClose
+  normal cxc
   call ClearMessages()
 endfunction
 
@@ -1222,7 +1231,7 @@ function! BackupCurrentFile()
   let cmd .= 'cd ' . s:custom_backup_dir . ';'
   let cmd .= 'git add ' . backup_file . ';'
   let cmd .= 'git commit -m "Backup - `date`";'
-  call system(cmd)
+  call jobstart(cmd)
 endfunction
 
 function! CopyCurrentFileBackupPath()
@@ -1595,7 +1604,7 @@ endfunction
 function! Lint()
   if &buftype != '' | return | endif
   if !filereadable(expand('%:p')) | return | endif
-  " if &filetype !~ 'ruby\|javascript\|css|\html' | return 0 | endif
+  if &filetype !~ '^\(ruby\|javascript\|scss\)' | return 0 | endif
 
   if &filetype =~ 'javascript'
     Neomake eslint
@@ -1746,6 +1755,22 @@ function! DetectBinaryFile()
   endif
 endfunction
 
+function! MakePlugSnapshot()
+  PlugSnapshot! ~/.vim/plug_snapshot.vim
+endfunction
+
+function! ToggleZoom()
+  if !exists('t:zoomed') | let t:zoomed = 0 | endif
+  if t:zoomed
+    wincmd =
+    let t:zoomed = 0
+  else
+    wincmd |
+    wincmd _
+    let t:zoomed = 1
+  endif
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1814,8 +1839,8 @@ augroup end
 if exists('$TMUX') && !exists('$DISABLE_VIM_WINDOW_RENAME')
   augroup tmux_title
     autocmd!
-    autocmd VimEnter * call system("tmux rename-window -t $TMUX_PANE '" . GetCwd() . "'")
-    autocmd VimLeave * call system('tmux setw automatic-rename')
+    autocmd VimEnter * call jobstart("tmux rename-window -t $TMUX_PANE '" . GetCwd() . "'")
+    autocmd VimLeave * call jobstart('tmux setw automatic-rename')
   augroup end
 endif
 
@@ -1830,6 +1855,11 @@ augroup goyo_events
   autocmd!
   autocmd User GoyoEnter nested call OnGoyoEnter()
   autocmd User GoyoLeave nested call OnGoyoLeave()
+augroup end
+
+augroup lazy_load_deoplete
+  autocmd!
+  autocmd InsertEnter * call deoplete#enable() | autocmd! lazy_load_deoplete
 augroup end
 
 augroup lint_events
