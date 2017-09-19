@@ -170,6 +170,8 @@ hi link xmlEndTag xmlTag
 hi link xmlTagName xmlTag
 hi link xmlAttrib xmlTag
 hi link xmlEqual xmlTag
+hi link xmlEntity Constant
+hi link xmlEntityPunct xmlEntity
 
 hi link yamlKey Tag
 hi link yamlAnchor rubyInstanceVariable
@@ -237,7 +239,7 @@ hi link jsExportDefault NONE
 hi link jsTernaryIfOperator NONE
 hi link jsTemplateBraces rubyInterpolationDelimiter
 hi link jsArrowFunction jsOperator
-hi link jsObject rubySymbol
+hi link jsObject Constant
 hi link jsObjectKey jsObject
 hi link jsNull jsObject
 hi link jsUndefined jsNull
@@ -251,6 +253,7 @@ hi link jsRegexpBoundary String
 hi link jsRegexpQuantifier String
 hi link jsSpecial String
 hi link jsLabel Statement
+hi link jsClassProperty Function
 
 hi link jsonQuote String
 hi link jsonKeyword String

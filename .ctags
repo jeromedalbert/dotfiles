@@ -9,9 +9,3 @@
 
 --regex-ruby=/^[ \t]*create_table[ \t]*"([a-zA-Z0-9_]+)"/\1/t,table/
 --regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
---regex-ruby=/^[ \t]*describe[ \t]*'(.+)'/\1/t,table/
---regex-ruby=/^[ \t]*context[ \t]*'(.+)'/\1/t,table/
---regex-ruby=/^[ \t]*describe[ \t]*"(.+)"/\1/t,table/
---regex-ruby=/^[ \t]*context[ \t]*"(.+)"/\1/t,table/
-
---regex-javascript=/^  ([A-Za-z0-9_$]+)[ \t]*\(/\1/f,function/
