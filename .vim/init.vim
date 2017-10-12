@@ -1,7 +1,13 @@
 "############
 "### TODO ###
 "############
-" have a shortcut for notes per project
+
+" make tmux cmd+e a real tmux pane that auto closes if previous command was successful
+" improve tmux window renaming
+" make <leader>d work on selection
+" lazyload parts of the vimrc file https://www.youtube.com/watch?v=QGQROe8ACpY&index=15&list=PLwJS-G75vM7kFO-yUkyNphxSIdbi_1NKX
+" use very magic by default when searching?
+" have a shortcut for TODO / notes per project
 " use universal ctags
 " list instance variables with <leader>I
 " maybe use p for preview and o for preview+go to the file
@@ -11,7 +17,7 @@
 " use fzf for command line git, tmux session switching, etc
 " make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
 " fix bug when sometimes closing an html tag switches to previous buffer
-" fix * register getting overridden when selecting in neosnippet (or try different snippet plugin)
+" fix * register getting overridden when selecting in neosnippet (or try different snippet plugin, investigate ultisnip)
 " don't press enter twice on completion popup (or try different completion plugin)
 " optimize or replace nerdtree for large projects
 " refresh nerdtree after renaming
@@ -184,7 +190,7 @@ noremap <c-n> <esc>:tabnew<cr>
 noremap <silent> <m-q> :q<cr>
 noremap <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  execute 'noremap <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
+  exe 'noremap <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
 noremap <c-h> gT
 noremap <m-l> gt
@@ -235,6 +241,7 @@ noremap gi gi<c-o>zz
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
 
+noremap <silent> q :let g:is_recording=0<cr>q
 noremap <leader>2 @
 noremap <leader>22 @@
 noremap <leader>2- @:
@@ -469,6 +476,8 @@ imap <silent> <f4> <esc><f4>
 
 noremap <silent> <m-=> :call ToggleZoom()<cr>
 
+nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call PlayLastMacro()<cr>' : '<cr>'
+
 "#############################
 "### General configuration ###
 "#############################
@@ -489,7 +498,7 @@ set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
 set incsearch ignorecase smartcase hlsearch
 set noshowmatch
 set nrformats-=octal
-set noerrorbells visualbell t_vb=
+set noerrorbells visualbell t_vb= belloff=all
 set history=500
 set backspace=indent,eol,start
 set shortmess+=Ic
@@ -529,6 +538,7 @@ set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
 set diffopt=vertical,filler,foldcolumn:0
+set whichwrap=b,s,h,l
 
 set statusline=
 set statusline+=\ %<%f
@@ -599,6 +609,7 @@ let NERDTreeIgnore = [
       \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
       \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
       \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep',
+      \ '\.rubocop-http',
       \
       \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
       \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
@@ -607,6 +618,7 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeHighlightCursorline = 0
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeCreatePrefix='silent keepalt keepjumps'
 
 let g:incsearch#auto_nohlsearch = 1
 
@@ -735,6 +747,8 @@ let s:custom_backup_dir='~/.vim_custom_backups'
 let g:neomake_verbose = 0
 let g:neomake_place_signs = 0
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+" let g:neomake_ruby_rubocop_exe = 'bundle'
+" let g:neomake_ruby_rubocop_args = ['exec', 'rubocop', '--format', 'emacs']
 let g:neomake_highlight_columns = 0
 
 let MRU_Window_Height = 10
@@ -1572,7 +1586,7 @@ endfunction
 
 function! PreserveView(cmd)
   let view = winsaveview()
-  execute a:cmd
+  exe a:cmd
   call winrestview(view)
 endfunction
 
@@ -1685,20 +1699,6 @@ function! EnhancedMetaDeleteRight()
   return AbstractRight("\<Right>\<BS>")
 endfunction
 
-" function! neomake#makers#ft#ruby#mri()
-"   let errorformat =
-"         \ '%-G%\%.%\%.%\%.%.%#,'.
-"         \ '%-GSyntax OK,'.
-"         \ '%E%f:%l: syntax error\, %m,'.
-"         \ '%Z%p^'
-
-"   return {
-"         \ 'exe': 'ruby',
-"         \ 'args': ['-c', '-T1', '-w'],
-"         \ 'errorformat': errorformat
-"         \ }
-" endfunction
-
 function! RenameTab()
   let tab_name = input('Tab name: ', '')
   call settabvar(tabpagenr(), 'tab_name', tab_name)
@@ -1750,7 +1750,9 @@ function! RestoreBufferScroll()
 endfunction
 
 function! DetectBinaryFile()
-  if &filetype == '' && !!search('\%u0000', 'wn')
+  if &filetype == ''
+        \ && expand('%') !~ '\.\(bz2\|gz\|lzma\|xz\|Z\)$'
+        \ && !!search('\%u0000', 'wn')
     Hexmode
   endif
 endfunction
@@ -1768,6 +1770,33 @@ function! ToggleZoom()
     wincmd |
     wincmd _
     let t:zoomed = 1
+  endif
+endfunction
+
+let s:named_registers = split('abcdefghijklmnopqrstuvwxyz', '\zs')
+let g:is_recording=0
+let s:recorded_register=0
+function! EnableMacroMappings(enable)
+  for named_register in s:named_registers
+    if a:enable
+      exe 'noremap <silent> q' . named_register . ' :call RecordMacro("' . named_register . '")<cr>'
+    else
+      exe 'unmap q' . named_register
+    endif
+  endfor
+endfunction
+call EnableMacroMappings(1)
+
+function! RecordMacro(named_register)
+  let g:is_recording=1
+  let s:recorded_register=a:named_register
+  exe 'normal! q' . a:named_register
+  call EnableMacroMappings(0)
+endfunction
+
+function! PlayLastMacro()
+  if !g:is_recording && s:recorded_register != ''
+    exe 'normal @' . s:recorded_register
   endif
 endfunction
 

@@ -1,7 +1,7 @@
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 
 ###########################
-### ALIASES / FUNCTIONS ###
+### Aliases / Functions ###
 ###########################
 # Aliases are in this .zshenv file to make them work in VIM's non-interactive shell
 
@@ -177,14 +177,10 @@ gg() {
  local git_repo=$(echo $last_command | awk -F/ '{print $NF}' | sed 's/.git$//')
  cd $git_repo
 }
-gclg() {
+ggcl() {
   local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
   gcl "$@"
   cd $git_repo
-}
-gclv() {
-  gclg "$@"
-  v.
 }
 alias gm="git merge"
 alias gm-="git merge -"
@@ -313,18 +309,21 @@ fix() {
 }
 alias gstats='git shortlog -sn'
 alias gsa='git submodule add'
+git-remove-submodule() {
+  local submodule="$@"
+  git submodule deinit -f $submodule
+  git rm -f $submodule
+  rm -rf .git/modules/$submodule
+}
+alias gsr='git-remove-submodule'
 
 # Github
 hc() {
   case $# in
-  0)  hub compare $(current-git-branch)
-      ;;
-  1)  hub compare $1..$(current-git-branch)
-      ;;
-  2)  hub compare $1..$2
-      ;;
-  *)  hub compare
-      ;;
+    0) hub compare $(current-git-branch);;
+    1) hub compare $1..$(current-git-branch);;
+    2) hub compare $1..$2;;
+    *) hub compare;;
   esac
 }
 alias hc-='hc $(git-branch-previous)'
@@ -503,3 +502,28 @@ alias ys='yarn run server'
 alias ya='yarn add'
 alias yrm='yarn remove'
 alias yre='yrm'
+
+# Fzf
+j() {
+  if [ $# -gt 0 ]; then
+    _z "$*"
+  else
+    cd "$(_z -l 2>&1 | fzf --height 40% --reverse --tac --query "$*" | sed 's/^[0-9,.]* *//')"
+  fi
+}
+vj() {
+  local old_directory=$(pwd)
+  (
+  j "$@"
+  if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
+  )
+}
+jj() {
+  cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
+}
+fgl() (
+  [ $# -eq 0 ] && return
+  cd /usr/local/Cellar/figlet/*/share/figlet/fonts
+  local font=$(ls *.flf | sort | fzf --no-multi --reverse --preview "figlet -f {} $@") &&
+  figlet -f "$font" "$@" | pbcopy
+)

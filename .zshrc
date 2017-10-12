@@ -1,5 +1,5 @@
 #############################
-### ENVIRONMENT VARIABLES ###
+### Environment variables ###
 #############################
 
 export EDITOR=$MAIN_EDITOR
@@ -28,12 +28,16 @@ export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export NVM_DIR=$HOME/.nvm
-export PATH=/usr/local/bin:$PATH
-export PATH=./node_modules/.bin:$PATH
-export PATH=$HOME/.bin:$PATH
+export PATH=$HOME/.bin
+export PATH=$PATH:./node_modules/.bin
+export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/bin
+export PATH=$PATH:/bin
+export PATH=$PATH:/usr/sbin
+export PATH=$PATH:/sbin
 
 #############################
-### GENERAL CONFIGURATION ###
+### General configuration ###
 #############################
 
 setopt no_beep
@@ -70,8 +74,15 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
+#############################
+### Plugins configuration ###
+#############################
+
+source ~/.zsh/z.sh
+unalias z
+
 ####################
-### KEY BINDINGS ###
+### Key bindings ###
 ####################
 bindkey -e
 
@@ -133,7 +144,7 @@ bindkey -R -M paste "^@"-"\M-^?" paste-insert
 bindkey -M paste -s '^M' '^J'
 
 #################
-### FUNCTIONS ###
+### Functions ###
 #################
 
 git-prompt-info() {
@@ -194,7 +205,7 @@ paste-insert() {
 }
 
 #############
-### OTHER ###
+### Other ###
 #############
 
 eval "$(rbenv init - --no-rehash)"

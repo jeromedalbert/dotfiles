@@ -7,6 +7,7 @@
 .DS_Store
 .keep
 *.pyc
+.rubocop-http*
 
 tmp
 log
