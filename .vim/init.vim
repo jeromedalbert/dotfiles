@@ -2,10 +2,11 @@
 "### TODO ###
 "############
 
+" switch to part of replay code to make q available in help/qf/buflist etc
+" open backup git diff in new tmux pane
 " make tmux cmd+e a real tmux pane that auto closes if previous command was successful
 " improve tmux window renaming
 " make <leader>d work on selection
-" lazyload parts of the vimrc file https://www.youtube.com/watch?v=QGQROe8ACpY&index=15&list=PLwJS-G75vM7kFO-yUkyNphxSIdbi_1NKX
 " use very magic by default when searching?
 " have a shortcut for TODO / notes per project
 " use universal ctags
@@ -242,7 +243,7 @@ noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
 
 noremap <silent> q :let g:is_recording=0<cr>q
-noremap <leader>2 @
+map <leader>2 @
 noremap <leader>22 @@
 noremap <leader>2- @:
 noremap <leader>1 :silent !
@@ -280,20 +281,20 @@ map <m-[> <c-t>
 "### Plugins/functions key mappings ###
 "######################################
 
-imap <expr> <tab> TabComplete()
-smap <expr> <tab> TabComplete()
-xmap <expr> <tab> TabComplete()
+imap <expr> <tab> functions#TabComplete()
+smap <expr> <tab> functions#TabComplete()
+xmap <expr> <tab> functions#TabComplete()
 
-nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
+nnoremap <silent> <esc> :nohlsearch<cr>:call functions#ClearEverything()<cr>
 inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
 imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
 
-noremap <silent> '' :call DisplayRegisters()<cr>
+noremap <silent> '' :call functions#DisplayRegisters()<cr>
 
-noremap <m-s><m-g> :call ShowHighlightsUnderCursor()<CR>
-noremap <c-s><c-a> :call ShowAllHighlights()<CR>
+noremap <m-s><m-g> :call functions#ShowHighlightsUnderCursor()<CR>
+noremap <c-s><c-a> :call functions#ShowAllHighlights()<CR>
 map <m-s><c-a> <c-s><c-a>
 
 noremap <c-p> :Files<cr>
@@ -301,13 +302,13 @@ noremap <leader>i :BTags<cr>
 
 tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
 
-noremap <leader>k :call OpenNERDTreeBuffer()<CR>
+noremap <leader>k :call functions#OpenNERDTreeBuffer()<CR>
 noremap <silent> <f1> :NERDTreeToggle<CR>
 noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
-noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
+noremap <silent> <leader>K :call functions#RevealInNERDTreeBuffer()<cr>
 
 noremap <silent> <f2> :TagbarToggle<CR>
-noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+noremap <silent> <f3> :call functions#ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -315,19 +316,19 @@ nmap cmm <Plug>CommentaryLine
 noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
 noremap <silent> <leader>l :silent w<cr>:TestLast<cr>
-nnoremap <leader>m :call ToggleTestInCurrentWindow()<cr>
-nnoremap <leader>v :call ToggleTestInSplitWindow()<cr>
+nnoremap <leader>m :call functions#ToggleTestInCurrentWindow()<cr>
+nnoremap <leader>v :call functions#ToggleTestInSplitWindow()<cr>
 
-noremap <leader>fmo :call MoveCurrentFile()<cr>
+noremap <leader>fmo :call functions#MoveCurrentFile()<cr>
 map <leader>fmv <leader>fmo
-noremap <leader>fde :call DeleteCurrentFile()<cr>
-noremap <leader>fdu :call DuplicateCurrentFile()<cr>
-noremap <leader>fcp :call CopyCurrentFilePath()<cr>
-noremap <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
-noremap <leader>fcn :call CopyCurrentFileName()<cr>
-noremap <leader>fcb :call CopyCurrentFileBackupPath()<cr>
-noremap <leader>fn :call CreateNewFileInCurrentDir()<cr>
-noremap <leader>fN :call CreateNewFile()<cr>
+noremap <leader>fde :call functions#DeleteCurrentFile()<cr>
+noremap <leader>fdu :call functions#DuplicateCurrentFile()<cr>
+noremap <leader>fcp :call functions#CopyCurrentFilePath()<cr>
+noremap <leader>fcap :call functions#CopyCurrentFileAbsolutePath()<cr>
+noremap <leader>fcn :call functions#CopyCurrentFileName()<cr>
+noremap <leader>fcb :call functions#CopyCurrentFileBackupPath()<cr>
+noremap <leader>fn :call functions#CreateNewFileInCurrentDir()<cr>
+noremap <leader>fN :call functions#CreateNewFile()<cr>
 
 noremap <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
 vnoremap <leader>fj :!jq '.'<cr>
@@ -338,16 +339,16 @@ noremap <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
 vnoremap <leader>fb :!js-beautify<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
-noremap <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
+noremap <silent> <m-0> 20zh:call functions#SetVirtualEdit()<cr>
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
 vnoremap <silent> <m--> 20zl
 vnoremap <silent> <m-0> 20zh
 
-noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
+noremap <silent> <c-z> :call functions#OnVimSuspend()<cr>:suspend<cr>:call functions#OnVimResume()<cr>
 
-noremap <m-t> :call ToggleQuotes()<cr>
-inoremap <m-t> <c-o>:call ToggleQuotes()<cr>
+noremap <m-t> :call functions#ToggleQuotes()<cr>
+inoremap <m-t> <c-o>:call functions#ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
 
 map / <Plug>(incsearch-forward)
@@ -372,24 +373,24 @@ map <f16> [<space>
 inoremap <f16> <esc>O
 
 noremap <leader>ff :FileSearch -Q -i '' <left><left>
-noremap <silent> <leader>yf :set opfunc=FileSearchVerb<CR>g@
+noremap <silent> <leader>yf :set opfunc=functions#FileSearchVerb<CR>g@
 map <leader>fw <leader>yfiw
 map <leader>fW <leader>yfiW
-vnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
+vnoremap <leader>ff y:let @/ = functions#GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <m-l> <end><space>-G '\.'<space><left><left>
 cnoremap <m-g> <end><space>-G ''<space><left><left>
 noremap <leader>fo :Gqfopen<cr>
 
 noremap <leader>-- @:
-noremap <leader>-b :call DeleteHiddenBuffers()<cr>
-noremap <leader>-u :call ClearUndos()<cr>
-noremap <leader>-k :call ResetProject()<cr>
+noremap <leader>-b :call functions#DeleteHiddenBuffers()<cr>
+noremap <leader>-u :call functions#ClearUndos()<cr>
+noremap <leader>-k :call functions#ResetProject()<cr>
 
-noremap <leader>rm :call ShowLatestMigration()<cr>
-noremap <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
-vnoremap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
+noremap <leader>rm :call functions#ShowLatestMigration()<cr>
+noremap <leader>rM :vnew<cr>:call functions#ShowLatestMigration()<cr>
+vnoremap <leader>rp :<c-u>call functions#ExtractRailsPartial()<cr>
 
-noremap <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
+noremap <leader>rn :call functions#NewPlaygroundBuffer('ruby')<cr>
 
 map gR gr$
 nmap cX cx$
@@ -397,46 +398,46 @@ nnoremap cc cc
 
 noremap <leader>oo :OldFiles<cr>
 noremap <leader>oh :Helptags<cr>
-noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
+noremap <silent> <leader>om :call functions#OpenMarkdownPreview()<cr>
 
-noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
-noremap <leader>yl :call LoadSession()<cr>
+noremap <leader>yq :call functions#MakeSession()<cr>:qa!<cr>
+noremap <leader>yl :call functions#LoadSession()<cr>
 
 nmap <silent> <leader>h <leader>yghiw
 nmap <silent> <leader>H <leader>yhiW
-nnoremap <silent> <leader>yh :set opfunc=HighlightOccurencesVerb<CR>g@
-nnoremap <silent> <leader>ygh :set opfunc=HighlightWholeOccurencesVerb<CR>g@
+nnoremap <silent> <leader>yh :set opfunc=functions#HighlightOccurencesVerb<CR>g@
+nnoremap <silent> <leader>ygh :set opfunc=functions#HighlightWholeOccurencesVerb<CR>g@
 
 nmap <silent> <leader>d <leader>ygdiw
 nmap <silent> <leader>D <leader>ydiW
-nnoremap <silent> <leader>yd :set opfunc=ChangeOccurenceVerb<CR>g@
-nnoremap <silent> <leader>ygd :set opfunc=ChangeWholeOccurenceVerb<CR>g@
+nnoremap <silent> <leader>yd :set opfunc=functions#ChangeOccurenceVerb<CR>g@
+nnoremap <silent> <leader>ygd :set opfunc=functions#ChangeWholeOccurenceVerb<CR>g@
 
 nnoremap <leader>x :%s/
 nmap <leader>X <leader>yxiw
-nnoremap <silent> <leader>yx :set opfunc=GlobalSubstituteVerb<CR>g@
+nnoremap <silent> <leader>yx :set opfunc=functions#GlobalSubstituteVerb<CR>g@
 nmap <leader>yX <leader>yxiW
-vnoremap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
+vnoremap <leader>x <esc>:%s/<c-r>=functions#GetSelectionForSearches()<cr>/
 
 nnoremap <leader>s :s/
 nmap <leader>S <leader>ysiw
-nnoremap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
+nnoremap <silent> <leader>ys :set opfunc=functions#SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
 vnoremap <leader>s :s/\%V
 
 nmap <leader>8 *
 xmap <leader>8 *
-nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
-xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
-xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
+nnoremap <silent> <leader>y8 :set opfunc=functions#SearchNextOccurenceVerb<cr>g@
+xnoremap * <esc>/<c-r>=functions#GetSelectionForSearches()<cr><cr>
+xnoremap # <esc>?<c-r>=functions#GetSelectionForSearches()<cr><cr>
 
-command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
-command! Gmodified call GitOpenModifiedFiles()
+command! -nargs=+ -complete=file FileSearch call functions#FileSearch(<q-args>)
+command! Gmodified call functions#GitOpenModifiedFiles()
 command! Lint call Lint()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* OldFiles call fzf#vim#history({ 'options': ' --prompt="OldFiles> "' })
-command! MakePlugSnapshot call MakePlugSnapshot()
+command! MakePlugSnapshot call functions#MakePlugSnapshot()
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -451,32 +452,32 @@ cabbrev gb Gblame
 cabbrev gm Gmodified
 cabbrev lint Lint
 
-xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
-xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
+xnoremap @ :<C-u>call functions#ExecuteMacroOnSelection()<cr>
+xnoremap <leader>2 :<C-u>call functions#ExecuteMacroOnSelection()<cr>
 
-noremap <silent> <leader>th :call MoveToPrevTab()<cr>
-noremap <silent> <leader>tl :call MoveToNextTab()<cr>
-noremap <silent> <leader>tr :call RenameTab()<cr>
+noremap <silent> <leader>th :call functions#MoveToPrevTab()<cr>
+noremap <silent> <leader>tl :call functions#MoveToNextTab()<cr>
+noremap <silent> <leader>tr :call functions#RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
-cnoremap <expr> <m-b> EnhancedMetaLeft()
-cnoremap <expr> <m-f> EnhancedMetaRight()
-cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
+cnoremap <expr> <m-b> functions#EnhancedMetaLeft()
+cnoremap <expr> <m-f> functions#EnhancedMetaRight()
+cnoremap <expr> <m-d> functions#EnhancedMetaDeleteRight()
 
 imap <m-_> <c-_>
 
-noremap <silent> <leader>j :call Join()<cr>
+noremap <silent> <leader>j :call functions#Join()<cr>
 
-nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
+nnoremap <silent> zn :call functions#ToggleFoldSyntax()<cr>
 
 nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
 imap <silent> <f4> <esc><f4>
 
-noremap <silent> <m-=> :call ToggleZoom()<cr>
+noremap <silent> <m-=> :call functions#ToggleZoom()<cr>
 
-nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call PlayLastMacro()<cr>' : '<cr>'
+nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call functions#PlayLastMacro()<cr>' : '<cr>'
 
 "#############################
 "### General configuration ###
@@ -742,8 +743,6 @@ let s:repls = {
       \ 'python': 'python -ic ""'
       \ }
 
-let s:custom_backup_dir='~/.vim_custom_backups'
-
 let g:neomake_verbose = 0
 let g:neomake_place_signs = 0
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
@@ -773,294 +772,6 @@ let g:markdown_syntax_conceal = 0
 "### Functions ###
 "#################
 
-function! TabComplete()
-  if neosnippet#expandable_or_jumpable()
-    return "\<Plug>(neosnippet_expand_or_jump)"
-  elseif IsEmmetExpandable()
-    return "\<plug>(emmet-expand-abbr)"
-  else
-    return "\<tab>"
-  endif
-endfunction
-
-function! IsEmmetExpandable()
-  if &filetype !~ 'html\|css\|jsx' | return 0 | endif
-  if !emmet#isExpandable() | return 0 | endif
-  if &filetype =~ 'css' | return 1 | endif
-
-  let expr = matchstr(getline('.')[:col('.')], '\(\S\+\)$')
-  return expr =~ '[.#>+*]' || index(s:emmetElements, expr) >= 0
-endfunction
-
-function! ClearEverything()
-  match
-  ccl
-  lcl
-  silent! call CloseTests()
-  NERDTreeClose
-  normal cxc
-  call ClearMessages()
-endfunction
-
-function! ClearMessages()
-  call feedkeys(":\<bs>")
-endfunction
-
-function! DisplayRegisters()
-  redir => output
-  silent exe 'reg "0123456789'
-  redir END
-  new
-  silent file [Registers]
-  setlocal nonumber norelativenumber colorcolumn=
-  setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
-  silent put =output
-  silent normal gg"_d2j
-  exe 'resize' . line('$')
-  map <silent> <buffer> q :q<cr>
-  map <silent> <buffer> <esc> q
-endfunction
-
-function! TrimTrailingWhitespace()
-  if &filetype =~ 'markdown\|neosnippet' | return | endif
-  let l = line(".")
-  let c = col(".")
-  %s/\s\+$//e
-  call cursor(l, c)
-endfunction
-
-function! ShowHighlightsUnderCursor()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunction
-
-function! ShowAllHighlights()
-  redir @z
-  silent hi
-  redir END
-  tabnew
-  setlocal buftype=nofile
-  normal "zpdd
-endfunction
-
-function! OpenNERDTreeBuffer()
-  if bufexists('NERD_tree_1')
-    buffer NERD_tree_1
-  else
-    let alternate_buffer = bufnr('%')
-    silent edit .
-    if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
-  end
-endfunction
-
-function! RevealInNERDTreeBuffer()
-  try
-    let p = g:NERDTreePath.New(expand('%:p'))
-  catch /^NERDTree.InvalidArgumentsError/
-    call nerdtree#echo('no file for the current buffer')
-    return
-  endtry
-  if p.isUnixHiddenPath()
-    let showhidden=g:NERDTreeShowHidden
-    let g:NERDTreeShowHidden = 1
-  endif
-
-  call OpenNERDTreeBuffer()
-
-  let node = b:NERDTree.root.reveal(p)
-  call b:NERDTree.render()
-  call node.putCursorHere(1,0)
-
-  if p.isUnixHiddenFile()
-    let g:NERDTreeShowHidden = showhidden
-  endif
-endfunction
-
-function! DeleteCurrentFile()
-  let answer = input('Delete current file? ', 'y')
-  if answer == 'y'
-    exec ':silent !rm ' . expand('%')
-  endif
-endfunction
-
-function! RefreshNERDTree()
-  " NERDTreeFind
-  " NERDTreeClose
-  " call g:NERDTree.ForCurrentTab().getRoot().refresh()
-  " call g:NERDTree.ForCurrentTab().getRoot().refresh()
-  " call nerdtree#ui_glue#invokeKeyMap('o')
-endfunction
-
-function! MoveCurrentFile()
-  let old_file = expand('%')
-  let new_file = input('New location: ', old_file, 'file')
-  if new_file != '' && new_file != old_file
-    let alternate_buffer = @#
-    if bufexists(new_file) | exec 'bd! ' . new_file | endif
-    exec ':silent !mkdir -p `dirname ' . new_file . '`'
-    exec ':silent !mv ' . old_file . ' ' . new_file
-    exec ':edit! ' . new_file
-    exec 'bd! ' . old_file
-    if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
-  endif
-endfunction
-
-function! RenameCurrentFile()
-  let old_name = expand('%:t')
-  let new_name = input('New name: ', old_name, 'file')
-  if new_name != '' && new_name != old_name
-    let dir = expand('%:h')
-    let old_file = expand('%')
-    let new_file = (dir == '.') ? (new_name) : (dir . '/' . new_name)
-    if new_file != old_file
-      let alternate_buffer = @#
-      if bufexists(new_file) | exec 'bd! ' . new_file | endif
-      exec ':silent !mv ' . old_file . ' ' . new_file
-      exec ':edit! ' . new_file
-      exec 'bd! ' . old_file
-      if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
-    endif
-  endif
-endfunction
-
-function! DuplicateCurrentFile()
-  let old_file = expand('%')
-  let new_file = input('Duplicate as: ', old_file, 'file')
-  if new_file != '' && new_file != old_file
-    if bufexists(new_file) | exec 'bd! ' . new_file | endif
-    exec ':saveas! ' . new_file
-  endif
-endfunction
-
-function! CopyCurrentFilePath()
-  let @+=expand('%')
-endfunction
-
-function! CopyCurrentFileAbsolutePath()
-  let @+=expand('%:p')
-endfunction
-
-function! CopyCurrentFileName()
-  let @+=expand('%:t')
-endfunction
-
-function! CreateNewFile()
-  let new_file = input('New file: ', '', 'file')
-  if new_file != ''
-    exec ':e ' . new_file
-    w
-  endif
-endfunction
-
-function! CreateNewFileInCurrentDir()
-  let path = expand('%:h')
-  if path == '.'
-    let path = ''
-  endif
-  if path != ''
-    let path .= '/'
-  endif
-
-  let new_file = input('New file: ', path, 'file')
-  if new_file != '' && new_file != path
-    exec ':e ' . new_file
-    w
-  endif
-endfunction
-
-function! ToggleTestForCurrentFile()
-  let current_file = expand("%")
-  let new_file = current_file
-  let in_spec = match(current_file, '^spec/') != -1
-  let going_to_spec = !in_spec
-  let in_app = match(current_file, '\<controllers\>') != -1
-             \ || match(current_file, '\<models\>') != -1
-             \ || match(current_file, '\<views\>') != -1
-             \ || match(current_file, '\<helpers\>') != -1
-             \ || match(current_file, '\<jobs\>') != -1
-             \ || match(current_file, '\<mailers\>') != -1
-             \ || match(current_file, '\<services\>') != -1
-  if going_to_spec
-    let new_file = substitute(new_file, '^app/', '', '')
-    let new_file = substitute(new_file, '\.e\?rb$', '_spec.rb', '')
-    let new_file = 'spec/' . new_file
-  else
-    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
-    let new_file = substitute(new_file, '^spec/', '', '')
-    if in_app
-      let new_file = 'app/' . new_file
-    end
-  endif
-  return new_file
-endfunction
-
-function! ToggleTestInCurrentWindow()
-  let new_file = ToggleTestForCurrentFile()
-  exec ':e ' . new_file
-endfunction
-
-function! ToggleTestInSplitWindow()
-  let new_file = ToggleTestForCurrentFile()
-  exec ':vsplit ' . new_file
-endfunction
-
-function! ToggleQuotes()
-  let before = getline('.')[col('^'):(col('.')-1)]
-  let after = getline('.')[(col('.')):col('$')]
-  normal mC
-  if before =~ '""$'
-    normal hxxi''
-  elseif before =~ '"$' && after =~ '^"'
-    normal xxi''
-  elseif before =~ "''$"
-    normal hxxi""
-  elseif before =~ "'$" && after =~ "^'"
-    normal xxi""
-  elseif before =~ '"' && after =~ '"'
-    normal cs"'
-  elseif before =~ "'" && after =~ "'"
-    normal cs'"
-  end
-  normal `C
-endfunction
-
-function! OnVimSuspend()
-  silent! wa
-endfunction
-
-function! OnVimResume()
-  silent! checktime
-endfunction
-
-function! OnHelpDisplayed()
-  wincmd _
-  map <buffer> <cr> <c-]>
-  map <buffer> q :bd<cr>
-endfunction
-
-function! OnQuickFixDisplayed()
-  setlocal colorcolumn=
-  map <buffer> <cr> <cr>:ccl<cr>
-  noremap <buffer> <f21> <cr>
-  map <buffer> o <f21><c-w><c-w>
-  map <buffer> q :q<cr>
-endfunction
-
-function! OnNERDTreeDisplayed()
-  map <buffer> J 5j
-  map <buffer> K 5k
-  map <buffer> <silent> o :call PreviewNERDTreeNode()<cr>
-  map <buffer> <silent> p :call PreviewNERDTreeNode()<cr>
-  map <buffer> <esc> :let t:escaped_nerdtree = 1<cr>q
-  map <buffer> <f1> q
-
-  if exists('t:last_bufnum')
-    let t:nerdtree_original_bufnum = t:last_bufnum
-  endif
-endfunction
-
 function! SaveCurrentBufNum()
   let t:last_bufnum = bufnr('%')
 endfunction
@@ -1073,127 +784,6 @@ function! RestoreNerdtreeOriginalBuffer()
     unlet t:nerdtree_original_bufnum
   endif
   if exists('t:escaped_nerdtree') | unlet t:escaped_nerdtree | endif
-endfunction
-
-function! OnTestDisplayed()
-  noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
-  map <silent><buffer> <esc> <leader>q
-  map <silent><buffer> q <esc>
-  noremap <silent><buffer> <cr> :call OpenFileInPreviousWindow(0)<cr>
-  noremap <silent><buffer> o :call OpenFileInPreviousWindow(1)<cr><c-w>p
-endfunction
-
-function! OnFileSearchDisplayed()
-  noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
-  nmap <buffer> o <cr>
-  noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
-endfunction
-
-function! OnBufExplorerDisplayed()
-  if !exists('b:config_defined')
-    setlocal colorcolumn=
-    map <buffer> <esc> q
-    let b:config_defined = 1
-  endif
-endfunction
-
-function! OnMRUDisplayed()
-  map <buffer> <esc> q
-endfunction
-
-function! PreviewNERDTreeNode()
-  let line = getline('.')
-  if line =~ '▸\|▾'
-    call nerdtree#ui_glue#invokeKeyMap('o')
-  elseif line !~ '^/'
-    normal go
-  endif
-endfunction
-
-function! FileSearch(search_options)
-  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree_1'
-    enew
-  else
-    tabnew
-  endif
-
-  let single_quote_pos = match(a:search_options, "'")
-  let double_quote_pos = match(a:search_options, '"')
-  let single_quote_search = single_quote_pos >= 0
-  if single_quote_pos >=0 && double_quote_pos >= 0
-    let single_quote_search = single_quote_pos < double_quote_pos
-  endif
-  let search_text = ''
-  if single_quote_search
-    let search_text = matchstr(a:search_options, "\\v'\\zs.{-}\\ze'")
-  else
-    let search_text = matchstr(a:search_options, "\\v\"\\zs.{-}\\ze(\\\\)\@<!\"")
-  endif
-  let @/ = search_text
-
-  let query = 'ag -C ' . a:search_options
-  call setqflist([], ' ', { 'title': query })
-  let opts = {}
-  let opts.file = ''
-  let opts.files_matched = 0
-  let opts.lines_matched = 0
-  function! opts.on_stdout(job_id, data, event)
-    for line in a:data
-      let escaped_line = substitute(line, '\(\e\[\(\d\{1,2}\(;\d\{1,2}\)\?\)\?[mK]\|\r\)', '', 'g')
-      if line =~ '^\e\[1;32m'
-        let self.file = escaped_line
-        let self.files_matched += 1
-        continue
-      end
-      let matches = matchlist(escaped_line, '^\(\d\+\):\(.*\)')
-      if len(matches)
-        call setqflist([{
-              \ 'filename': self.file,
-              \ 'lnum': matches[1],
-              \ 'text': matches[2]
-              \ }], 'a')
-        let self.lines_matched += 1
-      endif
-      let b:custom_status_msg =
-            \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
-    endfor
-  endfunction
-  " function! opts.on_exit(job_id, data, event)
-  "   let b:custom_status_msg =
-  "         \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
-  " endfunction
-  call termopen(query, opts)
-endfunction
-
-function! ResetProject()
-  for num in range(1, bufnr('$'))
-    if buflisted(num) && bufname(num) != 'NERD_tree_1'
-      silent exec 'bd! ' . num
-    endif
-  endfor
-
-  call OpenNERDTreeBuffer()
-  silent! let @# = ''
-  normal ggX^
-endfunction
-
-function! ClearUndos()
-  set undoreload=0
-  silent edit!
-  echo 'Undos cleared.'
-endfunction
-
-function! DeleteHiddenBuffers()
-  let open_buffers = []
-  for i in range(tabpagenr('$'))
-    call extend(open_buffers, tabpagebuflist(i + 1))
-  endfor
-
-  for num in range(1, bufnr('$') + 1)
-    if buflisted(num) && index(open_buffers, num) == -1
-      exec 'bd! ' . num
-    endif
-  endfor
 endfunction
 
 function! GetLintMsg()
@@ -1213,45 +803,6 @@ function! GetCustomStatusMsg()
   return '[' . b:custom_status_msg . ']'
 endfunction
 
-function! WriteUndoFile()
-  let undofile = escape(undofile(expand('%')), '%')
-  exec 'wundo ' . undofile
-endfunction
-
-function! ReadUndoFile()
-  let undofile = undofile(expand('%'))
-  if filereadable(undofile)
-    let undofile = escape(undofile,'%')
-    exec 'rundo ' . undofile
-  endif
-endfunction
-
-function! BackupCurrentFile()
-  if !isdirectory(expand(s:custom_backup_dir))
-    let cmd = 'mkdir -p ' . s:custom_backup_dir . ';'
-    let cmd .= 'cd ' . s:custom_backup_dir . ';'
-    let cmd .= 'git init;'
-    call system(cmd)
-  endif
-  let file = expand('%:p')
-  if file =~ fnamemodify(s:custom_backup_dir, ':t') | return | endif
-  let file_dir = s:custom_backup_dir . expand('%:p:h')
-  let backup_file = s:custom_backup_dir . file
-  let cmd = ''
-  if !isdirectory(expand(file_dir))
-    let cmd .= 'mkdir -p ' . file_dir . ';'
-  endif
-  let cmd .= 'cp ' . file . ' ' . backup_file . ';'
-  let cmd .= 'cd ' . s:custom_backup_dir . ';'
-  let cmd .= 'git add ' . backup_file . ';'
-  let cmd .= 'git commit -m "Backup - `date`";'
-  call jobstart(cmd)
-endfunction
-
-function! CopyCurrentFileBackupPath()
-  let @+=expand(s:custom_backup_dir . expand('%:p'))
-endfunction
-
 function! CustomTestStrategy(cmd) abort
   let opts = {}
   function! opts.on_exit(job_id, data, event)
@@ -1259,7 +810,7 @@ function! CustomTestStrategy(cmd) abort
       exe bufwinnr(t:term_test_bufnum) . 'wincmd w'
     end
   endfunction
-  call CloseTests()
+  call functions#CloseTests()
   botright new
   let t:term_test_bufnum = bufnr('%')
   resize 11
@@ -1267,57 +818,6 @@ function! CustomTestStrategy(cmd) abort
   wincmd p
 endfunction
 let g:test#custom_strategies = { 'custom': function('CustomTestStrategy') }
-
-function! CloseTests()
-  if exists('t:term_test_bufnum') && bufexists(t:term_test_bufnum)
-    exe 'bd! ' . t:term_test_bufnum
-    unlet t:term_test_bufnum
-  endif
-endfunction
-
-function! OpenFileInPreviousWindow(highlight_line)
-  let file_and_line = GetFileAndLineUnderCursor()
-  if !empty(file_and_line)
-    wincmd p
-    exe 'e ' . file_and_line[0]
-    exe file_and_line[1]
-    normal zz
-    if a:highlight_line
-      exe 'match Search /\%' . file_and_line[1] . 'l/'
-    endif
-  endif
-endfunction
-
-function! GetFileAndLineUnderCursor()
-  " let matches = matchlist(getline('.'), '\([\S^:]\+\):\(\d*\)')
-  normal mC^f:
-  let items = split(expand('<cWORD>'), ':')
-  normal `C
-  if len(items) >= 2 && filereadable(items[0])
-    return items[0:1]
-  endif
-endfunction
-
-function! OpenFileSearchResult(new_tab)
-  if getline('.') == '' | return | endif
-  let line = matchstr(getline('.'), '^\d\+')
-  normal mC
-  if line != ''
-    normal {
-    if getline('.') == ''
-      normal j
-    endif
-  endif
-  let file = getline('.')
-  normal `C
-  if file != ''
-    if a:new_tab | tabnew | endif
-    exe 'e ' . file
-    if line != ''
-      exe line
-    endif
-  endif
-endfunction
 
 function! GetTabLine()
   let line = ''
@@ -1342,53 +842,6 @@ function! GetTabLabel(tab_number)
     return 'FZF'
   end
   return fnamemodify(file_path, ':p:t')
-  " return GetFileLabel(file_path, a:tab_number)
-endfunction
-
-function! GetTabLabels()
-  let tabs = []
-  for i in range(tabpagenr('$'))
-    let path = bufname(tabpagebuflist(i)[0])
-    let name = fnamemodify(path, ':p:t')
-    call add(tabs, { 'path': path, 'name': name, 'name_suffix': '' })
-  endfor
-  for i in range(tabpagenr('$'))
-    for j in range(i, tabpagenr('$') - 1)
-      call Disambiguate(tabs, i, j)
-    endfor
-  endfor
-  return tabs
-endfunction
-
-function! Disambiguate(tabs, i, j)
-  let tab1 = a:tabs[a:i]
-  let tab2 = a:tabs[a:j]
-  if tab1.name != tab2.name | return | endif
-  if tab1.path == tab2.path | return | endif
-
-  """ Find root for all same name nodes
-
-  if tab1.name_suffix == tab2.name_suffix
-    " tab1.name = 1
-  endif
-  " a:tabs[a:i] = 1
-  " let a:tabs[a:i] = 1
-endfunction
-
-function! GetFileLabel(file_path, tab_number)
-  let file_label = fnamemodify(file_path, ':p:t')
-  for i in range(a:tab_number + 1, tabpagenr('$') + 1)
-    let other_file_path = tabpagebuflist(a:tab_number)[0]
-    let ambiguous_labels = file_path == other_file_path ? 0 : 1
-    while ambiguous_labels
-      let other_file_label = fnamemodify(other_file_path, ':p:t')
-      if file_label == other_file_label
-
-      else
-        same_labels = 0
-      endif
-    endwhile
-  endfor
 endfunction
 
 function! GetCwd()
@@ -1402,9 +855,8 @@ function! BufEnterConfig()
     map <buffer><Leader>fr :call feedkeys("\<space>fRa")<cr>
     map <buffer><Leader>fR :Greplace<cr>
   else
-    map <buffer><leader>fre :call RenameCurrentFile()<cr>
+    map <buffer><leader>fre :call functions#RenameCurrentFile()<cr>
     map <buffer><leader>frm <buffer><leader>fde
-    map <buffer><silent> <leader>fru :MRU<cr>
   endif
 
   if buffer_name !~ 'NERD_tree'
@@ -1416,18 +868,6 @@ function! BufEnterConfig()
   call ConfigureLargeFiles()
 
   exe ':match'
-endfunction
-
-function! GitOpenModifiedFiles()
-  silent only
-  let status = system('git status -s | remove-colors | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
-  let filenames = split(status, "\n")
-  if empty(filenames) | echo 'No modified files!' | return | endif
-  exec "edit " . filenames[0]
-  for filename in filenames[1:]
-    exec "sp " . filename
-  endfor
-  wincmd w
 endfunction
 
 function! ConfigureLargeFiles()
@@ -1444,62 +884,6 @@ function! ConfigureLargeFiles()
   endif
 endfunction
 
-function! ShowLatestMigration()
-  let alternate_buffer = bufnr('%')
-  enew
-  set ft=ruby
-  exec ':Emigration'
-  if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
-endfunction
-
-function! ExtractRailsPartial()
-  let name = input('Partial name: ', '')
-  if name != ''
-    exec "'<,'>Rextract " . name
-  endif
-endfunction
-
-function! IsCurrentBufferNew()
-  return bufname('%') == '' && IsCurrentBufferEmpty()
-endfunction
-
-function! IsCurrentBufferEmpty()
-  return line('$') == 1 && getline(1) == ''
-endfunction
-
-function! OpenMarkdownPreview()
-  if !exists('s:markdown_preview_job')
-    " https://github.com/joeyespo/grip
-    let s:markdown_preview_job = jobstart('grip')
-  endif
-  silent exec '!open http://localhost:6419/' . expand('%')
-endfunction
-
-function! NewPlaygroundBuffer(file_type)
-  if bufexists('[playground]')
-    bd! \[playground\]
-  endif
-  if IsCurrentBufferNew()
-    enew
-  else
-    tabnew
-  endif
-  file [playground]
-  setlocal buftype=nofile
-  exe 'set filetype=' . a:file_type
-endfunction
-
-function! MakeSession()
-  exe ':silent SaveSession! ' . GetCwd()
-  echo 'Session saved.'
-endfunction
-
-function! LoadSession()
-  exe ':silent OpenSession ' . GetCwd()
-  set conceallevel=2 concealcursor=niv
-  echo 'Session loaded.'
-endfunction
-
 function! CustomCloseTab()
   if s:current_tab_number == 1 | return | endif
   exe 'tabnext' . (s:current_tab_number - 1)
@@ -1507,112 +891,6 @@ endfunction
 
 function! GoToLastActiveTab()
   exe 'tabnext' . s:last_active_tab_number
-endfunction
-
-function! HighlightOccurencesVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = EscapeStringForSearches(@")
-  exe 'match Search /' . @/ . '/'
-endfunction
-
-function! HighlightWholeOccurencesVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = '\<' . EscapeStringForSearches(@") . '\>'
-  exe 'match Search /' . @/ . '/'
-endfunction
-
-function! ChangeOccurenceVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = EscapeStringForSearches(@")
-  exe 'match Search /' . @/ . '/'
-  call feedkeys('cgn', 'n')
-endfunction
-
-function! ChangeWholeOccurenceVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = '\<' . EscapeStringForSearches(@") . '\>'
-  exe 'match Search /' . @/ . '/'
-  call feedkeys('cgn', 'n')
-endfunction
-
-function! FileSearchVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = @"
-  let cmd = ":FileSearch -i -Q '" . @/ . "' \<left>\<left>"
-  call feedkeys(cmd, 'n')
-endfunction
-
-function! GlobalSubstituteVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = @"
-  call feedkeys(':%s/' . @/ . '/', 'n')
-endfunction
-
-function! SubstituteVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = @"
-  call feedkeys(':s/' . @/ . '/', 'n')
-endfunction
-
-function! SearchNextOccurenceVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = EscapeStringForSearches(@")
-  call feedkeys('n', 'n')
-endfunction
-
-function! GetSelectionForSearches() range
-  let reg_save = getreg('"')
-  let regtype_save = getregtype('"')
-  let cb_save = &clipboard
-  set clipboard&
-
-  normal! ""gvy
-  let selection = getreg('"')
-
-  call setreg('"', reg_save, regtype_save)
-  let &clipboard = cb_save
-
-  let escaped_selection = EscapeStringForSearches(selection)
-
-  return escaped_selection
-endfunction
-
-function! EscapeStringForSearches(string)
-  let string=a:string
-  let string = escape(string, '^$.*\/~[]')
-  let string = substitute(string, '\n', '\\n', 'g')
-  return string
-endfunction
-
-function! PreserveView(cmd)
-  let view = winsaveview()
-  exe a:cmd
-  call winrestview(view)
-endfunction
-
-function! ExecuteMacroOnSelection()
-  exe ":'<,'>normal @" . nr2char(getchar())
-endfunction
-
-function! OnGoyoEnter()
-  silent !tmux set status off
-endfunction
-
-function! OnGoyoLeave()
-  silent !tmux set status on
-endfunction
-
-python import vim
-function! SetVirtualEdit()
-  let absolute_col = virtcol('.') + pyeval('vim.current.window.col')
-  let absolute_col += &foldcolumn + (&number ? &numberwidth : 0)
-  let is_on_leftmost_screen = screencol() == absolute_col
-
-  if is_on_leftmost_screen
-    setlocal virtualedit=
-  else
-    setlocal virtualedit=all
-  endif
 endfunction
 
 function! Lint()
@@ -1627,109 +905,10 @@ function! Lint()
   end
 endfunction
 
-function! MoveToPrevTab()
-  if tabpagenr('$') == 1 && winnr('$') == 1
-    return
-  endif
-  let l:tab_nr = tabpagenr('$')
-  let l:cur_buf = bufnr('%')
-  if tabpagenr() != 1
-    close!
-    if l:tab_nr == tabpagenr('$')
-      tabprev
-    endif
-    vsplit
-  else
-    close!
-    exe "0tabnew"
-  endif
-  exe "b".l:cur_buf
-endfunction
-
-function! MoveToNextTab()
-  if tabpagenr('$') == 1 && winnr('$') == 1
-    return
-  endif
-  let l:tab_nr = tabpagenr('$')
-  let l:cur_buf = bufnr('%')
-  if tabpagenr() < tab_nr
-    close!
-    if l:tab_nr == tabpagenr('$')
-      tabnext
-    endif
-    vsplit
-  else
-    close!
-    tabnew
-  endif
-  exe "b".l:cur_buf
-endfunc
-
-function! EnhancedMetaLeft()
-  let line = getcmdline()
-  let pos = getcmdpos()
-  let next = 1
-  let nextnext = 1
-  let i = 2
-  while nextnext < pos
-    let next = nextnext
-    let nextnext = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
-    let i += 1
-  endwhile
-  return repeat("\<Left>", pos - next)
-endfunction
-
-function! EnhancedMetaRight()
-  return AbstractRight("\<Right>")
-endfunction
-
-function! AbstractRight(command)
-  let line = getcmdline()
-  let pos = getcmdpos()
-  let next = 1
-  let i = 2
-  while next <= pos && next > 0
-    let next = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
-    let i += 1
-  endwhile
-  return repeat(a:command, next - pos)
-endfunction
-
-function! EnhancedMetaDeleteRight()
-  return AbstractRight("\<Right>\<BS>")
-endfunction
-
-function! RenameTab()
-  let tab_name = input('Tab name: ', '')
-  call settabvar(tabpagenr(), 'tab_name', tab_name)
-  set showtabline=1
-endfunction
-
-function! Join()
-  let last_char = getline('.')[col('$')-2]
-  " normal! mCJ
-  normal! J
-  if last_char == '('
-    normal x
-  endif
-  " normal `C
-endfunction
-
 function! GetFoldText()
   let text = getline(v:foldstart)
   let width = winwidth(0) - &foldcolumn - strwidth(text)
   return text . repeat(' ', width)
-endfunction
-
-function! ToggleFoldSyntax()
-  if &foldmethod == 'manual'
-    setl foldenable
-    setl foldlevel=1
-    setl foldmethod=syntax
-  else
-    setl foldmethod=manual
-    normal zR
-  endif
 endfunction
 
 function! SaveBufferScroll()
@@ -1757,48 +936,25 @@ function! DetectBinaryFile()
   endif
 endfunction
 
-function! MakePlugSnapshot()
-  PlugSnapshot! ~/.vim/plug_snapshot.vim
-endfunction
-
-function! ToggleZoom()
-  if !exists('t:zoomed') | let t:zoomed = 0 | endif
-  if t:zoomed
-    wincmd =
-    let t:zoomed = 0
-  else
-    wincmd |
-    wincmd _
-    let t:zoomed = 1
-  endif
-endfunction
-
-let s:named_registers = split('abcdefghijklmnopqrstuvwxyz', '\zs')
-let g:is_recording=0
-let s:recorded_register=0
+if !exists('g:macros_loaded')
+  let g:macro_registers = split('abcdefghijklmnopqrstuvwxyz', '\zs')
+  let g:is_recording=0
+  let g:last_macro_register=''
+  for macro_register in g:macro_registers
+    exe 'noremap <silent> @' . macro_register . ' :call functions#PlayMacro("' . macro_register . '")<cr>'
+  endfor
+  let g:macros_loaded=1
+end
 function! EnableMacroMappings(enable)
-  for named_register in s:named_registers
+  for macro_register in g:macro_registers
     if a:enable
-      exe 'noremap <silent> q' . named_register . ' :call RecordMacro("' . named_register . '")<cr>'
+      exe 'noremap <silent> q' . macro_register . ' :call functions#RecordMacro("' . macro_register . '")<cr>'
     else
-      exe 'unmap q' . named_register
+      exe 'unmap q' . macro_register
     endif
   endfor
 endfunction
 call EnableMacroMappings(1)
-
-function! RecordMacro(named_register)
-  let g:is_recording=1
-  let s:recorded_register=a:named_register
-  exe 'normal! q' . a:named_register
-  call EnableMacroMappings(0)
-endfunction
-
-function! PlayLastMacro()
-  if !g:is_recording && s:recorded_register != ''
-    exe 'normal @' . s:recorded_register
-  endif
-endfunction
 
 "####################
 "### Autocommands ###
@@ -1840,23 +996,18 @@ augroup end
 
 augroup custom_backup
   autocmd!
-  autocmd BufWritePost * call BackupCurrentFile()
+  autocmd BufWritePost * call functions#BackupCurrentFile()
 augroup end
 
 augroup custom_undofile
   autocmd!
-  autocmd BufWritePost * call WriteUndoFile()
+  autocmd BufWritePost * call functions#WriteUndoFile()
 augroup end
 
 augroup on_display_events
   autocmd!
-  autocmd filetype help call OnHelpDisplayed()
-  autocmd filetype qf call OnQuickFixDisplayed()
-	autocmd filetype nerdtree call OnNERDTreeDisplayed()
-	autocmd filetype mru call OnMRUDisplayed()
 	autocmd TermOpen *test* call OnTestDisplayed()
-	autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
-	autocmd BufEnter \[BufExplorer\] call OnBufExplorerDisplayed()
+	autocmd TermOpen *ag\ * call functions#OnFileSearchDisplayed()
 augroup end
 
 augroup nerdtree_original_buffer
@@ -1882,8 +1033,8 @@ augroup end
 
 augroup goyo_events
   autocmd!
-  autocmd User GoyoEnter nested call OnGoyoEnter()
-  autocmd User GoyoLeave nested call OnGoyoLeave()
+  autocmd User GoyoEnter nested call functions#OnGoyoEnter()
+  autocmd User GoyoLeave nested call functions#OnGoyoLeave()
 augroup end
 
 augroup lazy_load_deoplete
@@ -1903,7 +1054,7 @@ augroup end
 
 augroup general_autocommands
   autocmd!
-  autocmd BufWritePre * call TrimTrailingWhitespace()
+  autocmd BufWritePre * call functions#TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
   autocmd InsertLeave * silent! set nopaste
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec

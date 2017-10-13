@@ -121,6 +121,7 @@ hi Type guifg=fg guibg=NONE gui=NONE
 hi Underlined guifg=NONE guibg=NONE gui=underline
 hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
 hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
+hi link Whitespace Normal
 hi qfLineNr guifg=#8A8885 guibg=NONE
 
 hi rubyInterpolation guifg=#4ea04c guibg=NONE gui=NONE
@@ -164,6 +165,7 @@ hi link hamlClass hamlTag
 hi link hamlClassChar hamlTag
 hi link hamlId hamlTag
 hi link hamlIdChar hamlTag
+hi link hamlFilter NONE
 
 hi link xmlTag Tag
 hi link xmlEndTag xmlTag
