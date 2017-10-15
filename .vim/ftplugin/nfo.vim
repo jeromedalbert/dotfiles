@@ -1,1 +1,1 @@
-silent edit ++enc=cp437
+try | silent edit ++enc=cp437 | catch | endtry

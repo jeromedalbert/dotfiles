@@ -2,14 +2,14 @@
 "### TODO ###
 "############
 
-" switch to part of replay code to make q available in help/qf/buflist etc
+" Karabiner: use tab system wide for esc, c-h, etc
+" have a shortcut for TODO / notes per project
 " open backup git diff in new tmux pane
+" use projectionist for test alternates and other alternates?
 " make tmux cmd+e a real tmux pane that auto closes if previous command was successful
 " improve tmux window renaming
 " make <leader>d work on selection
 " use very magic by default when searching?
-" have a shortcut for TODO / notes per project
-" use universal ctags
 " list instance variables with <leader>I
 " maybe use p for preview and o for preview+go to the file
 " when <cr>ing in a filesearch, rewind quickfix to closest previous match
@@ -89,6 +89,7 @@ Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'christoomey/vim-tmux-runner'
+Plug 'wincent/replay'
 call plug#end()
 
 "############################
@@ -201,8 +202,8 @@ noremap <silent> <leader>tc :tabclose<cr>
 noremap <silent> <leader>tq :tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
 
-noremap <leader>e :e $MYVIMRC<CR>
-noremap <leader>E :source $MYVIMRC<CR><esc>
+noremap <leader>e :e $MYVIMRC<cr>
+noremap <leader>E :e ~/.vim/autoload/functions.vim<cr>
 
 noremap <leader><leader> <C-^>
 
@@ -226,8 +227,6 @@ noremap <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
 
 noremap $ $ze
 
-noremap @- @:
-
 noremap <leader>rr :e config/routes.rb<cr>
 noremap <leader>rR :vnew config/routes.rb<cr>
 noremap <leader>rs :e db/schema.rb<cr>
@@ -242,9 +241,10 @@ noremap gi gi<c-o>zz
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
 
-noremap <silent> q :let g:is_recording=0<cr>q
+" noremap <silent> q :let g:is_recording=0<cr>q
 map <leader>2 @
 noremap <leader>22 @@
+noremap @- @:
 noremap <leader>2- @:
 noremap <leader>1 :silent !
 noremap <leader>5 :%!
@@ -300,7 +300,9 @@ map <m-s><c-a> <c-s><c-a>
 noremap <c-p> :Files<cr>
 noremap <leader>i :BTags<cr>
 
-tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
+if has('nvim')
+  tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
+endif
 
 noremap <leader>k :call functions#OpenNERDTreeBuffer()<CR>
 noremap <silent> <f1> :NERDTreeToggle<CR>
@@ -312,6 +314,7 @@ noremap <silent> <f3> :call functions#ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
+nmap cmu <Plug>Commentary<Plug>Commentary
 
 noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
@@ -477,7 +480,7 @@ imap <silent> <f4> <esc><f4>
 
 noremap <silent> <m-=> :call functions#ToggleZoom()<cr>
 
-nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call functions#PlayLastMacro()<cr>' : '<cr>'
+" nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call functions#PlayLastMacro()<cr>' : '<cr>'
 
 "#############################
 "### General configuration ###
@@ -530,7 +533,6 @@ set foldtext=GetFoldText()
 " set foldlevelstart=1
 " set foldlevelstart=99
 set tags=./.tags;
-set scrollback=-1
 set tabline=%!GetTabLine()
 set pumheight=8
 set nojoinspaces
@@ -540,6 +542,8 @@ set sidescroll=1 sidescrolloff=3
 set wildignorecase
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
+let $MYVIMFUNCTIONS = '~/.vim/autoload/functions.vim'
+set synmaxcol=1000
 
 set statusline=
 set statusline+=\ %<%f
@@ -557,6 +561,14 @@ if !isdirectory(undodir)
   call mkdir(undodir, 'p')
 endif
 set undodir=~/.vim/tmp/undo
+
+if has('nvim')
+  set scrollback=-1
+endif
+if has('gui_running')
+  set guifont=Menlo:h14 linespace=3
+  hi Cursor guifg=white guibg=red
+endif
 
 let html_no_rendering = 1
 let g:html_indent_inctags = 'p,main'
@@ -768,9 +780,10 @@ let g:mta_filetypes = {
 
 let g:markdown_syntax_conceal = 0
 
-"#################
-"### Functions ###
-"#################
+"##############################
+"### Eager-loaded functions ###
+"##############################
+" See .vim/autoload/functions.vim for lazy-loaded functions
 
 function! SaveCurrentBufNum()
   let t:last_bufnum = bufnr('%')
@@ -871,17 +884,31 @@ function! BufEnterConfig()
 endfunction
 
 function! ConfigureLargeFiles()
-  let max_line_length = max(map(range(1, line('$')), "col([v:val, '$'])")) - 1
-  if max_line_length > 1000
-    setlocal synmaxcol=153
-  endif
-
   let nb_lines = line('$')
   if nb_lines < 500 |
     set nolazyredraw
   else
     set lazyredraw
   endif
+
+  if !has('nvim') | return | endif
+  let opts = {}
+  let opts.tempfile = ''
+  let file = expand('%')
+  if file == ''
+    let opts.tempfile = tempname()
+    call writefile(getbufline('%', 1, '$'), opts.tempfile)
+    let file = opts.tempfile
+  endif
+  let cmd = "awk 'length > max { max=length } END { print max }' " . file
+  function! opts.on_stdout(job_id, data, event)
+    let max_line_length = a:data[0]
+    if max_line_length > 1000
+      setlocal synmaxcol=153
+    endif
+    if self.tempfile != '' | call delete(self.tempfile) | endif
+  endfunction
+  call jobstart(cmd, opts)
 endfunction
 
 function! CustomCloseTab()
@@ -936,26 +963,6 @@ function! DetectBinaryFile()
   endif
 endfunction
 
-if !exists('g:macros_loaded')
-  let g:macro_registers = split('abcdefghijklmnopqrstuvwxyz', '\zs')
-  let g:is_recording=0
-  let g:last_macro_register=''
-  for macro_register in g:macro_registers
-    exe 'noremap <silent> @' . macro_register . ' :call functions#PlayMacro("' . macro_register . '")<cr>'
-  endfor
-  let g:macros_loaded=1
-end
-function! EnableMacroMappings(enable)
-  for macro_register in g:macro_registers
-    if a:enable
-      exe 'noremap <silent> q' . macro_register . ' :call functions#RecordMacro("' . macro_register . '")<cr>'
-    else
-      exe 'unmap q' . macro_register
-    endif
-  endfor
-endfunction
-call EnableMacroMappings(1)
-
 "####################
 "### Autocommands ###
 "####################
@@ -1004,11 +1011,13 @@ augroup custom_undofile
   autocmd BufWritePost * call functions#WriteUndoFile()
 augroup end
 
-augroup on_display_events
-  autocmd!
-	autocmd TermOpen *test* call OnTestDisplayed()
-	autocmd TermOpen *ag\ * call functions#OnFileSearchDisplayed()
-augroup end
+if has('nvim')
+  augroup on_display_events
+    autocmd!
+    autocmd TermOpen *test* call OnTestDisplayed()
+    autocmd TermOpen *ag\ * call functions#OnFileSearchDisplayed()
+  augroup end
+end
 
 augroup nerdtree_original_buffer
   autocmd!
@@ -1056,6 +1065,7 @@ augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call functions#TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
+  autocmd BufWritePost $MYVIMFUNCTIONS source $MYVIMFUNCTIONS
   autocmd InsertLeave * silent! set nopaste
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call BufEnterConfig()

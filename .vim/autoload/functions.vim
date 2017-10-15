@@ -1,6 +1,7 @@
-"################################################################
-"### Lazy-loaded custom functions (makes Vim start up faster) ###
-"################################################################
+"####################################
+"### Lazy-loaded custom functions ###
+"####################################
+" Makes Vim start up faster
 
 function! functions#TabComplete()
   if neosnippet#expandable_or_jumpable()
@@ -744,24 +745,4 @@ function! functions#ToggleZoom()
     wincmd _
     let t:zoomed = 1
   endif
-endfunction
-
-function! functions#RecordMacro(macro_register)
-  let g:is_recording=1
-  let g:last_macro_register=a:macro_register
-  exe 'normal! q' . a:macro_register
-  call EnableMacroMappings(0)
-endfunction
-
-function! functions#PlayLastMacro()
-  if !g:is_recording && g:last_macro_register != ''
-    exe 'normal! @' . g:last_macro_register
-  endif
-endfunction
-
-function! functions#PlayMacro(macro_register)
-  exe 'normal! @' . a:macro_register
-  if !g:is_recording
-    let g:last_macro_register=a:macro_register
-  end
 endfunction

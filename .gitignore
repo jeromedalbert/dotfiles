@@ -1,10 +1,15 @@
 .vim/tmp
 .vim/plugged
-.secrets.zsh
+
 .tmux/plugins
 .tmux/sessions/*
 !.tmux/sessions/blog.conf
 !.tmux/sessions/rails.conf
-.bin/tmux
+
 .elinks/*
 !.elinks/elinks.conf
+
+.config/*
+!.config/karabiner
+
+.secrets.zsh
