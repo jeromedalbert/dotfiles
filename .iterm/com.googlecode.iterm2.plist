@@ -1276,26 +1276,12 @@
 			<key>Text</key>
 			<string>0x13 0x6e</string>
 		</dict>
-		<key>0x61-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x1</string>
-		</dict>
 		<key>0x63-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x59</string>
-		</dict>
-		<key>0x63-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x3</string>
 		</dict>
 		<key>0x64-0x100000</key>
 		<dict>
@@ -1310,13 +1296,6 @@
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x65</string>
-		</dict>
-		<key>0x65-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x5</string>
 		</dict>
 		<key>0x66-0x100000</key>
 		<dict>
@@ -1345,20 +1324,6 @@
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x5a</string>
-		</dict>
-		<key>0x68-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>16</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0x69-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x9</string>
 		</dict>
 		<key>0x6a-0x100000</key>
 		<dict>
@@ -1395,13 +1360,6 @@
 			<key>Text</key>
 			<string>0x13 0x53</string>
 		</dict>
-		<key>0x6b-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0xb</string>
-		</dict>
 		<key>0x6c-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1416,13 +1374,6 @@
 			<key>Text</key>
 			<string>0x13 0x43</string>
 		</dict>
-		<key>0x6e-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0xe</string>
-		</dict>
 		<key>0x6f-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1436,20 +1387,6 @@
 			<integer>13</integer>
 			<key>Text</key>
 			<string></string>
-		</dict>
-		<key>0x70-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x10</string>
-		</dict>
-		<key>0x72-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x12</string>
 		</dict>
 		<key>0x73-0x100000</key>
 		<dict>
@@ -1472,26 +1409,12 @@
 			<key>Text</key>
 			<string>0x13 0x75</string>
 		</dict>
-		<key>0x75-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x15</string>
-		</dict>
 		<key>0x77-0x100000</key>
 		<dict>
 			<key>Action</key>
 			<integer>11</integer>
 			<key>Text</key>
 			<string>0x13 0x78</string>
-		</dict>
-		<key>0x77-0x80000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x17</string>
 		</dict>
 		<key>0x78-0x100000</key>
 		<dict>
@@ -1548,13 +1471,6 @@
 			<integer>13</integer>
 			<key>Text</key>
 			<string></string>
-		</dict>
-		<key>0xd-0x20000</key>
-		<dict>
-			<key>Action</key>
-			<integer>10</integer>
-			<key>Text</key>
-			<string>[29~</string>
 		</dict>
 		<key>0xf700-0x280000</key>
 		<dict>
@@ -1763,7 +1679,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 139 606 469 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>303 150 796 473 0 0 1280 800 </string>
+	<string>303 273 796 473 0 0 1280 800 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -2154,13 +2070,6 @@
 					<integer>11</integer>
 					<key>Text</key>
 					<string>0x7f</string>
-				</dict>
-				<key>0x9-0x0</key>
-				<dict>
-					<key>Action</key>
-					<integer>11</integer>
-					<key>Text</key>
-					<string>0x1b</string>
 				</dict>
 				<key>0xf700-0x220000</key>
 				<dict>

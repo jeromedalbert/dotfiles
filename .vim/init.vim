@@ -168,29 +168,27 @@ cnoremap <c-n> <down>
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 
 noremap <silent> <m-d> <c-d>
-noremap <silent> <m-u> <c-u>
-noremap <silent> <m-e> <c-e>
-noremap <silent> <m-y> <c-y>
-noremap <silent> <m-f> <c-f>
+inoremap <m-d> <c-o>dw
 noremap <silent> <m-b> <c-b>
-noremap <silent> <m-w> <c-w>
-noremap <m-g> :=<cr>
-noremap <m-o> <c-o>
-noremap <m-x> <c-x>
-noremap <m-v> <c-v>
-noremap <m-r> <c-r>
+inoremap <m-b> <s-left>
+noremap <silent> <m-f> <c-f>
+inoremap <m-f> <s-right>
 inoremap <m-bs> <c-w>
 cnoremap <m-bs> <c-w>
-cnoremap <m-r><m-w> <c-r><c-w>
-cnoremap <m-k> <c-k>
-inoremap <m-b> <s-left>
-inoremap <m-f> <s-right>
-inoremap <m-d> <c-o>dw
-inoremap <m-o> <c-o>
+if !has('nvim')
+  " m-d
+  noremap <silent> ∂ <c-d>
+  inoremap ∂ <c-o>dw
+  " m-b
+  noremap <silent> ∫ <c-b>
+  inoremap ∫ <s-left>
+  " m-f
+  noremap <silent> ƒ <c-f>
+  inoremap ƒ <s-right>
+endif
 
 noremap <c-n> <esc>:tabnew<cr>
 noremap <silent> <m-q> :q<cr>
-noremap <silent> <m-w> :w<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   exe 'noremap <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
@@ -201,6 +199,22 @@ noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :tabclose<cr>
 noremap <silent> <leader>tq :tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
+if !has('nvim')
+  " m-q
+  noremap <silent> œ :q<cr>
+  " m-1 to m-9
+  let tab_number = 1
+  for mapping in ['¡', '™', '£', '¢', '∞', '§', '¶', '•', 'ª']
+    exe 'noremap <silent> ' . mapping . ' :tabnext ' . tab_number . '<cr>'
+    let tab_number += 1
+  endfor
+  " m-l
+  noremap ¬ gt
+  " m-}
+  noremap <silent> ’ :+tabmove<cr>
+  " m-{
+  noremap <silent> ” :-tabmove<cr>
+endif
 
 noremap <leader>e :e $MYVIMRC<cr>
 noremap <leader>E :e ~/.vim/autoload/functions.vim<cr>
@@ -209,13 +223,46 @@ noremap <leader><leader> <C-^>
 
 noremap <m-;> mCA;<esc>`C
 inoremap <m-;> <C-o>A;
-noremap <m-,> mCA,<esc>`C
-inoremap <m-,> <C-o>A,
+if has('nvim')
+  noremap <m-,> mCA,<esc>`C
+  inoremap <m-,> <C-o>A,
+endif
 noremap <m->> mCA.<esc>`C
-inoremap <m-.> <C-o>A.
 inoremap <m->> <C-o>A.
+inoremap <m-.> <C-o>A.
 noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
+if !has('nvim')
+  " m-;
+  noremap … mCA;<esc>`C
+  inoremap … <C-o>A;
+  " m-,
+  noremap ≤ mCA,<esc>`C
+  inoremap ≤ <C-o>A,
+  " m->
+  noremap ˘ mCA.<esc>`C
+  inoremap ˘ <C-o>A.
+  " m-.
+  inoremap ≥ <C-o>A.
+  " m-:
+  noremap Ú mCA:<esc>`C
+  inoremap Ú <C-o>A:
+endif
+
+map <m-m> %
+map <m-]> <c-]>
+map <m-[> <c-t>
+imap <m-_> <c-_>
+if !has('nvim')
+  " m-m
+  map µ %
+  " m-]
+  map ‘ <c-]>
+  " m-[
+  map “ <c-t>
+  " m-_
+  imap — <c-_>
+endif
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
@@ -272,11 +319,6 @@ noremap z<Space> za
 map gs gS
 map gj gJ
 
-map <m-m> %
-
-map <m-]> <c-]>
-map <m-[> <c-t>
-
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -293,9 +335,13 @@ imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
 
 noremap <silent> '' :call functions#DisplayRegisters()<cr>
 
-noremap <m-s><m-g> :call functions#ShowHighlightsUnderCursor()<CR>
-noremap <c-s><c-a> :call functions#ShowAllHighlights()<CR>
-map <m-s><c-a> <c-s><c-a>
+noremap <m-s><c-g> :call functions#ShowHighlightsUnderCursor()<CR>
+noremap <m-s><c-a> :call functions#ShowAllHighlights()<CR>
+if !has('nvim')
+  " m-s
+  noremap ß<c-g> :call functions#ShowHighlightsUnderCursor()<CR>
+  noremap ß<c-a> :call functions#ShowAllHighlights()<CR>
+endif
 
 noremap <c-p> :Files<cr>
 noremap <leader>i :BTags<cr>
@@ -342,17 +388,31 @@ noremap <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
 vnoremap <leader>fb :!js-beautify<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
+vnoremap <silent> <m--> 20zl
 noremap <silent> <m-0> 20zh:call functions#SetVirtualEdit()<cr>
+vnoremap <silent> <m-0> 20zh
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
-vnoremap <silent> <m--> 20zl
-vnoremap <silent> <m-0> 20zh
+if !has('nvim')
+  " m--
+  noremap <silent> – :set virtualedit=all<cr>20zl
+  vnoremap <silent> – 20zl
+  " m-0
+  noremap <silent> º 20zh:call functions#SetVirtualEdit()<cr>
+  vnoremap <silent> º 20zh
+endif
 
 noremap <silent> <c-z> :call functions#OnVimSuspend()<cr>:suspend<cr>:call functions#OnVimResume()<cr>
 
 noremap <m-t> :call functions#ToggleQuotes()<cr>
 inoremap <m-t> <c-o>:call functions#ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
+if !has('nvim')
+  " m-t
+  noremap † :call functions#ToggleQuotes()<cr>
+  inoremap † <c-o>:call functions#ToggleQuotes()<cr>
+  cnoremap † <c-e><c-w>"" <left><left>
+endif
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -364,16 +424,22 @@ map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
 map <m-j> ]e
-map <c-k> [e
 xmap <m-j> ]egv
+map <c-k> [e
 xmap <c-k> [egv
+if !has('nvim')
+  " m-j
+  map ∆ ]e
+  xmap ∆ ]egv
+endif
 
 map <leader>; `]]<space>
-map <m-cr> ]<space>
-inoremap <m-cr> <end><cr>
-" f16 is s-cr in my iTerm2
-map <f16> [<space>
-inoremap <f16> <esc>O
+" f17 is m-cr in my config
+map <f17> ]<space>
+inoremap <f17> <end><cr>
+" f18 is s-cr in my config
+map <f18> [<space>
+inoremap <f18> <esc>O
 
 noremap <leader>ff :FileSearch -Q -i '' <left><left>
 noremap <silent> <leader>yf :set opfunc=functions#FileSearchVerb<CR>g@
@@ -381,8 +447,11 @@ map <leader>fw <leader>yfiw
 map <leader>fW <leader>yfiW
 vnoremap <leader>ff y:let @/ = functions#GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <m-l> <end><space>-G '\.'<space><left><left>
-cnoremap <m-g> <end><space>-G ''<space><left><left>
+cnoremap <c-g> <end><space>-G ''<space><left><left>
 noremap <leader>fo :Gqfopen<cr>
+if !has('nvim')
+  cnoremap ¬ <end><space>-G '\.'<space><left><left>
+endif
 
 noremap <leader>-- @:
 noremap <leader>-b :call functions#DeleteHiddenBuffers()<cr>
@@ -462,14 +531,23 @@ noremap <silent> <leader>th :call functions#MoveToPrevTab()<cr>
 noremap <silent> <leader>tl :call functions#MoveToNextTab()<cr>
 noremap <silent> <leader>tr :call functions#RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
+if !has('nvim')
+  noremap <silent> ≥ :call GoToLastActiveTab()<cr>
+endif
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
+cnoremap <expr> <m-d> functions#EnhancedMetaDeleteRight()
 cnoremap <expr> <m-b> functions#EnhancedMetaLeft()
 cnoremap <expr> <m-f> functions#EnhancedMetaRight()
-cnoremap <expr> <m-d> functions#EnhancedMetaDeleteRight()
-
-imap <m-_> <c-_>
+if !has('nvim')
+  " m-d
+  cnoremap <expr> ∂ functions#EnhancedMetaDeleteRight()
+  "m-b
+  cnoremap <expr> ∫ functions#EnhancedMetaLeft()
+  " m-f
+  cnoremap <expr> ƒ functions#EnhancedMetaRight()
+end
 
 noremap <silent> <leader>j :call functions#Join()<cr>
 
@@ -479,6 +557,10 @@ nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
 imap <silent> <f4> <esc><f4>
 
 noremap <silent> <m-=> :call functions#ToggleZoom()<cr>
+if !has('nvim')
+  " m-=
+  noremap <silent> ≠ :call functions#ToggleZoom()<cr>
+endif
 
 " nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call functions#PlayLastMacro()<cr>' : '<cr>'
 
