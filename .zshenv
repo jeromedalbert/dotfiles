@@ -487,9 +487,14 @@ alias is='invoker start'
 alias fs='foreman start'
 
 # Python
-gpip() {
-  PIP_REQUIRE_VIRTUALENV="" pip "$@"
+alias python='/usr/local/bin/python2'
+gpip2() {
+  PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
 }
+gpip3() {
+  PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
+alias gpip=gpip2
 alias venv='virtualenv --python=/usr/local/bin/python'
 alias vac='source bin/activate'
 alias va='vac'

@@ -1,44 +1,18 @@
-"############
-"### TODO ###
-"############
-
-" Karabiner: use tab system wide for esc, c-h, etc
-" have a shortcut for TODO / notes per project
-" open backup git diff in new tmux pane
-" use projectionist for test alternates and other alternates?
-" make tmux cmd+e a real tmux pane that auto closes if previous command was successful
-" improve tmux window renaming
-" make <leader>d work on selection
-" use very magic by default when searching?
-" list instance variables with <leader>I
-" maybe use p for preview and o for preview+go to the file
-" when <cr>ing in a filesearch, rewind quickfix to closest previous match
-" make tests shortcut go to the right window if there is one open for that file
-" make custom 'search hit bottom' (or use a search count custom function or plugin)
-" use fzf for command line git, tmux session switching, etc
-" make enter inside html tags make an additional newline with indent (integrate with delimitmate, or custom script)
-" fix bug when sometimes closing an html tag switches to previous buffer
-" fix * register getting overridden when selecting in neosnippet (or try different snippet plugin, investigate ultisnip)
-" don't press enter twice on completion popup (or try different completion plugin)
-" optimize or replace nerdtree for large projects
-" refresh nerdtree after renaming
-" Limit overlinting when quickly switching buffers (especially :cdo and replaces)
-" improve greplace speed by not redrawing or using cdo
-" switch to Vim 8 when terminal support is released
-
 "###############
 "### Plugins ###
 "###############
-call plug#begin('~/.vim/plugged')
 
+call plug#begin('~/.vim/plugged')
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/deoplete.nvim'
 Plug 'neomake/neomake'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
 Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx'] }
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim'
+end
 
 Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'eruby'] }
 Plug 'othree/html5.vim', { 'for': ['html', 'eruby.html'] }
@@ -90,6 +64,7 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'christoomey/vim-tmux-runner'
 Plug 'wincent/replay'
+Plug 'prabirshrestha/async.vim'
 call plug#end()
 
 "############################
@@ -365,8 +340,8 @@ nmap cmu <Plug>Commentary<Plug>Commentary
 noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
 noremap <silent> <leader>l :silent w<cr>:TestLast<cr>
-nnoremap <leader>m :call functions#ToggleTestInCurrentWindow()<cr>
-nnoremap <leader>v :call functions#ToggleTestInSplitWindow()<cr>
+nnoremap <silent> <leader>m :exe 'e ' . functions#GetTestAlternateFile()<cr>
+nnoremap <silent> <leader>v :exe 'vsplit ' . functions#GetTestAlternateFile()<cr>
 
 noremap <leader>fmo :call functions#MoveCurrentFile()<cr>
 map <leader>fmv <leader>fmo
@@ -471,6 +446,8 @@ nnoremap cc cc
 noremap <leader>oo :OldFiles<cr>
 noremap <leader>oh :Helptags<cr>
 noremap <silent> <leader>om :call functions#OpenMarkdownPreview()<cr>
+nnoremap <silent> <leader>on :exe 'e ' . functions#GetProjectNotes()<cr>
+nnoremap <silent> <leader>oN :exe 'vsplit ' . functions#GetProjectNotes()<cr>
 
 noremap <leader>yq :call functions#MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call functions#LoadSession()<cr>
@@ -561,8 +538,6 @@ if !has('nvim')
   " m-=
   noremap <silent> ≠ :call functions#ToggleZoom()<cr>
 endif
-
-" nnoremap <silent> <expr> <cr> empty(&buftype) ? ':call functions#PlayLastMacro()<cr>' : '<cr>'
 
 "#############################
 "### General configuration ###
@@ -657,7 +632,7 @@ let g:html_indent_inctags = 'p,main'
 let g:html_indent_script1 = 'inc'
 let g:html_indent_style1 = 'inc'
 
-let g:python_host_prog  = '/usr/local/bin/python'
+let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 "#############################
@@ -973,7 +948,6 @@ function! ConfigureLargeFiles()
     set lazyredraw
   endif
 
-  if !has('nvim') | return | endif
   let opts = {}
   let opts.tempfile = ''
   let file = expand('%')
@@ -990,7 +964,7 @@ function! ConfigureLargeFiles()
     endif
     if self.tempfile != '' | call delete(self.tempfile) | endif
   endfunction
-  call jobstart(cmd, opts)
+  call async#job#start(cmd, opts)
 endfunction
 
 function! CustomCloseTab()
@@ -1128,10 +1102,12 @@ augroup goyo_events
   autocmd User GoyoLeave nested call functions#OnGoyoLeave()
 augroup end
 
-augroup lazy_load_deoplete
-  autocmd!
-  autocmd InsertEnter * call deoplete#enable() | autocmd! lazy_load_deoplete
-augroup end
+if has('nvim')
+  augroup lazy_load_deoplete
+    autocmd!
+    autocmd InsertEnter * call deoplete#enable() | autocmd! lazy_load_deoplete
+  augroup end
+endif
 
 augroup lint_events
   autocmd!

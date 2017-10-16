@@ -200,28 +200,18 @@ function! functions#CreateNewFileInCurrentDir()
   endif
 endfunction
 
-function! functions#ToggleTestInCurrentWindow()
-  let new_file = ToggleTestForCurrentFile()
-  exec ':e ' . new_file
-endfunction
-
-function! functions#ToggleTestInSplitWindow()
-  let new_file = ToggleTestForCurrentFile()
-  exec ':vsplit ' . new_file
-endfunction
-
-function! ToggleTestForCurrentFile()
+function! functions#GetTestAlternateFile()
   let current_file = expand("%")
   let new_file = current_file
   let in_spec = match(current_file, '^spec/') != -1
   let going_to_spec = !in_spec
   let in_app = match(current_file, '\<controllers\>') != -1
-             \ || match(current_file, '\<models\>') != -1
-             \ || match(current_file, '\<views\>') != -1
-             \ || match(current_file, '\<helpers\>') != -1
-             \ || match(current_file, '\<jobs\>') != -1
-             \ || match(current_file, '\<mailers\>') != -1
-             \ || match(current_file, '\<services\>') != -1
+        \ || match(current_file, '\<models\>') != -1
+        \ || match(current_file, '\<views\>') != -1
+        \ || match(current_file, '\<helpers\>') != -1
+        \ || match(current_file, '\<jobs\>') != -1
+        \ || match(current_file, '\<mailers\>') != -1
+        \ || match(current_file, '\<services\>') != -1
   if going_to_spec
     let new_file = substitute(new_file, '^app/', '', '')
     let new_file = substitute(new_file, '\.e\?rb$', '_spec.rb', '')
@@ -379,10 +369,6 @@ function! functions#FileSearch(search_options)
             \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
     endfor
   endfunction
-  " function! opts.on_exit(job_id, data, event)
-  "   let b:custom_status_msg =
-  "         \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
-  " endfunction
   call termopen(query, opts)
 endfunction
 
@@ -450,7 +436,7 @@ function! functions#BackupCurrentFile()
   let cmd .= 'cd ' . s:custom_backup_dir . ';'
   let cmd .= 'git add ' . backup_file . ';'
   let cmd .= 'git commit -m "Backup - `date`";'
-  call jobstart(cmd)
+  call async#job#start(cmd, {})
 endfunction
 
 function! functions#CopyCurrentFileBackupPath()
@@ -516,7 +502,7 @@ endfunction
 function! functions#OpenMarkdownPreview()
   if !exists('s:markdown_preview_job')
     " https://github.com/joeyespo/grip
-    let s:markdown_preview_job = jobstart('grip')
+    let s:markdown_preview_job = async#job#start('grip', {})
   endif
   silent exec '!open http://localhost:6419/' . expand('%')
 endfunction
@@ -745,4 +731,15 @@ function! functions#ToggleZoom()
     wincmd _
     let t:zoomed = 1
   endif
+endfunction
+
+function! functions#GetProjectNotes()
+  let file_path = expand('%:p')
+  let project_path = getcwd()
+  let relative_file_path = substitute(file_path, '^' . project_path . '/', '', '')
+  if file_path != ''
+        \ && (file_path !~ ('^' . project_path) || relative_file_path != expand('%'))
+    let project_path = expand('~')
+  endif
+  return project_path . '/.notes'
 endfunction
