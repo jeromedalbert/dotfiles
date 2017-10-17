@@ -10,9 +10,7 @@ Plug 'neomake/neomake'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
 Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx'] }
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim'
-end
+if has('nvim') | Plug 'Shougo/deoplete.nvim' | endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'eruby'] }
 Plug 'othree/html5.vim', { 'for': ['html', 'eruby.html'] }
@@ -37,8 +35,8 @@ Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive', { 'on': ['Gdiff', 'Glog', 'Gblame'] }
 Plug 'jeromedalbert/vim-rails', { 'for': 'ruby' }
@@ -150,17 +148,6 @@ noremap <silent> <m-f> <c-f>
 inoremap <m-f> <s-right>
 inoremap <m-bs> <c-w>
 cnoremap <m-bs> <c-w>
-if !has('nvim')
-  " m-d
-  noremap <silent> ∂ <c-d>
-  inoremap ∂ <c-o>dw
-  " m-b
-  noremap <silent> ∫ <c-b>
-  inoremap ∫ <s-left>
-  " m-f
-  noremap <silent> ƒ <c-f>
-  inoremap ƒ <s-right>
-endif
 
 noremap <c-n> <esc>:tabnew<cr>
 noremap <silent> <m-q> :q<cr>
@@ -174,22 +161,6 @@ noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :tabclose<cr>
 noremap <silent> <leader>tq :tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
-if !has('nvim')
-  " m-q
-  noremap <silent> œ :q<cr>
-  " m-1 to m-9
-  let tab_number = 1
-  for mapping in ['¡', '™', '£', '¢', '∞', '§', '¶', '•', 'ª']
-    exe 'noremap <silent> ' . mapping . ' :tabnext ' . tab_number . '<cr>'
-    let tab_number += 1
-  endfor
-  " m-l
-  noremap ¬ gt
-  " m-}
-  noremap <silent> ’ :+tabmove<cr>
-  " m-{
-  noremap <silent> ” :-tabmove<cr>
-endif
 
 noremap <leader>e :e $MYVIMRC<cr>
 noremap <leader>E :e ~/.vim/autoload/functions.vim<cr>
@@ -207,37 +178,11 @@ inoremap <m->> <C-o>A.
 inoremap <m-.> <C-o>A.
 noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
-if !has('nvim')
-  " m-;
-  noremap … mCA;<esc>`C
-  inoremap … <C-o>A;
-  " m-,
-  noremap ≤ mCA,<esc>`C
-  inoremap ≤ <C-o>A,
-  " m->
-  noremap ˘ mCA.<esc>`C
-  inoremap ˘ <C-o>A.
-  " m-.
-  inoremap ≥ <C-o>A.
-  " m-:
-  noremap Ú mCA:<esc>`C
-  inoremap Ú <C-o>A:
-endif
 
 map <m-m> %
 map <m-]> <c-]>
 map <m-[> <c-t>
 imap <m-_> <c-_>
-if !has('nvim')
-  " m-m
-  map µ %
-  " m-]
-  map ‘ <c-]>
-  " m-[
-  map “ <c-t>
-  " m-_
-  imap — <c-_>
-endif
 
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
@@ -245,7 +190,7 @@ noremap <leader>p <c-w>W
 noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
-noremap <silent> <leader>ob :silent! exe '!open -a "Google Chrome" %'<cr>
+noremap <silent> <leader>oc :silent! exe '!open -a "Google Chrome" %'<cr>
 
 noremap $ $ze
 
@@ -263,7 +208,6 @@ noremap gi gi<c-o>zz
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
 
-" noremap <silent> q :let g:is_recording=0<cr>q
 map <leader>2 @
 noremap <leader>22 @@
 noremap @- @:
@@ -312,11 +256,6 @@ noremap <silent> '' :call functions#DisplayRegisters()<cr>
 
 noremap <m-s><c-g> :call functions#ShowHighlightsUnderCursor()<CR>
 noremap <m-s><c-a> :call functions#ShowAllHighlights()<CR>
-if !has('nvim')
-  " m-s
-  noremap ß<c-g> :call functions#ShowHighlightsUnderCursor()<CR>
-  noremap ß<c-a> :call functions#ShowAllHighlights()<CR>
-endif
 
 noremap <c-p> :Files<cr>
 noremap <leader>i :BTags<cr>
@@ -350,7 +289,6 @@ noremap <leader>fdu :call functions#DuplicateCurrentFile()<cr>
 noremap <leader>fcp :call functions#CopyCurrentFilePath()<cr>
 noremap <leader>fcap :call functions#CopyCurrentFileAbsolutePath()<cr>
 noremap <leader>fcn :call functions#CopyCurrentFileName()<cr>
-noremap <leader>fcb :call functions#CopyCurrentFileBackupPath()<cr>
 noremap <leader>fn :call functions#CreateNewFileInCurrentDir()<cr>
 noremap <leader>fN :call functions#CreateNewFile()<cr>
 
@@ -368,26 +306,12 @@ noremap <silent> <m-0> 20zh:call functions#SetVirtualEdit()<cr>
 vnoremap <silent> <m-0> 20zh
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
-if !has('nvim')
-  " m--
-  noremap <silent> – :set virtualedit=all<cr>20zl
-  vnoremap <silent> – 20zl
-  " m-0
-  noremap <silent> º 20zh:call functions#SetVirtualEdit()<cr>
-  vnoremap <silent> º 20zh
-endif
 
 noremap <silent> <c-z> :call functions#OnVimSuspend()<cr>:suspend<cr>:call functions#OnVimResume()<cr>
 
 noremap <m-t> :call functions#ToggleQuotes()<cr>
 inoremap <m-t> <c-o>:call functions#ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
-if !has('nvim')
-  " m-t
-  noremap † :call functions#ToggleQuotes()<cr>
-  inoremap † <c-o>:call functions#ToggleQuotes()<cr>
-  cnoremap † <c-e><c-w>"" <left><left>
-endif
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -402,11 +326,6 @@ map <m-j> ]e
 xmap <m-j> ]egv
 map <c-k> [e
 xmap <c-k> [egv
-if !has('nvim')
-  " m-j
-  map ∆ ]e
-  xmap ∆ ]egv
-endif
 
 map <leader>; `]]<space>
 " f17 is m-cr in my config
@@ -424,9 +343,6 @@ vnoremap <leader>ff y:let @/ = functions#GetSelectionForSearches()<cr><leader>ff
 cnoremap <m-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
 noremap <leader>fo :Gqfopen<cr>
-if !has('nvim')
-  cnoremap ¬ <end><space>-G '\.'<space><left><left>
-endif
 
 noremap <leader>-- @:
 noremap <leader>-b :call functions#DeleteHiddenBuffers()<cr>
@@ -446,8 +362,9 @@ nnoremap cc cc
 noremap <leader>oo :OldFiles<cr>
 noremap <leader>oh :Helptags<cr>
 noremap <silent> <leader>om :call functions#OpenMarkdownPreview()<cr>
-nnoremap <silent> <leader>on :exe 'e ' . functions#GetProjectNotes()<cr>
-nnoremap <silent> <leader>oN :exe 'vsplit ' . functions#GetProjectNotes()<cr>
+noremap <silent> <leader>on :exe 'e ' . functions#GetProjectNotes()<cr>
+noremap <silent> <leader>oN :exe 'vsplit ' . functions#GetProjectNotes()<cr>
+noremap <silent> <leader>ob :call functions#OpenCurrentFileBackupHistory()<cr>
 
 noremap <leader>yq :call functions#MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call functions#LoadSession()<cr>
@@ -508,23 +425,12 @@ noremap <silent> <leader>th :call functions#MoveToPrevTab()<cr>
 noremap <silent> <leader>tl :call functions#MoveToNextTab()<cr>
 noremap <silent> <leader>tr :call functions#RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
-if !has('nvim')
-  noremap <silent> ≥ :call GoToLastActiveTab()<cr>
-endif
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
 cnoremap <expr> <m-d> functions#EnhancedMetaDeleteRight()
 cnoremap <expr> <m-b> functions#EnhancedMetaLeft()
 cnoremap <expr> <m-f> functions#EnhancedMetaRight()
-if !has('nvim')
-  " m-d
-  cnoremap <expr> ∂ functions#EnhancedMetaDeleteRight()
-  "m-b
-  cnoremap <expr> ∫ functions#EnhancedMetaLeft()
-  " m-f
-  cnoremap <expr> ƒ functions#EnhancedMetaRight()
-end
 
 noremap <silent> <leader>j :call functions#Join()<cr>
 
@@ -534,10 +440,6 @@ nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
 imap <silent> <f4> <esc><f4>
 
 noremap <silent> <m-=> :call functions#ToggleZoom()<cr>
-if !has('nvim')
-  " m-=
-  noremap <silent> ≠ :call functions#ToggleZoom()<cr>
-endif
 
 "#############################
 "### General configuration ###
@@ -565,7 +467,7 @@ set backspace=indent,eol,start
 set shortmess+=Ic
 set laststatus=2
 set mouse=a
-set title titlestring=%{GetCwd()}
+set title titlestring=%{GetProjectName()}
 set splitbelow splitright
 set nowrap
 set noswapfile
@@ -599,7 +501,6 @@ set sidescroll=1 sidescrolloff=3
 set wildignorecase
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
-let $MYVIMFUNCTIONS = '~/.vim/autoload/functions.vim'
 set synmaxcol=1000
 
 set statusline=
@@ -635,31 +536,33 @@ let g:html_indent_style1 = 'inc'
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
+let g:vim_indent_cont = &sw
+
 "#############################
 "### Plugins configuration ###
 "#############################
 
 let g:fzf_layout = { 'up': '100%' }
 let g:fzf_colors = {
-      \ 'fg':        ['fg', 'Normal'],
-      \ 'bg':        ['bg', 'Normal'],
-      \ 'hl':        ['fg', 'Statement'],
-      \ 'fg+':       ['fg', 'Normal'],
-      \ 'bg+':       ['bg', 'Normal'],
-      \ 'hl+':       ['fg', 'Statement'],
-      \ 'pointer':   ['fg', 'Statement']
-      \ }
+  \ 'fg':        ['fg', 'Normal'],
+  \ 'bg':        ['bg', 'Normal'],
+  \ 'hl':        ['fg', 'Statement'],
+  \ 'fg+':       ['fg', 'Normal'],
+  \ 'bg+':       ['bg', 'Normal'],
+  \ 'hl+':       ['fg', 'Statement'],
+  \ 'pointer':   ['fg', 'Statement']
+  \ }
 let g:fzf_action = {
-      \ 'ctrl-t': 'tab split',
-      \ 'alt-t': 'tab split',
-      \ 'ctrl-v': 'vsplit',
-      \ 'alt-v': 'vsplit',
-      \ 'alt-x': 'split'
-      \ }
+  \ 'ctrl-t': 'tab split',
+  \ 'alt-t': 'tab split',
+  \ 'ctrl-v': 'vsplit',
+  \ 'alt-v': 'vsplit',
+  \ 'alt-x': 'split'
+  \ }
 let g:fzf_history_dir = '~/.fzf_history'
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
 let $FZF_DEFAULT_OPTS .=
-      \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
+  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
 
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
@@ -675,15 +578,15 @@ let g:netrw_liststyle = 3
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeIgnore = [
-      \ '\.tags$', '\.tags_sorted_by_file$', '\.gemtags$', '\.pyc$', '\.pyo$',
-      \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
-      \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
-      \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep',
-      \ '\.rubocop-http',
-      \
-      \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
-      \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
-      \ ]
+  \ '\.tags$', '\.tags_sorted_by_file$', '\.gemtags$', '\.pyc$', '\.pyo$',
+  \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
+  \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
+  \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep',
+  \ '\.rubocop-http', '\.notes',
+  \
+  \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
+  \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
+  \ ]
 let NERDTreeQuitOnOpen = 1
 let NERDTreeHighlightCursorline = 0
 let g:NERDTreeDirArrowExpandable = '▸'
@@ -709,89 +612,89 @@ let g:neosnippet#snippets_directory='~/.vim/my-snippets'
 
 let g:user_emmet_mode = 'i'
 let g:user_emmet_settings = {
-      \ 'variables': {
-      \   'charset': 'utf-8',
-      \ },
-      \ 'css': {
-      \   'snippets': {
-      \     'pos': 'position:|;',
-      \     'pos:s': 'position:static;',
-      \     'pos:a': 'position:absolute;',
-      \     'posa': 'position:absolute;',
-      \     'pos:r': 'position:relative;',
-      \     'pos:f': 'position:fixed;',
-      \     'd': 'display:|;',
-      \     'db': 'display:block|;',
-      \     'w100': 'width:100%|;',
-      \     'h100': 'height:100%|;',
-      \     'v': 'visibility:|;',
-      \     'ov': 'overflow:|;',
-      \     'ovx': 'overflow-x:|;',
-      \     'ovy': 'overflow-y:|;',
-      \     'ovs': 'overflow-style:|;',
-      \     'bxz': 'box-sizing:|;',
-      \     'mar': 'max-resolution:|;',
-      \     'mir': 'min-resolution:|;',
-      \     'olc': 'outline-color:#|;',
-      \     'bdc': 'border-color:#|;',
-      \     'bdf': 'border-fit:|;',
-      \     'bdt+': 'border-top:|;',
-      \     'bdtc': 'border-top-color:#|;',
-      \     'bdr+': 'border-right:|;',
-      \     'bdrc': 'border-right-color:#|;',
-      \     "bdb+": 'border-bottom:|;',
-      \     'bdbc': 'border-bottom-color:#|;',
-      \     'bdl+': 'border-left:|;',
-      \     'bdlc': 'border-left-color:#|;',
-      \     'bg': 'background:#|;',
-      \     'bg+': 'background:|;',
-      \     'bgc': 'background-color:#|;',
-      \     'bgp': 'background-position:|;',
-      \     'bgcp': 'background-clip:|;',
-      \     'c': 'color:#|;',
-      \     'c:r': 'color:rgb(|);',
-      \     'c:ra': 'color:rgba(|);',
-      \     'cm': '/* || */',
-      \     'va': 'vertical-align:|;',
-      \     'ta': 'text-align:|;',
-      \     'td': 'text-decoration:|;',
-      \     'tov': 'text-overflow:|;',
-      \     'to+': 'text-outline:|;',
-      \     'tt': 'text-transform:|;',
-      \     'wm': 'writing-mode:|;',
-      \     'f+': 'font:|;',
-      \     'fs': 'font-style:|;',
-      \     'cur': 'cursor:|;',
-      \     'us': 'user-select:|;',
-      \   },
-      \ },
-      \ 'javascript.jsx' : {
-      \   'extends' : 'jsx'
-      \ },
-      \ }
+  \ 'variables': {
+  \   'charset': 'utf-8',
+  \ },
+  \ 'css': {
+  \   'snippets': {
+  \     'pos': 'position:|;',
+  \     'pos:s': 'position:static;',
+  \     'pos:a': 'position:absolute;',
+  \     'posa': 'position:absolute;',
+  \     'pos:r': 'position:relative;',
+  \     'pos:f': 'position:fixed;',
+  \     'd': 'display:|;',
+  \     'db': 'display:block|;',
+  \     'w100': 'width:100%|;',
+  \     'h100': 'height:100%|;',
+  \     'v': 'visibility:|;',
+  \     'ov': 'overflow:|;',
+  \     'ovx': 'overflow-x:|;',
+  \     'ovy': 'overflow-y:|;',
+  \     'ovs': 'overflow-style:|;',
+  \     'bxz': 'box-sizing:|;',
+  \     'mar': 'max-resolution:|;',
+  \     'mir': 'min-resolution:|;',
+  \     'olc': 'outline-color:#|;',
+  \     'bdc': 'border-color:#|;',
+  \     'bdf': 'border-fit:|;',
+  \     'bdt+': 'border-top:|;',
+  \     'bdtc': 'border-top-color:#|;',
+  \     'bdr+': 'border-right:|;',
+  \     'bdrc': 'border-right-color:#|;',
+  \     "bdb+": 'border-bottom:|;',
+  \     'bdbc': 'border-bottom-color:#|;',
+  \     'bdl+': 'border-left:|;',
+  \     'bdlc': 'border-left-color:#|;',
+  \     'bg': 'background:#|;',
+  \     'bg+': 'background:|;',
+  \     'bgc': 'background-color:#|;',
+  \     'bgp': 'background-position:|;',
+  \     'bgcp': 'background-clip:|;',
+  \     'c': 'color:#|;',
+  \     'c:r': 'color:rgb(|);',
+  \     'c:ra': 'color:rgba(|);',
+  \     'cm': '/* || */',
+  \     'va': 'vertical-align:|;',
+  \     'ta': 'text-align:|;',
+  \     'td': 'text-decoration:|;',
+  \     'tov': 'text-overflow:|;',
+  \     'to+': 'text-outline:|;',
+  \     'tt': 'text-transform:|;',
+  \     'wm': 'writing-mode:|;',
+  \     'f+': 'font:|;',
+  \     'fs': 'font-style:|;',
+  \     'cur': 'cursor:|;',
+  \     'us': 'user-select:|;',
+  \   },
+  \ },
+  \ 'javascript.jsx' : {
+  \   'extends' : 'jsx'
+  \ },
+  \ }
 let s:emmetElements = [
-      \ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article',
-      \ 'aside', 'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big',
-      \ 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center',
-      \ 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details',
-      \ 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset',
-      \ 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset',
-      \ 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input',
-      \ 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map',
-      \ 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noframes',
-      \ 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p',
-      \ 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp',
-      \ 'script', 'section', 'select', 'small', 'source', 'span', 'strike',
-      \ 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
-      \ 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track',
-      \ 'tt', 'u', 'ul', 'var', 'video', 'wbr',
-      \ 'h1', 'h2', 'h3', 'h4', 'h6',
-      \
-      \ 'emb', 'btn', 'sty', 'dlg', 'fst', 'fig', 'leg', 'tarea', 'hdr', 'cmd',
-      \ 'colg', 'art', 'fset', 'src', 'prog', 'bq', 'kg', 'adr' , 'cap',
-      \ 'datag', 'datal', 'sect', 'str', 'obj', 'ftr', 'optg', 'ifr', 'out',
-      \ 'det', 'acr', 'opt'
-      \ ]
+  \ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article',
+  \ 'aside', 'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big',
+  \ 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center',
+  \ 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details',
+  \ 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset',
+  \ 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset',
+  \ 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input',
+  \ 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map',
+  \ 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noframes',
+  \ 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p',
+  \ 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp',
+  \ 'script', 'section', 'select', 'small', 'source', 'span', 'strike',
+  \ 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
+  \ 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track',
+  \ 'tt', 'u', 'ul', 'var', 'video', 'wbr',
+  \ 'h1', 'h2', 'h3', 'h4', 'h6',
+  \
+  \ 'emb', 'btn', 'sty', 'dlg', 'fst', 'fig', 'leg', 'tarea', 'hdr', 'cmd',
+  \ 'colg', 'art', 'fset', 'src', 'prog', 'bq', 'kg', 'adr' , 'cap',
+  \ 'datag', 'datal', 'sect', 'str', 'obj', 'ftr', 'optg', 'ifr', 'out',
+  \ 'det', 'acr', 'opt'
+  \ ]
 
 let g:bufExplorerDisableDefaultKeyMapping = 1
 let g:bufExplorerShowRelativePath = 1
@@ -808,15 +711,13 @@ let g:session_autoload = 'no'
 let g:session_menu = 0
 
 let s:repls = {
-      \ 'ruby': 'irb --simple-prompt',
-      \ 'python': 'python -ic ""'
-      \ }
+  \ 'ruby': 'irb --simple-prompt',
+  \ 'python': 'python -ic ""'
+  \ }
 
 let g:neomake_verbose = 0
 let g:neomake_place_signs = 0
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-" let g:neomake_ruby_rubocop_exe = 'bundle'
-" let g:neomake_ruby_rubocop_args = ['exec', 'rubocop', '--format', 'emacs']
 let g:neomake_highlight_columns = 0
 
 let MRU_Window_Height = 10
@@ -829,11 +730,11 @@ let g:tmux_navigator_no_mappings = 1
 let g:jsx_ext_required = 0
 
 let g:mta_filetypes = {
-      \ 'html' : 1,
-      \ 'eruby.html' : 1,
-      \ 'xml' : 1,
-      \ 'javascript.jsx' : 1
-      \}
+  \ 'html' : 1,
+  \ 'eruby.html' : 1,
+  \ 'xml' : 1,
+  \ 'javascript.jsx' : 1
+  \}
 
 let g:markdown_syntax_conceal = 0
 
@@ -914,7 +815,7 @@ function! GetTabLabel(tab_number)
   return fnamemodify(file_path, ':p:t')
 endfunction
 
-function! GetCwd()
+function! GetProjectName()
   return fnamemodify(getcwd(), ':t')
 endfunction
 
@@ -1013,11 +914,32 @@ endfunction
 
 function! DetectBinaryFile()
   if &filetype == ''
-        \ && expand('%') !~ '\.\(bz2\|gz\|lzma\|xz\|Z\)$'
-        \ && !!search('\%u0000', 'wn')
+    \ && expand('%') !~ '\.\(bz2\|gz\|lzma\|xz\|Z\)$'
+    \ && !!search('\%u0000', 'wn')
     Hexmode
   endif
 endfunction
+
+function! EnableMetaMappings()
+  if has('gui_running')
+    let keys = { '∂': 'd', '∫': 'b', 'ƒ': 'f', 'œ': 'q', '¬': 'l', '’': '}',
+      \ '”': '{', '…': ';', '≤': ',', '˘': '>', '≥': '.', 'Ú': ': ',
+      \ 'µ': 'm', '‘': ']', '“': '[', '—': '_', 'ß': 's', '–': '-', 'º': 0,
+      \ '†': 't', '∆': 'j', '≠': '=',
+      \ '¡':1, '™':2, '£':3, '¢':4, '∞':5, '§':6, '¶':7, '•':8, 'ª':9 }
+    for symbol in keys(keys)
+      exe 'map ' . symbol . ' <m-' . keys[symbol] . '>'
+    endfor
+  else
+    let ascii_nums = [33] + range(35, 61) + range(63, 78) + range(80, 90)
+      \ + range(92, 123) + [125, 126]
+    for num in ascii_nums
+      let key = nr2char(num)
+      exe 'map <esc>' . key . ' <m-' . key . '>'
+    endfor
+  endif
+endfunction
+if !has('nvim') | call EnableMetaMappings() | endif
 
 "####################
 "### Autocommands ###
@@ -1037,7 +959,7 @@ augroup auto_mkdir
   autocmd!
   autocmd BufWritePre *
     \ if !isdirectory(expand('<afile>:p:h')) |
-      \ call mkdir(expand('<afile>:p:h'), 'p') |
+    \   call mkdir(expand('<afile>:p:h'), 'p') |
     \ endif
 augroup end
 
@@ -1070,7 +992,7 @@ augroup end
 if has('nvim')
   augroup on_display_events
     autocmd!
-    autocmd TermOpen *test* call OnTestDisplayed()
+    autocmd TermOpen *test* call functions#OnTestDisplayed()
     autocmd TermOpen *ag\ * call functions#OnFileSearchDisplayed()
   augroup end
 end
@@ -1081,11 +1003,13 @@ augroup nerdtree_original_buffer
   autocmd BufEnter * call RestoreNerdtreeOriginalBuffer()
 augroup end
 
-if exists('$TMUX') && !exists('$DISABLE_VIM_WINDOW_RENAME')
+if exists('$TMUX') && !exists('$DISABLE_WINDOW_RENAME')
   augroup tmux_title
     autocmd!
-    autocmd VimEnter * call jobstart("tmux rename-window -t $TMUX_PANE '" . GetCwd() . "'")
-    autocmd VimLeave * call jobstart('tmux setw automatic-rename')
+    autocmd VimEnter * call async#job#start(
+      \ "tmux rename-window -t $TMUX_PANE '" . GetProjectName() . "'", {}
+      \ )
+    autocmd VimLeave * call async#job#start('tmux setw automatic-rename', {})
   augroup end
 endif
 
@@ -1123,7 +1047,7 @@ augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call functions#TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
-  autocmd BufWritePost $MYVIMFUNCTIONS source $MYVIMFUNCTIONS
+  autocmd BufWritePost *.vim/autoload/* source %
   autocmd InsertLeave * silent! set nopaste
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call BufEnterConfig()

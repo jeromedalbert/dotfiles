@@ -80,17 +80,17 @@ hi LineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi FoldColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi CursorLineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi SignColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
-hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE
+hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE cterm=NONE
 hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guifg=NONE guibg=#454545 gui=NONE
 hi MatchParen guifg=NONE guibg=NONE gui=underline
-hi StatusLine guifg=fg guibg=#61605e gui=bold
-hi StatusLineNC guifg=fg guibg=#61605e gui=NONE
+hi StatusLine guifg=fg guibg=#61605e gui=bold cterm=bold
+hi StatusLineNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
 hi Pmenu guifg=#333333 guibg=#ffffff gui=NONE
 hi PmenuSel guifg=#ffffff guibg=#5d90cf gui=bold
 hi PmenuThumb guibg=#999999
 hi PmenuSbar guibg=#d6d6d6
-hi IncSearch guifg=#000000 guibg=#ffe88c gui=NONE
+hi IncSearch guifg=#000000 guibg=#ffe88c gui=NONE cterm=NONE
 hi Search guifg=NONE guibg=#336699 gui=NONE
 hi Directory guifg=#6b9bc0 guibg=NONE gui=NONE
 hi Folded guifg=fg guibg=NONE
@@ -102,10 +102,10 @@ hi Constant guifg=#6b9bc0 guibg=NONE gui=NONE
 hi DiffAdd guifg=fg guibg=#47840d gui=bold
 hi DiffDelete guifg=#dc322f guibg=NONE gui=NONE
 hi DiffChange guifg=fg guibg=#204a87
-hi DiffText guifg=fg guibg=#507ab7 gui=NONE
+hi DiffText guifg=fg guibg=#507ab7 gui=NONE cterm=NONE
 hi link Float Number
 hi Function guifg=#ffc765 guibg=NONE gui=NONE
-hi Identifier guifg=NONE guibg=NONE gui=NONE
+hi Identifier guifg=NONE guibg=NONE gui=NONE cterm=NONE
 hi NonText guifg=#404040 guibg=NONE gui=NONE
 hi link Number String
 hi PreProc guifg=#ce7829 guibg=NONE gui=NONE

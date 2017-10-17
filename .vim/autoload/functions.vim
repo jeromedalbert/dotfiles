@@ -26,7 +26,7 @@ function! functions#ClearEverything()
   match
   ccl
   lcl
-  silent! call CloseTests()
+  silent! call functions#CloseTests()
   NERDTreeClose
   normal cxc
   call ClearMessages()
@@ -75,15 +75,6 @@ function! functions#ShowAllHighlights()
   normal "zpdd
 endfunction
 
-function! functions#OpenNERDTreeBuffer()
-  if bufexists('NERD_tree_1')
-    buffer NERD_tree_1
-  else
-    let alternate_buffer = bufnr('%')
-    silent edit .
-    if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
-  end
-endfunction
 
 function! functions#RevealInNERDTreeBuffer()
   try
@@ -106,6 +97,16 @@ function! functions#RevealInNERDTreeBuffer()
   if p.isUnixHiddenFile()
     let g:NERDTreeShowHidden = showhidden
   endif
+endfunction
+
+function! OpenNERDTreeBuffer()
+  if bufexists('NERD_tree_1')
+    buffer NERD_tree_1
+  else
+    let alternate_buffer = bufnr('%')
+    silent edit .
+    if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
+  end
 endfunction
 
 function! functions#DeleteCurrentFile()
@@ -206,12 +207,12 @@ function! functions#GetTestAlternateFile()
   let in_spec = match(current_file, '^spec/') != -1
   let going_to_spec = !in_spec
   let in_app = match(current_file, '\<controllers\>') != -1
-        \ || match(current_file, '\<models\>') != -1
-        \ || match(current_file, '\<views\>') != -1
-        \ || match(current_file, '\<helpers\>') != -1
-        \ || match(current_file, '\<jobs\>') != -1
-        \ || match(current_file, '\<mailers\>') != -1
-        \ || match(current_file, '\<services\>') != -1
+    \ || match(current_file, '\<models\>') != -1
+    \ || match(current_file, '\<views\>') != -1
+    \ || match(current_file, '\<helpers\>') != -1
+    \ || match(current_file, '\<jobs\>') != -1
+    \ || match(current_file, '\<mailers\>') != -1
+    \ || match(current_file, '\<services\>') != -1
   if going_to_spec
     let new_file = substitute(new_file, '^app/', '', '')
     let new_file = substitute(new_file, '\.e\?rb$', '_spec.rb', '')
@@ -255,7 +256,7 @@ function! functions#OnVimResume()
 endfunction
 
 function! functions#OnTestDisplayed()
-  noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
+  noremap <silent><buffer> <leader>q <c-w>p:call functions#CloseTests()<cr>
   map <silent><buffer> <esc> <leader>q
   map <silent><buffer> q <esc>
   noremap <silent><buffer> <cr> :call OpenFileInPreviousWindow(0)<cr>
@@ -359,14 +360,14 @@ function! functions#FileSearch(search_options)
       let matches = matchlist(escaped_line, '^\(\d\+\):\(.*\)')
       if len(matches)
         call setqflist([{
-              \ 'filename': self.file,
-              \ 'lnum': matches[1],
-              \ 'text': matches[2]
-              \ }], 'a')
+          \ 'filename': self.file,
+          \ 'lnum': matches[1],
+          \ 'text': matches[2]
+          \ }], 'a')
         let self.lines_matched += 1
       endif
       let b:custom_status_msg =
-            \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
+        \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
     endfor
   endfunction
   call termopen(query, opts)
@@ -439,8 +440,11 @@ function! functions#BackupCurrentFile()
   call async#job#start(cmd, {})
 endfunction
 
-function! functions#CopyCurrentFileBackupPath()
-  let @+=expand(s:custom_backup_dir . expand('%:p'))
+function! functions#OpenCurrentFileBackupHistory()
+  let backup_dir = expand(s:custom_backup_dir . expand('%:p:h'))
+  let cmd = 'tmux split-window -h -c "' . backup_dir . '"\; '
+  let cmd .= 'send-keys "glop --since=\"1 month ago\" ' . expand('%:t') . '" C-m'
+  call system(cmd)
 endfunction
 
 function! functions#CloseTests()
@@ -738,7 +742,7 @@ function! functions#GetProjectNotes()
   let project_path = getcwd()
   let relative_file_path = substitute(file_path, '^' . project_path . '/', '', '')
   if file_path != ''
-        \ && (file_path !~ ('^' . project_path) || relative_file_path != expand('%'))
+    \ && (file_path !~ ('^' . project_path) || relative_file_path != expand('%'))
     let project_path = expand('~')
   endif
   return project_path . '/.notes'
