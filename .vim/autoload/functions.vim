@@ -88,7 +88,7 @@ function! functions#RevealInNERDTreeBuffer()
     let g:NERDTreeShowHidden = 1
   endif
 
-  call OpenNERDTreeBuffer()
+  call functions#OpenNERDTreeBuffer()
 
   let node = b:NERDTree.root.reveal(p)
   call b:NERDTree.render()
@@ -99,7 +99,7 @@ function! functions#RevealInNERDTreeBuffer()
   endif
 endfunction
 
-function! OpenNERDTreeBuffer()
+function! functions#OpenNERDTreeBuffer()
   if bufexists('NERD_tree_1')
     buffer NERD_tree_1
   else
@@ -380,7 +380,7 @@ function! functions#ResetProject()
     endif
   endfor
 
-  call OpenNERDTreeBuffer()
+  call functions#OpenNERDTreeBuffer()
   silent! let @# = ''
   normal ggX^
 endfunction

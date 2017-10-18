@@ -1115,6 +1115,13 @@
 	<real>1</real>
 	<key>GlobalKeyMap</key>
 	<dict>
+		<key>0x1b-0x0</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Text</key>
+			<string>0x1b 0x1b</string>
+		</dict>
 		<key>0x1b-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -1679,7 +1686,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 139 606 469 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>303 273 796 473 0 0 1280 800 </string>
+	<string>117 189 1016 512 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Menlo-Regular</key>
@@ -1694,6 +1701,10 @@
 	<string>6 310 970 435 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
 	<string>236 321 970 435 0 0 1280 777 </string>
+	<key>NeverWarnAboutMeta</key>
+	<true/>
+	<key>NeverWarnAboutMeta_selection</key>
+	<integer>0</integer>
 	<key>NeverWarnAboutShortLivedSessions_13B61A09-A5BF-48B7-8973-5D82561225C5</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_13B61A09-A5BF-48B7-8973-5D82561225C5_selection</key>
@@ -2573,7 +2584,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-10-15T04:39:31Z</date>
+	<date>2017-10-17T17:39:41Z</date>
 	<key>SUSkippedVersion</key>
 	<string>3.1.4.beta.1</string>
 	<key>SavePasteHistory</key>
