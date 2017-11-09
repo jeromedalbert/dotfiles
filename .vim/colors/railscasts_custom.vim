@@ -110,6 +110,7 @@ hi NonText guifg=#404040 guibg=NONE gui=NONE
 hi link Number String
 hi PreProc guifg=#ce7829 guibg=NONE gui=NONE
 hi Special guifg=fg guibg=NONE gui=NONE
+hi SpecialChar guifg=#4ea04c guibg=NONE gui=NONE
 hi SpecialKey guifg=#404040 guibg=#3e3d3d gui=NONE
 hi Statement guifg=#ce7829 guibg=NONE gui=NONE
 hi link StorageClass Statement
@@ -124,7 +125,7 @@ hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
 hi link Whitespace Normal
 hi qfLineNr guifg=#8A8885 guibg=NONE
 
-hi rubyInterpolation guifg=#4ea04c guibg=NONE gui=NONE
+hi link rubyInterpolation SpecialChar
 hi link rubyInterpolationDelimiter rubyInterpolation
 hi link rubyStringDelimiter String
 hi rubyBlockParameter guifg=NONE guibg=NONE gui=NONE
@@ -159,6 +160,7 @@ hi link htmlArg htmlTag
 hi link htmlSpecialChar Constant
 hi link htmlTagN htmlTag
 hi link htmlSpecialTagName htmlTag
+hi link htmlError NONE
 
 hi link hamlTag Tag
 hi link hamlClass hamlTag
@@ -239,7 +241,7 @@ hi link jsFrom NONE
 hi link jsExport NONE
 hi link jsExportDefault NONE
 hi link jsTernaryIfOperator NONE
-hi link jsTemplateBraces rubyInterpolationDelimiter
+hi link jsTemplateBraces SpecialChar
 hi link jsArrowFunction jsOperator
 hi link jsObject Constant
 hi link jsObjectKey jsObject
@@ -260,10 +262,12 @@ hi link jsClassProperty Function
 hi link jsonQuote String
 hi link jsonKeyword String
 hi link jsonNull Constant
-hi link jsonEscape rubyInterpolation
+hi link jsonEscape SpecialChar
 
 hi link shRange NONE
 hi link shQuote String
+hi link shCommandSub String
+hi link shCmdSubRegion shCommandSub
 
 hi diffRemoved guifg=#d32020 guibg=#eae3ca
 hi diffAdded guifg=#118714 guibg=#eae3ca

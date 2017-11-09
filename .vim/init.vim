@@ -34,12 +34,13 @@ Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }
 Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }
 
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
+Plug 'machakann/vim-sandwich'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive', { 'on': ['Gdiff', 'Glog', 'Gblame'] }
-Plug 'jeromedalbert/vim-rails', { 'for': 'ruby' }
+Plug 'jeromedalbert/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'jeromedalbert/vim-unimpaired'
 
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -62,7 +63,6 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'christoomey/vim-tmux-runner'
 Plug 'wincent/replay'
-Plug 'prabirshrestha/async.vim'
 call plug#end()
 
 "############################
@@ -85,9 +85,10 @@ noremap Y y$
 noremap Q <nop>
 
 noremap <silent> <leader>q :q<cr>
-noremap <leader>w :w<cr>
-noremap <leader>z :x<cr>
-noremap <leader>`q :qa!<cr>
+noremap <silent> <leader>w :w<cr>
+noremap <silent> <leader>z :x<cr>
+noremap <silent> <leader>`q :qa!<cr>
+noremap <silent> <leader><esc> <nop>
 
 noremap ' "
 noremap '] `]
@@ -161,6 +162,8 @@ noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :tabclose<cr>
 noremap <silent> <leader>tq :tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
+noremap <silent> <leader>t# :tabedit #<cr>
+noremap <silent> <leader>tt <c-w>T
 
 noremap <leader>e :e $MYVIMRC<cr>
 noremap <leader>E :e ~/.vim/autoload/functions.vim<cr>
@@ -191,6 +194,7 @@ noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>oc :silent! exe '!open -a "Google Chrome" %'<cr>
+noremap <silent> <leader>or :e README*<cr>
 
 noremap $ $ze
 
@@ -238,6 +242,9 @@ noremap z<Space> za
 map gs gS
 map gj gJ
 
+noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
+noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -259,6 +266,7 @@ noremap <m-s><c-a> :call functions#ShowAllHighlights()<CR>
 
 noremap <c-p> :Files<cr>
 noremap <leader>i :BTags<cr>
+" noremap <leader>I :call fzf#vim#buffer_tags('', '--vim-kinds=variable', { 'options': $FZF_DEFAULT_OPTS })<cr>
 
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
@@ -292,13 +300,14 @@ noremap <leader>fcn :call functions#CopyCurrentFileName()<cr>
 noremap <leader>fn :call functions#CreateNewFileInCurrentDir()<cr>
 noremap <leader>fN :call functions#CreateNewFile()<cr>
 
-noremap <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
-vnoremap <leader>fj :!jq '.'<cr>
-noremap <leader>fh :silent %!tidy -qi --show-errors 0<cr>
-noremap <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
+noremap <silent> <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
+vnoremap <silent> <leader>fj :!jq '.'<cr>
+noremap <silent> <leader>fh :silent %!tidy -qi
+  \ --show-errors 0 --force-output yes --tidy-mark no --wrap 0 --doctype omit<cr>
+noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 " https://github.com/beautify-web/js-beautify
-noremap <leader>fb :set filetype=javascript<cr>:%!js-beautify<cr>
-vnoremap <leader>fb :!js-beautify<cr>
+noremap <silent> <leader>fb :set filetype=javascript<cr>:%!js-beautify -s 2<cr>
+vnoremap <silent> <leader>fb :!js-beautify -s 2<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
 vnoremap <silent> <m--> 20zl
@@ -399,11 +408,11 @@ xnoremap # <esc>?<c-r>=functions#GetSelectionForSearches()<cr><cr>
 
 command! -nargs=+ -complete=file FileSearch call functions#FileSearch(<q-args>)
 command! Gmodified call functions#GitOpenModifiedFiles()
-command! Lint call Lint()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* OldFiles call fzf#vim#history({ 'options': ' --prompt="OldFiles> "' })
 command! MakePlugSnapshot call functions#MakePlugSnapshot()
+command! Profile call Profile()
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -416,7 +425,6 @@ cabbrev gd Gdiff
 cabbrev glog Glog
 cabbrev gb Gblame
 cabbrev gm Gmodified
-cabbrev lint Lint
 
 xnoremap @ :<C-u>call functions#ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call functions#ExecuteMacroOnSelection()<cr>
@@ -440,6 +448,10 @@ nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
 imap <silent> <f4> <esc><f4>
 
 noremap <silent> <m-=> :call functions#ToggleZoom()<cr>
+noremap <silent> <m-+> :call functions#ToggleZoom()<cr>
+
+noremap <silent> <m-N> <esc>:tabnew<cr>:OldFiles<cr>
+noremap <silent> <m-P> :OldFiles<cr>
 
 "#############################
 "### General configuration ###
@@ -538,6 +550,8 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 
 let g:vim_indent_cont = &sw
 
+let g:is_bash = 1
+
 "#############################
 "### Plugins configuration ###
 "#############################
@@ -570,11 +584,6 @@ let delimitMate_expand_space = 1
 " let g:netrw_banner=0
 let g:netrw_altfile = 1
 
-" let g:netrw_winsize = -28
-let g:netrw_liststyle = 3
-" let g:netrw_sort_sequence = '[\/]$,*'
-" let g:netrw_browse_split = 3
-
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeIgnore = [
@@ -591,7 +600,8 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeHighlightCursorline = 0
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
-let g:NERDTreeCreatePrefix='silent keepalt keepjumps'
+let NERDTreeCreatePrefix='silent keepalt keepjumps'
+let NERDTreeAutoDeleteBuffer=1
 
 let g:incsearch#auto_nohlsearch = 1
 
@@ -672,29 +682,6 @@ let g:user_emmet_settings = {
   \   'extends' : 'jsx'
   \ },
   \ }
-let s:emmetElements = [
-  \ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article',
-  \ 'aside', 'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big',
-  \ 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center',
-  \ 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details',
-  \ 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset',
-  \ 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset',
-  \ 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input',
-  \ 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map',
-  \ 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noframes',
-  \ 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p',
-  \ 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp',
-  \ 'script', 'section', 'select', 'small', 'source', 'span', 'strike',
-  \ 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
-  \ 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track',
-  \ 'tt', 'u', 'ul', 'var', 'video', 'wbr',
-  \ 'h1', 'h2', 'h3', 'h4', 'h6',
-  \
-  \ 'emb', 'btn', 'sty', 'dlg', 'fst', 'fig', 'leg', 'tarea', 'hdr', 'cmd',
-  \ 'colg', 'art', 'fset', 'src', 'prog', 'bq', 'kg', 'adr' , 'cap',
-  \ 'datag', 'datal', 'sect', 'str', 'obj', 'ftr', 'optg', 'ifr', 'out',
-  \ 'det', 'acr', 'opt'
-  \ ]
 
 let g:bufExplorerDisableDefaultKeyMapping = 1
 let g:bufExplorerShowRelativePath = 1
@@ -717,8 +704,12 @@ let s:repls = {
 
 let g:neomake_verbose = 0
 let g:neomake_place_signs = 0
+let g:neomake_html_enabled_makers = []
+let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_highlight_columns = 0
+call neomake#configure#automake('rw', 1000)
 
 let MRU_Window_Height = 10
 hi link MRUFileName String
@@ -737,6 +728,12 @@ let g:mta_filetypes = {
   \}
 
 let g:markdown_syntax_conceal = 0
+
+call operator#sandwich#set('all', 'all', 'highlight', 0)
+runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
+
+" let g:splitjoin_split_mapping = 'gs'
+" let g:splitjoin_join_mapping  = 'gj'
 
 "##############################
 "### Eager-loaded functions ###
@@ -807,6 +804,9 @@ function! GetTabLabel(tab_number)
 
   let buflist = tabpagebuflist(a:tab_number)
   let file_path = bufname(buflist[0])
+  if file_path =~ 'NERD_tree' && len(buflist) > 1
+    let file_path = bufname(buflist[1])
+  end
   if file_path == ''
     return '[No Name]'
   elseif file_path =~ 'fzf'
@@ -819,9 +819,16 @@ function! GetProjectName()
   return fnamemodify(getcwd(), ':t')
 endfunction
 
-function! BufEnterConfig()
-  let buffer_name = bufname('%')
+function! OnBufEnter()
+  exe ':match'
+  if !exists('b:buffer_mappings_created')
+    call CreateBufferMappings()
+  end
+  call ConfigureLargeBuffers()
+endfunction
 
+function! CreateBufferMappings()
+  let buffer_name = bufname('%')
   if buffer_name == '[Global Replace]'
     map <buffer><Leader>fr :call feedkeys("\<space>fRa")<cr>
     map <buffer><Leader>fR :Greplace<cr>
@@ -829,43 +836,51 @@ function! BufEnterConfig()
     map <buffer><leader>fre :call functions#RenameCurrentFile()<cr>
     map <buffer><leader>frm <buffer><leader>fde
   endif
-
   if buffer_name !~ 'NERD_tree'
     map <buffer> m, mO
     map <buffer> `, `O
     map <buffer> ', `O
   endif
-
-  call ConfigureLargeFiles()
-
-  exe ':match'
+  let b:buffer_mappings_created=1
 endfunction
 
-function! ConfigureLargeFiles()
+function! ConfigureLargeBuffers()
+  if (&buftype != '' || IsCurrentBufferEmpty()) | return | endif
   let nb_lines = line('$')
-  if nb_lines < 500 |
+  if !exists('b:previous_nb_lines') | let b:previous_nb_lines = '' | endif
+  if nb_lines == b:previous_nb_lines | return | endif
+  let b:previous_nb_lines = nb_lines
+  if nb_lines < 500
     set nolazyredraw
   else
     set lazyredraw
   endif
 
-  let opts = {}
-  let opts.tempfile = ''
+  if (!has('nvim') || &syntax == '') | return | endif
+  let b:tempfile = ''
   let file = expand('%')
   if file == ''
-    let opts.tempfile = tempname()
-    call writefile(getbufline('%', 1, '$'), opts.tempfile)
-    let file = opts.tempfile
+    let b:tempfile = tempname()
+    call writefile(getbufline('%', 1, '$'), b:tempfile)
+    let file = b:tempfile
   endif
   let cmd = "awk 'length > max { max=length } END { print max }' " . file
-  function! opts.on_stdout(job_id, data, event)
-    let max_line_length = a:data[0]
-    if max_line_length > 1000
-      setlocal synmaxcol=153
-    endif
-    if self.tempfile != '' | call delete(self.tempfile) | endif
-  endfunction
-  call async#job#start(cmd, opts)
+  call jobstart(cmd, { 'on_stdout': function('OnMaxLinesCounted') })
+endfunction
+
+function! IsCurrentBufferEmpty()
+  return line('$') == 1 && getline(1) == ''
+endfunction
+
+function! OnMaxLinesCounted(job_id, data, event)
+  let max_line_length = a:data[0]
+  if max_line_length > 1000
+    setlocal synmaxcol=153
+  endif
+  if exists('b:tempfile') && b:tempfile != ''
+    call delete(b:tempfile)
+    unlet b:tempfile
+  endif
 endfunction
 
 function! CustomCloseTab()
@@ -877,17 +892,17 @@ function! GoToLastActiveTab()
   exe 'tabnext' . s:last_active_tab_number
 endfunction
 
-function! Lint()
-  if &buftype != '' | return | endif
-  if !filereadable(expand('%:p')) | return | endif
-  if &filetype !~ '^\(ruby\|javascript\|scss\)' | return 0 | endif
+" function! Lint()
+"   if &buftype != '' | return | endif
+"   if !filereadable(expand('%:p')) | return | endif
+"   if &filetype !~ '^\(ruby\|javascript\|scss\)' | return 0 | endif
 
-  if &filetype =~ 'javascript'
-    Neomake eslint
-  else
-    Neomake
-  end
-endfunction
+"   if &filetype =~ 'javascript'
+"     Neomake eslint
+"   else
+"     Neomake
+"   end
+" endfunction
 
 function! GetFoldText()
   let text = getline(v:foldstart)
@@ -925,7 +940,7 @@ function! EnableMetaMappings()
     let keys = { '∂': 'd', '∫': 'b', 'ƒ': 'f', 'œ': 'q', '¬': 'l', '’': '}',
       \ '”': '{', '…': ';', '≤': ',', '˘': '>', '≥': '.', 'Ú': ': ',
       \ 'µ': 'm', '‘': ']', '“': '[', '—': '_', 'ß': 's', '–': '-', 'º': 0,
-      \ '†': 't', '∆': 'j', '≠': '=',
+      \ '†': 't', '∆': 'j', '≠': '=', '˜': 'N',
       \ '¡':1, '™':2, '£':3, '¢':4, '∞':5, '§':6, '¶':7, '•':8, 'ª':9 }
     for symbol in keys(keys)
       exe 'map ' . symbol . ' <m-' . keys[symbol] . '>'
@@ -940,6 +955,28 @@ function! EnableMetaMappings()
   endif
 endfunction
 if !has('nvim') | call EnableMetaMappings() | endif
+
+function! SetTmuxWindowName()
+  let cmd = 'rename=$(tmux show-window-options -t $TMUX_PANE -v automatic-rename);'
+  let cmd .= 'if [[ $rename != "off" ]]; then;'
+  let cmd .= "tmux rename-window -t $TMUX_PANE '" . GetProjectName() . "';"
+  let cmd .= 'fi'
+  call jobstart(cmd)
+endfunction
+
+function! RestoreTmuxWindowName()
+  let cmd = 'number_of_vims=$(tmux list-panes -F "#{pane_current_command}" | grep -c vim);'
+  let cmd .= 'if [[ $number_of_vims -eq 1 ]]; then;'
+  let cmd .= 'tmux setw automatic-rename;'
+  let cmd .= 'fi'
+  call system(cmd)
+endfunction
+
+function! Profile()
+  profile start profile.log
+  profile func *
+  profile file *
+endfunction
 
 "####################
 "### Autocommands ###
@@ -972,16 +1009,12 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.js.es6 set ft=javascript
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
   autocmd BufRead,BufNewFile *.env.* set ft=sh
+  autocmd BufRead,BufNewFile Brewfile set ft=ruby
 augroup end
 
 augroup detect_binary_files
   autocmd!
   autocmd BufRead * call DetectBinaryFile()
-augroup end
-
-augroup custom_backup
-  autocmd!
-  autocmd BufWritePost * call functions#BackupCurrentFile()
 augroup end
 
 augroup custom_undofile
@@ -990,12 +1023,17 @@ augroup custom_undofile
 augroup end
 
 if has('nvim')
+  augroup custom_backup
+    autocmd!
+    autocmd BufWritePost * call functions#BackupCurrentFile()
+  augroup end
+
   augroup on_display_events
     autocmd!
     autocmd TermOpen *test* call functions#OnTestDisplayed()
     autocmd TermOpen *ag\ * call functions#OnFileSearchDisplayed()
   augroup end
-end
+endif
 
 augroup nerdtree_original_buffer
   autocmd!
@@ -1003,13 +1041,11 @@ augroup nerdtree_original_buffer
   autocmd BufEnter * call RestoreNerdtreeOriginalBuffer()
 augroup end
 
-if exists('$TMUX') && !exists('$DISABLE_WINDOW_RENAME')
-  augroup tmux_title
+if exists('$TMUX') && has('nvim')
+  augroup tmux_window_name
     autocmd!
-    autocmd VimEnter * call async#job#start(
-      \ "tmux rename-window -t $TMUX_PANE '" . GetProjectName() . "'", {}
-      \ )
-    autocmd VimLeave * call async#job#start('tmux setw automatic-rename', {})
+    autocmd VimEnter * call SetTmuxWindowName()
+    autocmd VimLeave * call RestoreTmuxWindowName()
   augroup end
 endif
 
@@ -1033,10 +1069,10 @@ if has('nvim')
   augroup end
 endif
 
-augroup lint_events
-  autocmd!
-  autocmd BufWritePost,BufEnter,FocusLost * call Lint()
-augroup end
+" augroup lint_events
+"   autocmd!
+"   autocmd BufWritePost,BufEnter,FocusLost * call Lint()
+" augroup end
 
 augroup preserve_buffer_scroll
   autocmd BufLeave * call SaveBufferScroll()
@@ -1050,7 +1086,7 @@ augroup general_autocommands
   autocmd BufWritePost *.vim/autoload/* source %
   autocmd InsertLeave * silent! set nopaste
   autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
-  autocmd BufEnter * call BufEnterConfig()
+  autocmd BufEnter * call OnBufEnter()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "

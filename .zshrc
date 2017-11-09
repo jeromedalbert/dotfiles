@@ -25,7 +25,6 @@ export GREP_COLORS=auto
 export GREP_COLOR=auto
 export HOMEBREW_NO_ANALYTICS=1
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
-export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export NVM_DIR=$HOME/.nvm
 export PATH=$HOME/.bin
@@ -208,7 +207,8 @@ paste-insert() {
 ### Other ###
 #############
 
-eval "$(rbenv init - --no-rehash)"
+source /usr/local/opt/asdf/asdf.sh
+# eval "$(rbenv init - --no-rehash)"
 stty -ixon
 unset _JAVA_OPTIONS
 if [ -z $TMUX ]; then; tmux-start; fi

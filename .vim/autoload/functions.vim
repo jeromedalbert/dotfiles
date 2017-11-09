@@ -22,6 +22,30 @@ function! IsEmmetExpandable()
   return expr =~ '[.#>+*]' || index(s:emmetElements, expr) >= 0
 endfunction
 
+let s:emmetElements = [
+  \ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article',
+  \ 'aside', 'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big',
+  \ 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center',
+  \ 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details',
+  \ 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset',
+  \ 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset',
+  \ 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input',
+  \ 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map',
+  \ 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noframes',
+  \ 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p',
+  \ 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp',
+  \ 'script', 'section', 'select', 'small', 'source', 'span', 'strike',
+  \ 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td',
+  \ 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track',
+  \ 'tt', 'u', 'ul', 'var', 'video', 'wbr', 'template',
+  \ 'h1', 'h2', 'h3', 'h4', 'h6',
+  \
+  \ 'emb', 'btn', 'sty', 'dlg', 'fst', 'fig', 'leg', 'tarea', 'hdr', 'cmd',
+  \ 'colg', 'art', 'fset', 'src', 'prog', 'bq', 'kg', 'adr' , 'cap',
+  \ 'datag', 'datal', 'sect', 'str', 'obj', 'ftr', 'optg', 'ifr', 'out',
+  \ 'det', 'acr', 'opt'
+  \ ]
+
 function! functions#ClearEverything()
   match
   ccl
@@ -437,7 +461,7 @@ function! functions#BackupCurrentFile()
   let cmd .= 'cd ' . s:custom_backup_dir . ';'
   let cmd .= 'git add ' . backup_file . ';'
   let cmd .= 'git commit -m "Backup - `date`";'
-  call async#job#start(cmd, {})
+  call jobstart(cmd)
 endfunction
 
 function! functions#OpenCurrentFileBackupHistory()
@@ -472,10 +496,6 @@ function! IsCurrentBufferNew()
   return bufname('%') == '' && IsCurrentBufferEmpty()
 endfunction
 
-function! IsCurrentBufferEmpty()
-  return line('$') == 1 && getline(1) == ''
-endfunction
-
 function! functions#GitOpenModifiedFiles()
   silent only
   let status = system('git status -s | remove-colors | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
@@ -505,19 +525,18 @@ endfunction
 
 function! functions#OpenMarkdownPreview()
   if !exists('s:markdown_preview_job')
-    " https://github.com/joeyespo/grip
-    let s:markdown_preview_job = async#job#start('grip', {})
+    let s:markdown_preview_job = jobstart('grip')
   endif
   silent exec '!open http://localhost:6419/' . expand('%')
 endfunction
 
 function! functions#MakeSession()
-  exe ':silent SaveSession! ' . GetCwd()
+  exe ':silent SaveSession! ' . functions#GetProjectNotes()
   echo 'Session saved.'
 endfunction
 
 function! functions#LoadSession()
-  exe ':silent OpenSession ' . GetCwd()
+  exe ':silent OpenSession ' . functions#GetProjectNotes()
   set conceallevel=2 concealcursor=niv
   echo 'Session loaded.'
 endfunction
@@ -702,12 +721,10 @@ endfunction
 
 function! functions#Join()
   let last_char = getline('.')[col('$')-2]
-  " normal! mCJ
   normal! J
   if last_char == '('
     normal x
   endif
-  " normal `C
 endfunction
 
 function! functions#ToggleFoldSyntax()

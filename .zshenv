@@ -103,16 +103,18 @@ tk() {
   if [ $# -eq 0 ]; then
     tmux kill-session
   else
-    tmux kill-session -t $1
+    for session in "$@"; do
+      tmux kill-session -t $session
+    done
   fi
 }
 ta() {
   if [ $# -eq 0 ]; then; tmux attach; fi
 
   if [ -z $TMUX ]; then
-    tmux attach -t $1
+    tmux attach -t "=$1"
   else
-    tmux switch -t $1
+    tmux switch -t "=$1"
   fi
 }
 ts() {
@@ -197,7 +199,11 @@ gcam() { gca -m "$*" }
 alias gclean="git clean -fd"
 alias grhhc="grhh && gclean"
 gd() {
-  git diff "$@" | _format-git-diff | eval $GIT_PAGER
+  if [ $# -eq 0 ]; then
+    gd HEAD
+  else
+    git diff "$@" | _format-git-diff | eval $GIT_PAGER
+  fi
 }
 _format-git-diff() {
   sed -r "s/^([^-+ ]*)[-+ ]/\\1/"
@@ -206,6 +212,7 @@ gsh() {
   git show "$@" | _format-git-diff | eval $GIT_PAGER
 }
 alias gdc="gd --cached"
+alias gdh="gd HEAD"
 alias "gdh^"="gd 'HEAD^'"
 alias glog="git log"
 alias glo="git log --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
@@ -280,6 +287,7 @@ gpuf() {
 }
 alias gclo-"git clone"
 alias gx="gitx"
+alias gu="gitup"
 alias git-branch-previous='git check-ref-format --branch "@{-1}"'
 ggo() {
   current-git-branch > .git/previous_branch
@@ -441,6 +449,32 @@ alias emacs-games="ls /usr/share/emacs/22.1/lisp/play/*.elc | column -t"
 snow() {
   clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|awk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
 }
+alias weather='curl wttr.in'
+
+# Fzf
+j() {
+  if [ $# -gt 0 ]; then
+    _z "$*"
+  else
+    cd "$(_z -l 2>&1 | fzf --height 40% --reverse --tac --query "$*" | sed 's/^[0-9,.]* *//')"
+  fi
+}
+vj() {
+  local old_directory=$(pwd)
+  (
+  j "$@"
+  if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
+  )
+}
+jj() {
+  cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
+}
+fgl() (
+  [ $# -eq 0 ] && return
+  cd /usr/local/Cellar/figlet/*/share/figlet/fonts
+  local font=$(ls *.flf | sort | fzf --no-multi --reverse --preview "figlet -f {} $@") &&
+  figlet -f "$font" "$@" | pbcopy
+)
 
 # Ruby / Rails
 alias b='bundle'
@@ -484,21 +518,19 @@ alias irb='pry'
 alias pr='powder restart'
 alias il='invoker list'
 alias is='invoker start'
-alias fs='foreman start'
-
-# Python
-alias python='/usr/local/bin/python2'
-gpip2() {
-  PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
+fs() {
+  if [ -e Procfile.dev ]; then
+    foreman start -f Procfile.dev
+  else
+    foreman start
+  fi
 }
-gpip3() {
-  PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+rgsq() {
+  rg scaffold "$@" \
+    --no-assets --no-helper --no-serializer --no-controller-specs \
+    --no-view-specs --no-routing-specs --no-request-specs --no-model-specs
 }
-alias gpip=gpip2
-alias venv='virtualenv --python=/usr/local/bin/python'
-alias vac='source bin/activate'
-alias va='vac'
-alias pir='pip install -r requirements.txt'
+alias rru='rails runner'
 
 # Javascript
 alias y='yarn'
@@ -507,28 +539,3 @@ alias ys='yarn run server'
 alias ya='yarn add'
 alias yrm='yarn remove'
 alias yre='yrm'
-
-# Fzf
-j() {
-  if [ $# -gt 0 ]; then
-    _z "$*"
-  else
-    cd "$(_z -l 2>&1 | fzf --height 40% --reverse --tac --query "$*" | sed 's/^[0-9,.]* *//')"
-  fi
-}
-vj() {
-  local old_directory=$(pwd)
-  (
-  j "$@"
-  if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
-  )
-}
-jj() {
-  cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
-}
-fgl() (
-  [ $# -eq 0 ] && return
-  cd /usr/local/Cellar/figlet/*/share/figlet/fonts
-  local font=$(ls *.flf | sort | fzf --no-multi --reverse --preview "figlet -f {} $@") &&
-  figlet -f "$font" "$@" | pbcopy
-)
