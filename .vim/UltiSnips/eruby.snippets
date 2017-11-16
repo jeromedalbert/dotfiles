@@ -1,0 +1,108 @@
+global !p
+from snippet_utils import unindent
+endglobal
+
+snippet - "<% .. %>" i
+<% ${0} %>
+endsnippet
+
+snippet = "<%= .. %>" i
+<%= ${0} %>
+endsnippet
+
+pre_expand "unindent(snip)"
+snippet end "end"
+<% end %>
+endsnippet
+
+snippet ea "each do .. end"
+<% ${1}.each do |${2:e}| %>
+	${0}
+<% end %>
+endsnippet
+
+# snippet if "if"
+# <% if ${1:condition} %>
+# endsnippet
+
+snippet if "if .. end"
+<% if ${1:condition} %>
+	${0}
+<% end %>
+endsnippet
+
+pre_expand "unindent(snip)"
+snippet else "else"
+<% else %>
+	${0}
+endsnippet
+
+pre_expand "unindent(snip)"
+snippet el "else"
+<% else %>
+	${0}
+endsnippet
+
+pre_expand "unindent(snip)"
+snippet elsif "elsif"
+<% elsif ${1:condition} %>
+	${0}
+endsnippet
+
+snippet ife "if .. else .. end"
+<% if ${1:condition} %>
+	${2}
+<% else %>
+	${0}
+<% end %>
+endsnippet
+
+snippet lt "link_to"
+<%= link_to '${1}', ${0} %>
+endsnippet
+
+snippet cf "content_for"
+<%= content_for :${0} %>
+endsnippet
+
+snippet cff "content_for .. end"
+<% content_for :${1} %>
+	${0}
+<% end %>
+endsnippet
+
+snippet cfj "content_for :javascripts .. end"
+<% content_for :javascripts do %>
+	${0}
+<% end %>
+endsnippet
+
+snippet js "javascript_include_tag"
+<%= javascript_include_tag '${0}' %>
+endsnippet
+
+snippet jsp "javascript_pack_tag"
+<%= javascript_pack_tag '${0}' %>
+endsnippet
+
+snippet jpt "javascript_pack_tag"
+<%= javascript_pack_tag '${0}' %>
+endsnippet
+
+snippet css "stylesheet_link_tag"
+<%= stylesheet_link_tag '${0}', media: 'all' %>
+endsnippet
+
+snippet sty "stylesheet_link_tag"
+<%= stylesheet_link_tag '${0}', media: 'all' %>
+endsnippet
+
+snippet cfa "CSS and JS assets"
+<% content_for :stylesheets do %>
+	<%= stylesheet_link_tag '${1}', media: 'all' %>
+<% end %>
+
+<% content_for :javascripts do %>
+		<%= javascript_include_tag '${0}' %>
+<% end %>
+endsnippet

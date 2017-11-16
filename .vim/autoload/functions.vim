@@ -4,10 +4,11 @@
 " Makes Vim start up faster
 
 function! functions#TabComplete()
-  if neosnippet#expandable_or_jumpable()
-    return "\<Plug>(neosnippet_expand_or_jump)"
+  call UltiSnips#ExpandSnippetOrJump()
+  if g:ulti_expand_or_jump_res > 0
+    return ''
   elseif IsEmmetExpandable()
-    return "\<plug>(emmet-expand-abbr)"
+    return emmet#expandAbbr(0, '')
   else
     return "\<tab>"
   endif
@@ -305,7 +306,7 @@ endfunction
 function! functions#OnFileSearchDisplayed()
   noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
   nmap <buffer> o <cr>
-  noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
+  " noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
 endfunction
 
 function! OpenFileSearchResult(new_tab)
@@ -523,13 +524,12 @@ function! functions#OpenMarkdownPreview()
 endfunction
 
 function! functions#MakeSession()
-  exe ':silent SaveSession! ' . functions#GetProjectNotes()
+  exe ':silent SaveSession! ' . GetProjectName()
   echo 'Session saved.'
 endfunction
 
 function! functions#LoadSession()
-  exe ':silent OpenSession ' . functions#GetProjectNotes()
-  set conceallevel=2 concealcursor=niv
+  exe ':silent OpenSession ' . GetProjectName()
   echo 'Session loaded.'
 endfunction
 

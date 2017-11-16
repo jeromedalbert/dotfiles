@@ -1,0 +1,273 @@
+global !p
+from snippet_utils import camelcase
+endglobal
+
+snippet cl "console.log"
+console.log(${0});
+endsnippet
+
+snippet log "console.log"
+console.log(${0});
+endsnippet
+
+snippet ce "console.error"
+console.error(${0});
+endsnippet
+
+snippet loge "console.error"
+console.error(${0});
+endsnippet
+
+snippet ci "console.info"
+console.info(${0});
+endsnippet
+
+snippet logi "console.info"
+console.info(${0});
+endsnippet
+
+snippet cw "console.warn"
+console.warn(${0});
+endsnippet
+
+snippet logw "console.warn"
+console.warn(${0});
+endsnippet
+
+snippet al "alert"
+console.log(${0});
+endsnippet
+
+snippet if "if"
+if (${1:condition}) {
+	${0}
+}
+endsnippet
+
+snippet else "else"
+else {
+	${0}
+}
+endsnippet
+
+snippet el "else"
+else {
+	${0}
+}
+endsnippet
+
+snippet ife "if { .. } else { .. }"
+if (${1:condition}) {
+	${2}
+}
+else {
+	${0}
+}
+endsnippet
+
+snippet len "length"
+length
+endsnippet
+
+snippet preven "e.preventDefault()"
+e.preventDefault();
+endsnippet
+
+snippet f "() =>" w
+(${1}) => {
+	${0}
+}
+endsnippet
+
+snippet m
+${1:methodName}(${2}) {
+	${0}
+}
+endsnippet
+
+snippet st "setTimeout"
+setTimeout(() => {${1}}, ${0:1000});
+endsnippet
+
+snippet stt "setTimeout multiline"
+setTimeout(() => {
+	${1}
+}, ${0:1000});
+endsnippet
+
+snippet iife "Immediately Invoked Function Expression"
+(() => {
+
+	${0}
+
+})();
+endsnippet
+
+snippet cla "class { .. }"
+class ${1:`!p snip.rv = camelcase(snip.basename)`} {
+
+	${0}
+
+}
+endsnippet
+
+snippet clai "class { .. constructor .. }"
+class ${1:`!p snip.rv = camelcase(snip.basename)`} {
+
+	constructor() {
+		${0}
+	}
+
+}
+endsnippet
+
+snippet con "constructor"
+constructor() {
+	${0}
+}
+endsnippet
+
+snippet doc "document"
+document
+endsnippet
+
+snippet ea "forEach" w
+forEach(${1:e} => ${0});
+endsnippet
+
+snippet eaa "forEach multiline" w
+forEach((${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet map "map" w
+map(${1:e} => ${0});
+endsnippet
+
+snippet mapp "map multiline" w
+map((${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet red "reduce" w
+reduce((${1:acc}, ${2:e}) => ${0});
+endsnippet
+
+snippet redd "reduce multiline" w
+reduce((${1:acc}, ${2:e}) => {
+	${0}
+});
+endsnippet
+
+snippet fil "filter" w
+filter(${1:e} => ${0});
+endsnippet
+
+snippet fill "filter multiline" w
+filter((${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet fin "find" w
+find(${1:e} => ${0});
+endsnippet
+
+snippet finn "find multiline" w
+find((${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet p "new Promise"
+new Promise((resolve, reject) => {
+	${0}
+})
+endsnippet
+
+snippet then "then" w
+then((${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet try "try catch"
+try {
+	${1}
+}
+catch (e) {
+	${0}
+}
+endsnippet
+
+snippet catch "catch"
+catch((${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet im "import"
+import ${1} from '${0}';
+endsnippet
+
+snippet imp "import"
+import ${1} from '${0}';
+endsnippet
+
+snippet ex "export"
+export ${0};
+endsnippet
+
+snippet exp "export"
+export ${0};
+endsnippet
+
+snippet exd "export default"
+export default ${0};
+endsnippet
+
+snippet adde "addEventListener" w
+addEventListener('${1}', (${2:e}) => {
+	${0}
+});
+endsnippet
+
+snippet gi "getElementById" w
+getElementById('${0}')
+endsnippet
+
+snippet gii "document.getElementById"
+document.getElementById('${0}')
+endsnippet
+
+snippet q "querySelector" w
+querySelector('${1}')${0}
+endsnippet
+
+snippet qq "document.querySelector"
+document.querySelector('${1}')${0}
+endsnippet
+
+snippet a "querySelectorAll" w
+querySelectorAll('${1}')${0}
+endsnippet
+
+snippet aa "document.querySelectorAll"
+document.querySelectorAll('${1}')${0}
+endsnippet
+
+snippet req "require"
+require('${0}');
+endsnippet
+
+snippet mexp "module.exports = .."
+module.exports = ${0};
+endsnippet
+
+snippet str "use strict"
+'use strict';
+
+${0}
+endsnippet

@@ -5,7 +5,7 @@
 call plug#begin('~/.vim/plugged')
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'Shougo/neosnippet.vim'
+Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
@@ -193,7 +193,7 @@ noremap <leader>p <c-w>W
 noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
-noremap <silent> <leader>oc :silent! exe '!open -a "Google Chrome" %'<cr>
+noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
 noremap <silent> <leader>or :e README*<cr>
 
 noremap $ $ze
@@ -249,13 +249,10 @@ noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
 "### Plugins/functions key mappings ###
 "######################################
 
-imap <expr> <tab> functions#TabComplete()
-smap <expr> <tab> functions#TabComplete()
-xmap <expr> <tab> functions#TabComplete()
+inoremap <silent> <tab> <c-r>=functions#TabComplete()<cr>
+snoremap <silent> <tab> <esc>:call UltiSnips#JumpForwards()<cr>
 
 nnoremap <silent> <esc> :nohlsearch<cr>:call functions#ClearEverything()<cr>
-inoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
-snoremap <silent> <esc> <esc>:NeoSnippetClearMarkers<cr>
 
 imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
 
@@ -373,7 +370,7 @@ noremap <leader>oh :Helptags<cr>
 noremap <silent> <leader>om :call functions#OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :exe 'e ' . functions#GetProjectNotes()<cr>
 noremap <silent> <leader>oN :exe 'vsplit ' . functions#GetProjectNotes()<cr>
-noremap <silent> <leader>ob :call functions#OpenCurrentFileBackupHistory()<cr>
+noremap <silent> <leader>obk :call functions#OpenCurrentFileBackupHistory()<cr>
 
 noremap <leader>yq :call functions#MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call functions#LoadSession()<cr>
@@ -507,7 +504,6 @@ set tags=./.tags;
 set tabline=%!GetTabLine()
 set pumheight=8
 set nojoinspaces
-set conceallevel=2 concealcursor=niv
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
@@ -618,8 +614,15 @@ let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
 let g:unimpaired_no_toggling = 1
 
-let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
-let g:neosnippet#snippets_directory='~/.vim/my-snippets'
+let g:UltiSnipsExpandTrigger = '<nop>'
+let g:UltiSnipsListSnippets = '<nop>'
+let g:UltiSnipsJumpForwardTrigger = '<nop>'
+let g:UltiSnipsJumpBackwardTrigger = '<nop>'
+
+" let g:UltiSnipsExpandTrigger = '<tab>'
+" let g:UltiSnipsListSnippets = '<nop>'
+" let g:UltiSnipsJumpForwardTrigger = '<tab>'
+" let g:UltiSnipsJumpBackwardTrigger = '<nop>'
 
 let g:user_emmet_mode = 'i'
 let g:user_emmet_settings = {

@@ -1,0 +1,59 @@
+snippet ss "$('')" w
+$('${1}')${2}
+endsnippet
+
+snippet ajax "ajax"
+$.ajax({
+	type: 'POST',
+	url: $form.attr('action'),
+	data: $form.serialize(),
+	success: (response) => {
+		${0}
+	},
+	error: (response) => {
+
+	}
+});
+endsnippet
+
+snippet eaj "each jQuery" w
+each((i, ${1:e}) => {
+	${0}
+});
+endsnippet
+
+snippet eaij "each index jQuery"
+each((i) => {
+	${0}
+});
+endsnippet
+
+snippet on "on event" w
+on('${1}', (${2:e}) => {
+	${0}
+});
+endsnippet
+
+snippet rea "$(document).ready"
+$(() => {
+	${0}
+});
+endsnippet
+
+snippet re "$(document).ready"
+$(() => {
+	${0}
+});
+endsnippet
+
+snippet reap "$(document).ready ... new Page"
+class Page {
+
+	constructor() {
+		${0}
+	}
+
+}
+
+$(() => new Page());
+endsnippet

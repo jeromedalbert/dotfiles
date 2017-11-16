@@ -1,0 +1,43 @@
+priority -10
+
+snippet ajax "ajax"
+$.ajax({
+	type: 'POST',
+	url: $form.attr('action'),
+	data: $form.serialize(),
+	success: function (response) {
+		${0}
+	},
+	error: function (response) {
+
+	}
+});
+endsnippet
+
+snippet eaj "each jQuery" w
+each(function() {
+	${0}
+});
+endsnippet
+
+snippet eaij "each index jQuery"
+each(function(i) {
+	${0}
+});
+endsnippet
+
+snippet on "on event" w
+on('${1}', function(${2:e}) {
+	${0}
+});
+endsnippet
+
+snippet rea "$(document).ready"
+$(function() {
+	${0}
+});
+endsnippet
+
+snippet this "$(this)" w
+$(this)
+endsnippet

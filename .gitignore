@@ -14,3 +14,4 @@
 
 .secrets.zsh
 .zcompdump
+*.pyc
