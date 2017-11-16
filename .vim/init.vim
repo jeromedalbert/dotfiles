@@ -512,7 +512,8 @@ set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
 set diffopt=vertical,filler,foldcolumn:0
-set whichwrap=b,s,h,l
+" set whichwrap=b,s,h,l
+" set whichwrap=b,s,h
 set synmaxcol=1000
 
 set statusline=
@@ -544,13 +545,13 @@ let html_no_rendering = 1
 let g:html_indent_inctags = 'p,main'
 let g:html_indent_script1 = 'inc'
 let g:html_indent_style1 = 'inc'
-
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
-
 let g:vim_indent_cont = &sw
-
 let g:is_bash = 1
+
+" Trial
+set showtabline=2
 
 "#############################
 "### Plugins configuration ###
@@ -739,6 +740,14 @@ runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
 "### Eager-loaded functions ###
 "##############################
 " See .vim/autoload/functions.vim for lazy-loaded functions
+
+function! TrimTrailingWhitespace()
+  if &filetype =~ 'markdown\|snippet' | return | endif
+  let l = line('.')
+  let c = col('.')
+  %s/\s\+$//e
+  call cursor(l, c)
+endfunction
 
 function! SaveCurrentBufNum()
   let t:last_bufnum = bufnr('%')
@@ -1081,7 +1090,7 @@ augroup end
 
 augroup general_autocommands
   autocmd!
-  autocmd BufWritePre * call functions#TrimTrailingWhitespace()
+  autocmd BufWritePre * call TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
   autocmd BufWritePost *.vim/autoload/* source %
   autocmd InsertLeave * silent! set nopaste

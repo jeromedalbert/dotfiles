@@ -440,6 +440,7 @@ killui() {
     killall "${app}"
   done
 }
+alias nra='~/c/boilerplate/new-rails-app'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"

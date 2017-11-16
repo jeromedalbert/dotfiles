@@ -124,6 +124,7 @@ hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
 hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
 hi link Whitespace Normal
 hi qfLineNr guifg=#8A8885 guibg=NONE
+" hi TabLineFill guifg=#e3e3e3
 
 hi link rubyInterpolation SpecialChar
 hi link rubyInterpolationDelimiter rubyInterpolation
@@ -268,6 +269,9 @@ hi link shRange NONE
 hi link shQuote String
 hi link shCommandSub String
 hi link shCmdSubRegion shCommandSub
+hi link shOption NONE
+hi link shSpecial SpecialChar
+hi link shCtrlSeq shSpecial
 
 hi diffRemoved guifg=#d32020 guibg=#eae3ca
 hi diffAdded guifg=#118714 guibg=#eae3ca

@@ -75,14 +75,6 @@ function! functions#DisplayRegisters()
   map <silent> <buffer> <esc> q
 endfunction
 
-function! functions#TrimTrailingWhitespace()
-  if &filetype =~ 'markdown\|neosnippet' | return | endif
-  let l = line(".")
-  let c = col(".")
-  %s/\s\+$//e
-  call cursor(l, c)
-endfunction
-
 function! functions#ShowHighlightsUnderCursor()
   if !exists("*synstack")
     return
