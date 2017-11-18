@@ -614,15 +614,11 @@ let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
 let g:unimpaired_no_toggling = 1
 
+let g:UltiSnipsSnippetDirectories=['my-snippets']
 let g:UltiSnipsExpandTrigger = '<nop>'
 let g:UltiSnipsListSnippets = '<nop>'
 let g:UltiSnipsJumpForwardTrigger = '<nop>'
 let g:UltiSnipsJumpBackwardTrigger = '<nop>'
-
-" let g:UltiSnipsExpandTrigger = '<tab>'
-" let g:UltiSnipsListSnippets = '<nop>'
-" let g:UltiSnipsJumpForwardTrigger = '<tab>'
-" let g:UltiSnipsJumpBackwardTrigger = '<nop>'
 
 let g:user_emmet_mode = 'i'
 let g:user_emmet_settings = {

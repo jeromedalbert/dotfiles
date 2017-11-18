@@ -1,272 +1,273 @@
-snippet al
-abbr alert
-  alert(${0});
+global !p
+from snippet_utils import camelcase
+endglobal
 
-snippet cl
-abbr console.log
-  console.log(${0});
+snippet cl "console.log"
+console.log(${0});
+endsnippet
 
-snippet cll
-abbr console.log('...')
-  console.log('${0}');
+snippet log "console.log"
+console.log(${0});
+endsnippet
 
-snippet ce
-abbr console.error
-  console.error(${0});
+snippet ce "console.error"
+console.error(${0});
+endsnippet
 
-snippet ci
-abbr console.info
-  console.info(${0});
+snippet loge "console.error"
+console.error(${0});
+endsnippet
 
-snippet cw
-abbr console.warn
-  console.warn(${0});
+snippet ci "console.info"
+console.info(${0});
+endsnippet
 
-snippet if
-abbr if
-  if (${1:condition}) {
-    ${0}
-  }
+snippet logi "console.info"
+console.info(${0});
+endsnippet
 
-snippet else
-alias el
-abbr else
-  else {
-    ${0}
-  }
+snippet cw "console.warn"
+console.warn(${0});
+endsnippet
 
-snippet ife
-abbr if { .. } else { .. }
-  if (${1:condition}) {
-    ${0}
-  }
-  else {
+snippet logw "console.warn"
+console.warn(${0});
+endsnippet
 
-  }
+snippet al "alert"
+console.log(${0});
+endsnippet
 
-snippet len
-abbr length
-  length
+snippet if "if"
+if (${1:condition}) {
+	${0}
+}
+endsnippet
 
-snippet preven
-abbr e.preventDefault()
-  e.preventDefault();
+snippet else "else"
+else {
+	${0}
+}
+endsnippet
 
-snippet try
-abbr try catch
-  try {
-    ${0}
-  }
-  catch (e) {
+snippet el "else"
+else {
+	${0}
+}
+endsnippet
 
-  }
+snippet ife "if { .. } else { .. }"
+if (${1:condition}) {
+	${2}
+}
+else {
+	${0}
+}
+endsnippet
 
-snippet f
-options word
-abbr function
-  (${1}) => {
-    ${0}
-  }
+snippet len "length"
+length
+endsnippet
+
+snippet preven "e.preventDefault()"
+e.preventDefault();
+endsnippet
+
+snippet f "() =>" w
+(${1}) => {
+	${0}
+}
+endsnippet
 
 snippet m
-abbr method
-  ${1:methodName}(${2}) {
-    ${0}
-  }
+${1:methodName}(${2}) {
+	${0}
+}
+endsnippet
 
-snippet stt
-abbr setTimeout
-  setTimeout(() => {${0}}, 1000);
+snippet st "setTimeout"
+setTimeout(() => {${1}}, ${0:1000});
+endsnippet
 
-snippet iife
-abbr Immediately Invoked Function Expression
-  (() => {
+snippet stt "setTimeout multiline"
+setTimeout(() => {
+	${1}
+}, ${0:1000});
+endsnippet
 
-    ${0}
+snippet iife "Immediately Invoked Function Expression"
+(() => {
 
-  })();
+	${0}
 
-snippet cla
-abbr class { .. }
-  class ${1}{
+})();
+endsnippet
 
-    ${0}
+snippet cla "class { .. }"
+class ${1:`!p snip.rv = camelcase(snip.basename)`} {
 
-  }
+	${0}
 
-snippet clai
-abbr class { .. constructor .. }
-  class ${1}{
+}
+endsnippet
 
-    constructor() {
-      ${0}
-    }
+snippet clai "class { .. constructor .. }"
+class ${1:`!p snip.rv = camelcase(snip.basename)`} {
 
-  }
+	constructor() {
+		${0}
+	}
 
-snippet con
-abbr constructor
-  constructor() {
-    ${0}
-  }
+}
+endsnippet
 
-snippet doc
-abbr document
-  document
+snippet con "constructor"
+constructor() {
+	${0}
+}
+endsnippet
 
-snippet ea
-abbr forEach
-options word
-  forEach(${1:e} => ${0});
+snippet doc "document"
+document
+endsnippet
 
-snippet eaa
-alias fee feaa
-abbr forEach multiline
-options word
-  forEach((${1:e}) => {
-    ${0}
-  });
+snippet ea "forEach" w
+forEach(${1:e} => ${0});
+endsnippet
 
-snippet map
-abbr map
-options word
-  map(${1:e} => ${0});
+snippet eaa "forEach multiline" w
+forEach((${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet mapp
-abbr map multiline
-options word
-  map((${1:e}) => {
-    ${0}
-  });
+snippet map "map" w
+map(${1:e} => ${0});
+endsnippet
 
-snippet red
-abbr reduce
-options word
-  reduce((${1:acc}, ${2:e}) => ${0});
+snippet mapp "map multiline" w
+map((${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet redd
-abbr reduce multiline
-options word
-  reduce((${1:acc}, ${2:e}) => {
-    ${0}
-  });
+snippet red "reduce" w
+reduce((${1:acc}, ${2:e}) => ${0});
+endsnippet
 
-snippet fil
-alias filt
-abbr filter
-options word
-  filter(${1:e} => ${0});
+snippet redd "reduce multiline" w
+reduce((${1:acc}, ${2:e}) => {
+	${0}
+});
+endsnippet
 
-snippet fill
-alias filtt
-abbr filter multiline
-options word
-  filter((${1:e}) => {
-    ${0}
-  });
+snippet fil "filter" w
+filter(${1:e} => ${0});
+endsnippet
 
-snippet fin
-alias find
-abbr find multiline
-options word
-  find(${1:e} => ${0});
+snippet fill "filter multiline" w
+filter((${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet finn
-alias findd
-abbr find
-options word
-  find((${1:e}) => {
-    ${0}
-  });
+snippet fin "find" w
+find(${1:e} => ${0});
+endsnippet
 
-snippet p
-abbr new Promise
-  new Promise((resolve, reject) => {
-    ${0}
-  })
+snippet finn "find multiline" w
+find((${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet then
-abbr then
-options word
-  then((${1:e}) => {
-    ${0}
-  });
+snippet p "new Promise"
+new Promise((resolve, reject) => {
+	${0}
+})
+endsnippet
 
-snippet catch
-abbr catch
-options word
-  catch((${1:e}) => {
-    ${0}
-  });
+snippet then "then" w
+then((${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet im
-abbr imp import
-abbr import
-  import ${1} from '${0}';
+snippet try "try catch"
+try {
+	${1}
+}
+catch (e) {
+	${0}
+}
+endsnippet
 
-snippet ex
-abbr exp
-abbr export
-  export ${0};
+snippet catch "catch"
+catch((${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet exd
-abbr expd
-abbr export default
-  export default ${0};
+snippet im "import"
+import ${1} from '${0}';
+endsnippet
 
-snippet ae
-alias ad ade add adde
-abbr addEventListener
-options word
-  addEventListener('${1}', (${2:e}) => {
-    ${0}
-  });
+snippet imp "import"
+import ${1} from '${0}';
+endsnippet
 
-snippet gi
-abbr getElementById
-options word
-  getElementById('${0}')
+snippet ex "export"
+export ${0};
+endsnippet
 
-snippet dgi
-abbr document.getElementById
-  document.getElementById('${0}')
+snippet exp "export"
+export ${0};
+endsnippet
 
-snippet q
-alias qs s
-abbr querySelector
-options word
-  querySelector('${1}')${0}
+snippet exd "export default"
+export default ${0};
+endsnippet
 
-snippet qq
-alias dqs ds dq
-abbr document.querySelector
-options word
-  document.querySelector('${1}')${0}
+snippet adde "addEventListener" w
+addEventListener('${1}', (${2:e}) => {
+	${0}
+});
+endsnippet
 
-snippet a
-alias sa qsa qa
-abbr querySelectorAll
-options word
-  querySelectorAll('${1}')${0}
+snippet gi "getElementById" w
+getElementById('${0}')
+endsnippet
 
-snippet aa
-alias da dsa dqsa dqa
-abbr document.querySelectorAll
-options word
-  document.querySelectorAll('${1}')${0}
+snippet gii "document.getElementById"
+document.getElementById('${0}')
+endsnippet
 
-snippet re
-alias req
-abbr require
-  require('${0}');
+snippet q "querySelector" w
+querySelector('${1}')${0}
+endsnippet
 
-snippet me
-alias mex mexp
-abbr module.exports = ...
-  module.exports = ${0};
+snippet qq "document.querySelector"
+document.querySelector('${1}')${0}
+endsnippet
 
-snippet str
-abbr use strict
-  'use strict';
+snippet a "querySelectorAll" w
+querySelectorAll('${1}')${0}
+endsnippet
 
-  ${0}
+snippet aa "document.querySelectorAll"
+document.querySelectorAll('${1}')${0}
+endsnippet
+
+snippet req "require"
+require('${0}');
+endsnippet
+
+snippet mexp "module.exports = .."
+module.exports = ${0};
+endsnippet
+
+snippet str "use strict"
+'use strict';
+
+${0}
+endsnippet

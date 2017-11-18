@@ -1,268 +1,271 @@
-snippet #!
-options head
-  #!/usr/bin/env ruby
+global !p
+from snippet_utils import camelcase
+endglobal
 
-snippet ->
-options word
-  -> (${1:e}) { ${0} }
+snippet #! "#!/usr/bin/env ruby" b
+#!/usr/bin/env ruby
 
-snippet all
-abbr all? { |e| .. }
-options word
-  all? { |${1:e}| ${0} }
+${0}
+endsnippet
 
-snippet any
-abbr any? { |e| .. }
-options word
-  any? { |${1:e}| ${2} }
+snippet sheb "#!/usr/bin/env ruby" b
+#!/usr/bin/env ruby
 
-snippet ben
-abbr Benchmark.realtime { .. }
-  require 'benchmark'
+${0}
+endsnippet
 
-  puts Benchmark.realtime { 1_000_000.times { ${0} } }
+snippet -> "-> (e) { .. }" w
+-> (${1:e}) { ${0} }
+endsnippet
 
-snippet benc
-abbr Benchmark.bm(10) do |x| .. end
-  require 'benchmark'
+snippet all "all? { |e| .. }" w
+all? { |${1:e}| ${0} }
+endsnippet
 
-  n = 1_000_000
-  Benchmark.bm(10) do |x|
-    x.report(:${2:label1}) { n.times { ${3} } }
-    x.report(:${4:label2}) { n.times { ${5} } }
-  end
+snippet any "any? { |e| .. }" w
+any? { |${1:e}| ${2} }
+endsnippet
 
-snippet beg
-abbr begin .. rescue .. end
-  begin
-    ${0}
-  rescue
-  end
+snippet ben "Benchmark.realtime { .. }"
+require 'benchmark'
 
-snippet case
-abbr case .. when .. end
-  case ${1:object}
-  when ${2:condition}
-    ${0}
-  end
+puts Benchmark.realtime { 1_000_000.times { ${0} } }
+endsnippet
 
-snippet def
-abbr def .. end
-  def ${1:method_name}
-    ${0}
-  end
+snippet benn "Benchmark.bm(10) do |x| .. end"
+require 'benchmark'
 
-snippet defi
-abbr def initialize .. end
-  def initialize${1}
-    ${0}
-  end
+n = 1_000_000
+Benchmark.bm(10) do |x|
+	x.report(:${2:label1}) { n.times { ${3} } }
+	x.report(:${4:label2}) { n.times { ${5} } }
+end
+endsnippet
 
-snippet do
-abbr do .. end
-  do ${1:#:}
-    ${0}
-  end
+snippet beg "begin .. rescue .. end"
+begin
+	${0}
+rescue
+end
+endsnippet
 
-snippet req
-abbr require
-  require '${0}'
+snippet case "case .. when .. end"
+case ${1:object}
+when ${2:condition}
+	${0}
+end
+endsnippet
 
-snippet pro
-abbr protected
-  protected
+snippet def "def .. end"
+def ${1:method_name}
+	${0}
+end
+endsnippet
 
-snippet pri
-abbr private
-  private
+snippet defi "def initialize .. end"
+def initialize${1}
+	${0}
+end
+endsnippet
 
-snippet cla
-abbr class .. end
-  class ${1:`substitute(expand('%:t:r'), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-    ${0}
-  end
+snippet do "do .. end"
+do ${1}
+	${0}
+end
+endsnippet
 
-snippet clai
-abbr class .. initialize .. end
-  class ${1:`substitute(expand('%:t:r'), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-    def initialize${2}
-      ${3}
-    end
-  end
+snippet req "require"
+require '${0}'
+endsnippet
 
-snippet mod
-abbr module .. end
-  module ${1:`substitute(expand('%:t:r'), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-    ${0}
-  end
+snippet pro "protected"
+protected
+endsnippet
 
-snippet upt
-alias upto
-abbr upto(n) { |i| .. }
-options word
-  upto(${1:n}) { |${2:i}| ${0} }
+snippet pri "private"
+private
+endsnippet
 
-snippet downt
-alias downto
-abbr downto(n) { |i| .. }
-options word
-  downto(${1:n}) { |${2:i}| ${0} }
+snippet cla "class .. end"
+class ${1:`!p snip.rv = camelcase(snip.basename)`}
+	${0}
+end
+endsnippet
 
-snippet ea
-abbr each { |e| .. }
-options word
-  each { |${1:e}| ${0} }
+snippet clai "class .. initialize .. end"
+class ${1:`!p snip.rv = camelcase(snip.basename)`}
+	def initialize${2}
+		${3}
+	end
+end
+endsnippet
 
-snippet eaa
-abbr each do |e| .. end
-options word
-  each do |${1:e}|
-    ${0}
-  end
+snippet mod "module .. end"
+module ${1:`!p snip.rv = camelcase(snip.basename)`}
+	${0}
+end
+endsnippet
 
-snippet eai
-abbr each_index { |i| .. }
-options word
-  each_index { |${1:i}| ${0} }
+snippet upt "upto(n) { |i| .. }" w
+upto(${1:n}) { |${2:i}| ${0} }
+endsnippet
 
-snippet eaii
-abbr each_index do |i| .. end
-options word
-  each_index do |${1:i}|
-    ${0}
-  end
+snippet upto "upto(n) { |i| .. }" w
+upto(${1:n}) { |${2:i}| ${0} }
+endsnippet
 
-snippet eawi
-abbr each_with_index { |e, i| .. }
-options word
-  each_with_index { |${1:e}, ${2:i}| ${0} }
+snippet downt "downto(n) { |i| .. }" w
+downto(${1:n}) { |${2:i}| ${0} }
+endsnippet
 
-snippet eawii
-abbr each_with_index do |i| .. end
-options word
-  each_with_index do |${1:e}, ${2:i}|
-    ${0}
-  end
+snippet downto "downto(n) { |i| .. }" w
+downto(${1:n}) { |${2:i}| ${0} }
+endsnippet
 
-snippet eos
-alias EOS
-abbr <<-EOS .. EOS
-  <<-EOS
-  ${0}
-  EOS
+snippet ea "each { |e| .. }" w
+each { |${1:e}| ${0} }
+endsnippet
 
-snippet fea
-abbr find_each { |e| .. }
-options word
-  find_each { |${1:e}| ${0} }
+snippet eaa "each do |e| .. end" w
+each do |${1:e}|
+	${0}
+end
+endsnippet
 
-snippet feaa
-abbr find_each do |e| .. end
-options word
-  find_each do |${1:e}|
-    ${0}
-  end
+snippet eai "each_index { |i| .. }" w
+each_index { |${1:i}| ${0} }
+endsnippet
 
-snippet fin
-alias find
-abbr find { |e| .. }
-options word
-  find { |${1:e}| ${0} }
+snippet eaii "each_index do |i| .. end" w
+each_index do |${1:i}|
+	${0}
+end
+endsnippet
 
-snippet finn
-alias findd
-abbr find do |e| .. end
-options word
-  find do |${1:e}|
-    ${0}
-  end
+snippet eawi "each_with_index { |e, i| .. }" w
+each_with_index { |${1:e}, ${2:i}| ${0} }
+endsnippet
 
-snippet httpget
-abbr HTTP simple GET
-  res = Net::HTTP.get(URI(${0:url}))
-  puts res
+snippet eawii "each_with_index do |i| .. end" w
+each_with_index do |${1:e}, ${2:i}|
+	${0}
+end
+endsnippet
 
-snippet httplget
-abbr HTTP long GET
-  res = Net::HTTP.get_response(URI(${0:url}))
-  puts res.body
+snippet eos "<<-EOS .. EOS"
+<<-EOS
+${0}
+EOS
+endsnippet
 
-snippet if
-abbr if .. end
-  if ${1:condition}
-    ${0}
-  end
+snippet fea "find_each { |e| .. }" w
+find_each { |${1:e}| ${0} }
+endsnippet
 
-snippet ife
-abbr if .. else .. end
-  if ${1:condition}
-    ${0}
-  else
+snippet feaa "find_each do |e| .. end" w
+find_each do |${1:e}|
+	${0}
+end
+endsnippet
 
-  end
+snippet fin "find { |e| .. }" w
+find { |${1:e}| ${0} }
+endsnippet
 
-snippet map
-abbr map { |e| .. }
-options word
-  map { |${1:e}| ${0} }
+snippet find "find { |e| .. }" w
+find { |${1:e}| ${0} }
+endsnippet
 
-snippet mapp
-abbr map do |e| .. end
-options word
-  map do |${1:e}|
-    ${0}
-  end
+snippet finn "find do |e| .. end" w
+find do |${1:e}|
+	${0}
+end
+endsnippet
 
-snippet red
-abbr reduce { |acc, e| .. }
-options word
-  reduce${1} { |${2:acc}, ${3:e}| ${0} }
+snippet findd "find do |e| .. end" w
+find do |${1:e}|
+	${0}
+end
+endsnippet
 
-snippet redd
-abbr reduce do |acc, e| .. end
-options word
-  reduce${1} do |${2:acc}, ${3:e}|
-    ${0}
-  end
+snippet httpget "HTTP simple GET"
+res = Net::HTTP.get(URI(${0:url}))
+puts res
+endsnippet
 
-snippet sel
-abbr select { |e| .. }
-options word
-  select { |${1:e}| ${0} }
+snippet httplget "HTTP long GET"
+res = Net::HTTP.get_response(URI(${0:url}))
+puts res.body
+endsnippet
 
-snippet sell
-abbr select do |e| .. end
-options word
-  select do |${1:e}|
-    ${0}
-  end
+snippet if "if .. end"
+if ${1:condition}
+	${0}
+end
+endsnippet
 
-snippet tim
-abbr times { |i| .. }
-options word
-  times { |${1:i}| ${0} }
+snippet ife "if .. else .. end"
+if ${1:condition}
+	${2}
+else
+	${0}
+end
+endsnippet
 
-snippet timm
-abbr times do |i| .. end
-options word
-  times do |${1:i}|
-    ${0}
-  end
+snippet map "map { |e| .. }" w
+map { |${1:e}| ${0} }
+endsnippet
 
-snippet unt
-abbr until .. end
-  until ${1:condition}
-    ${0}
-  end
+snippet mapp "map do |e| .. end" w
+map do |${1:e}|
+	${0}
+end
+endsnippet
 
-snippet log
-abbr Rails.logger.debug(..)
-  Rails.logger.debug(${1})
+snippet red "reduce { |acc, e| .. }" w
+reduce${1} { |${2:acc}, ${3:e}| ${0} }
+endsnippet
 
-snippet loge
-abbr Rails.logger.error(..)
-  Rails.logger.error(${1})
+snippet redd "reduce do |acc, e| .. end" w
+reduce${1} do |${2:acc}, ${3:e}|
+	${0}
+end
+endsnippet
 
-snippet logi
-abbr Rails.logger.info(..)
-  Rails.logger.info(${1})
+snippet sel "select { |e| .. }" w
+select { |${1:e}| ${0} }
+endsnippet
+
+snippet sell "select do |e| .. end" w
+select do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet tim "times { |i| .. }" w
+times { |${1:i}| ${0} }
+endsnippet
+
+snippet timm "times do |i| .. end" w
+times do |${1:i}|
+	${0}
+end
+endsnippet
+
+snippet unt "until .. end"
+until ${1:condition}
+	${0}
+end
+endsnippet
+
+snippet log "Rails.logger.debug(..)"
+Rails.logger.debug(${1})
+endsnippet
+
+snippet loge "Rails.logger.error(..)"
+Rails.logger.error(${1})
+endsnippet
+
+snippet logi "Rails.logger.info(..)"
+Rails.logger.info(${1})
+endsnippet

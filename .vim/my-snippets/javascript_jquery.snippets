@@ -1,65 +1,59 @@
-snippet ajax
-alias aja
-abbr ajax call
-options indent
-  $.ajax({
-    type: 'POST',
-    url: $form.attr('action'),
-    data: $form.serialize(),
-    success: (response) => {
-      ${0}
-    },
-    error: (response) => {
+snippet ss "$('')" w
+$('${1}')${2}
+endsnippet
 
-    }
-  });
+snippet ajax "ajax"
+$.ajax({
+	type: 'POST',
+	url: $form.attr('action'),
+	data: $form.serialize(),
+	success: (response) => {
+		${0}
+	},
+	error: (response) => {
 
-snippet eaj
-abbr each
-options word
-  each((i, ${1:e}) => {
-    ${0}
-  });
+	}
+});
+endsnippet
 
-snippet eaij
-abbr each index
-options word
-  each((i) => {
-    ${0}
-  });
+snippet eaj "each jQuery" w
+each((i, ${1:e}) => {
+	${0}
+});
+endsnippet
 
-snippet on
-abbr on event
-options word
-  on('${1}', (${2:e}) => {
-    ${0}
-  });
+snippet eaij "each index jQuery"
+each((i) => {
+	${0}
+});
+endsnippet
 
-snippet rea
-abbr $(document).ready
-  $(() => {
-    ${0}
-  });
+snippet on "on event" w
+on('${1}', (${2:e}) => {
+	${0}
+});
+endsnippet
 
-snippet reap
-alias clap
-abbr $(document).ready ... new Page
-  class Page {
+snippet rea "$(document).ready"
+$(() => {
+	${0}
+});
+endsnippet
 
-    constructor() {
-      ${0}
-    }
+snippet re "$(document).ready"
+$(() => {
+	${0}
+});
+endsnippet
 
-  }
+snippet reap "$(document).ready ... new Page"
+class Page {
 
-  $(() => new Page());
+	constructor() {
+		${0}
+	}
 
-snippet reac
-abbr $(document).ready ... new class
-  $(() => new class {
+}
 
-    constructor() {
-      ${0}
-    }
-
-  });
+$(() => new Page());
+endsnippet

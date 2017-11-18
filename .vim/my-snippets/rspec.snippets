@@ -1,106 +1,111 @@
-snippet aft
-abbr after { .. }
-  after { ${0} }
+global !p
+from snippet_utils import camelcase
+endglobal
 
-snippet aftt
-abbr after do .. end
-  after do
-    ${0}
-  end
+snippet aft "after { .. }"
+after { ${0} }
+endsnippet
 
-snippet bef
-abbr before { .. }
-  before { ${0} }
+snippet aftt "after do .. end"
+after do
+	${0}
+end
+endsnippet
 
-snippet beff
-abbr before do .. end
-  before do
-    ${0}
-  end
+snippet bef "before { .. }"
+before { ${0} }
+endsnippet
 
-snippet con
-abbr context do .. end
-  context '${1:description}' do
-    ${0}
-  end
+snippet beff "before do .. end"
+before do
+	${0}
+end
+endsnippet
 
-snippet cond
-abbr context do .. end
-  context do
-    ${0}
-  end
+snippet con "context 'description' do .. end"
+context '${1:description}' do
+	${0}
+end
+endsnippet
 
-snippet des
-alias desc
-abbr describe do .. end
-  describe '${1:description}' do
-    ${0}
-  end
+snippet cond "context do .. end"
+context do
+	${0}
+end
+endsnippet
 
-snippet e
-alias ex,x
-abbr expect(..)
-  expect(${1}).${0}
+snippet des "describe do .. end"
+describe '${1:description}' do
+	${0}
+end
+endsnippet
 
-snippet it
-abbr it { .. }
-  it { ${0} }
+snippet e "expect(..)"
+expect(${1}).${0}
+endsnippet
 
-snippet ite
-alias itx
-abbr expect(..)
-  it { expect(${1}).${0} }
+snippet ex "expect(..)"
+expect(${1}).${0}
+endsnippet
 
-snippet its
-abbr its(..) { .. }
-  its(:${1}) { should ${0} }
+snippet it "it { .. }"
+it { ${0} }
+endsnippet
 
-snippet itsh
-abbr it { should .. }
-  it { should ${0} }
+snippet ite "it { expect(..) }"
+it { expect(${1}).${0} }
+endsnippet
 
-snippet itt
-abbr it 'does something' do .. end
-  it '${1:does something}' do
-    ${0}
-  end
+snippet its "its(..) { .. }"
+its(:${1}) { should ${0} }
+endsnippet
 
-snippet itd
-abbr it do .. end
-  it do
-    ${0}
-  end
+snippet itsh "it { should .. }"
+it { should ${0} }
+endsnippet
 
-snippet let
-abbr let(:object) { .. }
-  let(:${1:object}) { ${0} }
+snippet itt "it 'does something' do .. end"
+it '${1:does something}' do
+	${0}
+end
+endsnippet
 
-snippet let!
-abbr let!(:object) { .. }
-  let!(:${1:object}) { ${0} }
+snippet itd "it do .. end"
+it do
+	${0}
+end
+endsnippet
 
-snippet lett
-abbr let(:object) do .. end
-  let(:${1:object}) do
-    ${0}
-  end
+snippet let "let(:object) { .. }"
+let(:${1:object}) { ${0} }
+endsnippet
 
-snippet lett!
-abbr let!(:object) do .. end
-  let!(:${1:object}) do
-    ${0}
-  end
+snippet let! "let!(:object) { .. }"
+let!(:${1:object}) { ${0} }
+endsnippet
 
-snippet spec
-abbr spec template
-  require 'rails_helper'
+snippet lett "let(:object) do .. end"
+let(:${1:object}) do
+	${0}
+end
+endsnippet
 
-  describe ${1}`substitute(substitute(expand('%:t:r'), '_spec$', '', ''), '\(_\|^\)\(.\)', '\u\2', 'g')` do
+snippet lett! "let!(:object) do .. end"
+let!(:${1:object}) do
+	${0}
+end
+endsnippet
 
-    ${0}
+snippet spec "spec template"
+require 'rails_helper'
 
-  end
+describe ${1}`!p snip.rv = camelcase(re.sub('_spec$', '', snip.basename))` do
 
-snippet sub
-abbr subject
-  subject(:`substitute(expand('%:t:r'), '_spec$', '', '')`) { ${0} }
+	${0}
+
+end
+endsnippet
+
+snippet sub "subject"
+subject(:`!p snip.rv = re.sub('_spec$', '', snip.basename)`) { ${0} }
+endsnippet

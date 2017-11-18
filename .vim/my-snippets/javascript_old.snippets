@@ -1,23 +1,25 @@
-snippet f
-abbr function
-  function(${1}) {
-    ${0}
-  }
+priority -10
 
-snippet fn
-abbr function
-  function ${1:functionName}(${2}) {
-    ${0}
-  }
+snippet f "function" w
+function(${1}) {
+	${0}
+}
+endsnippet
 
-snippet stt
-abbr setTimeout
-  setTimeout(function() {${0}}, 1000);
+snippet fn "function"
+function ${1:functionName}(${2}) {
+	${0}
+}
+endsnippet
 
-snippet iife
-abbr Immediately Invoked Function Expression
-  (function() {
+snippet st "setTimeout"
+setTimeout(function() {${1}}, ${0:1000});
+endsnippet
 
-    ${0}
+snippet iife "Immediately Invoked Function Expression"
+(function() {
 
-  })();
+	${0}
+
+})();
+endsnippet
