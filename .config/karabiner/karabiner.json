@@ -8,6 +8,7 @@
         {
             "complex_modifications": {
                 "parameters": {
+                    "basic.to_delayed_action_delay_milliseconds": 500,
                     "basic.to_if_alone_timeout_milliseconds": 1000
                 },
                 "rules": [
@@ -1301,8 +1302,8 @@
                         ]
                     },
                     {
-                        "description": "alt+v to ctrl+v in Terminal",
-                        "manipulators": [
+                        "_description": "alt+v to ctrl+v in Terminal",
+                        "_manipulators": [
                             {
                                 "conditions": [
                                     {
@@ -1532,6 +1533,52 @@
                                 "to": [
                                     {
                                         "key_code": "escape"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "alt+j to enter",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_option"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "return_or_enter"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "_description": "alt+cmd+j to cmd+enter",
+                        "_manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_option",
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "return_or_enter",
+                                        "modifiers": [
+                                            "command"
+                                        ]
                                     }
                                 ],
                                 "type": "basic"

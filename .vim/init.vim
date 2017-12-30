@@ -34,19 +34,19 @@ Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }
 Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }
 
 Plug 'tpope/vim-commentary'
-" Plug 'tpope/vim-surround'
 Plug 'machakann/vim-sandwich'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive', { 'on': ['Gdiff', 'Glog', 'Gblame'] }
+" Plug 'tpope/vim-fugitive', { 'on': ['Gdiff', 'Glog', 'Gblame'] }
+Plug 'tpope/vim-fugitive'
 Plug 'jeromedalbert/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'jeromedalbert/vim-unimpaired'
 
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
 Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
-Plug 'Raimondi/delimitMate'
+Plug 'jeromedalbert/auto-pairs'
 Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
 Plug 'vim-scripts/closetag.vim', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
@@ -87,8 +87,9 @@ noremap Q <nop>
 noremap <silent> <leader>q :q<cr>
 noremap <silent> <leader>w :w<cr>
 noremap <silent> <leader>z :x<cr>
-noremap <silent> <leader>`q :qa!<cr>
 noremap <silent> <leader><esc> <nop>
+noremap <silent> <leader>`q :qa!<cr>
+noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
 
 noremap ' "
 noremap '] `]
@@ -152,7 +153,7 @@ cnoremap <m-bs> <c-w>
 
 noremap <c-n> <esc>:tabnew<cr>
 noremap <silent> <m-q> :q<cr>
-for tab_number in [1, 2, 3, 4, 5, 6, 7, 8, 9]
+for tab_number in [1, 2, 3, 4, 5, 6, 7, 8]
   exe 'noremap <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
 noremap <c-h> gT
@@ -183,6 +184,7 @@ noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
 
 map <m-m> %
+" noremap <m-9> %
 map <m-]> <c-]>
 map <m-[> <c-t>
 imap <m-_> <c-_>
@@ -195,15 +197,16 @@ noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
 noremap <silent> <leader>or :e README*<cr>
+noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 
 noremap $ $ze
 
 noremap <leader>rr :e config/routes.rb<cr>
-noremap <leader>rR :vnew config/routes.rb<cr>
+noremap <leader>rR :vnew<cr>:e config/routes.rb<cr>
 noremap <leader>rs :e db/schema.rb<cr>
 noremap <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <leader>rg :e Gemfile<cr>
-noremap <leader>rG :vnew Gemfile<cr>
+noremap <leader>rG :vnew<cr>:e Gemfile<cr>
 
 noremap g; g;zz
 noremap g, g,zz
@@ -245,6 +248,8 @@ map gj gJ
 noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
 noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
 
+noremap <silent> <m-v> :vnew<cr>
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -253,8 +258,6 @@ inoremap <silent> <tab> <c-r>=functions#TabComplete()<cr>
 snoremap <silent> <tab> <esc>:call UltiSnips#JumpForwards()<cr>
 
 nnoremap <silent> <esc> :nohlsearch<cr>:call functions#ClearEverything()<cr>
-
-imap <expr> <Space> "\<C-]><Plug>delimitMateSpace"
 
 noremap <silent> '' :call functions#DisplayRegisters()<cr>
 
@@ -285,7 +288,7 @@ noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
 noremap <silent> <leader>l :silent w<cr>:TestLast<cr>
 nnoremap <silent> <leader>m :exe 'e ' . functions#GetTestAlternateFile()<cr>
-nnoremap <silent> <leader>v :exe 'vsplit ' . functions#GetTestAlternateFile()<cr>
+nnoremap <silent> <leader>v :vsplit<cr>:exe 'e ' . functions#GetTestAlternateFile()<cr>
 
 noremap <leader>fmo :call functions#MoveCurrentFile()<cr>
 map <leader>fmv <leader>fmo
@@ -369,7 +372,7 @@ noremap <leader>oo :OldFiles<cr>
 noremap <leader>oh :Helptags<cr>
 noremap <silent> <leader>om :call functions#OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :exe 'e ' . functions#GetProjectNotes()<cr>
-noremap <silent> <leader>oN :exe 'vsplit ' . functions#GetProjectNotes()<cr>
+noremap <silent> <leader>oN :vsplit<cr>:exe 'e ' . functions#GetProjectNotes()<cr>
 noremap <silent> <leader>obk :call functions#OpenCurrentFileBackupHistory()<cr>
 
 noremap <leader>yq :call functions#MakeSession()<cr>:qa!<cr>
@@ -508,9 +511,10 @@ set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
 set diffopt=vertical,filler,foldcolumn:0
-" set whichwrap=b,s,h,l
-" set whichwrap=b,s,h
+set whichwrap=b,s,h,l
 set synmaxcol=1000
+set showtabline=2
+
 
 set statusline=
 set statusline+=\ %<%f
@@ -546,9 +550,6 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 let g:vim_indent_cont = &sw
 let g:is_bash = 1
 
-" Trial
-set showtabline=2
-
 "#############################
 "### Plugins configuration ###
 "#############################
@@ -573,10 +574,8 @@ let g:fzf_action = {
 let g:fzf_history_dir = '~/.fzf_history'
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
 let $FZF_DEFAULT_OPTS .=
-  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
-
-let delimitMate_expand_cr = 1
-let delimitMate_expand_space = 1
+  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="ctrl-j:accept,ctrl-n:down,ctrl-o:previous-history"'
+  " \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="enter:down,alt-m:accept"'
 
 " let g:netrw_banner=0
 let g:netrw_altfile = 1
@@ -588,7 +587,7 @@ let NERDTreeIgnore = [
   \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
   \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
   \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep',
-  \ '\.rubocop-http', '\.notes',
+  \ '\.rubocop-http', '\.notes', '\.retry',
   \
   \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
   \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
@@ -732,8 +731,8 @@ let g:markdown_syntax_conceal = 0
 call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
 
-" let g:splitjoin_split_mapping = 'gs'
-" let g:splitjoin_join_mapping  = 'gj'
+let g:AutoPairsCenterLine = 0
+let g:AutoPairsMultilineClose = 0
 
 "##############################
 "### Eager-loaded functions ###
@@ -1016,7 +1015,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.nfo,*.NFO set ft=nfo
   autocmd BufRead,BufNewFile *.js.es6 set ft=javascript
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
-  autocmd BufRead,BufNewFile *.env.* set ft=sh
+  autocmd BufRead,BufNewFile *.env* set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
 augroup end
 

@@ -1,6 +1,5 @@
 imap <silent> <buffer> <expr> / CloseTag()
 
-let b:delimitMate_matchpairs = "(:),[:],{:}"
 let b:unaryTagsStack = ""
 
 function! CloseTag()

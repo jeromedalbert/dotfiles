@@ -79,7 +79,7 @@ snippet f "() =>" w
 }
 endsnippet
 
-snippet m
+snippet m "method"
 ${1:methodName}(${2}) {
 	${0}
 }
@@ -271,3 +271,23 @@ snippet str "use strict"
 
 ${0}
 endsnippet
+
+# global !p
+# def remove_trailing_parenthesis():
+# 	if snip.buffer[snip.line].endswith(')'):
+# 		snip.buffer[snip.line] = snip.buffer[snip.line][:-2]
+# 		snip.cursor[1] -= 1
+# endglobal
+
+# pre_expand "remove_trailing_parenthesis()"
+# snippet ( "method" "re.search('\(\)?$', snip.buffer[snip.line])" ie
+# () {
+# 	${0}
+# }
+# endsnippet
+
+# snippet "^(\s*)(\w+)$" "Parenthesis (postfix)" "snip.cursor[1] == len(snip.buffer[snip.line])" re
+# `!p snip.rv = match.group(1) + match.group(2)`() {
+# `!p snip.rv = match.group(1)`  ${0}
+# `!p snip.rv = match.group(1)`}
+# endsnippet

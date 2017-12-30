@@ -230,7 +230,7 @@ hi markdownUrl guifg=#839496
 
 hi link javaScriptFunction Statement
 hi link javaScriptRailsFunction rubyRailsARMethod
-hi javaScriptBraces guifg=NONE guibg=NONE gui=NONE
+hi link javaScriptBraces NONE
 hi jsKeyword2 gui=italic
 hi link jsClassDefinition NONE
 hi jsComment guifg=#797979

@@ -346,6 +346,7 @@ alias di='docker images'
 alias dps='docker ps'
 alias drmi='docker rmi'
 alias drmif='docker rmi -f'
+alias drma='docker rm $(docker ps -a -q)'
 alias dr='docker run'
 alias drit='docker run -it'
 alias deit='docker exec -it'
@@ -356,14 +357,9 @@ alias dl='docker pull'
 alias dp='docker push'
 alias dt='docker tag'
 alias dh='docker history'
+alias da='docker attach'
 alias dm='docker-machine'
 alias dms='docker-machine start'
-dmip() {
-  local ip=$(docker-machine ip)
-
-  echo $ip | pbcopy
-  echo $ip
-}
 alias dc='docker-compose'
 alias dcb='docker-compose build'
 alias dcr='docker-compose run'
@@ -429,7 +425,6 @@ alias rtop="top -o rsize"
 alias ctop="top -o cpu"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 alias sub='filebot -get-subtitles'
-alias pw="openssl rand -base64 32 | tr -d '=/+'"
 minivim() {
   local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
   echo $conf | pbcopy
@@ -441,6 +436,17 @@ killui() {
   done
 }
 alias nra='~/c/boilerplate/new-rails-app'
+mkpwd() {
+  local max_chars=${1:-28}
+  cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1
+}
+mkpwd2() {
+  local password=$(openssl rand -base64 300 | tr -d '\n=/+')
+  local max_chars=${1:-28}
+  echo $password | cut -c-$max_chars
+}
+alias mkpw='mkpwd'
+alias pw='mkpasswd'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -466,6 +472,13 @@ vj() {
   j "$@"
   if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
   )
+}
+jv() {
+  local old_directory=$(pwd)
+  j "$@"
+  if [ "$(pwd)" != "$old_directory" ]; then
+    v.
+  fi
 }
 jj() {
   cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
@@ -540,3 +553,16 @@ alias ys='yarn run server'
 alias ya='yarn add'
 alias yrm='yarn remove'
 alias yre='yrm'
+
+# Python
+alias py='python'
+
+# Ansible
+alias an='ansible'
+alias ans='an'
+alias anp='ansible-playbook'
+alias apl='anp'
+alias and='ansible-doc'
+alias anc='ansible-console'
+alias anv='ansible-vault'
+alias ang='ansible-galaxy'

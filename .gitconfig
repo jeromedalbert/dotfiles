@@ -1,6 +1,7 @@
 [user]
 	name = Jerome Dalbert
 	email = jerome.dalbert@gmail.com
+	signingkey = 6D2165F110F51804
 
 [core]
   ignorecase = false
@@ -37,3 +38,6 @@
 
 [diff-so-fancy]
 	markEmptyLines = false
+
+[commit]
+	gpgsign = true

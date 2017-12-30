@@ -620,8 +620,8 @@ function! functions#OnGoyoLeave()
   silent !tmux set status on
 endfunction
 
-python import vim
 function! functions#SetVirtualEdit()
+  python import vim
   let absolute_col = virtcol('.') + pyeval('vim.current.window.col')
   let absolute_col += &foldcolumn + (&number ? &numberwidth : 0)
   let is_on_leftmost_screen = screencol() == absolute_col
@@ -644,7 +644,7 @@ function! functions#MoveToPrevTab()
     if l:tab_nr == tabpagenr('$')
       tabprev
     endif
-    vsplit
+    vnew
   else
     close!
     exe "0tabnew"
@@ -663,7 +663,7 @@ function! functions#MoveToNextTab()
     if l:tab_nr == tabpagenr('$')
       tabnext
     endif
-    vsplit
+    vnew
   else
     close!
     tabnew
@@ -712,9 +712,10 @@ function! functions#RenameTab()
 endfunction
 
 function! functions#Join()
-  let last_char = getline('.')[col('$')-2]
+  let previous_last_char = getline('.')[col('$')-2]
   normal! J
-  if last_char == '('
+  let current_char = getline('.')[col('.')-1]
+  if previous_last_char == '(' && current_char == ' '
     normal x
   endif
 endfunction
