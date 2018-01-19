@@ -50,6 +50,7 @@ remove-colors() {
 }
 alias md5sum=md5
 alias wcl='wc -l'
+alias ct.='ctags -R .'
 
 # Confs
 alias reload=". ~/.zshrc"
@@ -221,6 +222,7 @@ glop() {
 }
 alias gloo="git log --all --oneline --no-merges"
 alias gloS="glo -S"
+alias glo-="glo --"
 alias gdt="git difftool"
 alias gdtc="git difftool --cached"
 alias gmt="git mergetool"
@@ -260,6 +262,7 @@ alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
 alias gbDa='git branch | remove-colors | egrep -v "master|\*" | xargs git branch -D'
+alias gbm="gb -m"
 # alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
 # alias gbDa='git-list-branches | grep -v "master\|$(current-git-branch)" | xargs git branch -D'
 # git-list-branches() {
@@ -270,7 +273,6 @@ alias gunignore="git update-index --no-assume-unchanged"
 alias gignored="git ignored"
 alias gp='git push'
 alias gpf="gp -f"
-alias gbm="gb -m"
 gpu() {
   if [ $# -eq 0 ]; then
     gp -u origin $(current-git-branch)

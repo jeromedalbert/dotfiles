@@ -71,9 +71,25 @@ snippet cff "content_for .. end"
 <% end %>
 endsnippet
 
+snippet cfs "content_for :stylesheets .. end"
+<% content_for :stylesheets do %>
+	${0}
+<% end %>
+endsnippet
+
 snippet cfj "content_for :javascripts .. end"
 <% content_for :javascripts do %>
 	${0}
+<% end %>
+endsnippet
+
+snippet cfa "CSS and JS assets"
+<% content_for :stylesheets do %>
+	<%= stylesheet_link_tag '${1}', media: 'all' %>
+<% end %>
+
+<% content_for :javascripts do %>
+	<%= javascript_include_tag '${0}' %>
 <% end %>
 endsnippet
 
@@ -97,12 +113,163 @@ snippet sty "stylesheet_link_tag"
 <%= stylesheet_link_tag '${0}', media: 'all' %>
 endsnippet
 
-snippet cfa "CSS and JS assets"
-<% content_for :stylesheets do %>
-	<%= stylesheet_link_tag '${1}', media: 'all' %>
-<% end %>
+snippet imgt "image_tag"
+<%= image_tag '${1:path}' %>
+endsnippet
 
-<% content_for :javascripts do %>
-		<%= javascript_include_tag '${0}' %>
+snippet ff "form_for"
+<%= form_for :${1} do |f| %>
+	${0}
 <% end %>
+endsnippet
+
+snippet ftag "form_tag"
+<%= form_tag '${1:url}' do |f| %>
+	${0}
+<% end %>
+endsnippet
+
+snippet fc "f.check_box"
+<%= f.check_box :${1:attribute}, class: '${0}' %>
+endsnippet
+
+snippet fct "check_box_tag"
+<%= check_box_tag :${1:attribute}, nil, nil, class: '${0}' %>
+endsnippet
+
+snippet fl "f.label"
+<%= f.label :${1:attribute}, class: '${0}' %>
+endsnippet
+
+snippet flt "label_tag"
+<%= label_tag :${1:attribute}, '${2:Blah}', class: '${0}' %>
+endsnippet
+
+snippet fh "f.hidden_field"
+<%= f.hidden_field :${0:attribute} %>
+endsnippet
+
+snippet fht "hidden_field_tag"
+<%= hidden_field_tag :${0:attribute}, nil, class: '${0}' %>
+endsnippet
+
+snippet fp "f.password_field"
+<%= f.password_field :${1:password}, placeholder: '${2:Password}', class: '${0}' %>
+endsnippet
+
+snippet ft "f.text_field"
+<%= f.text_field :${1:attribute}, placeholder: '${2:Placeholder}', class: '${0}' %>
+endsnippet
+
+snippet ftt "text_field_tag"
+<%= text_field_tag :${1:attribute}, '${2:Placeholder}', class: '${0}' %>
+endsnippet
+
+snippet fi "f.text_field"
+<%= f.text_field :${1:attribute}, placeholder: '${2:Placeholder}', class: '${0}' %>
+endsnippet
+
+snippet fit "text_field_tag"
+<%= text_field_tag :${1:attribute}, '${2:Placeholder}', class: '${0}' %>
+endsnippet
+
+snippet fta "f.text_area"
+<%= f.text_area :${1:attribute}, placeholder: '${2:Enter copy here}', class: '${0}' %>
+endsnippet
+
+snippet fr "f.radio_button"
+<%= f.radio_button :${1:attribute}, ${2:default_value}, class: '${0}' %>
+endsnippet
+
+snippet frt "radio_button_tag"
+<%= radio_button_tag :${1:attribute}, nil, nil, class: '${0}' %>
+endsnippet
+
+snippet ffile "f.file_field"
+<%= f.file_field :${1:attribute}, class: '${0}' %>
+endsnippet
+
+snippet ffil "f.file_field"
+<%= f.file_field :${1:attribute}, class: '${0}' %>
+endsnippet
+
+snippet ffilt "file_field_tag"
+<%= f.file_field :${1:attribute}, class: '${0}' %>
+endsnippet
+
+snippet ffields "f.fields_for"
+<%= f.fields_for ${1:something} do |ff| %>
+	${0}
+<% end %>
+endsnippet
+
+snippet ffiel "f.fields_for"
+<%= f.fields_for ${1:something} do |ff| %>
+	${0}
+<% end %>
+endsnippet
+
+snippet ffieldsm "f.fields_for multiple models"
+<%= f.fields_for '${1:models_name}[]', ${2:model} do |ff| %>
+	${0}
+<% end %>
+endsnippet
+
+snippet ffielm "f.fields_for multiple models"
+<%= f.fields_for '${1:models_name}[]', ${2:model} do |ff| %>
+	${0}
+<% end %>
+endsnippet
+
+snippet fe "f.email_field"
+<%= f.email_field :${1:email}, placeholder: '${2:Email}', class: '${0}' %>
+endsnippet
+
+snippet fd "f.date_field"
+<%= f.date_field :${1:attribute}, class: '${0}' %>
+endsnippet
+
+snippet fse "f.select"
+<%= f.select :${1:attribute}, ${2:options}, {}, { class: '${3}' } %>
+endsnippet
+
+snippet fseo "f.select with options"
+<%= f.select(
+	:${1:attribute},
+	options_for_select([
+		['${2:text}', ${3:value}]
+	], ${4:value_selected}),
+	{},
+	class: '${0}'
+) %>
+endsnippet
+
+snippet fset "select_tag"
+<%= select_tag(:${1:attribute}, ${2:options}, class: '${0}') %>
+endsnippet
+
+snippet fseto "select_tag with options"
+<%= select_tag(
+	:${1:attribute},
+	options_for_select([
+		['${2:text}', ${3:value}]
+	], ${4:value_selected}),
+	class: '${0}'
+) %>
+endsnippet
+
+snippet fo "options_for_select"
+<%= options_for_select(
+	[
+		['${1:text}', ${2:value}]
+	], ${0:value_selected}
+) %>
+endsnippet
+
+snippet fs "f.submit"
+<%= f.submit '${1:Save}', class: '${0}' %>
+endsnippet
+
+snippet fst "submit_tag"
+<%= submit_tag '${1:Save}', class: '${0}' %>
 endsnippet
