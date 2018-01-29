@@ -15,6 +15,7 @@ alias la="ls -A"
 alias lla="ll -A"
 alias lld="ll -d"
 alias llrt="ll -rt"
+alias llart="lla -rt"
 alias rm="rm"
 alias rmrf="rm -rf"
 # alias grep='grep --color=auto'
@@ -547,6 +548,7 @@ rgsq() {
     --no-view-specs --no-routing-specs --no-request-specs --no-model-specs
 }
 alias rru='rails runner'
+alias rhash='asdf reshim ruby'
 
 # Javascript
 alias y='yarn'
@@ -568,3 +570,9 @@ alias and='ansible-doc'
 alias anc='ansible-console'
 alias anv='ansible-vault'
 alias ang='ansible-galaxy'
+
+# Heroku
+alias hps='heroku ps'
+alias hrc='heroku run rails console'
+alias hl='heroku logs -t'
+alias hr='heroku run'

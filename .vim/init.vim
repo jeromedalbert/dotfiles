@@ -38,7 +38,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive' " lazy loading this plugin makes it bug
+Plug 'tpope/vim-fugitive'
 Plug 'jeromedalbert/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'jeromedalbert/vim-unimpaired'
 
@@ -60,8 +60,10 @@ Plug 'xolox/vim-misc', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
-Plug 'christoomey/vim-tmux-runner'
 Plug 'wincent/replay'
+Plug 'ludovicchabant/vim-gutentags'
+" Plug 'jsfaint/gen_tags.vim'
+" Plug 'christoomey/vim-tmux-runner'
 call plug#end()
 
 "############################
@@ -70,7 +72,6 @@ call plug#end()
 
 let mapleader = ' '
 noremap - :
-" inoremap jj <esc>
 
 map J 5j
 map K 5k
@@ -188,7 +189,6 @@ noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
 
 map <m-m> %
-" noremap <m-9> %
 map <m-]> <c-]>
 map <m-[> <c-t>
 imap <m-_> <c-_>
@@ -335,18 +335,20 @@ map # <Plug>(incsearch-nohl-#)zz
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-nmap <down> ]e
-xmap <down> ]egv
-nmap <up> [e
-xmap <up> [egv
+" f17 is m-s-j in my config
+nmap <f17> ]e
+xmap <f17> ]egv
+" f18 is m-s-k in my config
+nmap <f18> [e
+xmap <f18> [egv
 
 map <leader>; `]]<space>
-" f17 is m-cr in my config
-map <f17> ]<space>
-inoremap <f17> <end><cr>
-" f18 is s-cr in my config
-map <f18> [<space>
-inoremap <f18> <esc>O
+inoremap <f17> <esc>O
+
+" map <f17> ]<space>
+" inoremap <f17> <end><cr>
+" map <f18> [<space>
+" inoremap <f18> <esc>O
 
 noremap <leader>ff :FileSearch -Q -i '' <left><left>
 noremap <silent> <leader>yf :set opfunc=FileSearchVerb<CR>g@
@@ -457,7 +459,7 @@ noremap <silent> <m-+> :call ToggleZoom()<cr>
 noremap <silent> <m-N> <esc>:tabnew<cr>:OldFiles<cr>
 noremap <silent> <m-P> :OldFiles<cr>
 
-nmap \ <Plug>(Replay)
+noremap <silent> gf :call ImprovedGoToFile()<cr>
 
 "#############################
 "### General configuration ###
@@ -494,7 +496,7 @@ set hidden
 set notimeout
 set textwidth=0 colorcolumn=80
 set ruler
-set tags=./.tags;
+set tags+=./.tags;
 set showcmd
 set autoread
 set nostartofline
@@ -509,7 +511,6 @@ set foldtext=GetFoldText()
 " set foldmethod=indent
 " set foldlevelstart=1
 " set foldlevelstart=99
-set tags=./.tags;
 set tabline=%!GetTabLine()
 set pumheight=8
 set nojoinspaces
@@ -520,7 +521,6 @@ set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
-
 
 set statusline=
 set statusline+=\ %<%f
@@ -580,8 +580,8 @@ let g:fzf_action = {
 let g:fzf_history_dir = '~/.fzf_history'
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
 let $FZF_DEFAULT_OPTS .=
-  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="ctrl-j:accept,ctrl-n:down,ctrl-o:next-history"'
-  " \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="enter:down,alt-m:accept"'
+  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="ctrl-j:accept,ctrl-n:down,ctrl-p:up,ctrl-o:previous-history,ctrl-i:next-history"'
+  " \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="ctrl-j:accept,ctrl-n:down,ctrl-o:next-history"'
 
 " let g:netrw_banner=0
 let g:netrw_altfile = 1
@@ -592,8 +592,8 @@ let NERDTreeIgnore = [
   \ '\.tags$', '\.tags_sorted_by_file$', '\.gemtags$', '\.pyc$', '\.pyo$',
   \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
   \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
-  \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep',
-  \ '\.rubocop-http', '\.notes', '\.retry',
+  \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep$',
+  \ '\.rubocop-http', '\.notes$', '\.retry$', 'tags$',
   \
   \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
   \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
@@ -740,6 +740,11 @@ runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
 
+" let g:loaded_gentags#gtags = 1
+" let g:gen_tags#ctags_auto_gen = 1
+let g:gutentags_ctags_tagfile = '.tags'
+let g:gutentags_ctags_auto_set_tags = 0
+
 "#################
 "### Functions ###
 "#################
@@ -796,6 +801,7 @@ function! ClearEverything()
   NERDTreeClose
   normal cxc
   call ClearMessages()
+  " pclose
 endfunction
 
 function! ClearMessages()
@@ -1755,13 +1761,37 @@ endfunction
 
 function! BackgroundLoadLazyLoadedCode()
   python import vim
-  call plug#load('vim-misc')
-  for plugin_name in keys(g:plugs)
-    let plug = g:plugs[plugin_name]
-    if has_key(plug, 'for') || has_key(plug, 'on')
-      call plug#load(plugin_name)
-    endif
-  endfor
+  if has('nvim')
+    call plug#load('deoplete.nvim')
+    autocmd! lazy_load_deoplete
+  endif
+  " call plug#load('vim-misc')
+  " for plugin_name in keys(g:plugs)
+  "   let plug = g:plugs[plugin_name]
+  "   if has_key(plug, 'for') || has_key(plug, 'on')
+  "     call plug#load(plugin_name)
+  "   endif
+  " endfor
+endfunction
+
+function! ImprovedGoToFile()
+  try
+    normal! gf
+  catch /\(E447\|E345\)/
+    try
+      exe "normal \<c-]>"
+    catch /E426/
+      echo 'Error: No file found'
+    endtry
+  endtry
+endfunction
+
+function! LazyLoadDeoplete()
+  if exists('g:first_enter_done')
+    call plug#load('deoplete.nvim')
+    autocmd! lazy_load_deoplete
+  endif
+  let g:first_enter_done = 1
 endfunction
 
 "####################
@@ -1770,7 +1800,11 @@ endfunction
 
 augroup improved_autowrite
   autocmd!
-  autocmd FocusLost,BufLeave * silent! wa
+  autocmd FocusLost,BufLeave *
+    \ if &modified |
+    \   silent! wa |
+    \   silent! GutentagsUpdate |
+    \ endif
 augroup end
 
 augroup improved_autoread
@@ -1851,7 +1885,7 @@ augroup end
 if has('nvim')
   augroup lazy_load_deoplete
     autocmd!
-    autocmd InsertEnter * call plug#load('deoplete.nvim') | autocmd! lazy_load_deoplete
+    autocmd InsertEnter * call LazyLoadDeoplete()
   augroup end
 endif
 

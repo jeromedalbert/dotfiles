@@ -1,0 +1,6 @@
+gem-ctags
+bundler
+pry
+awesome_print
+neovim
+invoker

@@ -1326,7 +1326,7 @@
                         ]
                     },
                     {
-                        "description": "alt+enter to f17 in Terminal",
+                        "description": "shift+alt+j to f17 in Terminal",
                         "manipulators": [
                             {
                                 "conditions": [
@@ -1340,9 +1340,10 @@
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "return_or_enter",
+                                    "key_code": "j",
                                     "modifiers": {
                                         "mandatory": [
+                                            "shift",
                                             "left_option"
                                         ]
                                     }
@@ -1357,7 +1358,7 @@
                         ]
                     },
                     {
-                        "description": "shift+enter to f18 in Terminal",
+                        "description": "shift+alt+k to f18 in Terminal",
                         "manipulators": [
                             {
                                 "conditions": [
@@ -1371,10 +1372,11 @@
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "return_or_enter",
+                                    "key_code": "k",
                                     "modifiers": {
                                         "mandatory": [
-                                            "shift"
+                                            "shift",
+                                            "left_option"
                                         ]
                                     }
                                 },

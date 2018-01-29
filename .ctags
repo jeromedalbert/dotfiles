@@ -1,11 +1,44 @@
 -f .tags
+
+--regex-ruby=/^[ \t]*create_table[ \t]*"([a-zA-Z0-9_]+)"/\1/t,table/
+--regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
+--regex-ruby=/^  (resources?|scope|[A-Za-z0-9_-]*namespace[ \t]*)[ \t]*:([a-zA-Z0-9_]+)/\2/n,namespace/
+--regex-ruby=/^  (resources?|scope|[A-Za-z0-9_-]*namespace[ \t]*)[ \t]*'([^']+)'/\2/n,namespace/
+--regex-ruby=/^  (resources?|scope|[A-Za-z0-9_-]*namespace[ \t]*)[ \t]*"([^"]+)"/\2/n,namespace/
+--regex-ruby=/^  ((get|post|put|patch|delete|match)[ \t]*:[a-zA-Z0-9_]+)/\1/r,route/
+--regex-ruby=/^  ((get|post|put|patch|delete|match)[ \t]*'[^']+')/\1/r,route/
+--regex-ruby=/^  ((get|post|put|patch|delete|match)[ \t]*"[^"]+")/\1/r,route/
+--regex-ruby=/^  ((root|root to:|root :to =>)[ \t]*'[^']+')/\1/r,route/
+--regex-ruby=/^  ((root|root to:|root :to =>)[ \t]*"[^"]+")/\1/r,route/
+--regex-ruby=/^  ((devise_for|devise_scope|authenticated?)[ \t]*:[a-zA-Z0-9_]+)/\1/r,route/
+
+--langdef=markdown
+--langmap=markdown:.md
+--regex-markdown=/^(#+[ \t]+.*)/\1/h,heading,headings/
+
+--langdef=scss
+--langmap=scss:.scss
+--regex-scss=/^[ \t]*@mixin ([A-Za-z0-9_-]+)/\1/m,mixin,mixins/
+--regex-scss=/^([A-Za-z0-9_-]*)*\.([A-Za-z0-9_-]+) *[,{]/\2/c,class,classes/
+--regex-scss=/^[ \t&]+\.([A-Za-z0-9_-]+) *[,{]/\1/c,class,classes/
+--regex-scss=/^(.*)*\#([A-Za-z0-9_-]+) *[,{]/\2/i,id,ids/
+--regex-scss=/^[ \t&]*#([A-Za-z0-9_-]+)/\1/i,id,ids/
+--regex-scss=/(^([A-Za-z0-9_-])*([A-Za-z0-9_-]+)) *[,|\{]/\1/t,tag,tags/
+--regex-scss=/(^([^\/\/])*)[ \t]+([A-Za-z0-9_-]+)) *[,|\{]/\3/t,tag,tags/
+--regex-scss=/(^(.*, *)([A-Za-z0-9_-]+)) *[,|\{]/\3/t,tag,tags/
+--regex-scss=/(^[ \t]+([A-Za-z0-9_-]+)) *[,|\{]/\1/t,tag,tags/
+--regex-scss=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/d,media,media/
+
+--langmap=html:.html.erb
+--regex-html=/id="([A-Za-z0-9_-]+)"/\1/i,id,ids/
+--regex-html=/class="([A-Za-z0-9_-]+)"/\1/c,class,classes/
+
 --exclude=.git
+--exclude=.svn
+--exclude=.hg
 --exclude=node_modules
 --exclude=log
 --exclude=tmp
 --exclude=coverage
 --exclude=vendor
 --exclude=db
-
---regex-ruby=/^[ \t]*create_table[ \t]*"([a-zA-Z0-9_]+)"/\1/t,table/
---regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
