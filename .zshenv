@@ -499,6 +499,7 @@ alias be='bundle exec'
 alias bo='bundle open'
 alias bi='bundle install'
 alias bu='bundle update'
+alias gop='gem open'
 rails() {
   if [ -e 'bin/rails' ]; then bin/rails "$@"; else command rails "$@"; fi
 }

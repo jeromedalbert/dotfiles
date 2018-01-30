@@ -521,6 +521,7 @@ set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
+set regexpengine=1
 
 set statusline=
 set statusline+=\ %<%f
@@ -716,9 +717,6 @@ let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_highlight_columns = 0
 call neomake#configure#automake('rw', 1000)
 
-let MRU_Window_Height = 10
-hi link MRUFileName String
-
 let s:last_active_tab_number = 1
 
 let g:tmux_navigator_no_mappings = 1
@@ -744,6 +742,8 @@ let g:AutoPairsMultilineClose = 0
 " let g:gen_tags#ctags_auto_gen = 1
 let g:gutentags_ctags_tagfile = '.tags'
 let g:gutentags_ctags_auto_set_tags = 0
+
+let g:splitjoin_ruby_hanging_args = 0
 
 "#################
 "### Functions ###

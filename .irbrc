@@ -1,6 +1,11 @@
+require 'irb/completion'
+require 'irb/ext/save-history'
 require 'awesome_print'
 
-AwesomePrint.pry!
+IRB.conf[:SAVE_HISTORY] = 10000
+IRB.conf[:AUTO_INDENT] = true
+
+AwesomePrint.irb!
 
 def rr
   reload!
