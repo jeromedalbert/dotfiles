@@ -24,6 +24,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 export GREP_COLORS=auto
 export GREP_COLOR=auto
 export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export NVM_DIR=$HOME/.nvm

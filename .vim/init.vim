@@ -12,15 +12,8 @@ Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
 Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx'] }
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
 
-Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'eruby'] }
-Plug 'othree/html5.vim', { 'for': ['html', 'eruby.html'] }
-Plug 'hail2u/vim-css3-syntax', { 'for': ['css', 'scss'] }
-Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
-Plug 'wavded/vim-stylus', { 'for': 'stylus' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html', 'eruby.html'] }
-Plug 'mxw/vim-jsx', { 'for': 'javascript' }
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-markdown', { 'for': 'markdown' }
-Plug 'keith/swift.vim', { 'for': 'swift' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
@@ -40,7 +33,6 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 Plug 'jeromedalbert/vim-rails', { 'for': ['ruby', 'eruby'] }
-Plug 'jeromedalbert/vim-unimpaired'
 
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
@@ -62,7 +54,8 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'wincent/replay'
 Plug 'ludovicchabant/vim-gutentags'
-" Plug 'jsfaint/gen_tags.vim'
+Plug 'joonty/vdebug', { 'on': 'Breakpoint' }
+Plug 'dhruvasagar/vim-buffer-history'
 " Plug 'christoomey/vim-tmux-runner'
 call plug#end()
 
@@ -92,22 +85,6 @@ noremap <silent> <leader>`q :qa!<cr>
 noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
 
 noremap ' "
-noremap '] `]
-noremap '[ `[
-" noremap =] `[=`]
-noremap v] `[v`]
-" map <] `[<`]
-" map >] `[>`]
-noremap ]o `]o
-noremap ]O `]O
-noremap ]a `]a
-noremap ]A `]A
-noremap [a `[a
-noremap [A `[A
-noremap ]i `]i
-noremap ]I `]I
-noremap [i `[i
-noremap [I `[I
 
 noremap <up> <nop>
 noremap <down> <nop>
@@ -151,7 +128,7 @@ inoremap <m-f> <s-right>
 inoremap <m-bs> <c-w>
 cnoremap <m-bs> <c-w>
 
-noremap <silent> <c-c> :enew<cr>
+" noremap <silent> <c-c> :enew<cr>
 noremap <silent> <m-v> :vnew<cr>
 noremap <silent> <m-V> :vsplit<cr>
 noremap <silent> <m-s> :new<cr>
@@ -252,6 +229,13 @@ map gj gJ
 noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
 noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
 
+noremap ]a :next<br>
+noremap [a :previous<br>
+noremap ]q :cnext<br>
+noremap [q :cprevious<br>
+noremap ]l :lnext<br>
+noremap [l :lprevious<br>
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -344,6 +328,7 @@ xmap <f18> [egv
 
 map <leader>; `]]<space>
 inoremap <f17> <esc>O
+noremap <m-O> O<cr>
 
 " map <f17> ]<space>
 " inoremap <f17> <end><cr>
@@ -450,8 +435,8 @@ noremap <silent> <leader>j :call Join()<cr>
 
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 
-nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
-imap <silent> <f4> <esc><f4>
+" nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
+" imap <silent> <f4> <esc><f4>
 
 noremap <silent> <m-=> :call ToggleZoom()<cr>
 noremap <silent> <m-+> :call ToggleZoom()<cr>
@@ -460,6 +445,13 @@ noremap <silent> <m-N> <esc>:tabnew<cr>:OldFiles<cr>
 noremap <silent> <m-P> :OldFiles<cr>
 
 noremap <silent> gf :call ImprovedGoToFile()<cr>
+
+noremap ]b :BufferHistoryForward<cr>
+noremap [b :BufferHistoryBack<cr>
+noremap ]f :<c-u>exe 'e ' . GetNextFile(1)<cr>
+noremap [f :<c-u>exe 'e ' . GetNextFile(-1)<cr>
+map ]<space> <Plug>InsertLineAfter
+map [<space> <Plug>InsertLineBefore
 
 "#############################
 "### General configuration ###
@@ -730,20 +722,25 @@ let g:mta_filetypes = {
   \ 'javascript.jsx' : 1
   \}
 
-let g:markdown_syntax_conceal = 0
-
 call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
 
-" let g:loaded_gentags#gtags = 1
-" let g:gen_tags#ctags_auto_gen = 1
 let g:gutentags_ctags_tagfile = '.tags'
 let g:gutentags_ctags_auto_set_tags = 0
 
 let g:splitjoin_ruby_hanging_args = 0
+let g:splitjoin_ruby_curly_braces = 0
+
+let g:polyglot_disabled = ['markdown']
+let g:markdown_syntax_conceal = 0
+" let g:php_syntax_extensions_enabled = []
+
+let g:vdebug_options = {}
+let g:vdebug_options['break_on_open'] = 0
+let g:vdebug_options['watch_window_style'] = 'compact'
 
 "#################
 "### Functions ###
@@ -1721,7 +1718,7 @@ function! EnableMetaMappings()
     let keys = { '∂': 'd', '∫': 'b', 'ƒ': 'f', 'œ': 'q', '¬': 'l', '’': '}',
       \ '”': '{', '…': ';', '≤': ',', '˘': '>', '≥': '.', 'Ú': ': ',
       \ 'µ': 'm', '‘': ']', '“': '[', '—': '_', 'ß': 's', '–': '-', 'º': 0,
-      \ '†': 't', '∆': 'j', '≠': '=', '˜': 'N',
+      \ '†': 't', '∆': 'j', '≠': '=', '˜': 'N', 'Ø': 'O', 'v': '√', 'V': '◊',
       \ '¡':1, '™':2, '£':3, '¢':4, '∞':5, '§':6, '¶':7, '•':8, 'ª':9 }
     for symbol in keys(keys)
       exe 'map ' . symbol . ' <m-' . keys[symbol] . '>'
@@ -1793,6 +1790,64 @@ function! LazyLoadDeoplete()
   endif
   let g:first_enter_done = 1
 endfunction
+
+function! GetNextFile(direction)
+  let file = expand('%:p')
+  if file == ''
+    let file = getcwd() . '/'
+  endif
+  let offset = v:count1 * a:direction
+  while offset
+    let files = GetFileEntries(fnamemodify(file,':h'))
+    if a:direction < 0
+      call reverse(sort(filter(files,'v:val <# file')))
+    else
+      call sort(filter(files,'v:val ># file'))
+    endif
+    let temp = get(files,0,'')
+    if temp == ''
+      let file = fnamemodify(file,':h')
+    else
+      let file = temp
+      let found = 1
+      while isdirectory(file)
+        let files = GetFileEntries(file)
+        if empty(files)
+          let found = 0
+          break
+        endif
+        let file = files[offset > 0 ? 0 : -1]
+      endwhile
+      let offset += (offset > 0 ? -1 : 1) * found
+    endif
+  endwhile
+  return fnameescape(fnamemodify(file, ':.'))
+endfunction
+
+function! GetFileEntries(path)
+  let path = substitute(a:path,'[\\/]$','','')
+  let files = split(glob(path."/.*"),"\n")
+  let files += split(glob(path."/*"),"\n")
+  call map(files,'substitute(v:val,"[\\/]$","","")')
+  call filter(files,'v:val !~# "[\\\\/]\\.\\.\\=$"')
+  let filter_suffixes = substitute(escape(&suffixes, '~.*$^'), ',', '$\\|', 'g') .'$'
+  call filter(files, 'v:val !~# filter_suffixes')
+  return files
+endfunction
+
+function! InsertLineBefore(count) abort
+  put!=repeat(nr2char(10), a:count)
+  ']+1
+  silent! call repeat#set("\<Plug>InsertLineBefore", a:count)
+endfunction
+nnoremap <silent> <Plug>InsertLineBefore :<c-u>call InsertLineBefore(v:count1)<cr>
+
+function! InsertLineAfter(count) abort
+  put =repeat(nr2char(10), a:count)
+  '[-1
+  silent! call repeat#set("\<Plug>InsertLineAfter", a:count)
+endfunction
+nnoremap <silent> <Plug>InsertLineAfter :<c-u>call InsertLineAfter(v:count1)<cr>
 
 "####################
 "### Autocommands ###

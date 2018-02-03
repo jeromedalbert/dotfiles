@@ -147,10 +147,6 @@ to() {
     ta $1
   fi
 }
-alias tw='to work'
-alias tp='to purchase'
-alias tb='to blog'
-alias tc='to code'
 
 # Git
 alias gi='git init'
@@ -288,6 +284,7 @@ gpuf() {
     gp -u -f "$@"
   fi
 }
+alias gph='git push heroku master'
 alias gclo-"git clone"
 alias gx="gitx"
 alias gu="gitup"
@@ -415,6 +412,7 @@ function cdf() {
 alias o="open"
 alias o.="open ."
 alias tcam="osascript ~/.bin/isightdisabler5.scpt"
+alias toggle-cam='tcam'
 alias dpad="sudo kextunload /System/Library/Extensions/AppleUSBMultitouch.kext" # 2> /dev/null"
 alias epad="sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext"
 alias emouse="dpad"

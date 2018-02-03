@@ -19,8 +19,9 @@
 "
 " Designed for 24-bit color terminals, with termguicolors on.
 "
-" Based on the RailsCasts TextMate theme (http://railscasts.com/about) via the
-" Sublime Text 2 RailsCasts Theme (https://github.com/tdm00/sublime-theme-railscasts).
+" Originally based on the RailsCasts TextMate theme
+" (http://railscasts.com/about) and the Sublime Text 2 RailsCasts Theme
+" (https://github.com/tdm00/sublime-theme-railscasts).
 "
 " Sublime Text colors are in the native 'Color LCD' color space on MacOS Sierra.
 " But iTerm2+Vim colors are in the sRGB color space.
@@ -175,6 +176,7 @@ hi link xmlEndTag xmlTag
 hi link xmlTagName xmlTag
 hi link xmlAttrib xmlTag
 hi link xmlEqual xmlTag
+hi link xmlProcessingDelim xmlTag
 hi link xmlEntity Constant
 hi link xmlEntityPunct xmlEntity
 
@@ -296,3 +298,21 @@ hi link gitcommitSummary NONE
 hi link gitcommitHeader gitcommitComment
 
 hi link swiftMethod NONE
+
+hi link phpMemberSelector NONE
+hi link phpStaticClasses NONE
+hi link phpFunction Function
+hi link phpFunctions NONE
+hi link phpClasses rubyConstantOther
+hi link phpComment jsComment
+hi link phpOperator NONE
+hi link phpVarSelector Keyword
+hi link phpSuperGlobals Constant
+" hi link phpMagicConstants rubyGlobalVariable
+
+hi link bladeDelimiter NONE
+
+hi DbgBreakptLine guibg=#80322f guifg=#ffffff
+hi link DbgBreakptSign DbgBreakptLine
+hi link DbgCurrentLine DiffText
+hi link DbgCurrentSign DbgCurrentLine
