@@ -9,7 +9,8 @@ Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
-Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx'] }
+Plug 'mattn/emmet-vim',
+  \ { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx', 'php'] }
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
 
 Plug 'sheerun/vim-polyglot'
@@ -54,7 +55,7 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'wincent/replay'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'joonty/vdebug', { 'on': 'Breakpoint' }
+Plug 'joonty/vdebug', { 'on': ['Breakpoint', 'VdebugStart'] }
 Plug 'dhruvasagar/vim-buffer-history'
 " Plug 'christoomey/vim-tmux-runner'
 call plug#end()
@@ -143,8 +144,7 @@ noremap <c-h> gT
 noremap <m-l> gt
 noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
-noremap <silent> <leader>tc :tabclose<cr>
-noremap <silent> <leader>tq :tabclose<cr>
+noremap <silent> <leader>tc :silent! tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
 noremap <silent> <leader>t# :tabedit #<cr>
 noremap <silent> <leader>tt <c-w>T
@@ -160,8 +160,8 @@ if has('nvim')
   inoremap <m-,> <C-o>A,
 endif
 noremap <m->> mCA.<esc>`C
-inoremap <m->> <C-o>A.
-inoremap <m-.> <C-o>A.
+imap <m->> <C-o>A.
+imap <m-.> <C-o>A.
 noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
 
@@ -228,6 +228,13 @@ map gj gJ
 
 noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
 noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
+
+" f17 is m-s-j in my config
+nnoremap <f17> :move .+1<cr>
+xnoremap <f17> :move '>+1<cr>gv
+" f18 is m-s-k in my config
+nnoremap <f18> :move .-2<cr>
+xnoremap <f18> :move '<-2<cr>gv
 
 noremap ]a :next<br>
 noremap [a :previous<br>
@@ -319,13 +326,6 @@ map # <Plug>(incsearch-nohl-#)zz
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-" f17 is m-s-j in my config
-nmap <f17> ]e
-xmap <f17> ]egv
-" f18 is m-s-k in my config
-nmap <f18> [e
-xmap <f18> [egv
-
 map <leader>; `]]<space>
 inoremap <f17> <esc>O
 noremap <m-O> O<cr>
@@ -392,6 +392,7 @@ nmap <leader>yS <leader>ysiW
 vnoremap <leader>s :s/\%V
 
 nmap <leader>8 *
+nmap <leader>, *
 xmap <leader>8 *
 nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
@@ -446,12 +447,25 @@ noremap <silent> <m-P> :OldFiles<cr>
 
 noremap <silent> gf :call ImprovedGoToFile()<cr>
 
-noremap ]b :BufferHistoryForward<cr>
-noremap [b :BufferHistoryBack<cr>
+noremap <silent> <leader>ub :Breakpoint<cr>
+noremap <silent> <leader>uu :VdebugStart<cr>
+noremap <silent> <leader>up :VdebugStart<cr>
+noremap <silent> <leader>us :VdebugStart<cr>
+noremap <silent> <leader>uc :BreakpointRemove *<cr>
+nmap <silent> <leader>ul V<leader>ue
+
+noremap <silent> ]b :BufferHistoryForward<cr>
+noremap <silent> [b :BufferHistoryBack<cr>
+map <silent> ]<space> <Plug>InsertLineAfter
+map <silent> [<space> <Plug>InsertLineBefore
+noremap <silent> ]c :<c-u>call CycleToNextFile(v:count1)<cr>
+noremap <silent> [c :<c-u>call CycleToNextFile(-v:count1)<cr>
+noremap <silent> ]C :<c-u>execute CycleToNextFile(-1, 1)<cr>
+noremap <silent> [C :<c-u>execute CycleToNextFile(0, 1)<cr>
 noremap ]f :<c-u>exe 'e ' . GetNextFile(1)<cr>
 noremap [f :<c-u>exe 'e ' . GetNextFile(-1)<cr>
-map ]<space> <Plug>InsertLineAfter
-map [<space> <Plug>InsertLineBefore
+map ]F ]C
+map [F [C
 
 "#############################
 "### General configuration ###
@@ -613,10 +627,10 @@ let g:rails_single_quotes_style = 1
 let g:unimpaired_no_toggling = 1
 
 let g:UltiSnipsSnippetDirectories=['my-snippets']
-let g:UltiSnipsExpandTrigger = '<nop>'
-let g:UltiSnipsListSnippets = '<nop>'
-let g:UltiSnipsJumpForwardTrigger = '<nop>'
-let g:UltiSnipsJumpBackwardTrigger = '<nop>'
+let g:UltiSnipsExpandTrigger = '<nul>'
+let g:UltiSnipsListSnippets = '<nul>'
+let g:UltiSnipsJumpForwardTrigger = '<nul>'
+let g:UltiSnipsJumpBackwardTrigger = '<nul>'
 
 let g:user_emmet_mode = 'i'
 let g:user_emmet_settings = {
@@ -741,6 +755,19 @@ let g:markdown_syntax_conceal = 0
 let g:vdebug_options = {}
 let g:vdebug_options['break_on_open'] = 0
 let g:vdebug_options['watch_window_style'] = 'compact'
+let g:vdebug_keymap = {
+\    'set_breakpoint' : '<leader>ub',
+\    'run' : '<leader>uu',
+\    'eval_visual' : '<leader>ue',
+\    'eval_under_cursor' : '<leader>ue',
+\    'get_context' : '<leader>ur',
+\    'detach' : '<leader>ud',
+\    'step_over' : '<down>',
+\    'step_into' : '<right>',
+\    'step_out' : '<left>',
+\    'run_to_cursor' : '<s-up>',
+\    'close' : 'q'
+\}
 
 "#################
 "### Functions ###
@@ -1791,6 +1818,17 @@ function! LazyLoadDeoplete()
   let g:first_enter_done = 1
 endfunction
 
+function! CycleToNextFile(count, ...)
+  let dir = expand('%:p:h')
+  let files = globpath(dir, '*', 0, 1) + globpath(dir, '.[^.]*', 0, 1)
+  let files = sort(filter(files, 'filereadable(v:val)'), 'i')
+  let idx = index(files, expand('%:p'))
+  if idx == -1 | return 'echoerr "Unable to move to next file"' | endif
+  let file = get(files, a:0 && a:1 ? a:count : ((idx + a:count) % len(files)), -1)
+  if file == -1 | return 'echoerr "Unable to move to next file"' | endif
+  exe 'edit ' . file
+endfunction
+
 function! GetNextFile(direction)
   let file = expand('%:p')
   if file == ''
@@ -1885,6 +1923,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
   autocmd BufRead,BufNewFile *.env* set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
+  autocmd BufRead,BufNewFile *.php set ft=php.html
 augroup end
 
 augroup detect_binary_files
