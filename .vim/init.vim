@@ -152,6 +152,10 @@ noremap <silent> <leader>tt <c-w>T
 noremap <leader>e :e $MYVIMRC<cr>
 
 noremap <leader><leader> <C-^>
+map [2 2[b
+map [3 3[b
+map ]2 2]b
+map ]3 3]b
 
 noremap <m-;> mCA;<esc>`C
 inoremap <m-;> <C-o>A;
@@ -236,12 +240,12 @@ xnoremap <f17> :move '>+1<cr>gv
 nnoremap <f18> :move .-2<cr>
 xnoremap <f18> :move '<-2<cr>gv
 
-noremap ]a :next<br>
-noremap [a :previous<br>
-noremap ]q :cnext<br>
-noremap [q :cprevious<br>
-noremap ]l :lnext<br>
-noremap [l :lprevious<br>
+noremap <silent> ]a :next<cr>
+noremap <silent> [a :previous<cr>
+noremap <silent> ]q :cnext<cr>
+noremap <silent> [q :cprevious<cr>
+noremap <silent> ]l :lnext<cr>
+noremap <silent> [l :lprevious<cr>
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -458,14 +462,12 @@ noremap <silent> ]b :BufferHistoryForward<cr>
 noremap <silent> [b :BufferHistoryBack<cr>
 map <silent> ]<space> <Plug>InsertLineAfter
 map <silent> [<space> <Plug>InsertLineBefore
-noremap <silent> ]c :<c-u>call CycleToNextFile(v:count1)<cr>
-noremap <silent> [c :<c-u>call CycleToNextFile(-v:count1)<cr>
-noremap <silent> ]C :<c-u>execute CycleToNextFile(-1, 1)<cr>
-noremap <silent> [C :<c-u>execute CycleToNextFile(0, 1)<cr>
-noremap ]f :<c-u>exe 'e ' . GetNextFile(1)<cr>
-noremap [f :<c-u>exe 'e ' . GetNextFile(-1)<cr>
-map ]F ]C
-map [F [C
+noremap <silent> ]f :<c-u>call CycleToNextFile(v:count1)<cr>
+noremap <silent> [f :<c-u>call CycleToNextFile(-v:count1)<cr>
+noremap <silent> ]F :<c-u>execute CycleToNextFile(-1, 1)<cr>
+noremap <silent> [F :<c-u>execute CycleToNextFile(0, 1)<cr>
+noremap ]e :<c-u>exe 'e ' . GetNextFile(1)<cr>
+noremap [e :<c-u>exe 'e ' . GetNextFile(-1)<cr>
 
 "#############################
 "### General configuration ###
@@ -606,7 +608,7 @@ let NERDTreeIgnore = [
   \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
   \ ]
 let NERDTreeQuitOnOpen = 1
-let NERDTreeHighlightCursorline = 0
+let NERDTreeHighlightCursorline = 1
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeCreatePrefix='silent keepalt keepjumps'
@@ -748,7 +750,7 @@ let g:gutentags_ctags_auto_set_tags = 0
 let g:splitjoin_ruby_hanging_args = 0
 let g:splitjoin_ruby_curly_braces = 0
 
-let g:polyglot_disabled = ['markdown']
+let g:polyglot_disabled = ['markdown', 'yaml']
 let g:markdown_syntax_conceal = 0
 " let g:php_syntax_extensions_enabled = []
 
@@ -1803,9 +1805,9 @@ function! ImprovedGoToFile()
     normal! gf
   catch /\(E447\|E345\)/
     try
-      exe "normal \<c-]>"
+      silent exe "normal \<c-]>"
     catch /E426/
-      echo 'Error: No file found'
+      echo "Error: No file found"
     endtry
   endtry
 endfunction
@@ -1923,7 +1925,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
   autocmd BufRead,BufNewFile *.env* set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
-  autocmd BufRead,BufNewFile *.php set ft=php.html
+  " autocmd BufRead,BufNewFile *.php set ft=php.html
 augroup end
 
 augroup detect_binary_files

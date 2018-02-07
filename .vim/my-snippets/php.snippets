@@ -1,0 +1,159 @@
+global !p
+from snippet_utils import camelcase
+endglobal
+
+snippet php "<?php"
+<?php
+
+${0}
+endsnippet
+
+snippet req "require"
+require '${0}';
+endsnippet
+
+snippet re "require"
+require '${0}';
+endsnippet
+
+snippet fn "function"
+function ${1:function_name}(${2}) {
+	${0}
+}
+endsnippet
+
+snippet f "function" w
+function (${1}) {
+	${0}
+}
+endsnippet
+
+snippet if "if { .. }"
+if (${1:condition})
+{
+	${0}
+}
+endsnippet
+
+snippet else "else"
+else
+{
+	${0}
+}
+endsnippet
+
+snippet ife "if { .. } else { .. }"
+if (${1:condition})
+{
+	${2}
+}
+else
+{
+	${0}
+}
+endsnippet
+
+snippet for "for"
+for (${1})
+{
+	${0}
+}
+endsnippet
+
+snippet fori "for ($i = ..)"
+for ($i = ${1:0}; $i < ${2:n}; $i++)
+{
+	${0}
+}
+endsnippet
+
+snippet ea "foreach"
+foreach(${1:elements} as $${2:element})
+{
+	${0}
+}
+endsnippet
+
+snippet while "while"
+while (${1})
+{
+	${0}
+}
+endsnippet
+
+snippet switch "switch .. case"
+switch (${1})
+{
+	case ${2:value} :
+		${0}
+		break;
+}
+endsnippet
+
+snippet case "case"
+case ${2:value} :
+	${0}
+	break;
+endsnippet
+
+snippet default "default"
+default :
+	${0}
+endsnippet
+
+snippet try "try catch"
+try {
+	${1}
+} catch (${2:exception $e}) {
+	${0}
+}
+endsnippet
+
+snippet cla "class { .. }"
+class ${1:`!p snip.rv = camelcase(snip.basename)`}
+{
+
+	${0}
+
+}
+endsnippet
+
+snippet clai "class { .. __construct .. }"
+class ${1:`!p snip.rv = camelcase(snip.basename)`}
+{
+
+	public function __construct(${2})
+	{
+		${0}
+	}
+
+}
+endsnippet
+
+snippet con "constructor"
+public function __construct(${1})
+{
+	${0}
+}
+endsnippet
+
+snippet m "public method"
+public function ${1:method_name}(${2})
+{
+	${0}
+}
+endsnippet
+
+snippet sm "public static method"
+public static function ${1:method_name}(${2})
+{
+	${0}
+}
+endsnippet
+
+snippet pm "private method"
+private function ${1:method_name}(${2})
+{
+	${0}
+}
+endsnippet

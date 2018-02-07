@@ -78,6 +78,10 @@ snippet req "require"
 require '${0}'
 endsnippet
 
+snippet re "require"
+require '${0}'
+endsnippet
+
 snippet pro "protected"
 protected
 endsnippet
@@ -234,8 +238,18 @@ snippet map "map { |e| .. }" w
 map { |${1:e}| ${0} }
 endsnippet
 
+snippet map! "map! { |e| .. }" w
+map! { |${1:e}| ${0} }
+endsnippet
+
 snippet mapp "map do |e| .. end" w
 map do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet mapp! "map! do |e| .. end" w
+map! do |${1:e}|
 	${0}
 end
 endsnippet
@@ -254,8 +268,38 @@ snippet sel "select { |e| .. }" w
 select { |${1:e}| ${0} }
 endsnippet
 
+snippet sel! "select! { |e| .. }" w
+select! { |${1:e}| ${0} }
+endsnippet
+
 snippet sell "select do |e| .. end" w
 select do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet sell! "select! do |e| .. end" w
+select! do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet rej "reject { |e| .. }" w
+reject { |${1:e}| ${0} }
+endsnippet
+
+snippet rej! "reject! { |e| .. }" w
+reject! { |${1:e}| ${0} }
+endsnippet
+
+snippet rejj "reject do |e| .. end" w
+reject do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet rejj! "reject! do |e| .. end" w
+reject! do |${1:e}|
 	${0}
 end
 endsnippet

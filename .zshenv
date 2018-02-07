@@ -447,7 +447,7 @@ mkpwd2() {
   echo $password | cut -c-$max_chars
 }
 alias mkpw='mkpwd'
-alias pw='mkpasswd'
+alias pw='mkpw'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -559,6 +559,9 @@ alias yre='yrm'
 
 # Python
 alias py='python'
+
+# PHP
+alias phpa='php -a'
 
 # Ansible
 alias an='ansible'

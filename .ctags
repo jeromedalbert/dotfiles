@@ -30,8 +30,8 @@
 --regex-scss=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/d,media,media/
 
 --langmap=html:.html.erb
---regex-html=/id="([A-Za-z0-9_-]+)"/\1/i,id,ids/
---regex-html=/class="([A-Za-z0-9_-]+)"/\1/c,class,classes/
+--regex-html=/id="([A-Za-z0-9_-]+)"/\1/I,id/
+--regex-html=/class="([A-Za-z0-9_-]+)"/\1/c,class/
 
 --kinds-php=-an
 
