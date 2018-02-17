@@ -51,12 +51,19 @@ remove-colors() {
 }
 alias md5sum=md5
 alias wcl='wc -l'
-alias ct.='ctags -R .'
+alias ct.='ctags -f .tags -R .'
 
 # Confs
-alias reload=". ~/.zshrc"
+alias reload='. ~/.zshrc'
+alias rel='reload'
 alias conf="$MAIN_EDITOR ~/.zshrc"
-alias al="$MAIN_EDITOR ~/.zshenv"
+al() {
+  if [ $# -eq 0 ]; then
+    $MAIN_EDITOR ~/.zshenv
+  else
+    alias $1
+  fi
+}
 
 # Zsh
 alias dirs='dirs -v'
@@ -247,9 +254,8 @@ alias grbi4="git rebase -i HEAD~4"
 alias grbi5="git rebase -i HEAD~5"
 alias grbim="git rebase -i master"
 alias grbir="git rebase -i --root"
-alias gcontinue="git rebase --continue"
-alias gcont="gcontinue"
-alias gcon="gcontinue"
+alias gcon="git rebase --continue"
+alias gaacon="gaa & gcon"
 alias gabort="git rebase --abort"
 alias gab="gabort"
 alias gskip="git rebase --skip"
@@ -497,7 +503,6 @@ alias be='bundle exec'
 alias bo='bundle open'
 alias bi='bundle install'
 alias bu='bundle update'
-alias gop='gem open'
 rails() {
   if [ -e 'bin/rails' ]; then bin/rails "$@"; else command rails "$@"; fi
 }
@@ -548,6 +553,10 @@ rgsq() {
 }
 alias rru='rails runner'
 alias rhash='asdf reshim ruby'
+alias gmo='gem open'
+alias gmi='gem install'
+alias gmu='gem uninstall'
+gmd() { open "http://www.rubydoc.info/gems/$1" }
 
 # Javascript
 alias y='yarn'
@@ -578,3 +587,5 @@ alias hps='heroku ps'
 alias hrc='heroku run rails console'
 alias hl='heroku logs -t'
 alias hr='heroku run'
+alias hmi='heroku run rake db:migrate'
+alias hro='heroku run rake db:rollback'

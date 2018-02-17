@@ -4,7 +4,7 @@
 
 call plug#begin('~/.vim/plugged')
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake'
 Plug 'jlanzarotta/bufexplorer'
@@ -69,10 +69,6 @@ noremap - :
 
 map J 5j
 map K 5k
-nnoremap j gj
-nnoremap k gk
-xnoremap j gj
-xnoremap k gk
 map 0 ^
 nnoremap d0 d^
 noremap Y y$
@@ -148,6 +144,7 @@ noremap <silent> <leader>tc :silent! tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
 noremap <silent> <leader>t# :tabedit #<cr>
 noremap <silent> <leader>tt <c-w>T
+noremap <silent> <leader>tn :tab split<cr>
 
 noremap <leader>e :e $MYVIMRC<cr>
 
@@ -185,13 +182,6 @@ noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 
 noremap $ $ze
-
-noremap <leader>rr :e config/routes.rb<cr>
-noremap <leader>rR :vnew<cr>:e config/routes.rb<cr>
-noremap <leader>rs :e db/schema.rb<cr>
-noremap <leader>rS :vnew<cr>:e db/schema.rb<cr>
-noremap <leader>rg :e Gemfile<cr>
-noremap <leader>rG :vnew<cr>:e Gemfile<cr>
 
 noremap g; g;zz
 noremap g, g,zz
@@ -234,18 +224,18 @@ noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
 noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
 
 " f17 is m-s-j in my config
-nnoremap <f17> :move .+1<cr>
-xnoremap <f17> :move '>+1<cr>gv
+nnoremap <silent> <f17> :move .+1<cr>
+xnoremap <silent> <f17> :move '>+1<cr>gv
 " f18 is m-s-k in my config
-nnoremap <f18> :move .-2<cr>
-xnoremap <f18> :move '<-2<cr>gv
+nnoremap <silent> <f18> :move .-2<cr>
+xnoremap <silent> <f18> :move '<-2<cr>gv
 
 noremap <silent> ]a :next<cr>
 noremap <silent> [a :previous<cr>
-noremap <silent> ]q :cnext<cr>
-noremap <silent> [q :cprevious<cr>
-noremap <silent> ]l :lnext<cr>
-noremap <silent> [l :lprevious<cr>
+noremap <silent> ]Q :clast<cr>
+noremap <silent> [Q :cfirst<cr>
+noremap <silent> ]L :llast<cr>
+noremap <silent> [L :lfirst<cr>
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -256,6 +246,11 @@ snoremap <silent> <tab> <esc>:call UltiSnips#JumpForwards()<cr>
 inoremap <silent> <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
 snoremap <silent> <s-tab> <esc>:call UltiSnips#JumpBackwards()<cr>
 
+nnoremap <expr> k Jumpable('gk')
+nnoremap <expr> j Jumpable('gj')
+xnoremap <expr> k Jumpable('gk')
+xnoremap <expr> j Jumpable('gj')
+
 nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
 
 noremap <silent> '' :call DisplayRegisters()<cr>
@@ -263,18 +258,18 @@ noremap <silent> '' :call DisplayRegisters()<cr>
 noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
 
-noremap <c-p> :Files<cr>
-noremap <leader>i :BTags<cr>
-" noremap <leader>I :call fzf#vim#buffer_tags('', '--vim-kinds=variable', { 'options': $FZF_DEFAULT_OPTS })<cr>
+noremap <silent> <c-p> :silent Files<cr>
+noremap <silent> <leader>i :silent BTags<cr>
+noremap <silent> <leader>I :silent Tags<cr>
 
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
 endif
 
-noremap <leader>k :call OpenNERDTreeBuffer()<CR>
 noremap <silent> <f1> :NERDTreeToggle<CR>
 noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
-noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
+" noremap <leader>k :call OpenNERDTreeBuffer()<CR>
+" noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
 
 noremap <silent> <f2> :TagbarToggle<CR>
 noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
@@ -353,18 +348,12 @@ noremap <leader>-b :call DeleteHiddenBuffers()<cr>
 noremap <leader>-u :call ClearUndos()<cr>
 noremap <leader>-k :call ResetProject()<cr>
 
-noremap <leader>rm :call ShowLatestMigration()<cr>
-noremap <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
-vnoremap <leader>rp :<c-u>call ExtractRailsPartial()<cr>
-
-noremap <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
-
 map gR gr$
 nmap cX cx$
 nnoremap cc cc
 
-noremap <leader>oo :OldFiles<cr>
-noremap <leader>oh :Helptags<cr>
+noremap <silent> <leader>oo :silent call BrowseOldFiles()<cr>
+noremap <silent> <leader>oh :silent Helptags<cr>
 noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :exe 'e ' . GetProjectNotes()<cr>
 noremap <silent> <leader>oN :let t:file=expand('%')<cr>:vnew<cr>:exe 'e ' . GetProjectNotes(t:file)<cr>
@@ -406,7 +395,6 @@ command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! Gmodified call GitOpenModifiedFiles()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
-command! -nargs=* OldFiles call fzf#vim#history({ 'options': ' --prompt="OldFiles> "' })
 command! MakePlugSnapshot call MakePlugSnapshot()
 command! Profile call Profile()
 
@@ -446,20 +434,14 @@ nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 noremap <silent> <m-=> :call ToggleZoom()<cr>
 noremap <silent> <m-+> :call ToggleZoom()<cr>
 
-noremap <silent> <m-N> <esc>:tabnew<cr>:OldFiles<cr>
-noremap <silent> <m-P> :OldFiles<cr>
+noremap <silent> <m-N> <esc>:tabnew<cr>:call BrowseOldFiles()<cr>
 
 noremap <silent> gf :call ImprovedGoToFile()<cr>
 
-noremap <silent> <leader>ub :Breakpoint<cr>
-noremap <silent> <leader>uu :VdebugStart<cr>
-noremap <silent> <leader>up :VdebugStart<cr>
-noremap <silent> <leader>us :VdebugStart<cr>
-noremap <silent> <leader>uc :BreakpointRemove *<cr>
-nmap <silent> <leader>ul V<leader>ue
-
 noremap <silent> ]b :BufferHistoryForward<cr>
 noremap <silent> [b :BufferHistoryBack<cr>
+noremap <silent> ]B :call BufferHistoryLast()<cr>
+noremap <silent> [B :call BufferHistoryFirst()<cr>
 map <silent> ]<space> <Plug>InsertLineAfter
 map <silent> [<space> <Plug>InsertLineBefore
 noremap <silent> ]f :<c-u>call CycleToNextFile(v:count1)<cr>
@@ -468,6 +450,10 @@ noremap <silent> ]F :<c-u>execute CycleToNextFile(-1, 1)<cr>
 noremap <silent> [F :<c-u>execute CycleToNextFile(0, 1)<cr>
 noremap ]e :<c-u>exe 'e ' . GetNextFile(1)<cr>
 noremap [e :<c-u>exe 'e ' . GetNextFile(-1)<cr>
+noremap <silent> ]q :call QfListNext('next')<cr>
+noremap <silent> [q :call QfListNext('previous')<cr>
+noremap <silent> ]l :call LocListNext('next')<cr>
+noremap <silent> [l :call LocListNext('previous')<cr>
 
 "#############################
 "### General configuration ###
@@ -569,13 +555,13 @@ let g:is_bash = 1
 "### Plugins configuration ###
 "#############################
 
-let g:fzf_layout = { 'up': '100%' }
+let g:fzf_layout = { 'window': 'let g:launching_fzf = 1 | topleft 100split enew' }
 let g:fzf_colors = {
   \ 'fg':        ['fg', 'Normal'],
   \ 'bg':        ['bg', 'Normal'],
-  \ 'hl':        ['fg', 'Statement'],
   \ 'fg+':       ['fg', 'Normal'],
   \ 'bg+':       ['bg', 'Normal'],
+  \ 'hl':        ['fg', 'Statement'],
   \ 'hl+':       ['fg', 'Statement'],
   \ 'pointer':   ['fg', 'Statement']
   \ }
@@ -584,25 +570,23 @@ let g:fzf_action = {
   \ 'alt-t': 'tab split',
   \ 'ctrl-v': 'vsplit',
   \ 'alt-v': 'vsplit',
-  \ 'alt-x': 'split'
+  \ 'alt-s': 'split'
   \ }
 let g:fzf_history_dir = '~/.fzf_history'
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
 let $FZF_DEFAULT_OPTS .=
-  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="ctrl-j:accept,ctrl-n:down,ctrl-p:up,ctrl-o:previous-history,ctrl-i:next-history"'
-  " \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  " --bind="ctrl-j:accept,ctrl-n:down,ctrl-o:next-history"'
+  \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
+  \ . ' --bind="ctrl-j:accept,ctrl-n:down,ctrl-p:up,ctrl-o:previous-history,ctrl-i:next-history"'
 
-" let g:netrw_banner=0
 let g:netrw_altfile = 1
 
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeIgnore = [
-  \ '\.tags$', '\.tags_sorted_by_file$', '\.gemtags$', '\.pyc$', '\.pyo$',
-  \ '\.exe$', '\.dll$', '\.obj$', '\.o$', '\.a$', '\.lib$', '\.so$',
-  \ '\.dylib$', '\.ncb$', '\.sdf$', '\.suo$', '\.pdb$', '\.idb$',
-  \ '\.DS_Store$', '\.class$', '\.psd$', '\.db$', '\.gitkeep$', '\.keep$',
-  \ '\.rubocop-http', '\.notes$', '\.retry$', 'tags$',
+  \ '\.tags', '\.gemtags$', '\.pyc$', '\.pyo$', '\.exe$', '\.dll$', '\.obj$',
+  \ '\.o$', '\.a$', '\.lib$', '\.so$', '\.dylib$', '\.ncb$', '\.sdf$',
+  \ '\.suo$', '\.pdb$', '\.idb$', '\.DS_Store$', '\.class$', '\.psd$', '\.db$',
+  \ '\.gitkeep$', '\.keep$', '\.rubocop-http', '\.notes$', '\.retry$', 'tags$',
   \
   \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
   \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
@@ -613,6 +597,7 @@ let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeCreatePrefix='silent keepalt keepjumps'
 let NERDTreeAutoDeleteBuffer=1
+let NERDTreeHijackNetrw = 0
 
 let g:incsearch#auto_nohlsearch = 1
 
@@ -623,6 +608,10 @@ let g:deoplete#enable_smart_case = 0
 let g:test#strategy = 'custom'
 
 let g:tagbar_sort = 0
+let g:tagbar_autofocus = 1
+let g:tagbar_map_showproto = '<nop>'
+
+let g:gundo_help = 0
 
 let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
@@ -732,11 +721,11 @@ let g:tmux_navigator_no_mappings = 1
 let g:jsx_ext_required = 0
 
 let g:mta_filetypes = {
-  \ 'html' : 1,
-  \ 'eruby.html' : 1,
-  \ 'xml' : 1,
-  \ 'javascript.jsx' : 1
-  \}
+  \ 'html': 1,
+  \ 'eruby.html': 1,
+  \ 'xml': 1,
+  \ 'javascript.jsx': 1
+  \ }
 
 call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
@@ -758,18 +747,18 @@ let g:vdebug_options = {}
 let g:vdebug_options['break_on_open'] = 0
 let g:vdebug_options['watch_window_style'] = 'compact'
 let g:vdebug_keymap = {
-\    'set_breakpoint' : '<leader>ub',
-\    'run' : '<leader>uu',
-\    'eval_visual' : '<leader>ue',
-\    'eval_under_cursor' : '<leader>ue',
-\    'get_context' : '<leader>ur',
-\    'detach' : '<leader>ud',
-\    'step_over' : '<down>',
-\    'step_into' : '<right>',
-\    'step_out' : '<left>',
-\    'run_to_cursor' : '<s-up>',
-\    'close' : 'q'
-\}
+  \ 'set_breakpoint': '<leader>ub',
+  \ 'run': '<leader>uu',
+  \ 'eval_visual': '<leader>ue',
+  \ 'eval_under_cursor': '<leader>ue',
+  \ 'get_context': '<leader>ur',
+  \ 'detach': '<leader>ud',
+  \ 'step_over': '<down>',
+  \ 'step_into': '<right>',
+  \ 'step_out': '<left>',
+  \ 'run_to_cursor': '<s-up>',
+  \ 'close': 'q'
+  \ }
 
 "#################
 "### Functions ###
@@ -784,6 +773,10 @@ function! TabComplete()
   else
     return "\<tab>"
   endif
+endfunction
+
+function! Jumpable(command)
+  return (v:count > 5 ? "m'" . v:count : '') . a:command
 endfunction
 
 function! IsEmmetExpandable()
@@ -824,7 +817,8 @@ function! ClearEverything()
   ccl
   lcl
   silent! call CloseTests()
-  NERDTreeClose
+  silent! NERDTreeClose
+  silent! TagbarClose
   normal cxc
   call ClearMessages()
   " pclose
@@ -865,7 +859,6 @@ function! ShowAllHighlights()
   normal "zpdd
 endfunction
 
-
 function! RevealInNERDTreeBuffer()
   try
     let p = g:NERDTreePath.New(expand('%:p'))
@@ -899,19 +892,50 @@ function! OpenNERDTreeBuffer()
   end
 endfunction
 
+function! PreviewNERDTreeFile()
+  if !exists('t:previous_preview_buffer') | let t:previous_preview_buffer = 0 | endif
+  let filename = substitute(getline('.'), '^\s*\|\s*$', '','g')
+  if filename =~ '/$'
+    call nerdtree#ui_glue#invokeKeyMap('o')
+    return
+  endif
+  let should_close_buffer_next_time = 1
+  if (bufnr(filename) > 0) | let should_close_buffer_next_time = 0 | endif
+
+  normal go
+  if t:previous_preview_buffer > 0
+    exe 'bwipeout ' . t:previous_preview_buffer
+    let t:previous_preview_buffer = 0
+  endif
+  if should_close_buffer_next_time
+    let t:previous_preview_buffer = bufnr(filename)
+  endif
+endfunction
+
+function! OpenBuffersOutsideOfNERDTree()
+  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
+    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
+    \ && &buftype == '' && !exists('g:launching_fzf')
+    let bufnum = bufnr('%')
+    close
+    exe 'b ' . bufnum
+  endif
+  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
+endfunction
+
+function! CloseNERTreeAndMaybeTab()
+  normal q
+  if len(tabpagebuflist()) == 1 && exists('b:startup_buffer')
+    \ && IsCurrentBufferNew() && !&modified
+    q
+  endif
+endfunction
+
 function! DeleteCurrentFile()
   let answer = input('Delete current file? ', 'y')
   if answer == 'y'
     exec ':silent !rm ' . expand('%')
   endif
-endfunction
-
-function! RefreshNERDTree()
-  " NERDTreeFind
-  " NERDTreeClose
-  " call g:NERDTree.ForCurrentTab().getRoot().refresh()
-  " call g:NERDTree.ForCurrentTab().getRoot().refresh()
-  " call nerdtree#ui_glue#invokeKeyMap('o')
 endfunction
 
 function! MoveCurrentFile()
@@ -1107,15 +1131,6 @@ function! OpenFileSearchResult(new_tab)
   endif
 endfunction
 
-function! PreviewNERDTreeNode()
-  let line = getline('.')
-  if line =~ '▸\|▾'
-    call nerdtree#ui_glue#invokeKeyMap('o')
-  elseif line !~ '^/'
-    normal go
-  endif
-endfunction
-
 function! FileSearch(search_options)
   if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree_1'
     enew
@@ -1170,13 +1185,17 @@ endfunction
 function! ResetProject()
   for num in range(1, bufnr('$'))
     if buflisted(num) && bufname(num) != 'NERD_tree_1'
-      silent exec 'bd! ' . num
+      silent exec 'silent bd! ' . num
     endif
   endfor
-
-  call OpenNERDTreeBuffer()
-  silent! let @# = ''
-  normal ggX^
+  let b:startup_buffer = 1
+  call ClearMessages()
+  if bufexists('NERD_tree_1')
+    NERDTreeFocus
+    normal ggX^
+  else
+    NERDTree
+  endif
 endfunction
 
 function! ClearUndos()
@@ -1492,7 +1511,7 @@ function! Join()
   let previous_last_char = getline('.')[col('$')-2]
   normal! J
   let current_char = getline('.')[col('.')-1]
-  if previous_last_char == '(' && current_char == ' '
+  if previous_last_char =~ '(\|[\' && current_char == ' '
     normal x
   endif
 endfunction
@@ -1549,16 +1568,6 @@ endfunction
 
 function! SaveCurrentBufNum()
   let t:last_bufnum = bufnr('%')
-endfunction
-
-function! RestoreNerdtreeOriginalBuffer()
-  if exists('t:escaped_nerdtree')
-    \ && exists('t:nerdtree_original_bufnum')
-    \ && bufnr('%') != t:nerdtree_original_bufnum
-    exe 'buffer ' . t:nerdtree_original_bufnum
-    unlet t:nerdtree_original_bufnum
-  endif
-  if exists('t:escaped_nerdtree') | unlet t:escaped_nerdtree | endif
 endfunction
 
 function! GetLintMsg()
@@ -1761,7 +1770,6 @@ function! EnableMetaMappings()
     endfor
   endif
 endfunction
-if !has('nvim') | call EnableMetaMappings() | endif
 
 function! SetTmuxWindowName()
   let cmd = 'rename=$(tmux show-window-options -t $TMUX_PANE -v automatic-rename);'
@@ -1807,7 +1815,8 @@ function! ImprovedGoToFile()
     try
       silent exe "normal \<c-]>"
     catch /E426/
-      echo "Error: No file found"
+      normal :
+      echo 'No file found'
     endtry
   endtry
 endfunction
@@ -1889,6 +1898,114 @@ function! InsertLineAfter(count) abort
 endfunction
 nnoremap <silent> <Plug>InsertLineAfter :<c-u>call InsertLineAfter(v:count1)<cr>
 
+function! QfListNext(cmd_next)
+  try
+    if !exists('g:saved_qflist') | let g:saved_qflist = [] | endif
+    let current_list = getqflist()
+    if current_list == g:saved_qflist
+      exe 'c' . a:cmd_next
+    else
+      let g:saved_qflist = current_list
+      cc
+    endif
+  catch /E553/ | echo 'No more items'
+  catch /E42/ | echo 'Empty quickfix list'
+  endtry
+endfunction
+
+function! LocListNext(cmd_next)
+  try
+    if !exists('g:saved_loclist') | let g:saved_loclist = [] | endif
+    let current_list = getloclist(0)
+    if current_list == g:saved_loclist
+      exe 'l' . a:cmd_next
+    else
+      let g:saved_loclist = current_list
+      ll
+    endif
+  catch /E553/
+    echo 'No more items'
+  catch /\(E42\|E776\)/
+    echo 'Empty location list'
+  endtry
+endfunction
+
+function! SetProjectMappings()
+  if IsRubyProject()
+    noremap <silent> <leader>rg :e Gemfile<cr>
+    noremap <silent> <leader>rG :vnew<cr>:e Gemfile<cr>
+    noremap <silent> <leader>rh :s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
+    nnoremap <silent> <leader>rH :%s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
+    noremap <silent> <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
+    noremap <silent> <leader>ub obinding.pry<esc>
+  endif
+  if IsRailsProject()
+    noremap <silent> <leader>rr :e config/routes.rb<cr>
+    noremap <silent> <leader>rR :vnew<cr>:e config/routes.rb<cr>
+    noremap <silent> <leader>rs :e db/schema.rb<cr>
+    noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
+    noremap <silent> <leader>rm :call ShowLatestMigration()<cr>
+    noremap <silent> <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
+    vnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
+  endif
+  if IsPhpProject()
+    noremap <silent> <leader>ub :Breakpoint<cr>
+    noremap <silent> <leader>uu :VdebugStart<cr>
+    noremap <silent> <leader>up :VdebugStart<cr>
+    noremap <silent> <leader>us :VdebugStart<cr>
+    noremap <silent> <leader>uc :BreakpointRemove *<cr>
+    nmap <silent> <leader>ul V<leader>ue
+  endif
+endfunction
+
+function! IsRubyProject()
+  return !empty(glob('Gemfile'))
+endfunction
+
+function! IsRailsProject()
+  return !empty(glob('config/environment.rb'))
+endfunction
+
+function! IsPhpProject()
+  return !empty(glob('*.php'))
+endfunction
+
+function! BufferHistoryLast()
+  exe 'normal ' . (len(w:buffer_history) - w:buffer_history_index - 1) . ']b'
+endfunction
+
+function! BufferHistoryFirst()
+  exe 'normal ' . w:buffer_history_index . '[b'
+endfunction
+
+function! DisplayDirectory(dir)
+  if !isdirectory(a:dir) | return | endif
+  call ClearMessages()
+  enew
+  let b:startup_buffer = 1
+  call buffer_history#add(winbufnr(0))
+  NERDTree
+endfunction
+
+function! BrowseOldFiles()
+  let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&filetype") != "qf"')
+  let buffers = sort(buffers, 'SortBuffers')
+  let files = filter(map(buffers, 'bufname(v:val)'), 'len(v:val)')
+    \ + filter(copy(v:oldfiles), 'filereadable(expand(v:val))')
+  let files = filter(files, "v:val !~ '/' || v:val =~ '^" . getcwd() ."/'")
+  let files = fzf#vim#_uniq(map(files, 'fnamemodify(v:val, ":.")'))
+
+  call fzf#run(fzf#wrap({
+    \ 'source': files,
+    \ 'options': ['--prompt', 'OldFiles> ']
+    \ }))
+endfunction
+
+function! SortBuffers(...)
+  let [b1, b2] = map(copy(a:000), 'get(g:fzf#vim#buffers, v:val, v:val)')
+  return b1 < b2 ? 1 : -1
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -1923,9 +2040,8 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.nfo,*.NFO set ft=nfo
   autocmd BufRead,BufNewFile *.js.es6 set ft=javascript
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
-  autocmd BufRead,BufNewFile *.env* set ft=conf
+  autocmd BufRead,BufNewFile *.env*,Procfile* set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
-  " autocmd BufRead,BufNewFile *.php set ft=php.html
 augroup end
 
 augroup detect_binary_files
@@ -1950,12 +2066,6 @@ if has('nvim')
     autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
   augroup end
 endif
-
-augroup nerdtree_original_buffer
-  autocmd!
-  autocmd BufLeave * call SaveCurrentBufNum()
-  autocmd BufEnter * call RestoreNerdtreeOriginalBuffer()
-augroup end
 
 if exists('$TMUX') && has('nvim')
   augroup tmux_window_name
@@ -2002,18 +2112,30 @@ augroup background_load_lazy_loaded_plugins
     \ autocmd! background_load_lazy_loaded_plugins
 augroup end
 
+augroup replace_netrw_with_nerdtree
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,VimEnter * call DisplayDirectory(expand('<amatch>'))
+augroup end
+
 augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
-  autocmd BufWritePost *.vim/autoload/* source %
   autocmd InsertLeave * silent! set nopaste
-  autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call OnBufEnter()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
+  autocmd BufWinEnter * call OpenBuffersOutsideOfNERDTree()
 augroup end
+
+"#############
+"### Other ###
+"#############
+
+if !has('nvim') | call EnableMetaMappings() | endif
+call SetProjectMappings()
 
 set exrc
 set secure
