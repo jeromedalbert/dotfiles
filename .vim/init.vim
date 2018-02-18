@@ -32,7 +32,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive', { 'on': [] }
 Plug 'jeromedalbert/vim-rails', { 'for': ['ruby', 'eruby'] }
 
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -392,11 +392,14 @@ xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
 command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
-command! Gmodified call GitOpenModifiedFiles()
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! MakePlugSnapshot call MakePlugSnapshot()
 command! Profile call Profile()
+command! Gdiff call LazyLoadFugitive('Gdiff')
+command! Glog call LazyLoadFugitive('Glog')
+command! Gblame call LazyLoadFugitive('Gblame')
+command! Gmodified call GitOpenModifiedFiles()
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -2004,6 +2007,12 @@ endfunction
 function! SortBuffers(...)
   let [b1, b2] = map(copy(a:000), 'get(g:fzf#vim#buffers, v:val, v:val)')
   return b1 < b2 ? 1 : -1
+endfunction
+
+function! LazyLoadFugitive(cmd)
+  call plug#load('vim-fugitive')
+  call fugitive#detect(expand('%:p'))
+  exe a:cmd
 endfunction
 
 "####################
