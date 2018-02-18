@@ -14,7 +14,6 @@ Plug 'mattn/emmet-vim',
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
 
 Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
@@ -742,9 +741,8 @@ let g:gutentags_ctags_auto_set_tags = 0
 let g:splitjoin_ruby_hanging_args = 0
 let g:splitjoin_ruby_curly_braces = 0
 
-let g:polyglot_disabled = ['markdown', 'yaml']
+let g:polyglot_disabled = ['yaml']
 let g:markdown_syntax_conceal = 0
-" let g:php_syntax_extensions_enabled = []
 
 let g:vdebug_options = {}
 let g:vdebug_options['break_on_open'] = 0

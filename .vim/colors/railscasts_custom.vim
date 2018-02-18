@@ -229,6 +229,18 @@ hi link markdownLinkText String
 hi markdownLinkTextDelimiter guifg=#647b83
 hi link markdownLinkDelimiter markdownLinkTextDelimiter
 hi markdownUrl guifg=#839496
+hi link markdownListMarker htmlTagName
+
+hi link mkdListItem markdownListMarker
+hi link mkdCode NONE
+hi link mkdLink markdownLinkText
+hi link mkdUrl markdownUrl
+hi link mkdDelimiter markdownLinkTextDelimiter
+hi link mkdBold markdownBold
+hi link htmlBold mkdBold
+hi link mkdItalic markdownItalic
+hi link htmlItalic mkdItalic
+hi link mkdLineBreak markdownlinebreak
 
 hi link javaScriptFunction Statement
 hi link javaScriptRailsFunction rubyRailsARMethod
