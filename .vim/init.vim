@@ -4,7 +4,7 @@
 
 call plug#begin('~/.vim/plugged')
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake'
 Plug 'jlanzarotta/bufexplorer'
@@ -56,6 +56,7 @@ Plug 'wincent/replay'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'joonty/vdebug', { 'on': ['Breakpoint', 'VdebugStart'] }
 Plug 'dhruvasagar/vim-buffer-history'
+Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 " Plug 'christoomey/vim-tmux-runner'
 call plug#end()
 
@@ -267,8 +268,6 @@ endif
 
 noremap <silent> <f1> :NERDTreeToggle<CR>
 noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
-" noremap <leader>k :call OpenNERDTreeBuffer()<CR>
-" noremap <silent> <leader>K :call RevealInNERDTreeBuffer()<cr>
 
 noremap <silent> <f2> :TagbarToggle<CR>
 noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
@@ -440,6 +439,11 @@ noremap <silent> <m-N> <esc>:tabnew<cr>:call BrowseOldFiles()<cr>
 
 noremap <silent> gf :call ImprovedGoToFile()<cr>
 
+noremap ga= :Tabularize /=<cr>
+noremap ga<bar> :Tabularize /<bar><cr>
+map gat ga<bar>
+noremap ga<space> :Tabularize / /l0<cr>
+
 noremap <silent> ]b :BufferHistoryForward<cr>
 noremap <silent> [b :BufferHistoryBack<cr>
 noremap <silent> ]B :call BufferHistoryLast()<cr>
@@ -557,7 +561,9 @@ let g:is_bash = 1
 "### Plugins configuration ###
 "#############################
 
-let g:fzf_layout = { 'window': 'let g:launching_fzf = 1 | topleft 100split enew' }
+let g:fzf_layout = {
+  \ 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew'
+  \ }
 let g:fzf_colors = {
   \ 'fg':        ['fg', 'Normal'],
   \ 'bg':        ['bg', 'Normal'],
@@ -860,72 +866,51 @@ function! ShowAllHighlights()
   normal "zpdd
 endfunction
 
-function! RevealInNERDTreeBuffer()
-  try
-    let p = g:NERDTreePath.New(expand('%:p'))
-  catch /^NERDTree.InvalidArgumentsError/
-    call nerdtree#echo('no file for the current buffer')
-    return
-  endtry
-  if p.isUnixHiddenPath()
-    let showhidden=g:NERDTreeShowHidden
-    let g:NERDTreeShowHidden = 1
-  endif
-
-  call OpenNERDTreeBuffer()
-
-  let node = b:NERDTree.root.reveal(p)
-  call b:NERDTree.render()
-  call node.putCursorHere(1,0)
-
-  if p.isUnixHiddenFile()
-    let g:NERDTreeShowHidden = showhidden
-  endif
+function! OnNERDTreeInit()
+  let t:nerdtree_winnr = bufwinnr('%')
+  normal! j
 endfunction
 
-function! OpenNERDTreeBuffer()
-  if bufexists('NERD_tree_1')
-    buffer NERD_tree_1
-  else
-    let alternate_buffer = bufnr('%')
-    silent edit .
-    if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
-  end
-endfunction
-
-function! PreviewNERDTreeFile()
-  if !exists('t:previous_preview_buffer') | let t:previous_preview_buffer = 0 | endif
-  let filename = substitute(getline('.'), '^\s*\|\s*$', '','g')
-  if filename =~ '/$'
-    call nerdtree#ui_glue#invokeKeyMap('o')
-    return
-  endif
-  let should_close_buffer_next_time = 1
-  if (bufnr(filename) > 0) | let should_close_buffer_next_time = 0 | endif
-
-  normal go
-  if t:previous_preview_buffer > 0
-    exe 'bwipeout ' . t:previous_preview_buffer
-    let t:previous_preview_buffer = 0
-  endif
-  if should_close_buffer_next_time
-    let t:previous_preview_buffer = bufnr(filename)
-  endif
-endfunction
-
-function! OpenBuffersOutsideOfNERDTree()
+function! PreventBuffersInNERDTree()
   if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
     \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
     \ && &buftype == '' && !exists('g:launching_fzf')
     let bufnum = bufnr('%')
-    close
+    silent! close
     exe 'b ' . bufnum
   endif
   if exists('g:launching_fzf') | unlet g:launching_fzf | endif
 endfunction
 
-function! CloseNERTreeAndMaybeTab()
-  normal q
+function! NERDTreePreviewOrOpen()
+  if !exists('b:previous_preview_bufnum')
+    let b:previous_preview_bufnum = 0
+    let b:previous_preview_bufnum_to_close = 0
+  endif
+  let filename = substitute(getline('.'), '^\s*\|\s*$', '','g')
+  if filename =~ '/$'
+    call nerdtree#ui_glue#invokeKeyMap('o') | return
+  endif
+  let filename = '^' . filename . '$'
+  let should_close_buffer_next_time = bufnr(filename) <= 0
+  if bufnr(filename) == b:previous_preview_bufnum
+    wincmd w
+    return
+  endif
+
+  normal go
+  if b:previous_preview_bufnum_to_close > 0
+    exe 'bwipeout ' . b:previous_preview_bufnum_to_close
+    let b:previous_preview_bufnum_to_close = 0
+  endif
+  if should_close_buffer_next_time
+    let b:previous_preview_bufnum_to_close = bufnr(filename)
+  endif
+  let b:previous_preview_bufnum = bufnr(filename)
+endfunction
+
+function! CloseNERDTree()
+  q
   if len(tabpagebuflist()) == 1 && exists('b:startup_buffer')
     \ && IsCurrentBufferNew() && !&modified
     q
@@ -1193,15 +1178,17 @@ function! ResetProject()
   call ClearMessages()
   if bufexists('NERD_tree_1')
     NERDTreeFocus
-    normal ggX^
+    normal ggX^j
   else
     NERDTree
   endif
 endfunction
 
 function! ClearUndos()
+  let v = winsaveview()
   set undoreload=0
   silent edit!
+  call winrestview(v)
   echo 'Undos cleared.'
 endfunction
 
@@ -2125,6 +2112,12 @@ augroup replace_netrw_with_nerdtree
   autocmd BufEnter,VimEnter * call DisplayDirectory(expand('<amatch>'))
 augroup end
 
+augroup nerdtree_events
+  autocmd!
+  autocmd User NERDTreeInit call OnNERDTreeInit()
+  autocmd BufWinEnter * call PreventBuffersInNERDTree()
+augroup end
+
 augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call TrimTrailingWhitespace()
@@ -2134,7 +2127,6 @@ augroup general_autocommands
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
-  autocmd BufWinEnter * call OpenBuffersOutsideOfNERDTree()
 augroup end
 
 "#############

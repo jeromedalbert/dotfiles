@@ -189,6 +189,15 @@ ggcl() {
   gcl "$@"
   cd $git_repo
 }
+gclv() {
+  local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
+  gcl "$@"
+  v $git_repo
+}
+ggclv() {
+  ggcl "$@"
+  v .
+}
 alias gm="git merge"
 alias gm-="git merge -"
 alias gcm="git checkout master"

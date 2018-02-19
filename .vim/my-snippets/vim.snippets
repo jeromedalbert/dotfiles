@@ -3,3 +3,10 @@ function! ${1:FunctionName}(${2})
 	${0}
 endfunction
 endsnippet
+
+snippet au "augroup"
+augroup ${1:group_name}
+	autocmd!
+	${0}
+augroup end
+endsnippet
