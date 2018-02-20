@@ -1,4 +1,4 @@
-imap <silent> <buffer> <expr> / CloseTag()
+inoremap <silent> <buffer> <expr> / CloseTag()
 
 let b:unaryTagsStack = ""
 

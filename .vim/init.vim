@@ -270,7 +270,7 @@ noremap <silent> <f1> :NERDTreeToggle<CR>
 noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
 
 noremap <silent> <f2> :TagbarToggle<CR>
-noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+noremap <silent> <leader>ut :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -283,7 +283,7 @@ nnoremap <silent> <leader>m :exe 'e ' . GetTestAlternateFile()<cr>
 nnoremap <silent> <leader>v :let t:file=expand('%')<cr>:vnew<cr>:exe 'e ' . GetTestAlternateFile(t:file)<cr>
 
 noremap <leader>fmo :call MoveCurrentFile()<cr>
-map <leader>fmv <leader>fmo
+noremap <leader>fre :call RenameCurrentFile()<cr>
 noremap <leader>fde :call DeleteCurrentFile()<cr>
 noremap <leader>fdu :call DuplicateCurrentFile()<cr>
 noremap <leader>fcp :call CopyCurrentFilePath()<cr>
@@ -604,8 +604,11 @@ let NERDTreeHighlightCursorline = 1
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeCreatePrefix='silent keepalt keepjumps'
-let NERDTreeAutoDeleteBuffer=1
+let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeHijackNetrw = 0
+let NERDTreeMapCWD = 'cd'
+let NERDTreeMapChdir = 'CD'
+let NERDTreeMapChangeRoot = 'd'
 
 let g:incsearch#auto_nohlsearch = 1
 
@@ -866,9 +869,66 @@ function! ShowAllHighlights()
   normal "zpdd
 endfunction
 
+function! Autowrite()
+  if &modified
+    silent! wa
+    silent! GutentagsUpdate
+  endif
+endfunction
+
 function! OnNERDTreeInit()
   let t:nerdtree_winnr = bufwinnr('%')
+  let b:previous_preview_bufnum_to_close = 0
+  call OnNERDTreeEnter()
   normal! j
+endfunction
+
+function! OnNERDTreeEnter()
+  let b:original_bufnum = 0
+  if exists('t:last_bufnum')
+    let b:original_bufnum = t:last_bufnum
+  endif
+  let b:previous_preview_bufnum = 0
+endfunction
+
+function! NERDTreePreviewOrOpen()
+  let filename = substitute(getline('.'), '^\s*\|\s*$', '','g')
+  if filename =~ '/$'
+    call nerdtree#ui_glue#invokeKeyMap('o') | return
+  endif
+  let filename = '^' . filename . '$'
+  let should_close_buffer_next_time = bufnr(filename) <= 0
+  if bufnr(filename) == b:previous_preview_bufnum && bufnr(filename) > 0
+    wincmd w
+    return
+  endif
+  normal go
+  if b:previous_preview_bufnum_to_close > 0
+    if b:previous_preview_bufnum_to_close != b:original_bufnum
+      exe 'bwipeout ' . b:previous_preview_bufnum_to_close
+    endif
+    let b:previous_preview_bufnum_to_close = 0
+  endif
+  if should_close_buffer_next_time
+    let b:previous_preview_bufnum_to_close = bufnr(filename)
+  endif
+  let b:previous_preview_bufnum = bufnr(filename)
+endfunction
+
+function! EscapeNERDTree()
+  let original_bufnum = b:original_bufnum
+  NERDTreeClose
+  if original_bufnum
+    exe 'b ' . original_bufnum
+  endif
+endfunction
+
+function! CloseNERDTree()
+  q
+  if len(tabpagebuflist()) == 1 && exists('b:startup_buffer')
+    \ && IsCurrentBufferNew() && !&modified
+    q
+  endif
 endfunction
 
 function! PreventBuffersInNERDTree()
@@ -880,41 +940,6 @@ function! PreventBuffersInNERDTree()
     exe 'b ' . bufnum
   endif
   if exists('g:launching_fzf') | unlet g:launching_fzf | endif
-endfunction
-
-function! NERDTreePreviewOrOpen()
-  if !exists('b:previous_preview_bufnum')
-    let b:previous_preview_bufnum = 0
-    let b:previous_preview_bufnum_to_close = 0
-  endif
-  let filename = substitute(getline('.'), '^\s*\|\s*$', '','g')
-  if filename =~ '/$'
-    call nerdtree#ui_glue#invokeKeyMap('o') | return
-  endif
-  let filename = '^' . filename . '$'
-  let should_close_buffer_next_time = bufnr(filename) <= 0
-  if bufnr(filename) == b:previous_preview_bufnum
-    wincmd w
-    return
-  endif
-
-  normal go
-  if b:previous_preview_bufnum_to_close > 0
-    exe 'bwipeout ' . b:previous_preview_bufnum_to_close
-    let b:previous_preview_bufnum_to_close = 0
-  endif
-  if should_close_buffer_next_time
-    let b:previous_preview_bufnum_to_close = bufnr(filename)
-  endif
-  let b:previous_preview_bufnum = bufnr(filename)
-endfunction
-
-function! CloseNERDTree()
-  q
-  if len(tabpagebuflist()) == 1 && exists('b:startup_buffer')
-    \ && IsCurrentBufferNew() && !&modified
-    q
-  endif
 endfunction
 
 function! DeleteCurrentFile()
@@ -1554,10 +1579,6 @@ function! TrimTrailingWhitespace()
   call cursor(l, c)
 endfunction
 
-function! SaveCurrentBufNum()
-  let t:last_bufnum = bufnr('%')
-endfunction
-
 function! GetLintMsg()
   let counts = neomake#statusline#LoclistCounts()
   let error_count = get(counts, 'E', 0) + get(counts, 'I', 0)
@@ -1626,26 +1647,49 @@ endfunction
 function! OnBufEnter()
   exe ':match'
   if !exists('b:buffer_mappings_created')
-    call CreateBufferMappings()
+    call OverrideGlobalMappings()
   end
   call ConfigureLargeBuffers()
 endfunction
 
-function! CreateBufferMappings()
+function! OverrideGlobalMappings()
+  call StashGlobalMappings(
+    \ ['<leader>fre', ''], ['d0', 'n'], ['ds', 'n'], ['dss', 'n']
+    \ )
   let buffer_name = bufname('%')
   if buffer_name == '[Global Replace]'
     map <buffer><Leader>fr :call feedkeys("\<space>fRa")<cr>
     map <buffer><Leader>fR :Greplace<cr>
   else
-    map <buffer><leader>fre :call RenameCurrentFile()<cr>
-    map <buffer><leader>frm <buffer><leader>fde
+    call RestoreBufferMappings('<leader>fre')
   endif
   if buffer_name !~ 'NERD_tree'
+    call RestoreBufferMappings('d0', 'ds', 'dss')
     map <buffer> m, mO
     map <buffer> `, `O
     map <buffer> ', `O
   endif
   let b:buffer_mappings_created=1
+endfunction
+
+function! StashGlobalMappings(...)
+  if exists('g:stashed_mappings') | return | endif
+  let g:global_mappings = {}
+  for [mapping, mode] in a:000
+    let g:global_mappings[mapping] = maparg(mapping, mode, 0, 1)
+    exe mode . 'unmap ' . mapping
+  endfor
+  let g:stashed_mappings = 1
+endfunction
+
+function! RestoreBufferMappings(...)
+  for mapping in a:000
+    let info = g:global_mappings[mapping]
+    exe info.mode . (info.noremap ? 'noremap' : 'map') . ' <buffer>'
+      \ (info.silent ? '<silent>' : '') .
+      \ (info.expr ? '<expr>' : '') .
+      \ ' ' . mapping . ' ' . info.rhs
+  endfor
 endfunction
 
 function! ConfigureLargeBuffers()
@@ -2006,11 +2050,7 @@ endfunction
 
 augroup improved_autowrite
   autocmd!
-  autocmd FocusLost,BufLeave *
-    \ if &modified |
-    \   silent! wa |
-    \   silent! GutentagsUpdate |
-    \ endif
+  autocmd FocusLost,BufLeave * call Autowrite()
 augroup end
 
 augroup improved_autoread
@@ -2095,6 +2135,7 @@ endif
 " augroup end
 
 augroup preserve_buffer_scroll
+  autocmd!
   autocmd BufLeave * call SaveBufferScroll()
   autocmd BufEnter * call RestoreBufferScroll()
 augroup end
@@ -2116,6 +2157,8 @@ augroup nerdtree_events
   autocmd!
   autocmd User NERDTreeInit call OnNERDTreeInit()
   autocmd BufWinEnter * call PreventBuffersInNERDTree()
+  autocmd BufEnter NERD_tree* call OnNERDTreeEnter()
+  autocmd BufLeave * silent let t:last_bufnum = bufnr('%')
 augroup end
 
 augroup general_autocommands
