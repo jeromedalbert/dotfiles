@@ -522,6 +522,7 @@ set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
 set regexpengine=1
+set wildignore=.DS_Store,.localized,.tags,.keep,*.pyc,*.class
 
 set statusline=
 set statusline+=\ %<%f
@@ -590,14 +591,12 @@ let g:netrw_altfile = 1
 
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
+let NERDTreeRespectWildIgnore = 1
 let NERDTreeIgnore = [
-  \ '\.tags', '\.gemtags$', '\.pyc$', '\.pyo$', '\.exe$', '\.dll$', '\.obj$',
-  \ '\.o$', '\.a$', '\.lib$', '\.so$', '\.dylib$', '\.ncb$', '\.sdf$',
-  \ '\.suo$', '\.pdb$', '\.idb$', '\.DS_Store$', '\.class$', '\.psd$', '\.db$',
-  \ '\.gitkeep$', '\.keep$', '\.rubocop-http', '\.notes$', '\.retry$', 'tags$',
+  \ '\.rubocop-http', '\.notes$',
   \
-  \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.bundle$',
-  \ '^\.sass-cache$', '^tmp$', '^log$', '\^coverage$', '^node_modules$'
+  \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.sass-cache$',
+  \ '^tmp$', '^log$', '\^coverage$', '^node_modules$'
   \ ]
 let NERDTreeQuitOnOpen = 1
 let NERDTreeHighlightCursorline = 1

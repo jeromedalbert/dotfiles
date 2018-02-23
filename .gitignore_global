@@ -5,6 +5,7 @@
 .nvimrc
 .notes
 .ll_sync.sh
+.localized
 
 tags
 zeus.json
