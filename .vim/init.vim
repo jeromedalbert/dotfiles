@@ -293,18 +293,18 @@ noremap <leader>fn :call CreateNewFileInCurrentDir()<cr>
 noremap <leader>fN :call CreateNewFile()<cr>
 
 noremap <silent> <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
-vnoremap <silent> <leader>fj :!jq '.'<cr>
+xnoremap <silent> <leader>fj :!jq '.'<cr>
 noremap <silent> <leader>fh :silent %!tidy -qi
   \ --show-errors 0 --force-output yes --tidy-mark no --wrap 0 --doctype omit<cr>
 noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 " https://github.com/beautify-web/js-beautify
 noremap <silent> <leader>fb :set filetype=javascript<cr>:%!js-beautify -s 2<cr>
-vnoremap <silent> <leader>fb :!js-beautify -s 2<cr>
+xnoremap <silent> <leader>fb :!js-beautify -s 2<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
-vnoremap <silent> <m--> 20zl
+xnoremap <silent> <m--> 20zl
 noremap <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
-vnoremap <silent> <m-0> 20zh
+xnoremap <silent> <m-0> 20zh
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
 
@@ -336,7 +336,7 @@ noremap <leader>ff :FileSearch -Q -i '' <left><left>
 noremap <silent> <leader>yf :set opfunc=FileSearchVerb<CR>g@
 map <leader>fw <leader>yfiw
 map <leader>fW <leader>yfiW
-vnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
+xnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <m-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
 noremap <leader>fo :Gqfopen<cr>
@@ -374,13 +374,13 @@ nnoremap <leader>x :%s/
 nmap <leader>X <leader>yxiw
 nnoremap <silent> <leader>yx :set opfunc=GlobalSubstituteVerb<CR>g@
 nmap <leader>yX <leader>yxiW
-vnoremap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
+nnoremap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
 
 nnoremap <leader>s :s/
 nmap <leader>S <leader>ysiw
 nnoremap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
-vnoremap <leader>s :s/\%V
+xnoremap <leader>s :s/\%V
 
 nmap <leader>8 *
 nmap <leader>, *
@@ -878,49 +878,58 @@ endfunction
 
 function! OnNERDTreeInit()
   let t:nerdtree_winnr = bufwinnr('%')
-  let b:previous_preview_bufnum_to_close = 0
-  call OnNERDTreeEnter()
+  call ResetNERDTreePreview()
   normal! j
 endfunction
 
-function! OnNERDTreeEnter()
-  let b:original_bufnum = 0
-  if exists('t:last_bufnum')
-    let b:original_bufnum = t:last_bufnum
-  endif
+function! ResetNERDTreePreview()
+  let t:original_bufnum = 0
+  if exists('t:last_bufnum') | let t:original_bufnum = t:last_bufnum | endif
+  let t:escaped_nerdtree = 0
   let b:previous_preview_bufnum = 0
+  let b:previous_preview_bufnum_to_close = 0
 endfunction
 
 function! NERDTreePreviewOrOpen()
-  let filename = substitute(getline('.'), '^\s*\|\s*$', '','g')
-  if filename =~ '/$'
+  let current_path = g:NERDTreeFileNode.GetSelected().path
+  if current_path.isDirectory
     call nerdtree#ui_glue#invokeKeyMap('o') | return
   endif
-  let filename = '^' . filename . '$'
-  let should_close_buffer_next_time = bufnr(filename) <= 0
-  if bufnr(filename) == b:previous_preview_bufnum && bufnr(filename) > 0
+  let filename = current_path.str({ 'format': 'Edit' })
+  let bfilename = '^' . filename . '$'
+  let should_close_buffer_next_time = bufnr(bfilename) <= 0
+  if bufnr(bfilename) == b:previous_preview_bufnum && bufnr(bfilename) > 0
     wincmd w
     return
   endif
   normal go
   if b:previous_preview_bufnum_to_close > 0
-    if b:previous_preview_bufnum_to_close != b:original_bufnum
+    if b:previous_preview_bufnum_to_close != t:original_bufnum
       exe 'bwipeout ' . b:previous_preview_bufnum_to_close
     endif
     let b:previous_preview_bufnum_to_close = 0
   endif
   if should_close_buffer_next_time
-    let b:previous_preview_bufnum_to_close = bufnr(filename)
+    let b:previous_preview_bufnum_to_close = bufnr(bfilename)
   endif
-  let b:previous_preview_bufnum = bufnr(filename)
+  let b:previous_preview_bufnum = bufnr(bfilename)
+endfunction
+
+function! LeaveNERDTreePreview()
+  if !exists('t:original_bufnum') | return | endif
+  if t:original_bufnum > 0 && t:original_bufnum != bufnr('%')
+    if t:escaped_nerdtree
+      exe 'b ' . t:original_bufnum
+    elseif @# == ''
+      silent! let @# = t:original_bufnum
+    endif
+  endif
+  let t:escaped_nerdtree = 0
 endfunction
 
 function! EscapeNERDTree()
-  let original_bufnum = b:original_bufnum
-  NERDTreeClose
-  if original_bufnum
-    exe 'b ' . original_bufnum
-  endif
+  let t:escaped_nerdtree = 1
+  q
 endfunction
 
 function! CloseNERDTree()
@@ -1978,7 +1987,7 @@ function! SetProjectMappings()
     noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
     noremap <silent> <leader>rm :call ShowLatestMigration()<cr>
     noremap <silent> <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
-    vnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
+    xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
   endif
   if IsPhpProject()
     noremap <silent> <leader>ub :Breakpoint<cr>
@@ -2024,7 +2033,7 @@ function! BrowseOldFiles()
   let buffers = sort(buffers, 'SortBuffers')
   let files = filter(map(buffers, 'bufname(v:val)'), 'len(v:val)')
     \ + filter(copy(v:oldfiles), 'filereadable(expand(v:val))')
-  let files = filter(files, "v:val !~ '/' || v:val =~ '^" . getcwd() ."/'")
+  let files = filter(files, "(v:val !~ '/' || v:val =~ '^" . getcwd() ."/') && v:val != '.'")
   let files = fzf#vim#_uniq(map(files, 'fnamemodify(v:val, ":.")'))
 
   call fzf#run(fzf#wrap({
@@ -2157,8 +2166,9 @@ augroup nerdtree_events
   autocmd!
   autocmd User NERDTreeInit call OnNERDTreeInit()
   autocmd BufWinEnter * call PreventBuffersInNERDTree()
-  autocmd BufEnter NERD_tree* call OnNERDTreeEnter()
+  autocmd BufEnter NERD_tree* call ResetNERDTreePreview()
   autocmd BufLeave * silent let t:last_bufnum = bufnr('%')
+  autocmd BufEnter * call LeaveNERDTreePreview()
 augroup end
 
 augroup general_autocommands
