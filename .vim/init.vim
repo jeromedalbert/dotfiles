@@ -6,14 +6,13 @@ call plug#begin('~/.vim/plugged')
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
-Plug 'neomake/neomake'
+Plug 'neomake/neomake', { 'on': [] }
+Plug 'sheerun/vim-polyglot'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
 Plug 'mattn/emmet-vim',
   \ { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx', 'php'] }
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
-
-Plug 'sheerun/vim-polyglot'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
@@ -22,24 +21,24 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'haya14busa/vim-textobj-function-syntax'
-Plug 'inkarkat/argtextobj.vim'
+Plug 'b4winckler/vim-angry'
 Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }
 Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }
 
 Plug 'tpope/vim-commentary'
-Plug 'machakann/vim-sandwich'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive', { 'on': [] }
-Plug 'jeromedalbert/vim-rails', { 'for': ['ruby', 'eruby'] }
+Plug 'machakann/vim-sandwich'
+Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
 Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
 Plug 'jeromedalbert/auto-pairs'
 Plug 'kurkale6ka/vim-pairs'
-Plug 'valloric/MatchTagAlways', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
+Plug 'valloric/MatchTagAlways', { 'on': [] }
 Plug 'vim-scripts/closetag.vim', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
@@ -392,6 +391,7 @@ xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
+command! -nargs=1 GemOpen call GemOpen(<q-args>)
 command! MakePlugSnapshot call MakePlugSnapshot()
 command! Profile call Profile()
 command! Gdiff call LazyLoadFugitive('Gdiff')
@@ -410,6 +410,8 @@ cabbrev gd Gdiff
 cabbrev glog Glog
 cabbrev gb Gblame
 cabbrev gm Gmodified
+cabbrev prof Profile
+cabbrev gmo GemOpen
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -460,6 +462,11 @@ noremap <silent> ]q :call QfListNext('next')<cr>
 noremap <silent> [q :call QfListNext('previous')<cr>
 noremap <silent> ]l :call LocListNext('next')<cr>
 noremap <silent> [l :call LocListNext('previous')<cr>
+
+xmap <silent> aa <Plug>AngryOuterSuffix
+omap <silent> aa <Plug>AngryOuterSuffix
+xmap <silent> ia <Plug>AngryInnerSuffix
+omap <silent> ia <Plug>AngryInnerSuffix
 
 "#############################
 "### General configuration ###
@@ -522,7 +529,7 @@ set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
 set regexpengine=1
-set wildignore=.DS_Store,.localized,.tags,.keep,*.pyc,*.class
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class
 
 set statusline=
 set statusline+=\ %<%f
@@ -555,6 +562,7 @@ let g:html_indent_script1 = 'inc'
 let g:html_indent_style1 = 'inc'
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
+let g:ruby_path = ''
 let g:vim_indent_cont = &sw
 let g:is_bash = 1
 
@@ -587,8 +595,6 @@ let $FZF_DEFAULT_OPTS .=
   \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
   \ . ' --bind="ctrl-j:accept,ctrl-n:down,ctrl-p:up,ctrl-o:previous-history,ctrl-i:next-history"'
 
-let g:netrw_altfile = 1
-
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeRespectWildIgnore = 1
@@ -609,19 +615,13 @@ let NERDTreeMapCWD = 'cd'
 let NERDTreeMapChdir = 'CD'
 let NERDTreeMapChangeRoot = 'd'
 
-let g:incsearch#auto_nohlsearch = 1
-
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
 
-let g:test#strategy = 'custom'
-
 let g:tagbar_sort = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = '<nop>'
-
-let g:gundo_help = 0
 
 let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
@@ -710,25 +710,14 @@ let g:session_autosave = 'no'
 let g:session_autoload = 'no'
 let g:session_menu = 0
 
-let s:repls = {
-  \ 'ruby': 'irb --simple-prompt',
-  \ 'python': 'python -ic ""'
-  \ }
-
 let g:neomake_verbose = 0
 let g:neomake_place_signs = 0
-let g:neomake_html_enabled_makers = []
-let g:neomake_javascript_enabled_makers = ['eslint']
-let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_highlight_columns = 0
-call neomake#configure#automake('rw', 1000)
-
-let s:last_active_tab_number = 1
-
-let g:tmux_navigator_no_mappings = 1
-
-let g:jsx_ext_required = 0
+let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_html_enabled_makers = []
+let g:neomake_sh_enabled_makers = ['sh']
+let g:neomake_zsh_enabled_makers = ['zsh']
 
 let g:mta_filetypes = {
   \ 'html': 1,
@@ -768,6 +757,14 @@ let g:vdebug_keymap = {
   \ 'run_to_cursor': '<s-up>',
   \ 'close': 'q'
   \ }
+
+let g:tmux_navigator_no_mappings = 1
+let g:jsx_ext_required = 0
+let g:angry_disable_maps = 1
+let g:incsearch#auto_nohlsearch = 1
+let g:test#strategy = 'custom'
+let g:gundo_help = 0
+let g:netrw_altfile = 1
 
 "#################
 "### Functions ###
@@ -953,7 +950,7 @@ endfunction
 function! DeleteCurrentFile()
   let answer = input('Delete current file? ', 'y')
   if answer == 'y'
-    exec ':silent !rm ' . expand('%')
+    exec ':silent !rm ' . shellescape(expand('%'))
   endif
 endfunction
 
@@ -963,8 +960,8 @@ function! MoveCurrentFile()
   if new_file != '' && new_file != old_file
     let alternate_buffer = @#
     if bufexists(new_file) | exec 'bd! ' . new_file | endif
-    exec ':silent !mkdir -p `dirname ' . new_file . '`'
-    exec ':silent !mv ' . old_file . ' ' . new_file
+    exec ':silent !mkdir -p `dirname ' . shellescape(new_file) . '`'
+    exec ':silent !mv ' . shellescape(old_file) . ' ' . shellescape(new_file)
     exec ':edit! ' . new_file
     exec 'bd! ' . old_file
     if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
@@ -981,7 +978,7 @@ function! RenameCurrentFile()
     if new_file != old_file
       let alternate_buffer = @#
       if bufexists(new_file) | exec 'bd! ' . new_file | endif
-      exec ':silent !mv ' . old_file . ' ' . new_file
+      exec ':silent !mv ' . shellescape(old_file) . ' ' . shellescape(new_file)
       exec ':edit! ' . new_file
       exec 'bd! ' . old_file
       if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
@@ -1203,18 +1200,14 @@ endfunction
 
 function! ResetProject()
   for num in range(1, bufnr('$'))
-    if buflisted(num) && bufname(num) != 'NERD_tree_1'
+    if buflisted(num) || bufname(num) =~ 'NERD_tree'
       silent exec 'silent bd! ' . num
     endif
   endfor
+  enew
   let b:startup_buffer = 1
   call ClearMessages()
-  if bufexists('NERD_tree_1')
-    NERDTreeFocus
-    normal ggX^j
-  else
-    NERDTree
-  endif
+  NERDTree
 endfunction
 
 function! ClearUndos()
@@ -1318,7 +1311,8 @@ function! GitOpenModifiedFiles()
   wincmd w
 endfunction
 
-function! ShowLatestMigration()
+function! ShowLatestRailsMigration()
+  call LazyLoadRails()
   let alternate_buffer = bufnr('%')
   enew
   set ft=ruby
@@ -1327,6 +1321,7 @@ function! ShowLatestMigration()
 endfunction
 
 function! ExtractRailsPartial()
+  call LazyLoadRails()
   let name = input('Partial name: ', '')
   if name != ''
     exec "'<,'>Rextract " . name
@@ -1588,11 +1583,11 @@ function! TrimTrailingWhitespace()
 endfunction
 
 function! GetLintMsg()
+  if !exists('g:loaded_neomake') | return '' | endif
   let counts = neomake#statusline#LoclistCounts()
   let error_count = get(counts, 'E', 0) + get(counts, 'I', 0)
   let warning_count = get(counts, 'W', 0)
   if error_count + warning_count == 0 | return '' | endif
-
   let count_msgs = []
   if error_count > 0 | call add(count_msgs, 'E:' . error_count) | endif
   if warning_count > 0 | call add(count_msgs, 'W:' . warning_count) | endif
@@ -1744,21 +1739,10 @@ function! CustomCloseTab()
   exe 'tabnext' . (s:current_tab_number - 1)
 endfunction
 
+let s:last_active_tab_number = 1
 function! GoToLastActiveTab()
   exe 'tabnext' . s:last_active_tab_number
 endfunction
-
-" function! Lint()
-"   if &buftype != '' | return | endif
-"   if !filereadable(expand('%:p')) | return | endif
-"   if &filetype !~ '^\(ruby\|javascript\|scss\)' | return 0 | endif
-
-"   if &filetype =~ 'javascript'
-"     Neomake eslint
-"   else
-"     Neomake
-"   end
-" endfunction
 
 function! GetFoldText()
   let text = getline(v:foldstart)
@@ -1833,22 +1817,8 @@ function! Profile()
   profile file *
 endfunction
 
-function! BackgroundLoadLazyLoadedCode()
-  python import vim
-  if has('nvim')
-    call plug#load('deoplete.nvim')
-    autocmd! lazy_load_deoplete
-  endif
-  " call plug#load('vim-misc')
-  " for plugin_name in keys(g:plugs)
-  "   let plug = g:plugs[plugin_name]
-  "   if has_key(plug, 'for') || has_key(plug, 'on')
-  "     call plug#load(plugin_name)
-  "   endif
-  " endfor
-endfunction
-
 function! ImprovedGoToFile()
+  if &filetype =~ 'ruby' | call LazyLoadRails() | endif
   try
     normal! gf
   catch /\(E447\|E345\)/
@@ -1859,14 +1829,6 @@ function! ImprovedGoToFile()
       echo 'No file found'
     endtry
   endtry
-endfunction
-
-function! LazyLoadDeoplete()
-  if exists('g:first_enter_done')
-    call plug#load('deoplete.nvim')
-    autocmd! lazy_load_deoplete
-  endif
-  let g:first_enter_done = 1
 endfunction
 
 function! CycleToNextFile(count, ...)
@@ -1984,8 +1946,8 @@ function! SetProjectMappings()
     noremap <silent> <leader>rR :vnew<cr>:e config/routes.rb<cr>
     noremap <silent> <leader>rs :e db/schema.rb<cr>
     noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
-    noremap <silent> <leader>rm :call ShowLatestMigration()<cr>
-    noremap <silent> <leader>rM :vnew<cr>:call ShowLatestMigration()<cr>
+    noremap <silent> <leader>rm :call ShowLatestRailsMigration()<cr>
+    noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
     xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
   endif
   if IsPhpProject()
@@ -2024,7 +1986,7 @@ function! DisplayDirectory(dir)
   enew
   let b:startup_buffer = 1
   call buffer_history#add(winbufnr(0))
-  NERDTree
+  exe 'NERDTree ' . a:dir
 endfunction
 
 function! BrowseOldFiles()
@@ -2046,10 +2008,66 @@ function! SortBuffers(...)
   return b1 < b2 ? 1 : -1
 endfunction
 
+function! LazyLoadRails()
+  if !exists('g:loaded_rails')
+    call plug#load('vim-rails')
+    call RailsDetect()
+    call rails#buffer_setup()
+  endif
+endfunction
+
 function! LazyLoadFugitive(cmd)
   call plug#load('vim-fugitive')
   call fugitive#detect(expand('%:p'))
   exe a:cmd
+endfunction
+
+function! LazyLoadDeoplete()
+  if exists('g:first_enter_done')
+    call plug#load('deoplete.nvim')
+    autocmd! lazy_load_deoplete
+  endif
+  let g:first_enter_done = 1
+endfunction
+
+function! LazyLint(...)
+  if &buftype != '' | return | endif
+  if !filereadable(expand('%:p')) | return | endif
+  call LazyLoadNeomake()
+  Neomake
+endfunction
+
+function! LazyLoadNeomake()
+  if !exists('g:loaded_neomake')
+    call plug#load('neomake')
+    call neomake#configure#automake({
+      \ 'BufWinEnter': {}, 'BufWritePost': {}, 'FocusLost': {},
+      \ }, 1000)
+  endif
+  autocmd! lazy_lint
+endfunction
+
+function! LazyLoadMTA(...)
+  if !exists('g:loaded_matchtagalways')
+    call plug#load('MatchTagAlways')
+    call MatchTagAlways#Setup()
+  endif
+  autocmd! lazy_load_mta
+endfunction
+
+function! LazyLoadSlowCode()
+  python import vim
+  if has('nvim')
+    call plug#load('deoplete.nvim')
+    autocmd! lazy_load_deoplete
+  endif
+  call LazyLoadNeomake()
+  autocmd! lazy_load_slow_code
+endfunction
+
+function! GemOpen(gem_name)
+  let path = system('VISUAL=echo gem open ' . a:gem_name)
+  exe 'e ' . path
 endfunction
 
 "####################
@@ -2137,22 +2155,25 @@ if has('nvim')
   augroup end
 endif
 
-" augroup lint_events
-"   autocmd!
-"   autocmd BufWritePost,BufEnter,FocusLost * call Lint()
-" augroup end
+augroup lazy_lint
+  autocmd!
+  autocmd BufWinEnter,BufWritePost,FocusLost * call timer_start('1000', 'LazyLint')
+augroup end
+
+augroup lazy_load_mta
+  autocmd!
+  autocmd Filetype *html,xml,*.jsx call timer_start('200', 'LazyLoadMTA')
+augroup end
+
+augroup lazy_load_slow_code
+  autocmd!
+  autocmd FocusLost * call LazyLoadSlowCode()
+augroup end
 
 augroup preserve_buffer_scroll
   autocmd!
   autocmd BufLeave * call SaveBufferScroll()
   autocmd BufEnter * call RestoreBufferScroll()
-augroup end
-
-augroup background_load_lazy_loaded_plugins
-  autocmd!
-  autocmd FocusLost *
-    \ call BackgroundLoadLazyLoadedCode() |
-    \ autocmd! background_load_lazy_loaded_plugins
 augroup end
 
 augroup replace_netrw_with_nerdtree
