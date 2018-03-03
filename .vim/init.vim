@@ -179,6 +179,7 @@ noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
 noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
+noremap <silent> <leader>o<esc> <nop>
 
 noremap $ $ze
 
@@ -528,8 +529,9 @@ set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
-set regexpengine=1
+" set regexpengine=1
 set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class
+set viminfo=!,'1000,<50,s10,h
 
 set statusline=
 set statusline+=\ %<%f
@@ -845,8 +847,8 @@ function! DisplayRegisters()
   silent put =output
   silent normal gg"_d2j
   exe 'resize' . line('$')
-  map <silent> <buffer> q :q<cr>
-  map <silent> <buffer> <esc> q
+  map <silent><buffer> q :q<cr>
+  map <silent><buffer> <esc> q
 endfunction
 
 function! ShowHighlightsUnderCursor()
@@ -913,7 +915,7 @@ endfunction
 
 function! LeaveNERDTreePreview()
   if !exists('t:original_bufnum') | return | endif
-  if t:original_bufnum > 0 && t:original_bufnum != bufnr('%')
+  if bufexists(t:original_bufnum) && t:original_bufnum != bufnr('%')
     if t:escaped_nerdtree
       exe 'b ' . t:original_bufnum
     elseif @# == ''
@@ -1341,6 +1343,7 @@ function! MakeSession()
 endfunction
 
 function! LoadSession()
+  silent! NERDTreeClose
   exe ':silent OpenSession ' . GetProjectName()
   echo 'Session loaded.'
 endfunction
@@ -1519,8 +1522,8 @@ endfunction
 
 function! RenameTab()
   let tab_name = input('Tab name: ', '')
-  call settabvar(tabpagenr(), 'tab_name', tab_name)
-  set showtabline=1
+  let t:tab_name = tab_name
+  set showtabline=2
 endfunction
 
 function! Join()
@@ -1616,31 +1619,101 @@ endfunction
 let g:test#custom_strategies = { 'custom': function('CustomTestStrategy') }
 
 function! GetTabLine()
+  let tabs = BuildTabs()
   let line = ''
-  for i in range(tabpagenr('$'))
+  for i in range(len(tabs))
     let line .= (i+1 == tabpagenr()) ? '%#TabLineSel#' : '%#TabLine#'
     let line .= '%' . (i + 1) . 'T'
-    let line .= ' %{GetTabLabel(' . (i + 1) . ')} '
+    let line .= ' ' . tabs[i].uniq_name . ' '
   endfor
   let line .= '%#TabLineFill#%T'
   return line
 endfunction
 
-function! GetTabLabel(tab_number)
-  let custom_tab_name = gettabvar(a:tab_number, 'tab_name')
-  if custom_tab_name != '' | return custom_tab_name | endif
+function! BuildTabs()
+  let tabs = []
+  for i in range(tabpagenr('$'))
+    let tabnum = i + 1
+    let buflist = tabpagebuflist(tabnum)
+    let file_path = ''
+    let tab_name = bufname(buflist[0])
+    if tab_name =~ 'NERD_tree' && len(buflist) > 1
+      let tab_name = bufname(buflist[1])
+    end
+    let custom_tab_name = gettabvar(tabnum, 'tab_name')
+    let is_custom_name = 0
+    if custom_tab_name != ''
+      let tab_name = custom_tab_name
+      let is_custom_name = 1
+    elseif tab_name == ''
+      let tab_name = '[No Name]'
+      let is_custom_name = 1
+    elseif tab_name =~ 'fzf'
+      let tab_name = 'FZF'
+      let is_custom_name = 1
+    else
+      let file_path = fnamemodify(tab_name, ':p')
+      let tab_name = fnamemodify(tab_name, ':p:t')
+    end
+    let tab = {
+      \ 'name': tab_name,
+      \ 'uniq_name': tab_name,
+      \ 'file_path': file_path,
+      \ 'is_custom_name': is_custom_name
+      \ }
+    call add(tabs, tab)
+  endfor
+  call CalculateTabUniqueNames(tabs)
+  return tabs
+endfunction
 
-  let buflist = tabpagebuflist(a:tab_number)
-  let file_path = bufname(buflist[0])
-  if file_path =~ 'NERD_tree' && len(buflist) > 1
-    let file_path = bufname(buflist[1])
-  end
-  if file_path == ''
-    return '[No Name]'
-  elseif file_path =~ 'fzf'
-    return 'FZF'
-  end
-  return fnamemodify(file_path, ':p:t')
+function! CalculateTabUniqueNames(tabs)
+  for tab in a:tabs
+    if tab.is_custom_name | continue | endif
+    let tab_common_path = ''
+    for other_tab in a:tabs
+      if tab.name != other_tab.name || tab.file_path == other_tab.file_path
+        \ || other_tab.is_custom_name
+        continue
+      endif
+      let common_path = GetCommonPath(tab.file_path, other_tab.file_path)
+      if tab_common_path == '' || len(common_path) < len(tab_common_path)
+        let tab_common_path = common_path
+      endif
+    endfor
+    if tab_common_path == '' | continue | endif
+    let common_path_has_immediate_child = 0
+    for other_tab in a:tabs
+      if tab.name == other_tab.name && !other_tab.is_custom_name
+        \ && tab_common_path == fnamemodify(other_tab.file_path, ':h')
+        let common_path_has_immediate_child = 1
+        break
+      endif
+    endfor
+    if common_path_has_immediate_child
+      let tab_common_path = fnamemodify(common_path, ':h')
+    endif
+    let path = tab.file_path[len(tab_common_path)+1:-1]
+    let path = fnamemodify(path, ':~:.:h')
+    let dirs = split(path, '/', 1)
+    if len(dirs) >= 5
+      let path = dirs[0] . '/.../' . dirs[-1]
+    endif
+    let tab.uniq_name = tab.name . ' - ' . path
+  endfor
+endfunction
+
+function! GetCommonPath(path1, path2)
+  let dirs1 = split(a:path1, '/', 1)
+  let dirs2 = split(a:path2, '/', 1)
+  let i_different = 0
+  for i in range(len(dirs1))
+    if get(dirs1, i) != get(dirs2, i)
+      let i_different = i
+      break
+    endif
+  endfor
+  return join(dirs1[0:i_different-1], '/')
 endfunction
 
 function! GetProjectName()

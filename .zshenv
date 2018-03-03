@@ -440,7 +440,8 @@ sman() { man "${1}" | col -b | subl }
 alias rtop="top -o rsize"
 alias ctop="top -o cpu"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
-alias sub='filebot -get-subtitles'
+alias sub='subliminal download -l en'
+alias sub2='filebot -get-subtitles'
 minivim() {
   local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
   echo $conf | pbcopy
@@ -546,8 +547,6 @@ alias debug='pry-remote'
 alias st='spring stop'
 alias irb='pry'
 alias pr='powder restart'
-alias il='invoker list'
-alias is='invoker start'
 fs() {
   if [ -e Procfile.dev ]; then
     foreman start -f Procfile.dev

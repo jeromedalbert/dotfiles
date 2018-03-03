@@ -328,3 +328,5 @@ hi DbgBreakptLine guibg=#80322f guifg=#ffffff
 hi link DbgBreakptSign DbgBreakptLine
 hi link DbgCurrentLine DiffText
 hi link DbgCurrentSign DbgCurrentLine
+
+hi link NERDTreeDirSlash NERDTreeDir
