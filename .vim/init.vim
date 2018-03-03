@@ -374,7 +374,7 @@ nnoremap <leader>x :%s/
 nmap <leader>X <leader>yxiw
 nnoremap <silent> <leader>yx :set opfunc=GlobalSubstituteVerb<CR>g@
 nmap <leader>yX <leader>yxiW
-nnoremap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
+xnoremap <leader>x <esc>:%s/<c-r>=GetSelectionForSearches()<cr>/
 
 nnoremap <leader>s :s/
 nmap <leader>S <leader>ysiw
@@ -742,6 +742,7 @@ let g:splitjoin_ruby_curly_braces = 0
 
 let g:polyglot_disabled = ['yaml']
 let g:markdown_syntax_conceal = 0
+let g:jsx_ext_required = 0
 
 let g:vdebug_options = {}
 let g:vdebug_options['break_on_open'] = 0
@@ -760,8 +761,6 @@ let g:vdebug_keymap = {
   \ 'close': 'q'
   \ }
 
-let g:tmux_navigator_no_mappings = 1
-let g:jsx_ext_required = 0
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
 let g:test#strategy = 'custom'
@@ -827,6 +826,7 @@ function! ClearEverything()
   silent! call CloseTests()
   silent! NERDTreeClose
   silent! TagbarClose
+  silent! GundoHide
   normal cxc
   call ClearMessages()
   " pclose
@@ -915,7 +915,7 @@ endfunction
 
 function! LeaveNERDTreePreview()
   if !exists('t:original_bufnum') | return | endif
-  if bufexists(t:original_bufnum) && t:original_bufnum != bufnr('%')
+  if bufexists(t:original_bufnum) && t:original_bufnum > 0 && t:original_bufnum != bufnr('%')
     if t:escaped_nerdtree
       exe 'b ' . t:original_bufnum
     elseif @# == ''
