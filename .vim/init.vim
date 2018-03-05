@@ -9,14 +9,13 @@ Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
-Plug 'mattn/emmet-vim',
-  \ { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx', 'php'] }
+Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
 
-Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'eruby'] }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html', 'eruby.html'] }
+Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', '*html'] }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
-Plug 'othree/html5.vim', { 'for': ['html', 'eruby.html'] }
+Plug 'othree/html5.vim', { 'for': '*html' }
 Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'wavded/vim-stylus', { 'for': 'stylus' }
@@ -49,7 +48,7 @@ Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
 Plug 'jeromedalbert/auto-pairs'
 Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
-Plug 'vim-scripts/closetag.vim', { 'for': ['html', 'eruby.html', 'xml', 'javascript.jsx'] }
+Plug 'vim-scripts/closetag.vim', { 'for': ['*html', 'xml', '*jsx'] }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'haya14busa/incsearch.vim'
