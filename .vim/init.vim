@@ -7,12 +7,22 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }
-Plug 'sheerun/vim-polyglot'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
 Plug 'mattn/emmet-vim',
   \ { 'for': ['html', 'eruby.html', 'css', 'scss', 'javascript.jsx', 'php'] }
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
+
+Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'eruby'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html', 'eruby.html'] }
+Plug 'mxw/vim-jsx', { 'for': 'javascript' }
+Plug 'othree/html5.vim', { 'for': ['html', 'eruby.html'] }
+Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
+Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
+Plug 'wavded/vim-stylus', { 'for': 'stylus' }
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'keith/swift.vim', { 'for': 'swift' }
+Plug 'StanAngeloff/php.vim', { 'for': 'php' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
@@ -56,7 +66,8 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'joonty/vdebug', { 'on': ['Breakpoint', 'VdebugStart'] }
 Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-" Plug 'christoomey/vim-tmux-runner'
+Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
+Plug 'ecomba/vim-ruby-refactoring', { 'on': [] }
 call plug#end()
 
 "############################
@@ -273,8 +284,12 @@ noremap <silent> <f2> :TagbarToggle<CR>
 noremap <silent> <leader>ut :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
+xmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
 nmap cmu <Plug>Commentary<Plug>Commentary
+omap ac <Plug>Commentary
+nmap cic <Plug>ChangeCommentary
+nmap dic <Plug>ChangeCommentary<esc>
 
 noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
@@ -529,7 +544,7 @@ set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
-" set regexpengine=1
+set regexpengine=1
 set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class
 set viminfo=!,'1000,<50,s10,h
 
@@ -740,8 +755,11 @@ let g:gutentags_ctags_auto_set_tags = 0
 let g:splitjoin_ruby_hanging_args = 0
 let g:splitjoin_ruby_curly_braces = 0
 
-let g:polyglot_disabled = ['yaml']
 let g:markdown_syntax_conceal = 0
+let g:html5_event_handler_attributes_complete = 0
+let g:html5_rdfa_attributes_complete = 0
+let g:html5_microdata_attributes_complete = 0
+let g:html5_aria_attributes_complete = 0
 let g:jsx_ext_required = 0
 
 let g:vdebug_options = {}
@@ -766,6 +784,7 @@ let g:incsearch#auto_nohlsearch = 1
 let g:test#strategy = 'custom'
 let g:gundo_help = 0
 let g:netrw_altfile = 1
+let g:ruby_refactoring_map_keys = 0
 
 "#################
 "### Functions ###
@@ -2013,6 +2032,9 @@ function! SetProjectMappings()
     nnoremap <silent> <leader>rH :%s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
     noremap <silent> <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
     noremap <silent> <leader>ub obinding.pry<esc>
+    nnoremap <silent> <leader>rfv :call RubyRenameVar()<cr>
+    nnoremap <silent> <leader>rfi :call RubyRenameInstanceVar()<cr>
+    xnoremap <silent> <leader>rfev :call RubyExtractVar()<cr>
   endif
   if IsRailsProject()
     noremap <silent> <leader>rr :e config/routes.rb<cr>
@@ -2095,6 +2117,13 @@ function! LazyLoadFugitive(cmd)
   exe a:cmd
 endfunction
 
+function! LazyLoadRubyRefactor()
+  if !exists('g:loaded_ruby_refactoring')
+    call plug#load('vim-ruby-refactoring')
+    let g:loaded_ruby_refactoring = 1
+  endif
+endfunction
+
 function! LazyLoadDeoplete()
   if exists('g:first_enter_done')
     call plug#load('deoplete.nvim')
@@ -2143,6 +2172,25 @@ function! GemOpen(gem_name)
   exe 'e ' . path
 endfunction
 
+function! RubyRenameVar()
+  call LazyLoadRubyRefactor()
+  normal viw
+  call feedkeys(":RRenameLocalVariable\<cr>")
+endfunction
+
+function! RubyRenameInstanceVar()
+  call LazyLoadRubyRefactor()
+  normal viw
+  let v = winsaveview()
+  RRenameInstanceVariable
+  call winrestview(v)
+endfunction
+
+function! RubyExtractVar()
+  call LazyLoadRubyRefactor()
+  RExtractLocalVariable
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -2175,6 +2223,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
   autocmd BufRead,BufNewFile *.env*,Procfile* set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
+  autocmd BufRead,BufNewFile *.apib set filetype=markdown
 augroup end
 
 augroup detect_binary_files
@@ -2269,6 +2318,7 @@ augroup general_autocommands
   autocmd BufWritePre * call TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
   autocmd InsertLeave * silent! set nopaste
+  autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
   autocmd BufEnter * call OnBufEnter()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
