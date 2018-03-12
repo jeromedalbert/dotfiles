@@ -242,7 +242,9 @@ nnoremap <silent> <f18> :move .-2<cr>
 xnoremap <silent> <f18> :move '<-2<cr>gv
 
 noremap <silent> ]a :next<cr>
+noremap <silent> ]A :last<cr>
 noremap <silent> [a :previous<cr>
+noremap <silent> [A :first<cr>
 noremap <silent> ]Q :clast<cr>
 noremap <silent> [Q :cfirst<cr>
 noremap <silent> ]L :llast<cr>
