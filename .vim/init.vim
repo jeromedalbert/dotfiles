@@ -145,7 +145,7 @@ noremap <silent> <m-q> :q<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8]
   exe 'noremap <silent> <m-' . tab_number . '> :tabnext ' . tab_number . '<cr>'
 endfor
-noremap <c-h> gT
+nnoremap <c-h> gT
 noremap <m-l> gt
 noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
@@ -187,6 +187,7 @@ noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
+noremap <silent> <leader>ob<esc> <nop>
 noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
@@ -286,9 +287,6 @@ nmap cm <Plug>Commentary
 xmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
 nmap cmu <Plug>Commentary<Plug>Commentary
-omap ac <Plug>Commentary
-nmap cic <Plug>ChangeCommentary
-nmap dic <Plug>ChangeCommentary<esc>
 
 noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
@@ -358,7 +356,7 @@ noremap <leader>fo :Gqfopen<cr>
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
 noremap <leader>-u :call ClearUndos()<cr>
-noremap <leader>-k :call ResetProject()<cr>
+noremap <leader>-k :silent! call ResetProject()<cr>
 
 map gR gr$
 nmap cX cx$
@@ -544,7 +542,7 @@ set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
 set regexpengine=1
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class,*.swp
 set viminfo=!,'1000,<50,s10,h
 
 set statusline=
@@ -754,7 +752,10 @@ let g:gutentags_ctags_auto_set_tags = 0
 let g:splitjoin_ruby_hanging_args = 0
 let g:splitjoin_ruby_curly_braces = 0
 
+let g:ruby_indent_assignment_style = 'variable'
 let g:markdown_syntax_conceal = 0
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_fenced_languages = []
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
@@ -916,6 +917,7 @@ function! NERDTreePreviewOrOpen()
   let should_close_buffer_next_time = bufnr(bfilename) <= 0
   if bufnr(bfilename) == b:previous_preview_bufnum && bufnr(bfilename) > 0
     wincmd w
+    " exe "normal \<cr>"
     return
   endif
   normal go
@@ -945,10 +947,19 @@ endfunction
 
 function! EscapeNERDTree()
   let t:escaped_nerdtree = 1
-  q
+  call CloseNERDTree()
 endfunction
 
 function! CloseNERDTree()
+  let first_buf = tabpagebuflist()[0]
+  if bufname(first_buf) !~ 'NERD_tree' | return | endif
+  if bufnr('%') == first_buf
+    wincmd p
+  endif
+  1close
+endfunction
+
+function! QuitNERDTree()
   q
   if len(tabpagebuflist()) == 1 && exists('b:startup_buffer')
     \ && IsCurrentBufferNew() && !&modified
@@ -1113,30 +1124,29 @@ function! OnTestDisplayed()
   noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
   map <silent><buffer> <esc> <leader>q
   map <silent><buffer> q <esc>
-  noremap <silent><buffer> <cr> :call OpenFileInPreviousWindow(0)<cr>
-  noremap <silent><buffer> o :call OpenFileInPreviousWindow(1)<cr><c-w>p
+  noremap <silent><buffer> o :call OpenErrorFile(1)<cr>
+  noremap <silent><buffer> <cr> :call OpenErrorFile(0)<cr>
+  map <silent><buffer> i <cr>
 endfunction
 
-function! OpenFileInPreviousWindow(highlight_line)
+function! OpenErrorFile(preview_mode)
   let file_and_line = GetFileAndLineUnderCursor()
-  if !empty(file_and_line)
-    wincmd p
-    exe 'e ' . file_and_line[0]
-    exe file_and_line[1]
-    normal zz
-    if a:highlight_line
-      exe 'match Search /\%' . file_and_line[1] . 'l/'
-    endif
+  if empty(file_and_line) | return | endif
+  let winnr = winnr()
+  wincmd p
+  exe 'drop ' . file_and_line[0]
+  exe file_and_line[1]
+  normal zz
+  if a:preview_mode
+    exe 'match Search /\%' . file_and_line[1] . 'l/'
+    exe winnr . 'wincmd w'
   endif
 endfunction
 
 function! GetFileAndLineUnderCursor()
-  " let matches = matchlist(getline('.'), '\([\S^:]\+\):\(\d*\)')
-  normal mC^f:
-  let items = split(expand('<cWORD>'), ':')
-  normal `C
-  if len(items) >= 2 && filereadable(items[0])
-    return items[0:1]
+  let matches = matchlist(getline('.'), '\(\S\+\):\(\d\+\)')
+  if len(matches) && filereadable(matches[1])
+    return matches[1:2]
   endif
 endfunction
 
@@ -1480,7 +1490,7 @@ function! MoveToPrevTab()
     vnew
   else
     close!
-    exe "0tabnew"
+    0tabnew
   endif
   exe "b".l:cur_buf
 endfunction
@@ -1740,9 +1750,9 @@ endfunction
 
 function! OnBufEnter()
   exe ':match'
-  if !exists('b:buffer_mappings_created')
-    call OverrideGlobalMappings()
-  end
+  " if !exists('b:buffer_mappings_created')
+  call OverrideGlobalMappings()
+  " end
   call ConfigureLargeBuffers()
 endfunction
 
@@ -1763,7 +1773,7 @@ function! OverrideGlobalMappings()
     map <buffer> `, `O
     map <buffer> ', `O
   endif
-  let b:buffer_mappings_created=1
+  " let b:buffer_mappings_created=1
 endfunction
 
 function! StashGlobalMappings(...)
@@ -1930,7 +1940,7 @@ function! CycleToNextFile(count, ...)
   if idx == -1 | return 'echoerr "Unable to move to next file"' | endif
   let file = get(files, a:0 && a:1 ? a:count : ((idx + a:count) % len(files)), -1)
   if file == -1 | return 'echoerr "Unable to move to next file"' | endif
-  exe 'edit ' . file
+  exe 'edit ' . fnameescape(fnamemodify(file, ':.'))
 endfunction
 
 function! GetNextFile(direction)

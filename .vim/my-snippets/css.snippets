@@ -5,3 +5,9 @@ endsnippet
 snippet h100
 height: 100%${0};
 endsnippet
+
+snippet "(^\s*)(\.\w+)" "class" "snip.cursor[1] == len(snip.buffer[snip.line])" re
+`!p snip.rv = match.group(1) + match.group(2)` {
+`!p snip.rv = match.group(1)`  ${0}
+`!p snip.rv = match.group(1)`}
+endsnippet

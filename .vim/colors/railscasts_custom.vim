@@ -241,6 +241,9 @@ hi link htmlBold mkdBold
 hi link mkdItalic markdownItalic
 hi link htmlItalic mkdItalic
 hi link mkdLineBreak markdownlinebreak
+hi link mkdBlockQuote NONE
+hi link mkdCodeStart NONE
+hi link mkdCodeEnd mkdCodeStart
 
 hi link javaScriptFunction Statement
 hi link javaScriptRailsFunction rubyRailsARMethod

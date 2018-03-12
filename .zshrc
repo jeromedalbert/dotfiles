@@ -209,7 +209,5 @@ paste-insert() {
 #############
 
 source /usr/local/opt/asdf/asdf.sh
-# eval "$(rbenv init - --no-rehash)"
 stty -ixon
-unset _JAVA_OPTIONS
 if [ -z $TMUX ]; then; tmux-start; fi

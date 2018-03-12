@@ -7,4 +7,4 @@ map <buffer> i <cr>
 
 nnoremap <silent><buffer> o :call NERDTreePreviewOrOpen()<cr>
 nnoremap <silent><buffer> <esc> :call EscapeNERDTree()<cr>
-nnoremap <silent><buffer> <leader>q :call CloseNERDTree()<cr>
+nnoremap <silent><buffer> <leader>q :call QuitNERDTree()<cr>

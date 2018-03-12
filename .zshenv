@@ -54,8 +54,8 @@ alias wcl='wc -l'
 alias ct.='ctags -f .tags -R .'
 
 # Confs
-alias reload='. ~/.zshrc'
-alias rel='reload'
+alias reload='. ~/.zshrc; . ~/.zshenv'
+alias rl='reload'
 alias conf="$MAIN_EDITOR ~/.zshrc"
 al() {
   if [ $# -eq 0 ]; then
@@ -464,6 +464,7 @@ mkpwd2() {
 }
 alias mkpw='mkpwd'
 alias pw='mkpw'
+alias fd='fd --type f'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -478,24 +479,19 @@ alias weather='curl wttr.in'
 # Fzf
 j() {
   if [ $# -gt 0 ]; then
-    _z "$*"
+    # _z "$@"
+    cd "$(_z -l 2>&1 | fzf -f "$*" | head -n 1 | sed 's/^[0-9,.]* *//')"
   else
     cd "$(_z -l 2>&1 | fzf --height 40% --reverse --tac --query "$*" | sed 's/^[0-9,.]* *//')"
   fi
 }
 vj() {
-  local old_directory=$(pwd)
-  (
-  j "$@"
-  if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
-  )
+  (jv "$@")
 }
 jv() {
   local old_directory=$(pwd)
   j "$@"
-  if [ "$(pwd)" != "$old_directory" ]; then
-    v.
-  fi
+  if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
 }
 jj() {
   cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
@@ -549,9 +545,9 @@ alias irb='pry'
 alias pr='powder restart'
 fs() {
   if [ -e Procfile.dev ]; then
-    foreman start -f Procfile.dev
+    foreman start -e .env,.env.local -e Procfile.dev "$@"
   else
-    foreman start
+    foreman start -e .env,.env.local "$@"
   fi
 }
 rgsq() {
@@ -565,6 +561,10 @@ alias gmo='gem open'
 alias gmi='gem install'
 alias gmu='gem uninstall'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
+gman() {
+  local gem_path=$(VISUAL=echo gem open $1)
+  man $gem_path/man/*
+}
 
 # Javascript
 alias y='yarn'
