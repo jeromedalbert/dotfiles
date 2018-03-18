@@ -354,6 +354,7 @@ alias hb="hub browse"
 alias hp="hb -- pulls"
 alias hw="hb -- wiki"
 alias hf="hub fork"
+alias hcr="hub create"
 
 # Docker
 alias d='docker'
@@ -480,6 +481,7 @@ alias weather='curl wttr.in'
 j() {
   if [ $# -gt 0 ]; then
     # _z "$@"
+    # cd "$(_z -l 2>&1 | fzf -f "$*" | sort -nr | head -n 1 | sed 's/^[0-9,.]* *//')"
     cd "$(_z -l 2>&1 | fzf -f "$*" | head -n 1 | sed 's/^[0-9,.]* *//')"
   else
     cd "$(_z -l 2>&1 | fzf --height 40% --reverse --tac --query "$*" | sed 's/^[0-9,.]* *//')"

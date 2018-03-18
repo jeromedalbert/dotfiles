@@ -84,11 +84,11 @@ hi SignColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE cterm=NONE
 hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guifg=NONE guibg=#454545 gui=NONE
-hi MatchParen guifg=NONE guibg=NONE gui=underline
+hi MatchParen guifg=NONE guibg=NONE gui=underline cterm=underline
 hi StatusLine guifg=fg guibg=#61605e gui=bold cterm=bold
 hi StatusLineNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
 hi Pmenu guifg=#333333 guibg=#ffffff gui=NONE
-hi PmenuSel guifg=#ffffff guibg=#5d90cf gui=bold
+hi PmenuSel guifg=#ffffff guibg=#5d90cf gui=bold cterm=bold
 hi PmenuThumb guibg=#999999
 hi PmenuSbar guibg=#d6d6d6
 hi IncSearch guifg=#000000 guibg=#ffe88c gui=NONE cterm=NONE
@@ -98,9 +98,9 @@ hi Folded guifg=fg guibg=NONE
 hi VertSplit guifg=bg guibg=NONE
 hi Error guibg=#9b0000 gui=NONE
 hi link Character String
-hi Comment guifg=#bd9553 guibg=NONE gui=italic
+hi Comment guifg=#bd9553 guibg=NONE gui=italic cterm=italic
 hi Constant guifg=#6b9bc0 guibg=NONE gui=NONE
-hi DiffAdd guifg=fg guibg=#47840d gui=bold
+hi DiffAdd guifg=fg guibg=#47840d gui=bold cterm=bold
 hi DiffDelete guifg=#dc322f guibg=NONE gui=NONE
 hi DiffChange guifg=fg guibg=#204a87
 hi DiffText guifg=fg guibg=#507ab7 gui=NONE cterm=NONE
@@ -118,9 +118,9 @@ hi link StorageClass Statement
 hi String guifg=#a4c35b guibg=NONE gui=NONE
 hi Tag guifg=#e9c063 guibg=NONE gui=NONE
 hi Title guifg=NONE guibg=NONE gui=NONE
-hi Todo cterm=inverse,bold guifg=#bd9553 guibg=NONE gui=inverse,bold,italic
+hi Todo guifg=#bd9553 guibg=NONE gui=inverse,bold,italic cterm=inverse,bold,italic
 hi Type guifg=fg guibg=NONE gui=NONE
-hi Underlined guifg=NONE guibg=NONE gui=underline
+hi Underlined guifg=NONE guibg=NONE gui=underline cterm=underline
 hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
 hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
 hi link Whitespace Normal
@@ -222,8 +222,8 @@ hi link stylusIdChar stylusClass
 hi link stylusProperty cssProp
 
 hi markdownheadingdelimiter guifg=#cd4a00
-hi markdownBold guifg=#576e75 gui=bold
-hi markdownItalic guifg=#576e75 gui=italic
+hi markdownBold guifg=#576e75 gui=bold cterm=bold
+hi markdownItalic guifg=#576e75 gui=italic cterm=italic
 hi markdownlinebreak guibg=#a67806
 hi link markdownLinkText String
 hi markdownLinkTextDelimiter guifg=#647b83
@@ -248,10 +248,10 @@ hi link mkdCodeEnd mkdCodeStart
 hi link javaScriptFunction Statement
 hi link javaScriptRailsFunction rubyRailsARMethod
 hi link javaScriptBraces NONE
-hi jsKeyword2 gui=italic
+hi jsKeyword2 gui=italic cterm=italic
 hi link jsClassDefinition NONE
 hi jsComment guifg=#797979
-hi jsCommentTodo guifg=#797979 gui=inverse,bold,italic
+hi jsCommentTodo guifg=#797979 gui=inverse,bold,italic cterm=inverse,bold,italic
 hi link jsFunction jsKeyword2
 hi link jsStorageClass jsKeyword2
 hi link jsImport NONE

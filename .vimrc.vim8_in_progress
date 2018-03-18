@@ -5,7 +5,7 @@
 call plug#begin('~/.vim/plugged')
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
@@ -55,7 +55,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'nishigori/increment-activator'
 Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'tmux-plugins/vim-tmux-focus-events'
+" Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'xolox/vim-misc', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
@@ -82,6 +82,8 @@ map 0 ^
 nnoremap d0 d^
 noremap Y y$
 noremap Q <nop>
+noremap ' "
+noremap $ $ze
 
 noremap <silent> <leader>q :q<cr>
 noremap <silent> <leader>w :w<cr>
@@ -89,8 +91,7 @@ noremap <silent> <leader>z :x<cr>
 noremap <silent> <leader><esc> <nop>
 noremap <silent> <leader>`q :qa!<cr>
 noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
-
-noremap ' "
+" noremap <silent> <leader>`w :execute 'silent! write !sudo tee % >/dev/null' <bar> edit!<cr>
 
 noremap <up> <nop>
 noremap <down> <nop>
@@ -158,6 +159,8 @@ imap <m->> <C-o>A.
 imap <m-.> <C-o>A.
 noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
+
+map <m-m> %
 map <m-]> <c-]>
 map <m-[> <c-t>
 imap <m-_> <c-_>
@@ -174,8 +177,6 @@ noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
 
-noremap $ $ze
-
 noremap g; g;zz
 noremap g, g,zz
 noremap gi gi<c-o>zz
@@ -187,8 +188,7 @@ map <leader>2 @
 noremap <leader>22 @@
 noremap @- @:
 noremap <leader>2- @:
-noremap <leader>1 :silent !
-noremap <leader>5 :%!
+noremap <leader>1 :Silent !
 
 noremap <leader>ft :set filetype=
 
@@ -244,8 +244,6 @@ nnoremap <expr> j Jumpable('gj')
 xnoremap <expr> k Jumpable('gk')
 xnoremap <expr> j Jumpable('gj')
 
-nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
-
 noremap <silent> '' :call DisplayRegisters()<cr>
 
 noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
@@ -255,9 +253,7 @@ noremap <silent> <c-p> :silent Files<cr>
 noremap <silent> <leader>i :silent BTags<cr>
 noremap <silent> <leader>I :silent Tags<cr>
 
-if has('nvim')
-  tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
-endif
+tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
 
 noremap <silent> <f1> :NERDTreeToggle<CR>
 noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
@@ -322,6 +318,11 @@ inoremap <m-J> <esc>O
 noremap <m-O> O<cr>
 inoremap <m-O> <esc>O<cr>
 
+" map <f17> ]<space>
+" inoremap <f17> <end><cr>
+" map <f18> [<space>
+" inoremap <f18> <esc>O
+
 noremap <leader>ff :FileSearch -Q -i '' <left><left>
 noremap <silent> <leader>yf :set opfunc=FileSearchVerb<CR>g@
 map <leader>fw <leader>yfiw
@@ -383,6 +384,7 @@ command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
+command! -nargs=1 Silent call SilentExec(<q-args>)
 command! MakePlugSnapshot call MakePlugSnapshot()
 command! Profile call Profile()
 command! Gdiff call LazyLoadFugitive('Gdiff')
@@ -488,9 +490,10 @@ set title titlestring=%{GetProjectName()}
 set splitbelow splitright
 set nowrap
 set noswapfile
+" set nobackup nowritebackup
 set clipboard=unnamed
 set hidden
-set notimeout
+set notimeout ttimeout ttimeoutlen=0
 set textwidth=0 colorcolumn=80
 set ruler
 set tags+=./.tags;
@@ -524,9 +527,11 @@ set formatoptions+=j
 set history=10000
 set langnoremap
 set viminfo=!,'1000,<50,s10,h
+runtime! macros/matchit.vim
 exe "set cedit=\<c-y>"
 
 set statusline=
+set statusline+=%#StatusLine#
 set statusline+=\ %<%f
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
@@ -566,8 +571,10 @@ let g:is_bash = 1
 "### Plugins configuration ###
 "#############################
 
+  " \ 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew'
+  " \ 'window': 'setlocal statusline=%#StatusLine# | topleft 100split enew'
 let g:fzf_layout = {
-  \ 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew'
+  \ 'up': '100%'
   \ }
 let g:fzf_colors = {
   \ 'fg':        ['fg', 'Normal'],
@@ -952,19 +959,19 @@ function! QuitNERDTree()
 endfunction
 
 function! PreventBuffersInNERDTree()
-  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
-    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
-    \ && &buftype == '' && !exists('g:launching_fzf')
-    let bufnum = bufnr('%')
-    silent! close
-    exe 'b ' . bufnum
-  endif
-  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
+  " if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
+  "   \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
+  "   \ && &buftype == '' && !exists('g:launching_fzf')
+  "   let bufnum = bufnr('%')
+  "   silent! close
+  "   exe 'b ' . bufnum
+  " endif
+  " if exists('g:launching_fzf') | unlet g:launching_fzf | endif
 endfunction
 
 function! DeleteCurrentFile()
   let answer = input('Delete current file? ', 'y')
-  " normal :
+  normal :
   if answer != 'y' | return | endif
   call system('rm ' . shellescape(expand('%')))
   silent! checktime
@@ -1027,6 +1034,7 @@ endfunction
 
 function! CreateNewFile()
   let new_file = input('New file: ', '', 'file')
+  normal :
   if new_file != ''
     exec ':e ' . new_file
     w
@@ -1043,6 +1051,7 @@ function! CreateNewFileInCurrentDir()
   endif
 
   let new_file = input('New file: ', path, 'file')
+  normal :
   if new_file != '' && new_file != path
     exec ':e ' . new_file
     w
@@ -1190,7 +1199,6 @@ function! FileSearch(search_options)
   let opts = {}
   let opts.file = ''
   let opts.files_matched = 0
-  let opts.lines_matched = 0
   function! opts.on_stdout(job_id, data, event)
     for line in a:data
       let escaped_line = substitute(line, '\(\e\[\(\d\{1,2}\(;\d\{1,2}\)\?\)\?[mK]\|\r\)', '', 'g')
@@ -1212,15 +1220,19 @@ function! FileSearch(search_options)
         \ self.lines_matched . ' matches, ' . self.files_matched . ' files'
     endfor
   endfunction
-  call termopen(query, opts)
+  " call termopen(query, opts)
+  let opts = { 'curwin': 1 }
+  call term_start([&shell, '-c', query], opts)
+  wincmd N
 endfunction
 
 function! ResetProject()
-  for num in range(1, bufnr('$'))
-    if buflisted(num) || bufname(num) =~ 'NERD_tree'
-      silent exec 'silent bd! ' . num
-    endif
-  endfor
+  " for num in range(1, bufnr('$'))
+  "   if buflisted(num) || bufname(num) =~ 'NERD_tree'
+  "     silent exec 'silent bd! ' . num
+  "   endif
+  " endfor
+  %bdelete!
   enew
   let b:startup_buffer = 1
   call ClearMessages()
@@ -1562,7 +1574,7 @@ function! ToggleFoldSyntax()
 endfunction
 
 function! MakePlugSnapshot()
-  PlugSnapshot! ~/.vim/.plug_snapshot.vim
+  PlugSnapshot! ~/.vim/plug_snapshot.vim
 endfunction
 
 function! ToggleZoom()
@@ -2167,6 +2179,18 @@ function! RubyExtractVar()
   RExtractLocalVariable
 endfunction
 
+function! SilentExec(cmd)
+  let cmd = substitute(a:cmd, '^!', '', '')
+  let cmd = substitute(cmd, '%', shellescape(expand('%')), '')
+  call system(cmd)
+endfunction
+
+function! ConfigureTerminal()
+  if &buftype != 'terminal' | return | endif
+  setlocal nonumber norelativenumber
+  setlocal colorcolumn=
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -2255,17 +2279,17 @@ endif
 
 augroup lazy_lint
   autocmd!
-  autocmd BufWinEnter,BufWritePost,FocusLost * call timer_start('1000', 'LazyLint')
+  " autocmd BufWinEnter,BufWritePost,FocusLost * call timer_start('1000', 'LazyLint')
 augroup end
 
 augroup lazy_load_mta
   autocmd!
-  autocmd Filetype *html,xml,*.jsx call timer_start('200', 'LazyLoadMTA')
+  " autocmd Filetype *html,xml,*.jsx call timer_start('200', 'LazyLoadMTA')
 augroup end
 
 augroup lazy_load_slow_code
   autocmd!
-  autocmd FocusLost * call LazyLoadSlowCode()
+  " autocmd FocusLost * call LazyLoadSlowCode()
 augroup end
 
 augroup preserve_buffer_scroll
@@ -2299,6 +2323,8 @@ augroup general_autocommands
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
+  autocmd TermResponse * nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
+  autocmd BufWinEnter * call ConfigureTerminal()
 augroup end
 
 "#############
@@ -2306,10 +2332,6 @@ augroup end
 "#############
 
 call SetProjectMappings()
-
-if !has('nvim') && !has('gui_running')
-  runtime .enable_meta_mappings.vim
-endif
 
 set exrc
 set secure

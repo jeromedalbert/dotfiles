@@ -92,10 +92,10 @@ bindkey '^b' backward-char
 bindkey '^f' forward-char
 bindkey '\eb' backward-word
 bindkey '\ef' forward-word
+bindkey '\ed' kill-word
 bindkey '^k' kill-line
 bindkey '^d' delete-char
 bindkey '\ew' backward-kill-word
-bindkey '\ed' kill-word
 bindkey '^u' backward-kill-line
 bindkey '^r' history-incremental-search-backward
 
@@ -113,6 +113,7 @@ zmodload zsh/complist
 bindkey -M menuselect '^e' accept-line
 bindkey -M menuselect '\ef' menu-complete
 bindkey -M menuselect '\eb' reverse-menu-complete
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 zle -N insert-last-command-output
 bindkey '^x^l' insert-last-command-output
@@ -142,6 +143,13 @@ bindkey -M paste '^[[201~' end-paste
 zle -N paste-insert paste-insert
 bindkey -R -M paste "^@"-"\M-^?" paste-insert
 bindkey -M paste -s '^M' '^J'
+
+# bindkey -M emacs 'â' backward-word
+# bindkey -M emacs 'æ' forward-word
+# bindkey -M emacs 'ä' kill-word
+# bindkey -M menuselect 'æ' menu-complete
+# bindkey -M menuselect 'â' reverse-menu-complete
+# bindkey '®' insert-last-word
 
 #################
 ### Functions ###
