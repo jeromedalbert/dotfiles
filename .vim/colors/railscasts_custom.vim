@@ -87,6 +87,8 @@ hi ColorColumn guifg=NONE guibg=#454545 gui=NONE
 hi MatchParen guifg=NONE guibg=NONE gui=underline cterm=underline
 hi StatusLine guifg=fg guibg=#61605e gui=bold cterm=bold
 hi StatusLineNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
+hi StatusLineTerm guifg=fg guibg=#61605e gui=bold cterm=bold
+hi StatusLineTermNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
 hi Pmenu guifg=#333333 guibg=#ffffff gui=NONE
 hi PmenuSel guifg=#ffffff guibg=#5d90cf gui=bold cterm=bold
 hi PmenuThumb guibg=#999999

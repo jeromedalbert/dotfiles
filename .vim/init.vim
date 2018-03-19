@@ -82,15 +82,15 @@ map 0 ^
 nnoremap d0 d^
 noremap Y y$
 noremap Q <nop>
+noremap ' "
+noremap $ $ze
 
 noremap <silent> <leader>q :q<cr>
-noremap <silent> <leader>w :w<cr>
+noremap <silent> <leader>w :update<cr>:Neomake<cr>
 noremap <silent> <leader>z :x<cr>
 noremap <silent> <leader><esc> <nop>
 noremap <silent> <leader>`q :qa!<cr>
 noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
-
-noremap ' "
 
 noremap <up> <nop>
 noremap <down> <nop>
@@ -158,6 +158,8 @@ imap <m->> <C-o>A.
 imap <m-.> <C-o>A.
 noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
+
+map <m-m> %
 map <m-]> <c-]>
 map <m-[> <c-t>
 imap <m-_> <c-_>
@@ -165,16 +167,16 @@ imap <m-_> <c-_>
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
 
-noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
-noremap <silent> <leader>od :silent! exe '!open ' . expand('%:h')<cr>
+noremap <silent> <leader>odp :silent! exe '!open ' . getcwd()<cr>
+map <silent> <leader>odd <leader>odp
+map <silent> <leader>odr <leader>odp
+noremap <silent> <leader>odf :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
 noremap <silent> <leader>ob<esc> <nop>
 noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
-
-noremap $ $ze
 
 noremap g; g;zz
 noremap g, g,zz
@@ -343,8 +345,8 @@ nnoremap cc cc
 noremap <silent> <leader>oo :silent call BrowseOldFiles()<cr>
 noremap <silent> <leader>oh :silent Helptags<cr>
 noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
-noremap <silent> <leader>on :exe 'e ' . GetProjectNotes()<cr>
-noremap <silent> <leader>oN :let t:file=expand('%')<cr>:vnew<cr>:exe 'e ' . GetProjectNotes(t:file)<cr>
+noremap <silent> <leader>on :e ~/.notes<cr>
+noremap <silent> <leader>oN :vnew<cr>:e ~/.notes<cr>
 noremap <silent> <leader>obk :call OpenCurrentFileBackupHistory()<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
@@ -524,7 +526,7 @@ set formatoptions+=j
 set history=10000
 set langnoremap
 set viminfo=!,'1000,<50,s10,h
-exe "set cedit=\<c-y>"
+exe "set cedit=\<c-o>"
 
 set statusline=
 set statusline+=\ %<%f
@@ -871,14 +873,15 @@ function! ShowAllHighlights()
 endfunction
 
 function! Autowrite()
+  silent! wa
   if &modified
-    silent! wa
     silent! GutentagsUpdate
   endif
 endfunction
 
 function! OnNERDTreeInit()
   let t:nerdtree_winnr = bufwinnr('%')
+  let t:refresh_nerdtree_next_time = 0
   call ResetNERDTreePreview()
   normal! j
 endfunction
@@ -889,6 +892,16 @@ function! ResetNERDTreePreview()
   let t:escaped_nerdtree = 0
   let b:previous_preview_bufnum = 0
   let b:previous_preview_bufnum_to_close = 0
+endfunction
+
+function! OnNERDTreeEnter()
+  call ResetNERDTreePreview()
+
+  if t:refresh_nerdtree_next_time
+    call b:NERDTree.root.refresh()
+    call b:NERDTree.render()
+    let t:refresh_nerdtree_next_time = 0
+  endif
 endfunction
 
 function! NERDTreePreviewOrOpen()
@@ -962,12 +975,28 @@ function! PreventBuffersInNERDTree()
   if exists('g:launching_fzf') | unlet g:launching_fzf | endif
 endfunction
 
+function! RefreshNERDTree()
+  if !exists('t:nerdtree_winnr') | return 0 | endif
+  let first_buf = tabpagebuflist()[0]
+  if bufname(first_buf) =~ 'NERD_tree'
+    1wincmd w
+    silent call b:NERDTree.root.refresh()
+    silent call b:NERDTree.render()
+    wincmd p
+    return 1
+  else
+    let t:refresh_nerdtree_next_time = 1
+    return 0
+  endif
+endfunction
+
 function! DeleteCurrentFile()
   let answer = input('Delete current file? ', 'y')
-  " normal :
+  normal :
   if answer != 'y' | return | endif
   call system('rm ' . shellescape(expand('%')))
   silent! checktime
+  call RefreshNERDTree()
   if v:shell_error == 0 | echo 'File deleted.'
   else | echo "\nCould not delete file."
   endif
@@ -985,6 +1014,7 @@ function! MoveCurrentFile()
   exec ':edit! ' . new_file
   exec 'bd! ' . old_file
   if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
+  call RefreshNERDTree()
 endfunction
 
 function! RenameCurrentFile()
@@ -1002,6 +1032,7 @@ function! RenameCurrentFile()
   exec ':edit! ' . new_file
   exec 'bd! ' . old_file
   if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
+  call RefreshNERDTree()
 endfunction
 
 function! DuplicateCurrentFile()
@@ -1011,6 +1042,7 @@ function! DuplicateCurrentFile()
   if (new_file == '' || new_file == old_file) | return | endif
   if buflisted(new_file) | exec 'bd! ' . new_file | endif
   exec ':saveas! ' . new_file
+  call RefreshNERDTree()
 endfunction
 
 function! CopyCurrentFilePath()
@@ -1030,6 +1062,7 @@ function! CreateNewFile()
   if new_file != ''
     exec ':e ' . new_file
     w
+    if RefreshNERDTree() | call feedkeys(":file\<cr>") | end
   endif
 endfunction
 
@@ -1041,11 +1074,11 @@ function! CreateNewFileInCurrentDir()
   if path != ''
     let path .= '/'
   endif
-
   let new_file = input('New file: ', path, 'file')
   if new_file != '' && new_file != path
     exec ':e ' . new_file
     w
+    if RefreshNERDTree() | call feedkeys(":file\<cr>") | end
   endif
 endfunction
 
@@ -1216,11 +1249,12 @@ function! FileSearch(search_options)
 endfunction
 
 function! ResetProject()
-  for num in range(1, bufnr('$'))
-    if buflisted(num) || bufname(num) =~ 'NERD_tree'
-      silent exec 'silent bd! ' . num
-    endif
-  endfor
+  " for num in range(1, bufnr('$'))
+  "   if buflisted(num) || bufname(num) =~ 'NERD_tree'
+  "     silent exec 'silent bd! ' . num
+  "   endif
+  " endfor
+  %bdelete!
   enew
   let b:startup_buffer = 1
   call ClearMessages()
@@ -1575,21 +1609,6 @@ function! ToggleZoom()
     wincmd _
     let t:zoomed = 1
   endif
-endfunction
-
-function! GetProjectNotes(...)
-  if a:0
-    let file_path = a:1
-  else
-    let file_path = expand('%:p')
-  endif
-  let project_path = getcwd()
-  let relative_file_path = substitute(file_path, '^' . project_path . '/', '', '')
-  if file_path != ''
-    \ && (file_path !~ ('^' . project_path) || relative_file_path != expand('%'))
-    let project_path = expand('~')
-  endif
-  return project_path . '/.notes'
 endfunction
 
 function! TrimTrailingWhitespace()
@@ -2283,8 +2302,8 @@ augroup end
 augroup nerdtree_events
   autocmd!
   autocmd User NERDTreeInit call OnNERDTreeInit()
+  autocmd BufEnter NERD_tree* call OnNERDTreeEnter()
   autocmd BufWinEnter * call PreventBuffersInNERDTree()
-  autocmd BufEnter NERD_tree* call ResetNERDTreePreview()
   autocmd BufLeave * silent let t:last_bufnum = bufnr('%')
   autocmd BufEnter * call LeaveNERDTreePreview()
 augroup end

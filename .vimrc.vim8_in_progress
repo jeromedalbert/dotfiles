@@ -318,11 +318,6 @@ inoremap <m-J> <esc>O
 noremap <m-O> O<cr>
 inoremap <m-O> <esc>O<cr>
 
-" map <f17> ]<space>
-" inoremap <f17> <end><cr>
-" map <f18> [<space>
-" inoremap <f18> <esc>O
-
 noremap <leader>ff :FileSearch -Q -i '' <left><left>
 noremap <silent> <leader>yf :set opfunc=FileSearchVerb<CR>g@
 map <leader>fw <leader>yfiw
@@ -531,7 +526,6 @@ runtime! macros/matchit.vim
 exe "set cedit=\<c-y>"
 
 set statusline=
-set statusline+=%#StatusLine#
 set statusline+=\ %<%f
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
@@ -572,7 +566,6 @@ let g:is_bash = 1
 "#############################
 
   " \ 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew'
-  " \ 'window': 'setlocal statusline=%#StatusLine# | topleft 100split enew'
 let g:fzf_layout = {
   \ 'up': '100%'
   \ }
