@@ -39,6 +39,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive', { 'on': [] }
+Plug 'tpope/vim-projectionist', { 'on': [] }
 Plug 'machakann/vim-sandwich'
 Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 
@@ -62,7 +63,6 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'wincent/replay'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'joonty/vdebug', { 'on': ['Breakpoint', 'VdebugStart'] }
 Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
@@ -86,7 +86,7 @@ noremap ' "
 noremap $ $ze
 
 noremap <silent> <leader>q :q<cr>
-noremap <silent> <leader>w :update<cr>:Neomake<cr>
+noremap <silent> <leader>w :w<cr>:Neomake<cr>
 noremap <silent> <leader>z :x<cr>
 noremap <silent> <leader><esc> <nop>
 noremap <silent> <leader>`q :qa!<cr>
@@ -138,8 +138,7 @@ noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :silent! tabclose<cr>
 noremap <silent> <leader>to :tabonly<cr>
 noremap <silent> <leader>t# :tabedit #<cr>
-noremap <silent> <leader>tt <c-w>T
-noremap <silent> <leader>tn :tab split<cr>
+noremap <silent> <leader>tn <c-w>T
 
 noremap <leader>e :e $MYVIMRC<cr>
 
@@ -196,7 +195,6 @@ noremap <leader>ft :set filetype=
 
 nnoremap gV `[V`]
 
-cabbrev tnew Tnew
 cabbrev co copen
 cabbrev qf copen
 cabbrev lo lopen
@@ -275,8 +273,8 @@ nmap cmu <Plug>Commentary<Plug>Commentary
 noremap <silent> <leader>a :silent w<cr>:TestFile<cr>
 noremap <silent> <leader>c :silent w<cr>:TestNearest<cr>
 noremap <silent> <leader>l :silent w<cr>:TestLast<cr>
-nnoremap <silent> <leader>m :exe 'e ' . GetTestAlternateFile()<cr>
-nnoremap <silent> <leader>v :let t:file=expand('%')<cr>:vnew<cr>:exe 'e ' . GetTestAlternateFile(t:file)<cr>
+nnoremap <silent> <leader>m :call EditAlternateFile(0)<cr>
+nnoremap <silent> <leader>v :call EditAlternateFile(1)<cr>
 
 noremap <leader>fmo :call MoveCurrentFile()<cr>
 noremap <leader>fre :call RenameCurrentFile()<cr>
@@ -409,8 +407,8 @@ cabbrev gmo GemOpen
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
 
-noremap <silent> <leader>th :call MoveToPrevTab()<cr>
-noremap <silent> <leader>tl :call MoveToNextTab()<cr>
+noremap <silent> <leader>th :call MergeToPrevTab()<cr>
+noremap <silent> <leader>tl :call MergeToNextTab()<cr>
 noremap <silent> <leader>tr :call RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 
@@ -750,29 +748,19 @@ let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
 let g:jsx_ext_required = 0
 
-let g:vdebug_options = {}
-let g:vdebug_options['break_on_open'] = 0
-let g:vdebug_options['watch_window_style'] = 'compact'
-let g:vdebug_keymap = {
-  \ 'set_breakpoint': '<leader>ub',
-  \ 'run': '<leader>uu',
-  \ 'eval_visual': '<leader>ue',
-  \ 'eval_under_cursor': '<leader>ue',
-  \ 'get_context': '<leader>ur',
-  \ 'detach': '<leader>ud',
-  \ 'step_over': '<down>',
-  \ 'step_into': '<right>',
-  \ 'step_out': '<left>',
-  \ 'run_to_cursor': '<s-up>',
-  \ 'close': 'q'
-  \ }
-
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
 let g:test#strategy = 'custom'
 let g:gundo_help = 0
 let g:netrw_altfile = 1
 let g:ruby_refactoring_map_keys = 0
+
+let g:projectionist_heuristics = {
+  \   '*': {
+  \     'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
+  \     'spec/*_spec.rb': { 'alternate': 'app/{}.rb' }
+  \   }
+  \ }
 
 "#################
 "### Functions ###
@@ -998,8 +986,12 @@ function! DeleteCurrentFile()
   silent! checktime
   call RefreshNERDTree()
   if v:shell_error == 0 | echo 'File deleted.'
-  else | echo "\nCould not delete file."
+  else | call EchoErr("\nCould not delete file.")
   endif
+endfunction
+
+function! EchoErr(msg)
+  echohl ErrorMsg | echo a:msg | echohl None
 endfunction
 
 function! MoveCurrentFile()
@@ -1082,34 +1074,16 @@ function! CreateNewFileInCurrentDir()
   endif
 endfunction
 
-function! GetTestAlternateFile(...)
-  if a:0
-    let current_file = a:1
-  else
-    let current_file = expand('%')
+function! EditAlternateFile(split)
+  call LazyLoadProjectionist()
+  call ProjectionistDetect(expand('%:p'))
+  let alternates = projectionist#query_file('alternate')
+  if empty(alternates)
+    call EchoErr('No alternate file found') | return
   endif
-  let alternate_file = current_file
-  let in_spec = match(current_file, '^spec/') != -1
-  let going_to_spec = !in_spec
-  let in_app = match(current_file, '\<controllers\>') != -1
-    \ || match(current_file, '\<models\>') != -1
-    \ || match(current_file, '\<views\>') != -1
-    \ || match(current_file, '\<helpers\>') != -1
-    \ || match(current_file, '\<jobs\>') != -1
-    \ || match(current_file, '\<mailers\>') != -1
-    \ || match(current_file, '\<services\>') != -1
-  if going_to_spec
-    let alternate_file = substitute(alternate_file, '^app/', '', '')
-    let alternate_file = substitute(alternate_file, '\.e\?rb$', '_spec.rb', '')
-    let alternate_file = 'spec/' . alternate_file
-  else
-    let alternate_file = substitute(alternate_file, '_spec\.rb$', '.rb', '')
-    let alternate_file = substitute(alternate_file, '^spec/', '', '')
-    if in_app
-      let alternate_file = 'app/' . alternate_file
-    end
-  endif
-  return alternate_file
+  let file = fnamemodify(alternates[0], ':.')
+  if a:split | vnew | endif
+  exe 'e ' . file
 endfunction
 
 function! ToggleQuotes()
@@ -1497,7 +1471,7 @@ function! SetVirtualEdit()
   endif
 endfunction
 
-function! MoveToPrevTab()
+function! MergeToPrevTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
   endif
@@ -1516,7 +1490,7 @@ function! MoveToPrevTab()
   exe "b".l:cur_buf
 endfunction
 
-function! MoveToNextTab()
+function! MergeToNextTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
   endif
@@ -2040,14 +2014,6 @@ function! SetProjectMappings()
     noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
     xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
   endif
-  if IsPhpProject()
-    noremap <silent> <leader>ub :Breakpoint<cr>
-    noremap <silent> <leader>uu :VdebugStart<cr>
-    noremap <silent> <leader>up :VdebugStart<cr>
-    noremap <silent> <leader>us :VdebugStart<cr>
-    noremap <silent> <leader>uc :BreakpointRemove *<cr>
-    nmap <silent> <leader>ul V<leader>ue
-  endif
 endfunction
 
 function! IsRubyProject()
@@ -2160,6 +2126,13 @@ function! LazyLoadSlowCode()
   endif
   call LazyLoadNeomake()
   autocmd! lazy_load_slow_code
+endfunction
+
+function! LazyLoadProjectionist()
+  if !exists('g:loaded_projectionist')
+    call plug#load('vim-projectionist')
+  endif
+  autocmd! projectionist
 endfunction
 
 function! GemOpen(gem_name)
