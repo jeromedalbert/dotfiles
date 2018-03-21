@@ -751,9 +751,11 @@ let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
 let g:jsx_ext_required = 0
 
+let g:test#strategy = 'custom'
+let g:test#no_alternate = 1
+
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
-let g:test#strategy = 'custom'
 let g:gundo_help = 0
 let g:netrw_altfile = 1
 let g:ruby_refactoring_map_keys = 0

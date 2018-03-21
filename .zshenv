@@ -189,6 +189,7 @@ ggcl() {
   gcl "$@"
   cd $git_repo
 }
+alias gclg='ggcl'
 gclv() {
   local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
   gcl "$@"
