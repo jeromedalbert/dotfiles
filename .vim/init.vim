@@ -79,7 +79,6 @@ noremap - :
 map J 5j
 map K 5k
 map 0 ^
-nnoremap d0 d^
 noremap Y y$
 noremap Q <nop>
 noremap ' "
@@ -261,9 +260,8 @@ endif
 
 noremap <silent> <f1> :NERDTreeToggle<CR>
 noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
-
 noremap <silent> <f2> :TagbarToggle<CR>
-noremap <silent> <leader>ut :call ReadUndoFile()<cr>:GundoToggle<cr>
+noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 xmap cm <Plug>Commentary
@@ -277,7 +275,6 @@ nnoremap <silent> <leader>m :call EditAlternateFile(0)<cr>
 nnoremap <silent> <leader>v :call EditAlternateFile(1)<cr>
 
 noremap <leader>fmo :call MoveCurrentFile()<cr>
-noremap <leader>fre :call RenameCurrentFile()<cr>
 noremap <leader>fde :call DeleteCurrentFile()<cr>
 noremap <leader>fdu :call DuplicateCurrentFile()<cr>
 noremap <leader>fcp :call CopyCurrentFilePath()<cr>
@@ -414,9 +411,13 @@ noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
-cnoremap <expr> <m-d> EnhancedMetaDeleteRight()
-cnoremap <expr> <m-b> EnhancedMetaLeft()
-cnoremap <expr> <m-f> EnhancedMetaRight()
+cnoremap <expr> <m-b> MovePreviousWORD("\<left>")
+cnoremap <expr> <m-f> MoveNextWORD("\<right>")
+cnoremap <expr> <m-d> MoveNextWORD("\<right>\<bs>")
+cnoremap <expr> <m-B> MovePreviousCase("\<left>")
+cnoremap <expr> <m-W> MovePreviousCase("\<bs>")
+cnoremap <expr> <m-F> MoveNextCase("\<right>")
+cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
 
 noremap <silent> <leader>j :call Join()<cr>
 
@@ -724,6 +725,8 @@ let g:mta_filetypes = {
 
 call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
+nunmap ds
+nunmap dss
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
@@ -1475,11 +1478,11 @@ function! MergeToPrevTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
   endif
-  let l:tab_nr = tabpagenr('$')
-  let l:cur_buf = bufnr('%')
+  let tab_nr = tabpagenr('$')
+  let cur_buf = bufnr('%')
   if tabpagenr() != 1
     close!
-    if l:tab_nr == tabpagenr('$')
+    if tab_nr == tabpagenr('$')
       tabprev
     endif
     vnew
@@ -1487,18 +1490,18 @@ function! MergeToPrevTab()
     close!
     0tabnew
   endif
-  exe "b".l:cur_buf
+  exe "b".cur_buf
 endfunction
 
 function! MergeToNextTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
   endif
-  let l:tab_nr = tabpagenr('$')
-  let l:cur_buf = bufnr('%')
+  let tab_nr = tabpagenr('$')
+  let cur_buf = bufnr('%')
   if tabpagenr() < tab_nr
     close!
-    if l:tab_nr == tabpagenr('$')
+    if tab_nr == tabpagenr('$')
       tabnext
     endif
     vnew
@@ -1506,10 +1509,10 @@ function! MergeToNextTab()
     close!
     tabnew
   endif
-  exe "b".l:cur_buf
+  exe 'b'.cur_buf
 endfunc
 
-function! EnhancedMetaLeft()
+function! MovePreviousWORD(cmd)
   let line = getcmdline()
   let pos = getcmdpos()
   let next = 1
@@ -1517,30 +1520,48 @@ function! EnhancedMetaLeft()
   let i = 2
   while nextnext < pos
     let next = nextnext
-    let nextnext = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let nextnext = match(line, '\<\S\|\s\zs\S\|^\|$', 0, i) + 1
     let i += 1
   endwhile
-  return repeat("\<Left>", pos - next)
+  return repeat(a:cmd, pos - next)
 endfunction
 
-function! EnhancedMetaRight()
-  return AbstractRight("\<Right>")
-endfunction
-
-function! AbstractRight(command)
+function! MoveNextWORD(cmd)
   let line = getcmdline()
   let pos = getcmdpos()
   let next = 1
   let i = 2
   while next <= pos && next > 0
-    let next = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let next = match(line, '\<\S\|\s\zs\S\|^\|$', 0, i) + 1
     let i += 1
   endwhile
-  return repeat(a:command, next - pos)
+  return repeat(a:cmd, next - pos)
 endfunction
 
-function! EnhancedMetaDeleteRight()
-  return AbstractRight("\<Right>\<BS>")
+function! MovePreviousCase(cmd)
+  let line = getcmdline()
+  let pos = getcmdpos()
+  let next = 1
+  let nextnext = 1
+  let i = 2
+  while nextnext < pos
+    let next = nextnext
+    let nextnext = match(line, '\U\zs\u\|\u\U\|\(\s\|_\)\zs\S\|^\|$', 0, i) + 1
+    let i += 1
+  endwhile
+  return repeat(a:cmd, pos - next)
+endfunction
+
+function! MoveNextCase(cmd)
+  let line = getcmdline()
+  let pos = getcmdpos()
+  let next = 1
+  let i = 2
+  while next <= pos && next > 0
+    let next = match(line, '\U\zs\u\|\u\U\|\(\s\|_\)\zs\S\|^\|$', 0, i) + 1
+    let i += 1
+  endwhile
+  return repeat(a:cmd, next - pos)
 endfunction
 
 function! RenameTab()
@@ -1730,50 +1751,30 @@ endfunction
 
 function! OnBufEnter()
   exe ':match'
-  " if !exists('b:buffer_mappings_created')
-  call OverrideGlobalMappings()
-  " end
+  if !exists('b:buffer_mappings_created')
+    call CreateBufferMappings()
+  endif
   call ConfigureLargeBuffers()
 endfunction
 
-function! OverrideGlobalMappings()
-  call StashGlobalMappings(
-    \ ['<leader>fre', ''], ['d0', 'n'], ['ds', 'n'], ['dss', 'n']
-    \ )
-  let buffer_name = bufname('%')
-  if buffer_name == '[Global Replace]'
+function! CreateBufferMappings()
+  let bufname = bufname('%')
+  if bufname == '[Global Replace]'
     map <buffer><Leader>fr :call feedkeys("\<space>fRa")<cr>
     map <buffer><Leader>fR :Greplace<cr>
   else
-    call RestoreBufferMappings('<leader>fre')
+    noremap <buffer> <leader>fre :call RenameCurrentFile()<cr>
+    noremap <buffer> <leader>frm :call DeleteCurrentFile()<cr>
   endif
-  if buffer_name !~ 'NERD_tree'
-    call RestoreBufferMappings('d0', 'ds', 'dss')
+  if bufname !~ 'NERD_tree'
+    nnoremap <buffer> d0 d^
+    nmap <buffer> ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+    nmap <buffer> dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
     map <buffer> m, mO
     map <buffer> `, `O
     map <buffer> ', `O
   endif
-  " let b:buffer_mappings_created=1
-endfunction
-
-function! StashGlobalMappings(...)
-  if exists('g:stashed_mappings') | return | endif
-  let g:global_mappings = {}
-  for [mapping, mode] in a:000
-    let g:global_mappings[mapping] = maparg(mapping, mode, 0, 1)
-    exe mode . 'unmap ' . mapping
-  endfor
-  let g:stashed_mappings = 1
-endfunction
-
-function! RestoreBufferMappings(...)
-  for mapping in a:000
-    let info = g:global_mappings[mapping]
-    exe info.mode . (info.noremap ? 'noremap' : 'map') . ' <buffer>'
-      \ (info.silent ? '<silent>' : '') .
-      \ (info.expr ? '<expr>' : '') .
-      \ ' ' . mapping . ' ' . info.rhs
-  endfor
+  let b:buffer_mappings_created = 1
 endfunction
 
 function! ConfigureLargeBuffers()
@@ -2159,6 +2160,12 @@ function! RubyExtractVar()
   RExtractLocalVariable
 endfunction
 
+function! OnCmdwinEnter()
+  setlocal nonumber norelativenumber colorcolumn=
+  nnoremap <silent><buffer> <esc> :q<cr>
+  nnoremap <silent><buffer> q :q<cr>
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -2291,6 +2298,7 @@ augroup general_autocommands
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
+  autocmd CmdwinEnter * call OnCmdwinEnter()
 augroup end
 
 "#############
