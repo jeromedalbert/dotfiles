@@ -114,7 +114,7 @@ hi link Number String
 hi PreProc guifg=#ce7829 guibg=NONE gui=NONE
 hi Special guifg=fg guibg=NONE gui=NONE
 hi SpecialChar guifg=#4ea04c guibg=NONE gui=NONE
-hi SpecialKey guifg=#404040 guibg=#3e3d3d gui=NONE
+hi SpecialKey guifg=#61605e guibg=NONE gui=NONE
 hi Statement guifg=#ce7829 guibg=NONE gui=NONE
 hi link StorageClass Statement
 hi String guifg=#a4c35b guibg=NONE gui=NONE

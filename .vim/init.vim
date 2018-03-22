@@ -1358,11 +1358,15 @@ function! ExtractRailsPartial()
   endif
 endfunction
 
-function! OpenMarkdownPreview()
-  if !exists('s:markdown_preview_job')
-    let s:markdown_preview_job = jobstart('grip')
+function! OpenMarkdownPreview() abort
+  if exists('s:markdown_job_id')
+    call jobstop(s:markdown_job_id)
+    unlet s:markdown_job_id
   endif
-  silent exec '!open http://localhost:6419/' . expand('%')
+  let job_id = jobstart('grip ' . expand('%:p'))
+  if job_id <= 0 | return | endif
+  let s:markdown_job_id = job_id
+  silent exec '!open http://localhost:6419'
 endfunction
 
 function! MakeSession()
