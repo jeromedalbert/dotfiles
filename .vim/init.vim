@@ -111,6 +111,9 @@ inoremap <c-k> <c-o>D
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cnoremap <c-p> <up>
 cnoremap <c-n> <down>
+cnoremap <c-m-a> <home>
+cmap <m-A> <c-a>
+cmap <m-E> <c-e>
 
 noremap <silent> <m-d> <c-d>
 inoremap <m-d> <c-o>dw
@@ -380,7 +383,8 @@ command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
-command! MakePlugSnapshot call MakePlugSnapshot()
+command! MakePlugSnapshot PlugSnapshot! ~/.vim/.plug_snapshot.vim
+command! RestorePlugSnapshot source ~/.vim/.plug_snapshot.vim
 command! Profile call Profile()
 command! Gdiff call LazyLoadFugitive('Gdiff')
 command! Glog call LazyLoadFugitive('Glog')
@@ -392,6 +396,7 @@ cabbrev plugc PlugClean
 cabbrev plugu PlugUpdate
 cabbrev plugst PlugStatus
 cabbrev plugs MakePlugSnapshot
+cabbrev plugr RestorePlugSnapshot
 cabbrev goyo Goyo
 cabbrev gdiff Gdiff
 cabbrev gd Gdiff
@@ -414,10 +419,14 @@ nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 cnoremap <expr> <m-b> MovePreviousWORD("\<left>")
 cnoremap <expr> <m-f> MoveNextWORD("\<right>")
 cnoremap <expr> <m-d> MoveNextWORD("\<right>\<bs>")
-cnoremap <expr> <m-B> MovePreviousCase("\<left>")
-cnoremap <expr> <m-W> MovePreviousCase("\<bs>")
-cnoremap <expr> <m-F> MoveNextCase("\<right>")
-cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
+cnoremap <expr> <c-m-b> MovePreviousCase("\<left>")
+cmap <m-B> <c-m-b>
+cnoremap <expr> <c-m-w> MovePreviousCase("\<bs>")
+cmap <m-W> <c-m-w>
+cnoremap <expr> <c-m-f> MoveNextCase("\<right>")
+cmap <m-F> <c-m-f>
+cnoremap <expr> <c-m-d> MoveNextCase("\<right>\<bs>")
+cmap <m-D> <c-m-d>
 
 noremap <silent> <leader>j :call Join()<cr>
 
@@ -515,12 +524,12 @@ set nojoinspaces
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class,*.swp
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
 set showtabline=2
 set regexpengine=1
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class,*.swp
 set formatoptions+=j
 set history=10000
 set langnoremap
@@ -562,6 +571,15 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 let g:ruby_path = ''
 let g:vim_indent_cont = &sw
 let g:is_bash = 1
+let g:vimsyn_minlines = 50
+
+let g:loaded_2html_plugin = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_logipat = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_rrhelper = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_vimballPlugin = 1
 
 "#############################
 "### Plugins configuration ###
@@ -1594,10 +1612,6 @@ function! ToggleFoldSyntax()
     setl foldmethod=manual
     normal zR
   endif
-endfunction
-
-function! MakePlugSnapshot()
-  PlugSnapshot! ~/.vim/.plug_snapshot.vim
 endfunction
 
 function! ToggleZoom()
