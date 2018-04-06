@@ -111,7 +111,6 @@ inoremap <c-k> <c-o>D
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cnoremap <c-p> <up>
 cnoremap <c-n> <down>
-cnoremap <c-m-a> <home>
 cmap <m-A> <c-a>
 cmap <m-E> <c-e>
 
@@ -420,14 +419,10 @@ nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 cnoremap <expr> <m-b> MovePreviousWORD("\<left>")
 cnoremap <expr> <m-f> MoveNextWORD("\<right>")
 cnoremap <expr> <m-d> MoveNextWORD("\<right>\<bs>")
-cnoremap <expr> <c-m-b> MovePreviousCase("\<left>")
-cmap <m-B> <c-m-b>
-cnoremap <expr> <c-m-w> MovePreviousCase("\<bs>")
-cmap <m-W> <c-m-w>
-cnoremap <expr> <c-m-f> MoveNextCase("\<right>")
-cmap <m-F> <c-m-f>
-cnoremap <expr> <c-m-d> MoveNextCase("\<right>\<bs>")
-cmap <m-D> <c-m-d>
+cnoremap <expr> <m-B> MovePreviousCase("\<left>")
+cnoremap <expr> <m-W> MovePreviousCase("\<bs>")
+cnoremap <expr> <m-F> MoveNextCase("\<right>")
+cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
 
 noremap <silent> <leader>j :call Join()<cr>
 
@@ -1545,7 +1540,7 @@ function! MovePreviousWORD(cmd)
   let i = 2
   while nextnext < pos
     let next = nextnext
-    let nextnext = match(line, '\<\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let nextnext = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, pos - next)
@@ -1557,7 +1552,7 @@ function! MoveNextWORD(cmd)
   let next = 1
   let i = 2
   while next <= pos && next > 0
-    let next = match(line, '\<\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let next = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, next - pos)
@@ -1571,7 +1566,7 @@ function! MovePreviousCase(cmd)
   let i = 2
   while nextnext < pos
     let next = nextnext
-    let nextnext = match(line, '\U\zs\u\|\u\U\|\(\s\|_\)\zs\S\|^\|$', 0, i) + 1
+    let nextnext = match(line, '\<\S\|\>\S\|\U\zs\u\|\u\U\|\(\s\|_\)\zs\S\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, pos - next)
@@ -1583,7 +1578,7 @@ function! MoveNextCase(cmd)
   let next = 1
   let i = 2
   while next <= pos && next > 0
-    let next = match(line, '\U\zs\u\|\u\U\|\(\s\|_\)\zs\S\|^\|$', 0, i) + 1
+    let next = match(line, '\<\S\|\>\S\|\U\zs\u\|\u\U\|_\S\|\s\zs\S\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, next - pos)
