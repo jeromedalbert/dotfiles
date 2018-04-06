@@ -85,7 +85,7 @@ noremap ' "
 noremap $ $ze
 
 noremap <silent> <leader>q :q<cr>
-noremap <silent> <leader>w :w<cr>:Neomake<cr>
+noremap <silent> <leader>w :w<cr>:Lint<cr>
 noremap <silent> <leader>z :x<cr>
 noremap <silent> <leader><esc> <nop>
 noremap <silent> <leader>`q :qa!<cr>
@@ -383,13 +383,14 @@ command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
-command! MakePlugSnapshot PlugSnapshot! ~/.vim/.plug_snapshot.vim
-command! RestorePlugSnapshot source ~/.vim/.plug_snapshot.vim
-command! Profile call Profile()
 command! Gdiff call LazyLoadFugitive('Gdiff')
 command! Glog call LazyLoadFugitive('Glog')
 command! Gblame call LazyLoadFugitive('Gblame')
 command! Gmodified call GitOpenModifiedFiles()
+command! MakePlugSnapshot PlugSnapshot! ~/.vim/.plug_snapshot.vim
+command! RestorePlugSnapshot source ~/.vim/.plug_snapshot.vim
+command! Profile call Profile()
+command! Lint call LazyLint()
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean

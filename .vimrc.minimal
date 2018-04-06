@@ -4,41 +4,39 @@ set hidden
 set wildmenu
 
 let mapleader=" "
-map - :
-inoremap jj <esc>
+noremap - :
 
 map J 5j
 map K 5k
-nmap 0 ^
-map Y y$
+map 0 ^
+noremap Y y$
 noremap Q <nop>
-
-map <leader>q :q<cr>
-map <leader>w :w<cr>
-map <leader>z :x<cr>
-nmap <leader>`q :qa!<cr>
-
 noremap ' "
 
-map <silent> <m-d> <c-d>
-map <silent> <m-u> <c-u>
-map <silent> <m-e> <c-e>
-map <silent> <m-y> <c-y>
-map <m-o> <c-o>
+noremap <leader>q :q<cr>
+noremap <leader>w :w<cr>
+noremap <leader>z :x<cr>
+noremap <leader>`q :qa!<cr>
 
-map <c-n> <esc>:tabnew<cr>
-map <silent> <m-q> :q<cr>
-map <silent> <m-w> :w<cr>
-map <c-h> gT
-map <m-l> gt
+noremap <silent> <m-d> <c-d>
+noremap <silent> <m-u> <c-u>
+noremap <silent> <m-e> <c-e>
+noremap <silent> <m-y> <c-y>
+noremap <m-o> <c-o>
+
+noremap <c-n> <esc>:tabnew<cr>
+noremap <silent> <m-q> :q<cr>
+noremap <c-h> gT
+noremap <m-l> gt
 
 nnoremap <leader><leader> <C-^>
 
 noremap <leader>n <c-w><c-w>
+noremap <leader>p <c-w>W
 noremap <m-]> 20zl
 noremap <m-[> 20zh
 
-map <c-p> :e */**/*
+noremap <c-p> :e */**/*
 
 inoremap <c-e> <end>
 inoremap <c-f> <right>
