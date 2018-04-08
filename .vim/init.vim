@@ -19,7 +19,7 @@ Plug 'othree/html5.vim', { 'for': '*html' }
 Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'wavded/vim-stylus', { 'for': 'stylus' }
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'jeromedalbert/vim-markdown', { 'branch': 'hl-heading', 'for': 'markdown' }
 Plug 'keith/swift.vim', { 'for': 'swift' }
 Plug 'StanAngeloff/php.vim', { 'for': 'php' }
 
@@ -46,7 +46,7 @@ Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
 Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
-Plug 'jeromedalbert/auto-pairs'
+Plug 'jeromedalbert/auto-pairs', { 'branch': 'better-auto-pairs' }
 Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
 Plug 'vim-scripts/closetag.vim', { 'for': ['*html', 'xml', '*jsx'] }
@@ -266,7 +266,6 @@ noremap <silent> <f2> :TagbarToggle<CR>
 noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
-xmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
 nmap cmu <Plug>Commentary<Plug>Commentary
 
@@ -416,9 +415,9 @@ noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
 
-cnoremap <expr> <m-b> MovePreviousWORD("\<left>")
-cnoremap <expr> <m-f> MoveNextWORD("\<right>")
-cnoremap <expr> <m-d> MoveNextWORD("\<right>\<bs>")
+cnoremap <expr> <m-b> MovePreviousWord("\<left>")
+cnoremap <expr> <m-f> MoveNextWord("\<right>")
+cnoremap <expr> <m-d> MoveNextWord("\<right>\<bs>")
 cnoremap <expr> <m-B> MovePreviousCase("\<left>")
 cnoremap <expr> <m-W> MovePreviousCase("\<bs>")
 cnoremap <expr> <m-F> MoveNextCase("\<right>")
@@ -1098,7 +1097,7 @@ function! EditAlternateFile(split)
   call ProjectionistDetect(expand('%:p'))
   let alternates = projectionist#query_file('alternate')
   if empty(alternates)
-    call EchoErr('No alternate file found') | return
+    return EchoErr('No alternate file found')
   endif
   let file = fnamemodify(alternates[0], ':.')
   if a:split | vnew | endif
@@ -1377,10 +1376,14 @@ function! OpenMarkdownPreview() abort
     call jobstop(s:markdown_job_id)
     unlet s:markdown_job_id
   endif
-  let job_id = jobstart('grip ' . expand('%:p'))
-  if job_id <= 0 | return | endif
+  let available_port = system(
+    \ "lsof -s tcp:listen -i :40500-40800 | awk -F ' *|:' '{ print $10 }' | sort -n | tail -n1"
+    \ ) + 1
+  if available_port == 1 | let available_port = 40500 | endif
+  let job_id = jobstart('grip ' . shellescape(expand('%:p')) . ' :' . available_port)
+  if job_id <= 0 | return EchoErr('Error') | endif
   let s:markdown_job_id = job_id
-  silent exec '!open http://localhost:6419'
+  silent exec '!open http://localhost:' . available_port
 endfunction
 
 function! MakeSession()
@@ -1532,7 +1535,7 @@ function! MergeToNextTab()
   exe 'b'.cur_buf
 endfunc
 
-function! MovePreviousWORD(cmd)
+function! MovePreviousWord(cmd)
   let line = getcmdline()
   let pos = getcmdpos()
   let next = 1
@@ -1540,19 +1543,19 @@ function! MovePreviousWORD(cmd)
   let i = 2
   while nextnext < pos
     let next = nextnext
-    let nextnext = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let nextnext = match(line, '\<\S\|\>\S\|\W\zs\w\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, pos - next)
 endfunction
 
-function! MoveNextWORD(cmd)
+function! MoveNextWord(cmd)
   let line = getcmdline()
   let pos = getcmdpos()
   let next = 1
   let i = 2
   while next <= pos && next > 0
-    let next = match(line, '\<\S\|\>\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let next = match(line, '\<\S\|\>\S\|\W\zs\w\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, next - pos)
@@ -1566,7 +1569,7 @@ function! MovePreviousCase(cmd)
   let i = 2
   while nextnext < pos
     let next = nextnext
-    let nextnext = match(line, '\<\S\|\>\S\|\U\zs\u\|\u\U\|\(\s\|_\)\zs\S\|^\|$', 0, i) + 1
+    let nextnext = match(line, '\<\S\|\>\S\|\U\zs\u\|\u\U\|\(\W\|_\)\zs\w\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, pos - next)
@@ -1578,7 +1581,7 @@ function! MoveNextCase(cmd)
   let next = 1
   let i = 2
   while next <= pos && next > 0
-    let next = match(line, '\<\S\|\>\S\|\U\zs\u\|\u\U\|_\S\|\s\zs\S\|^\|$', 0, i) + 1
+    let next = match(line, '\<\S\|\>\S\|\U\zs\u\|\u\U\|_\|\W\zs\w\|^\|$', 0, i) + 1
     let i += 1
   endwhile
   return repeat(a:cmd, next - pos)

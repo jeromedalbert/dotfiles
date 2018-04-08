@@ -401,10 +401,9 @@ alias ssh_key="cat ~/.ssh/id_rsa.pub | pbcopy"
 
 # Apps / Binaries
 alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-alias s="subl"
-alias s.="subl ."
-alias s3="command subl"
-alias s3.="s3 ."
+alias subl.="subl ."
+alias subl3="command subl"
+alias subl3.="subl3 ."
 alias zzz="pmset sleepnow"
 alias say_good="say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo"
 alias say_bad="say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo"
