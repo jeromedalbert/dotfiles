@@ -27,7 +27,6 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-export NVM_DIR=$HOME/.nvm
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:/usr/local/bin
