@@ -599,3 +599,13 @@ alias hl='heroku logs -t'
 alias hr='heroku run'
 alias hmi='heroku run rake db:migrate'
 alias hro='heroku run rake db:rollback'
+
+# Brew
+alias bri='brew install'
+alias brin='brew info'
+alias bru='brew uninstall'
+alias brs='brew search'
+alias bci='brew cask install'
+alias bcin='brew cask info'
+alias bcu='brew cask uninstall'
+alias bcs='brew cask search'

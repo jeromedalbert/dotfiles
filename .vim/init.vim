@@ -38,11 +38,11 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive', { 'on': [] }
 Plug 'tpope/vim-projectionist', { 'on': [] }
-Plug 'machakann/vim-sandwich'
+Plug 'jeromedalbert/vim-fugitive', { 'branch': 'better-vim-fugitive', 'on': [] }
 Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 
+Plug 'machakann/vim-sandwich'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
 Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
@@ -776,6 +776,8 @@ let g:ruby_refactoring_map_keys = 0
 let g:projectionist_heuristics = {
   \   '*': {
   \     'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
+  \     'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
+  \     'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' },
   \     'spec/*_spec.rb': { 'alternate': 'app/{}.rb' }
   \   }
   \ }
@@ -1165,6 +1167,7 @@ endfunction
 function! OnFileSearchDisplayed()
   noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
   nmap <buffer> o <cr>
+  nmap <buffer> i <cr>
   " noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
 endfunction
 
