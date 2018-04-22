@@ -125,9 +125,10 @@ hi Type guifg=fg guibg=NONE gui=NONE
 hi Underlined guifg=NONE guibg=NONE gui=underline cterm=underline
 hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
 hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
+" hi ErrorMsg guifg=#ffffff guibg=#990000 gui=NONE
+" hi WarningMsg guifg=#000000 guibg=#DDDD00 gui=NONE
 hi link Whitespace Normal
 hi qfLineNr guifg=#8A8885 guibg=NONE
-" hi TabLineFill guifg=#e3e3e3
 
 hi link rubyInterpolation SpecialChar
 hi link rubyInterpolationDelimiter rubyInterpolation

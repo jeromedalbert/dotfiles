@@ -1,3 +1,5 @@
 wincmd _
-map <buffer> <cr> <c-]>
+
 noremap <buffer> q :bd<cr>
+nmap <buffer> <cr> <c-]>
+nmap <buffer> i <cr>

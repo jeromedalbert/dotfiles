@@ -308,12 +308,12 @@ cnoremap <m-t> <c-e><c-w>"" <left><left>
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
-map <silent> n <Plug>(incsearch-nohl-n)zz
-map <silent> N <Plug>(incsearch-nohl-N)zz
+map <silent> n :call ClearMessages()<cr><Plug>(incsearch-nohl-n)zz
+map <silent> N :call ClearMessages()<cr><Plug>(incsearch-nohl-N)zz
 map * <Plug>(incsearch-nohl-*)zz
 map # <Plug>(incsearch-nohl-#)zz
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
+map g* <Plug>(incsearch-nohl-g*)zz
+map g# <Plug>(incsearch-nohl-g#)zz
 
 map <leader>; `]]<space>
 inoremap <m-J> <esc>O
@@ -777,8 +777,8 @@ let g:projectionist_heuristics = {
   \   '*': {
   \     'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \     'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
-  \     'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' },
-  \     'spec/*_spec.rb': { 'alternate': 'app/{}.rb' }
+  \     'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
+  \     'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
   \   }
   \ }
 
@@ -834,7 +834,7 @@ function! Jumpable(command)
 endfunction
 
 function! ClearEverything()
-  match
+  call clearmatches()
   ccl
   lcl
   silent! call CloseTests()
@@ -845,8 +845,13 @@ function! ClearEverything()
   call ClearMessages()
 endfunction
 
-function! ClearMessages()
-  call feedkeys(":\<bs>")
+function! ClearMessages(...)
+  let hard_clear = a:0
+  if hard_clear
+    call feedkeys(":\<bs>")
+  else
+    normal :
+  endif
 endfunction
 
 function! DisplayRegisters()
@@ -1000,7 +1005,7 @@ endfunction
 
 function! DeleteCurrentFile()
   let answer = input('Delete current file? ', 'y')
-  normal :
+  call ClearMessages()
   if answer != 'y' | return | endif
   call system('rm ' . shellescape(expand('%')))
   silent! checktime
@@ -1017,7 +1022,7 @@ endfunction
 function! MoveCurrentFile()
   let old_file = expand('%')
   let new_file = input('New location: ', old_file, 'file')
-  normal :
+  call ClearMessages()
   if (new_file == '' || new_file == old_file) | return | endif
   let alternate_buffer = @#
   if buflisted(new_file) | exec 'bd! ' . new_file | endif
@@ -1032,7 +1037,7 @@ endfunction
 function! RenameCurrentFile()
   let old_name = expand('%:t')
   let new_name = input('New name: ', old_name, 'file')
-  normal :
+  call ClearMessages()
   if (new_name == '' || new_name == old_name) | return | endif
   let dir = expand('%:h')
   let old_file = expand('%')
@@ -1050,7 +1055,7 @@ endfunction
 function! DuplicateCurrentFile()
   let old_file = expand('%')
   let new_file = input('Duplicate as: ', old_file, 'file')
-  normal :
+  call ClearMessages()
   if (new_file == '' || new_file == old_file) | return | endif
   if buflisted(new_file) | exec 'bd! ' . new_file | endif
   exec ':saveas! ' . new_file
@@ -1098,9 +1103,8 @@ function! EditAlternateFile(split)
   call LazyLoadProjectionist()
   call ProjectionistDetect(expand('%:p'))
   let alternates = projectionist#query_file('alternate')
-  if empty(alternates)
-    return EchoErr('No alternate file found')
-  endif
+  if empty(alternates) | return EchoErr('No alternate file found') | endif
+  call sort(alternates, {a1, a2 -> len(a1) - len(a2)})
   let file = fnamemodify(alternates[0], ':.')
   if a:split | vnew | endif
   exe 'e ' . file
@@ -1252,7 +1256,7 @@ function! ResetProject()
   %bdelete!
   enew
   let b:startup_buffer = 1
-  call ClearMessages()
+  call ClearMessages(1)
   NERDTree
 endfunction
 
@@ -1381,10 +1385,7 @@ function! OpenMarkdownPreview() abort
   endif
   let s:markdown_job_id = jobstart(
     \ 'grip ' . shellescape(expand('%:p')) . " 0 2>&1 | awk '/Running/ { printf $4 }'",
-    \ { 'on_stdout': 'OnGripStart', 'pty': 1 })
-  function! OnGripStart(_, output, __)
-    call system('open ' . a:output[0])
-  endfunction
+    \ { 'pty': 1, 'on_stdout': {_, output -> system('open ' . output[0])} })
 endfunction
 
 function! MakeSession()
@@ -1628,10 +1629,9 @@ endfunction
 
 function! TrimTrailingWhitespace()
   if &filetype =~ 'markdown\|snippet' | return | endif
-  let l = line('.')
-  let c = col('.')
+  let pos = [line('.'), col('.')]
   %s/\s\+$//e
-  call cursor(l, c)
+  call cursor(pos)
 endfunction
 
 function! GetLintMsg()
@@ -1907,7 +1907,7 @@ function! ImprovedGoToFile()
     try
       silent exe "normal \<c-]>"
     catch /E426/
-      normal :
+      call ClearMessages()
       echo 'No file found'
     endtry
   endtry
@@ -2059,7 +2059,7 @@ endfunction
 
 function! DisplayDirectory(dir)
   if !isdirectory(a:dir) | return | endif
-  call ClearMessages()
+  call ClearMessages(1)
   enew
   let b:startup_buffer = 1
   call buffer_history#add(winbufnr(0))

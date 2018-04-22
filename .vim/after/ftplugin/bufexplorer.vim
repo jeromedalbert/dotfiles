@@ -1,5 +1,4 @@
-if !exists('b:config_defined')
-  setlocal colorcolumn=
-  map <buffer> <esc> q
-  let b:config_defined = 1
-endif
+setlocal colorcolumn=
+
+nmap <buffer> <esc> q
+nmap <buffer> i <cr>
