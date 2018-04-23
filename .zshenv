@@ -55,7 +55,8 @@ alias ct.='ctags -f .tags -R .'
 
 # Confs
 alias reload='. ~/.zshrc; . ~/.zshenv'
-alias rl='reload'
+alias rel='reload'
+alias rl='rel'
 alias conf="$MAIN_EDITOR ~/.zshrc"
 al() {
   if [ $# -eq 0 ]; then
@@ -546,10 +547,18 @@ alias st='spring stop'
 alias irb='pry'
 alias pr='powder restart'
 fs() {
-  if [ -e Procfile.dev ]; then
-    foreman start -e .env,.env.local -e Procfile.dev "$@"
+  if [ -e 'Procfile.dev' ]; then
+    if [ -e '.env.local' ]; then
+      foreman start -e .env,.env.local -f Procfile.dev "$@"
+    else
+      foreman start -e .env -f Procfile.dev "$@"
+    fi
   else
-    foreman start -e .env,.env.local "$@"
+    if [ -e '.env.local' ]; then
+      foreman start -e .env,.env.local "$@"
+    else
+      foreman start -e .env "$@"
+    fi
   fi
 }
 rgsq() {
