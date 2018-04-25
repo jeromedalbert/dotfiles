@@ -12,6 +12,7 @@
 
 .config/*
 !.config/karabiner
+!.config/nvim
 
 .secrets.zsh
 .zcompdump
