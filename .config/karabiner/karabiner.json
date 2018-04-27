@@ -1525,6 +1525,32 @@
                         ]
                     },
                     {
+                        "description": "ctrl+shift+delete to lock screen",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "delete_or_backspace",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_control",
+                                            "left_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "q",
+                                        "modifiers": [
+                                          "control",
+                                          "command"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "_description": "alt+cmd+j to cmd+enter",
                         "_manipulators": [
                             {
