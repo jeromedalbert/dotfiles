@@ -1541,8 +1541,8 @@
                                     {
                                         "key_code": "q",
                                         "modifiers": [
-                                          "control",
-                                          "command"
+                                            "control",
+                                            "command"
                                         ]
                                     }
                                 ],
