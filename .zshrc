@@ -217,4 +217,4 @@ paste-insert() {
 
 source /usr/local/opt/asdf/asdf.sh
 stty -ixon
-if [ -z $TMUX ]; then; tmux-start; fi
+if [ -z $TMUX ] && [ -z $MYVIMRC ]; then; tmux-start; fi

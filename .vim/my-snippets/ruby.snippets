@@ -91,15 +91,15 @@ private
 endsnippet
 
 snippet cla "class .. end"
-class ${1:`!p snip.rv = camelcase(snip.basename)`}
+class ${1:`!p snip.rv = camelcase(snip.basename)`}${2}
 	${0}
 end
 endsnippet
 
 snippet clai "class .. initialize .. end"
-class ${1:`!p snip.rv = camelcase(snip.basename)`}
-	def initialize${2}
-		${3}
+class ${1:`!p snip.rv = camelcase(snip.basename)`}${2}
+	def initialize${3}
+		${0}
 	end
 end
 endsnippet

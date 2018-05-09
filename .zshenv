@@ -25,7 +25,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 v() {
-  if ([ $# -eq 1 ] && [ -d $1 ]); then
+  if [ $# -eq 1 ] && [ -d $1 ]; then
     (cd $1; $VIM_EDITOR .)
   else
     $VIM_EDITOR "$@"
@@ -52,6 +52,7 @@ remove-colors() {
 alias md5sum=md5
 alias wcl='wc -l'
 alias ct.='ctags -f .tags -R .'
+alias chx='chmod +x'
 
 # Confs
 alias reload='. ~/.zshrc; . ~/.zshenv'
@@ -302,6 +303,7 @@ gpuf() {
     gp -u -f "$@"
   fi
 }
+alias gpd='git push -d'
 alias gph='git push heroku master'
 alias gclo-"git clone"
 alias gx="gitx"
@@ -532,6 +534,7 @@ alias rgm='rails generate migration'
 alias rdm='rails destroy migration'
 alias rd='rails destroy'
 alias rc='rails c'
+alias rcs='rails c --sandbox'
 alias rr='rake routes'
 alias mi1='rake db:migrate'
 alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
@@ -577,6 +580,8 @@ gman() {
   local gem_path=$(VISUAL=echo gem open $1)
   man $gem_path/man/*
 }
+alias ocov='open coverage/index.html '
+alias cov='COVERAGE=true rspec && ocov'
 
 # Javascript
 alias y='yarn'
@@ -609,6 +614,8 @@ alias hl='heroku logs -t'
 alias hr='heroku run'
 alias hmi='heroku run rake db:migrate'
 alias hro='heroku run rake db:rollback'
+alias hap='heroku accounts:set personal'
+alias haw='heroku accounts:set work'
 
 # Brew
 alias bri='brew install'

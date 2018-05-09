@@ -67,6 +67,7 @@ Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
 Plug 'ecomba/vim-ruby-refactoring', { 'on': [] }
+Plug 'wakatime/vim-wakatime'
 call plug#end()
 
 "############################
@@ -167,10 +168,8 @@ imap <m-_> <c-_>
 noremap <leader>n <c-w>w
 noremap <leader>p <c-w>W
 
-noremap <silent> <leader>odp :silent! exe '!open ' . getcwd()<cr>
-map <silent> <leader>odd <leader>odp
-map <silent> <leader>odr <leader>odp
-noremap <silent> <leader>odf :silent! exe '!open ' . expand('%:h')<cr>
+noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
+noremap <silent> <leader>o. :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
 noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
 noremap <silent> <leader>ob<esc> <nop>
@@ -254,16 +253,21 @@ noremap <m-?> :call ShowAllHighlights()<CR>
 
 noremap <silent> <c-p> :silent Files<cr>
 noremap <silent> <leader>i :silent BTags<cr>
-noremap <silent> <leader>I :silent Tags<cr>
+" noremap <silent> <leader>I :silent Tags<cr>
 
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
 endif
 
-noremap <silent> <f1> :NERDTreeToggle<CR>
-noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
-noremap <silent> <f2> :TagbarToggle<CR>
-noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+" noremap <silent> <f1> :NERDTreeToggle<CR>
+" noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
+" noremap <silent> <f2> :TagbarToggle<CR>
+" noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+
+noremap <silent> <leader>k :NERDTreeToggle<CR>
+noremap <silent> <leader>g :silent! NERDTreeFind<CR>
+noremap <silent> <leader>I :TagbarToggle<CR>
+" noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -299,6 +303,10 @@ noremap <silent> <m-0> 20zh:call SetVirtualEdit()<cr>
 xnoremap <silent> <m-0> 20zh
 nnoremap <silent> ^ ^:set virtualedit=<cr>ze
 nnoremap <silent> $ $:set virtualedit=<cr>ze
+nnoremap <silent> <m-_> zl
+xnoremap <silent> <m-_> zl
+nnoremap <silent> <m-)> zh
+xnoremap <silent> <m-)> zh
 
 noremap <silent> <c-z> :call OnVimSuspend()<cr>:suspend<cr>:call OnVimResume()<cr>
 
@@ -519,7 +527,7 @@ set nojoinspaces
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class,*.swp
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class,*.swp,*.dump
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
@@ -612,7 +620,7 @@ let NERDTreeIgnore = [
   \ '\.rubocop-http', '\.notes$',
   \
   \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.sass-cache$',
-  \ '^tmp$', '^log$', '\^coverage$', '^node_modules$'
+  \ '^tmp$', '^log$', '^coverage$', '^node_modules$'
   \ ]
 let NERDTreeQuitOnOpen = 1
 let NERDTreeHighlightCursorline = 1
@@ -621,8 +629,8 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeCreatePrefix='silent keepalt keepjumps'
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeHijackNetrw = 0
-let NERDTreeMapCWD = 'cd'
-let NERDTreeMapChdir = 'CD'
+let g:NERDTreeMapCWD = '<nul>'
+let g:NERDTreeMapChdir = '<nul>'
 let NERDTreeMapChangeRoot = 'd'
 
 let g:deoplete#enable_at_startup = 1
@@ -1001,6 +1009,11 @@ function! RefreshNERDTree()
     let t:refresh_nerdtree_next_time = 1
     return 0
   endif
+endfunction
+
+function! NERDTreeCD()
+  call g:NERDTreeFileNode.GetSelected().path.changeToDir()
+  call nerdtree#ui_glue#chRootCwd()
 endfunction
 
 function! DeleteCurrentFile()
@@ -2186,6 +2199,12 @@ function! OnCmdwinEnter()
   nnoremap <silent><buffer> q :q<cr>
 endfunction
 
+function! OnTermOpen()
+  if &buftype != 'terminal' | return | endif
+  setlocal nonumber norelativenumber colorcolumn=
+  nnoremap <silent><buffer> G G{}
+endfunction
+
 "####################
 "### Autocommands ###
 "####################
@@ -2241,6 +2260,7 @@ if has('nvim')
     autocmd!
     autocmd TermOpen *test* call OnTestDisplayed()
     autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
+    autocmd TermOpen * call OnTermOpen()
   augroup end
 endif
 
