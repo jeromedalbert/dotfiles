@@ -202,6 +202,10 @@ ggclv() {
   ggcl "$@"
   v .
 }
+exp() {
+  cd ~/c/tmp
+  ggclv "$@"
+}
 alias gm="git merge"
 alias gm-="git merge -"
 alias gcm="git checkout master"
@@ -609,13 +613,16 @@ alias ang='ansible-galaxy'
 
 # Heroku
 alias hps='heroku ps'
-alias hrc='heroku run rails console'
 alias hl='heroku logs -t'
-alias hr='heroku run'
 alias hmi='heroku run rake db:migrate'
-alias hro='heroku run rake db:rollback'
 alias hap='heroku accounts:set personal'
 alias haw='heroku accounts:set work'
+alias haa='heroku apps --all'
+alias hcs='heroku config:set'
+alias hr='heroku run'
+alias hrc='heroku run rails console'
+alias hro='heroku run rake db:rollback'
+alias hrp='heroku run "printenv | sort"'
 
 # Brew
 alias bri='brew install'

@@ -13,7 +13,7 @@ main() {
     basic) perform_basic_conversion;;
     normal) perform_normal_conversion;;
     best) perform_best_conversion;;
-    *) main normal $1 $2;;
+    *) main best $1 $2;;
   esac
 }
 

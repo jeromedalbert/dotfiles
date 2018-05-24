@@ -252,8 +252,8 @@ noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
 
 noremap <silent> <c-p> :silent Files<cr>
+noremap <silent> <m-P> :silent Tags<cr>
 noremap <silent> <leader>i :silent BTags<cr>
-" noremap <silent> <leader>I :silent Tags<cr>
 
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
@@ -536,7 +536,6 @@ set regexpengine=1
 set formatoptions+=j
 set history=10000
 set langnoremap
-set viminfo=!,'1000,<50,s10,h
 exe "set cedit=\<c-o>"
 
 set statusline=
@@ -1392,13 +1391,14 @@ function! ExtractRailsPartial()
 endfunction
 
 function! OpenMarkdownPreview() abort
-  if exists('s:markdown_job_id') && s:markdown_job_id > 0
-    call jobstop(s:markdown_job_id)
+  if exists('s:markdown_job_id')
+    silent! call jobstop(s:markdown_job_id)
     unlet s:markdown_job_id
   endif
   let s:markdown_job_id = jobstart(
     \ 'grip ' . shellescape(expand('%:p')) . " 0 2>&1 | awk '/Running/ { printf $4 }'",
-    \ { 'pty': 1, 'on_stdout': {_, output -> system('open ' . output[0])} })
+    \ { 'pty': 1, 'on_stdout': {_, output -> system('open ' . output[0])} }
+    \ )
 endfunction
 
 function! MakeSession()
@@ -2339,6 +2339,7 @@ augroup general_autocommands
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
   autocmd CmdwinEnter * call OnCmdwinEnter()
+  autocmd DirChanged * call SetProjectMappings()
 augroup end
 
 "#############
