@@ -67,7 +67,6 @@ Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
 Plug 'ecomba/vim-ruby-refactoring', { 'on': [] }
-Plug 'wakatime/vim-wakatime'
 call plug#end()
 
 "############################
@@ -267,7 +266,7 @@ endif
 noremap <silent> <leader>k :NERDTreeToggle<CR>
 noremap <silent> <leader>g :silent! NERDTreeFind<CR>
 noremap <silent> <leader>I :TagbarToggle<CR>
-" noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -1363,7 +1362,7 @@ endfunction
 
 function! GitOpenModifiedFiles()
   silent only
-  let status = system('git status -s | remove-colors | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
+  let status = system('git status -s | remove-colors | sed "s/^.\{3\}//"')
   let filenames = split(status, "\n")
   if empty(filenames) | echo 'No modified files!' | return | endif
   exec "edit " . filenames[0]

@@ -474,6 +474,8 @@ mkpwd2() {
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
+alias cpng='curl -s http://127.0.0.1:4040/status | grep -P "https://.*?ngrok.io" -oh | tr -d "\n" | pbcopy'
+alias ngcp='cpng'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"

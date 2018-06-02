@@ -18,3 +18,7 @@ end
 def lm(object)
   object.methods - object.class.superclass.instance_methods
 end
+
+def sk
+  Sidekiq.redis { |conn| conn.flushdb }
+end
