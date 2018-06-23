@@ -282,6 +282,7 @@ alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
 alias gbDa='git branch | remove-colors | egrep -v "master|\*" | xargs git branch -D'
+alias gbD-="gbD @{-1}"
 alias gbm="gb -m"
 # alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
 # alias gbDa='git-list-branches | grep -v "master\|$(current-git-branch)" | xargs git branch -D'
@@ -462,6 +463,7 @@ killui() {
   done
 }
 alias nra='~/c/boilerplate/new-rails-app'
+alias nrg='~/c/boilerplate/new-ruby-gem'
 mkpwd() {
   local max_chars=${1:-28}
   cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1

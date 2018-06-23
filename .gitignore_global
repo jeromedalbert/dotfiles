@@ -6,6 +6,7 @@
 .notes
 .ll_sync.sh
 .localized
+.rspec-local
 
 tags
 zeus.json

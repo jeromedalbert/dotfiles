@@ -22,6 +22,7 @@ Plug 'wavded/vim-stylus', { 'for': 'stylus' }
 Plug 'jeromedalbert/vim-markdown', { 'branch': 'hl-heading', 'for': 'markdown' }
 Plug 'keith/swift.vim', { 'for': 'swift' }
 Plug 'StanAngeloff/php.vim', { 'for': 'php' }
+Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
@@ -40,12 +41,13 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-projectionist', { 'on': [] }
 Plug 'jeromedalbert/vim-fugitive', { 'branch': 'better-vim-fugitive', 'on': [] }
+Plug 'tpope/vim-rhubarb'
 Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 
 Plug 'machakann/vim-sandwich'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
-Plug 'skwp/greplace.vim', { 'on': ['Gqfopen', 'Greplace'] }
+Plug 'yegappan/greplace', { 'on': ['Gqfopen', 'Greplace'] }
 Plug 'jeromedalbert/auto-pairs', { 'branch': 'better-auto-pairs' }
 Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
@@ -351,6 +353,9 @@ noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :e ~/.notes<cr>
 noremap <silent> <leader>oN :vnew<cr>:e ~/.notes<cr>
 noremap <silent> <leader>obk :call OpenCurrentFileBackupHistory()<cr>
+noremap <silent> <leader>og V:<c-u>call OpenFileInGithub(1)<cr>
+xnoremap <silent> <leader>og :<c-u>call OpenFileInGithub(1)<cr>
+noremap <silent> <leader>oG :<c-u>call OpenFileInGithub(0)<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
@@ -396,6 +401,7 @@ command! MakePlugSnapshot PlugSnapshot! ~/.vim/.plug_snapshot.vim
 command! RestorePlugSnapshot source ~/.vim/.plug_snapshot.vim
 command! Profile call Profile()
 command! Lint call LazyLint()
+command! -range=0 FocusSelection call FocusSelection(<count>)
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -411,6 +417,7 @@ cabbrev gb Gblame
 cabbrev gm Gmodified
 cabbrev prof Profile
 cabbrev gmo GemOpen
+cabbrev focus FocusSelection
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -1335,6 +1342,16 @@ function! OpenCurrentFileBackupHistory()
   call system(cmd)
 endfunction
 
+function! OpenFileInGithub(open_lines)
+  if !exists('g:loaded_fugitive') | call LazyLoadFugitive('') | endif
+
+  if a:open_lines
+    '<,'>Gbrowse origin:%
+  else
+    Gbrowse
+  endif
+endfunction
+
 function! CloseTests()
   if exists('t:term_test_bufnum') && bufexists(t:term_test_bufnum)
     exe 'bd! ' . t:term_test_bufnum
@@ -1792,7 +1809,7 @@ endfunction
 function! CreateBufferMappings()
   let bufname = bufname('%')
   if bufname == '[Global Replace]'
-    map <buffer><Leader>fr :call feedkeys("\<space>fRa")<cr>
+    map <buffer><Leader>fr :Greplace!<cr>
     map <buffer><Leader>fR :Greplace<cr>
   else
     noremap <buffer> <leader>fre :call RenameCurrentFile()<cr>
@@ -2013,7 +2030,7 @@ function! LocListNext(cmd_next)
   try
     if !exists('g:saved_loclist') | let g:saved_loclist = [] | endif
     let current_list = getloclist(0)
-    if current_list == g:saved_loclist
+    if current_list == g:saved_loclist "&& len(current_list) > 1
       exe 'l' . a:cmd_next
     else
       let g:saved_loclist = current_list
@@ -2202,6 +2219,15 @@ function! OnTermOpen()
   if &buftype != 'terminal' | return | endif
   setlocal nonumber norelativenumber colorcolumn=
   nnoremap <silent><buffer> G G{}
+endfunction
+
+function! FocusSelection(visual)
+  if !a:visual | return | endif
+  let filetype = &filetype
+  normal gv"zy
+  enew
+  exe 'set filetype=' . filetype
+  normal "zpggdd
 endfunction
 
 "####################

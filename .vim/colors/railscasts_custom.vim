@@ -337,3 +337,5 @@ hi link DbgCurrentLine DiffText
 hi link DbgCurrentSign DbgCurrentLine
 
 hi link NERDTreeDirSlash NERDTreeDir
+
+hi link gReplaceLineNr NONE
