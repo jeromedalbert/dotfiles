@@ -47,7 +47,7 @@ Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 Plug 'machakann/vim-sandwich'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
-Plug 'yegappan/greplace', { 'on': ['Gqfopen', 'Greplace'] }
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'jeromedalbert/auto-pairs', { 'branch': 'better-auto-pairs' }
 Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
@@ -177,6 +177,7 @@ noremap <silent> <leader>ob<esc> <nop>
 noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
+noremap <silent> <leader>oq :copen<cr>
 
 noremap g; g;zz
 noremap g, g,zz
@@ -281,8 +282,10 @@ nnoremap <silent> <leader>m :call EditAlternateFile(0)<cr>
 nnoremap <silent> <leader>v :call EditAlternateFile(1)<cr>
 
 noremap <leader>fmo :call MoveCurrentFile()<cr>
-noremap <leader>fde :call DeleteCurrentFile()<cr>
+noremap <leader>fre :call RenameCurrentFile()<cr>
 noremap <leader>fdu :call DuplicateCurrentFile()<cr>
+noremap <leader>fde :call DeleteCurrentFile()<cr>
+map <leader>frm <leader>fde
 noremap <leader>fcp :call CopyCurrentFilePath()<cr>
 noremap <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
 noremap <leader>fcn :call CopyCurrentFileName()<cr>
@@ -297,6 +300,7 @@ noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 " https://github.com/beautify-web/js-beautify
 noremap <silent> <leader>fb :set filetype=javascript<cr>:%!js-beautify -s 2<cr>
 xnoremap <silent> <leader>fb :!js-beautify -s 2<cr>
+noremap <silent> <leader>fo :copen<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
 xnoremap <silent> <m--> 20zl
@@ -336,7 +340,7 @@ map <leader>fW <leader>yfiW
 xnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
-noremap <leader>fo :Gqfopen<cr>
+" noremap <leader>fo :Gqfopen<cr>
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -1808,13 +1812,6 @@ endfunction
 
 function! CreateBufferMappings()
   let bufname = bufname('%')
-  if bufname == '[Global Replace]'
-    map <buffer><Leader>fr :Greplace!<cr>
-    map <buffer><Leader>fR :Greplace<cr>
-  else
-    noremap <buffer> <leader>fre :call RenameCurrentFile()<cr>
-    noremap <buffer> <leader>frm :call DeleteCurrentFile()<cr>
-  endif
   if bufname !~ 'NERD_tree'
     nnoremap <buffer> d0 d^
     nmap <buffer> ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)

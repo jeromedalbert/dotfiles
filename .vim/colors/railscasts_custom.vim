@@ -128,7 +128,10 @@ hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
 " hi ErrorMsg guifg=#ffffff guibg=#990000 gui=NONE
 " hi WarningMsg guifg=#000000 guibg=#DDDD00 gui=NONE
 hi link Whitespace Normal
-hi qfLineNr guifg=#8A8885 guibg=NONE
+hi link qfLineNr NONE
+hi link qfFilename NONE
+hi link qfSeparator NONE
+hi link QuickfixLine NONE
 
 hi link rubyInterpolation SpecialChar
 hi link rubyInterpolationDelimiter rubyInterpolation
@@ -337,5 +340,3 @@ hi link DbgCurrentLine DiffText
 hi link DbgCurrentSign DbgCurrentLine
 
 hi link NERDTreeDirSlash NERDTreeDir
-
-hi link gReplaceLineNr NONE
