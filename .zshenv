@@ -208,8 +208,6 @@ exp() {
 }
 alias gm="git merge"
 alias gm-="git merge -"
-alias gcm="git checkout master"
-unalias gcm
 gcm() {
   if [ $# -eq 0 ]; then
     git checkout master
@@ -272,17 +270,23 @@ alias grbi5="git rebase -i HEAD~5"
 alias grbim="git rebase -i master"
 alias grbir="git rebase -i --root"
 alias gcon="git rebase --continue"
-alias gaacon="gaa & gcon"
+alias gaacon="gaa && gcon"
 alias gabort="git rebase --abort"
 alias gab="gabort"
-alias gskip="git rebase --skip"
+alias gsk="git rebase --skip"
 alias gb='git branch'
 alias gbs="git branch -D sav &> /dev/null; git branch sav"
+alias gcs="git checkout sav"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
 alias gbDa='git branch | remove-colors | egrep -v "master|\*" | xargs git branch -D'
 alias gbD-="gbD @{-1}"
+gbDi() {
+  git branch | remove-colors | egrep -v "master|\*"  > /tmp/branches-to-delete && \
+    $MAIN_EDITOR /tmp/branches-to-delete && \
+    xargs git branch -D < /tmp/branches-to-delete
+}
 alias gbm="gb -m"
 # alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
 # alias gbDa='git-list-branches | grep -v "master\|$(current-git-branch)" | xargs git branch -D'
@@ -340,6 +344,7 @@ alias gcp-='git cherry-pick -'
 fix() {
   vim +/"<<<<<<<" $(git diff --name-only --diff-filter=U | xargs)
 }
+alias fx='fix'
 alias gstats='git shortlog -sn'
 alias gsa='git submodule add'
 git-remove-submodule() {
@@ -427,8 +432,7 @@ ip() {
 }
 public-ip() {
   local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
-  echo $ip | pbcopy
-  echo $ip
+  echo $ip | tee >(pbcopy)
 }
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
 function cdf() {
@@ -478,6 +482,7 @@ alias pw='mkpw'
 alias fd='fd --type f'
 alias cpng='curl -s http://127.0.0.1:4040/status | grep -P "https://.*?ngrok.io" -oh | tr -d "\n" | pbcopy'
 alias ngcp='cpng'
+cptxt() { tesseract $1 stdout | tee >(pbcopy) }
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"

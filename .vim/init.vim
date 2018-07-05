@@ -139,8 +139,8 @@ noremap <c-l> gt
 noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :silent! tabclose<cr>
-noremap <silent> <leader>to :tabonly<cr>
-noremap <silent> <leader>t# :tabedit #<cr>
+noremap <silent> <leader>to :silent! tabonly<cr>
+noremap <silent> <leader>t3 :tabnew #<cr>
 noremap <silent> <leader>tn <c-w>T
 
 noremap <leader>e :e $MYVIMRC<cr>
@@ -363,6 +363,8 @@ noremap <silent> <leader>oG :<c-u>call OpenFileInGithub(0)<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
+noremap <leader>ytw :call ToggleOption('wrap')<cr>
+noremap <leader>ytl :call ToggleOption('number')<cr>:call ToggleOption('relativenumber')<cr>
 
 nmap <silent> <leader>h <leader>yghiw
 nmap <silent> <leader>H <leader>yhiW
@@ -1869,7 +1871,7 @@ endfunction
 
 let s:last_active_tab_number = 1
 function! GoToLastActiveTab()
-  exe 'tabnext' . s:last_active_tab_number
+  exe 'silent! tabnext' . s:last_active_tab_number
 endfunction
 
 function! GetFoldText()
@@ -2225,6 +2227,14 @@ function! FocusSelection(visual)
   enew
   exe 'set filetype=' . filetype
   normal "zpggdd
+endfunction
+
+function! ToggleOption(option_name, ...)
+  let option_scope = 'local'
+  if a:0 | let option_scope = '' | endif
+  exe 'let enabled = &' . a:option_name
+  let option_prefix = enabled ? 'no' : ''
+  exe 'set' . option_scope . ' ' . option_prefix . a:option_name
 endfunction
 
 "####################

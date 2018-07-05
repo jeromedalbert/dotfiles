@@ -1,6 +1,7 @@
 require 'awesome_print'
 
 AwesomePrint.pry!
+Pry.config.pager = false if ENV['VIM']
 
 def rr
   reload!
