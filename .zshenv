@@ -1,5 +1,3 @@
-if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
-
 ###########################
 ### Aliases / Functions ###
 ###########################
@@ -53,6 +51,7 @@ alias md5sum=md5
 alias wcl='wc -l'
 alias ct.='ctags -f .tags -R .'
 alias chx='chmod +x'
+ed() { command ed -p '*' "$@" }
 
 # Confs
 alias reload='. ~/.zshrc; . ~/.zshenv'
@@ -184,27 +183,36 @@ alias gcl='git clone'
 alias gclone='git clone'
 gg() {
  local last_command=$history[$((HISTCMD-1))]
- local git_repo=$(echo $last_command | awk -F/ '{print $NF}' | sed 's/.git$//')
- cd $git_repo
+ cd $(git_repo $last_command)
+}
+git-repo() {
+  echo $1 | sed 's/.git$//' | sed 's/\/$//' | awk -F/ '{print $NF}'
 }
 ggcl() {
-  local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
+  local git_repo=$(git-repo $1)
   gcl "$@"
   cd $git_repo
 }
 alias gclg='ggcl'
 gclv() {
-  local git_repo=$(echo $1 | awk -F/ '{print $NF}' | sed 's/.git$//')
+  local git_repo=$(git-repo $1)
   gcl "$@"
   v $git_repo
 }
 ggclv() {
   ggcl "$@"
-  v .
+  v.
 }
-exp() {
+ex() {
+  [ $# -eq 0 ] && return
+  local git_repo=$(git-repo $1)
   cd ~/c/tmp
-  ggclv "$@"
+  if [ -d $git_repo ]; then
+    cd $git_repo
+    v.
+  else
+    ggclv "$@"
+  fi
 }
 alias gm="git merge"
 alias gm-="git merge -"
@@ -275,6 +283,7 @@ alias gabort="git rebase --abort"
 alias gab="gabort"
 alias gsk="git rebase --skip"
 alias gb='git branch'
+alias gbso='git branch --sort=-committerdate'
 alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gcs="git checkout sav"
 alias gbd="git branch -d"
@@ -283,9 +292,10 @@ alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs
 alias gbDa='git branch | remove-colors | egrep -v "master|\*" | xargs git branch -D'
 alias gbD-="gbD @{-1}"
 gbDi() {
-  git branch | remove-colors | egrep -v "master|\*"  > /tmp/branches-to-delete && \
-    $MAIN_EDITOR /tmp/branches-to-delete && \
-    xargs git branch -D < /tmp/branches-to-delete
+  git branch --sort=-committerdate | remove-colors | egrep -v "master|\*" | cut -c3- > /tmp/branches && \
+    cp /tmp/branches /tmp/branches-to-keep && \
+    $MAIN_EDITOR /tmp/branches-to-keep && \
+    comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep) | xargs 2> /dev/null git branch -D
 }
 alias gbm="gb -m"
 # alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
@@ -430,10 +440,17 @@ ip() {
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
-public-ip() {
+publicip() {
   local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
   echo $ip | tee >(pbcopy)
 }
+iploc() {
+  curl ipinfo.io/"$@"
+}
+alias public-ip='publicip'
+alias iplocation='iploc'
+alias geoip='iploc'
+alias ipgeo='iploc'
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
 function cdf() {
   cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
@@ -561,22 +578,24 @@ alias zs!='rm -f .zeus.sock; zs'
 alias zc='zeus c'
 alias debug='pry-remote'
 alias st='spring stop'
+alias strc='st && rc'
 alias irb='pry'
 alias pr='powder restart'
 fs() {
-  if [ -e 'Procfile.dev' ]; then
-    if [ -e '.env.local' ]; then
-      foreman start -e .env,.env.local -f Procfile.dev "$@"
-    else
-      foreman start -e .env -f Procfile.dev "$@"
-    fi
-  else
-    if [ -e '.env.local' ]; then
-      foreman start -e .env,.env.local "$@"
-    else
-      foreman start -e .env "$@"
-    fi
-  fi
+  foreman start
+  # if [ -e 'Procfile.dev' ]; then
+  #   if [ -e '.env.local' ]; then
+  #     foreman start -e .env,.env.local -f Procfile.dev "$@"
+  #   else
+  #     foreman start -e .env -f Procfile.dev "$@"
+  #   fi
+  # else
+  #   if [ -e '.env.local' ]; then
+  #     foreman start -e .env,.env.local "$@"
+  #   else
+  #     foreman start -e .env "$@"
+  #   fi
+  # fi
 }
 rgsq() {
   rg scaffold "$@" \
@@ -646,3 +665,5 @@ alias bcu='brew cask uninstall'
 alias bcup='brew cask upgrade'
 alias bcs='brew cask search'
 alias bcl='brew cask list'
+
+if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi

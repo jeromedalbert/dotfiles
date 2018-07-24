@@ -53,7 +53,6 @@ Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
 Plug 'vim-scripts/closetag.vim', { 'for': ['*html', 'xml', '*jsx'] }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'haya14busa/incsearch.vim'
 Plug 'nishigori/increment-activator'
 Plug 'sickill/vim-pasta'
@@ -254,22 +253,16 @@ noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
 
 noremap <silent> <c-p> :silent Files<cr>
-noremap <silent> <m-P> :silent Tags<cr>
-noremap <silent> <leader>i :silent BTags<cr>
+noremap <silent> <leader>i :silent call BrowseBufferTags()<cr>
+noremap <silent> <m-P> :silent call BrowseAllTags()<cr>
 
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
 endif
 
-" noremap <silent> <f1> :NERDTreeToggle<CR>
-" noremap <silent> <leader><f1> :silent! NERDTreeFind<CR>
-" noremap <silent> <f2> :TagbarToggle<CR>
-" noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
-
 noremap <silent> <leader>k :NERDTreeToggle<CR>
 noremap <silent> <leader>g :silent! NERDTreeFind<CR>
-noremap <silent> <leader>I :TagbarToggle<CR>
-noremap <silent> <f3> :call ReadUndoFile()<cr>:GundoToggle<cr>
+noremap <silent> <leader>ou :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -287,7 +280,9 @@ noremap <leader>fdu :call DuplicateCurrentFile()<cr>
 noremap <leader>fde :call DeleteCurrentFile()<cr>
 map <leader>frm <leader>fde
 noremap <leader>fcp :call CopyCurrentFilePath()<cr>
+noremap <leader>fcP :call CopyCurrentFilePath(1)<cr>
 noremap <leader>fcap :call CopyCurrentFileAbsolutePath()<cr>
+noremap <leader>fcaP :call CopyCurrentFileAbsolutePath(1)<cr>
 noremap <leader>fcn :call CopyCurrentFileName()<cr>
 noremap <leader>fn :call CreateNewFileInCurrentDir()<cr>
 noremap <leader>fN :call CreateNewFile()<cr>
@@ -397,7 +392,6 @@ xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
 command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
-command! -nargs=* BTags call fzf#vim#buffer_tags(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
 command! Gdiff call LazyLoadFugitive('Gdiff')
 command! Glog call LazyLoadFugitive('Glog')
@@ -416,9 +410,6 @@ cabbrev plugst PlugStatus
 cabbrev plugs MakePlugSnapshot
 cabbrev plugr RestorePlugSnapshot
 cabbrev goyo Goyo
-cabbrev gdiff Gdiff
-cabbrev gd Gdiff
-cabbrev glog Glog
 cabbrev gb Gblame
 cabbrev gm Gmodified
 cabbrev prof Profile
@@ -455,6 +446,7 @@ noremap <silent> <m-=> :call ToggleZoom()<cr>
 noremap <silent> <m-N> <esc>:tabnew<cr>:call BrowseOldFiles()<cr>
 
 noremap <silent> gf :call ImprovedGoToFile()<cr>
+noremap <silent> gl :call DisplayEnclosingLine()<cr>
 
 noremap ga= :Tabularize /=<cr>
 noremap ga<bar> :Tabularize /<bar><cr>
@@ -647,10 +639,6 @@ let NERDTreeMapChangeRoot = 'd'
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
-
-let g:tagbar_sort = 0
-let g:tagbar_autofocus = 1
-let g:tagbar_map_showproto = '<nop>'
 
 let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
@@ -858,7 +846,6 @@ function! ClearEverything()
   lcl
   silent! call CloseTests()
   silent! NERDTreeClose
-  silent! TagbarClose
   silent! GundoHide
   normal cxc
   call ClearMessages()
@@ -1086,16 +1073,20 @@ function! DuplicateCurrentFile()
   call RefreshNERDTree()
 endfunction
 
-function! CopyCurrentFilePath()
-  let @+=expand('%')
+function! CopyCurrentFilePath(...)
+  let linenr = ''
+  if a:0 | let linenr = ':' . line('.') | endif
+  let @+ = expand('%') . linenr
 endfunction
 
-function! CopyCurrentFileAbsolutePath()
-  let @+=expand('%:p')
+function! CopyCurrentFileAbsolutePath(...)
+  let linenr = ''
+  if a:0 | let linenr = ':' . line('.') | endif
+  let @+ = expand('%:p') . linenr
 endfunction
 
 function! CopyCurrentFileName()
-  let @+=expand('%:t')
+  let @+ = expand('%:t')
 endfunction
 
 function! CreateNewFile()
@@ -1272,11 +1263,6 @@ function! FileSearch(search_options)
 endfunction
 
 function! ResetProject()
-  " for num in range(1, bufnr('$'))
-  "   if buflisted(num) || bufname(num) =~ 'NERD_tree'
-  "     silent exec 'silent bd! ' . num
-  "   endif
-  " endfor
   %bdelete!
   enew
   let b:startup_buffer = 1
@@ -1352,7 +1338,8 @@ function! OpenFileInGithub(open_lines)
   if !exists('g:loaded_fugitive') | call LazyLoadFugitive('') | endif
 
   if a:open_lines
-    '<,'>Gbrowse origin:%
+    " '<,'>Gbrowse origin:%
+    '<,'>Gbrowse :%
   else
     Gbrowse
   endif
@@ -2094,6 +2081,20 @@ function! DisplayDirectory(dir)
   exe 'NERDTree ' . a:dir
 endfunction
 
+function! BrowseBufferTags()
+  if empty(tagfiles())
+    call system('ctags -R -f' . g:gutentags_ctags_tagfile)
+  endif
+  call fzf#vim#buffer_tags('', { 'options': $FZF_DEFAULT_OPTS })
+endfunction
+
+function! BrowseAllTags()
+  if empty(tagfiles())
+    call system('ctags -R -f' . g:gutentags_ctags_tagfile)
+  endif
+  call fzf#vim#tags('')
+endfunction
+
 function! BrowseOldFiles()
   let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&filetype") != "qf"')
   let buffers = sort(buffers, 'SortBuffers')
@@ -2235,6 +2236,14 @@ function! ToggleOption(option_name, ...)
   exe 'let enabled = &' . a:option_name
   let option_prefix = enabled ? 'no' : ''
   exe 'set' . option_scope . ' ' . option_prefix . a:option_name
+endfunction
+
+function! DisplayEnclosingLine()
+  let cmd = "ctags -f - --fields=n " . expand('%') . " | awk -F: '{ print $NF }'"
+  let cmd .= " | sort -nr | awk '" . line('.') . " >= $1 { print $1; exit }' "
+  let linenum = system(cmd)
+  let line = substitute(getline(linenum), '^\s*', '', 'g')
+  echo line
 endfunction
 
 "####################
