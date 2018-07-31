@@ -41,7 +41,6 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-projectionist', { 'on': [] }
 Plug 'jeromedalbert/vim-fugitive', { 'branch': 'better-vim-fugitive', 'on': [] }
-Plug 'tpope/vim-rhubarb'
 Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 
 Plug 'machakann/vim-sandwich'
@@ -352,9 +351,8 @@ noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :e ~/.notes<cr>
 noremap <silent> <leader>oN :vnew<cr>:e ~/.notes<cr>
 noremap <silent> <leader>obk :call OpenCurrentFileBackupHistory()<cr>
-noremap <silent> <leader>og V:<c-u>call OpenFileInGithub(1)<cr>
-xnoremap <silent> <leader>og :<c-u>call OpenFileInGithub(1)<cr>
-noremap <silent> <leader>oG :<c-u>call OpenFileInGithub(0)<cr>
+noremap <silent> <leader>og V:<c-u>call OpenCurrentFileInGithub()<cr>
+xnoremap <silent> <leader>og :<c-u>call OpenCurrentFileInGithub()<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
@@ -1334,15 +1332,19 @@ function! OpenCurrentFileBackupHistory()
   call system(cmd)
 endfunction
 
-function! OpenFileInGithub(open_lines)
-  if !exists('g:loaded_fugitive') | call LazyLoadFugitive('') | endif
-
-  if a:open_lines
-    " '<,'>Gbrowse origin:%
-    '<,'>Gbrowse :%
-  else
-    Gbrowse
-  endif
+function! OpenCurrentFileInGithub()
+  let file_dir = expand('%:h')
+  let git_root = system('cd ' . file_dir . '; git rev-parse --show-toplevel | tr -d "\n"')
+  let file_path = substitute(expand('%:p'), git_root . '/', '', '')
+  let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"')
+  let git_remote = system('cd ' . file_dir . '; git remote get-url origin')
+  let repo_path = matchlist(git_remote, ':\(.*\)\.')[1]
+  let url = 'https://github.com/' . repo_path . '/blob/' . branch . '/' . file_path
+  let first_line = getpos("'<")[1]
+  let url .= '#L' . first_line
+  let last_line = getpos("'>")[1]
+  if last_line != first_line | let url .= '-L' . last_line | endif
+  call system('open ' . url)
 endfunction
 
 function! CloseTests()
