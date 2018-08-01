@@ -2278,9 +2278,9 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.nfo,*.NFO set ft=nfo
   autocmd BufRead,BufNewFile *.js.es6 set ft=javascript
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
-  autocmd BufRead,BufNewFile *.env*,Procfile* set ft=conf
+  autocmd BufRead,BufNewFile *.env*,Procfile*,*.config set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
-  autocmd BufRead,BufNewFile *.apib set filetype=markdown
+  autocmd BufRead,BufNewFile *.apib set ft=markdown
 augroup end
 
 augroup detect_binary_files

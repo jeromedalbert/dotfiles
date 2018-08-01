@@ -21,6 +21,7 @@
 #     * z -r foo  # cd to highest ranked dir matching foo
 #     * z -t foo  # cd to most recently accessed dir matching foo
 #     * z -l foo  # list matches instead of cd
+#     * z -e foo  # echo the best match, don't cd
 #     * z -c foo  # restrict matches to subdirs of $PWD
 
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
@@ -31,13 +32,17 @@ _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
+    # if symlink, dereference
+    [ -h "$datafile" ] && datafile=$(readlink "$datafile")
+
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
+        local line
         while read line; do
             # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
+            [ -d "${line%%\|*}" ] && echo "$line"
         done < "$datafile"
         return 0
     }
@@ -57,7 +62,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        awk < <(_z_dirs 2>/dev/null) -v path="$*" -v now="$(date +%s)" -F"|" '
+        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -90,17 +95,15 @@ _z() {
 
     # tab completion
     elif [ "$1" = "--complete" -a -s "$datafile" ]; then
-        while read line; do
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v q="$2" -F"|" '
+        _z_dirs | awk -v q="$2" -F"|" '
             BEGIN {
-                if( q == tolower(q) ) imatch = 1
                 q = substr(q, 3)
-                gsub(" ", ".*", q)
+                if( q == tolower(q) ) imatch = 1
+                gsub(/ /, ".*", q)
             }
             {
                 if( imatch ) {
-                    if( tolower($1) ~ tolower(q) ) print $1
+                    if( tolower($1) ~ q ) print $1
                 } else if( $1 ~ q ) print $1
             }
         ' 2>/dev/null
@@ -111,7 +114,7 @@ _z() {
             --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
-                    e) local echo=echo;;
+                    e) local echo=1;;
                     h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
                     l) local list=1;;
                     r) local typ="rank";;
@@ -141,19 +144,21 @@ _z() {
                 if( dx < 604800 ) return rank / 2
                 return rank / 4
             }
-            function output(files, out, common) {
+            function output(matches, best_match, common) {
                 # list or return the desired directory
                 if( list ) {
                     cmd = "sort -n >&2"
-                    for( x in files ) {
-                        if( files[x] ) printf "%-10s %s\n", files[x], x | cmd
+                    for( x in matches ) {
+                        if( matches[x] ) {
+                            printf "%-10s %s\n", matches[x], x | cmd
+                        }
                     }
                     if( common ) {
                         printf "%-10s %s\n", "common:", common > "/dev/stderr"
                     }
                 } else {
-                    if( common ) out = common
-                    print out
+                    if( common ) best_match = common
+                    print best_match
                 }
             }
             function common(matches) {
@@ -164,11 +169,9 @@ _z() {
                     }
                 }
                 if( short == "/" ) return
-                # use a copy to escape special characters, as we want to return
-                # the original. yeah, this escaping is awful.
-                clean_short = short
-                gsub(/\[\(\)\[\]\|\]/, "\\\\&", clean_short)
-                for( x in matches ) if( matches[x] && x !~ clean_short ) return
+                for( x in matches ) if( matches[x] && index(x, short) != 1 ) {
+                    return
+                }
                 return short
             }
             BEGIN {
