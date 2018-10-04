@@ -230,6 +230,16 @@ noremap <silent> [Q :cfirst<cr>
 noremap <silent> ]L :llast<cr>
 noremap <silent> [L :lfirst<cr>
 
+noremap <silent> <leader>rg :e Gemfile<cr>
+noremap <silent> <leader>rG :vnew<cr>:e Gemfile<cr>
+noremap <silent> <leader>rh :s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
+nnoremap <silent> <leader>rH :%s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
+noremap <silent> <leader>ub obinding.pry<esc>
+noremap <silent> <leader>rr :e config/routes.rb<cr>
+noremap <silent> <leader>rR :vnew<cr>:e config/routes.rb<cr>
+noremap <silent> <leader>rs :e db/schema.rb<cr>
+noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
+
 "######################################
 "### Plugins/functions key mappings ###
 "######################################
@@ -472,6 +482,15 @@ xmap <silent> aa <Plug>AngryOuterSuffix
 omap <silent> aa <Plug>AngryOuterSuffix
 xmap <silent> ia <Plug>AngryInnerSuffix
 omap <silent> ia <Plug>AngryInnerSuffix
+
+noremap <silent> <leader>rm :call ShowLatestRailsMigration()<cr>
+noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
+xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
+noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
+noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
+nnoremap <silent> <leader>rfv :call RubyRenameVar()<cr>
+nnoremap <silent> <leader>rfi :call RubyRenameInstanceVar()<cr>
+xnoremap <silent> <leader>rfev :call RubyExtractVar()<cr>
 
 "#############################
 "### General configuration ###
@@ -1210,7 +1229,7 @@ function! OpenFileSearchResult(new_tab)
 endfunction
 
 function! FileSearch(search_options)
-  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree_1'
+  if IsCurrentBufferNew() || bufname('%') =~ 'ag -C \|NERD_tree'
     enew
   else
     tabnew
@@ -1350,22 +1369,8 @@ endfunction
 function! CloseTests()
   if exists('t:term_test_bufnum') && bufexists(t:term_test_bufnum)
     exe 'bd! ' . t:term_test_bufnum
-    unlet t:term_test_bufnum
+    silent! unlet t:term_test_bufnum
   endif
-endfunction
-
-function! NewPlaygroundBuffer(file_type)
-  if bufexists('[playground]')
-    bd! \[playground\]
-  endif
-  if IsCurrentBufferNew()
-    enew
-  else
-    tabnew
-  endif
-  file [playground]
-  setlocal buftype=nofile
-  exe 'set filetype=' . a:file_type
 endfunction
 
 function! IsCurrentBufferNew()
@@ -1399,6 +1404,45 @@ function! ExtractRailsPartial()
   if name != ''
     exec "'<,'>Rextract " . name
   endif
+endfunction
+
+function! EvalRubyBuffer()
+  set filetype=ruby
+  let v = winsaveview()
+  if match(getline('$'), '# \?=>') == -1
+    normal GA # =>
+  endif
+  %!xmpfilter
+  call winrestview(v)
+endfunction
+
+function! EvalRailsBuffer()
+  setl synmaxcol=3000
+  setl wrap
+  set filetype=ruby
+  let v = winsaveview()
+  silent! $s/ # =>.*/
+  silent g/^# \~>/normal dG
+  let tempfile = tempname()
+  call writefile(getbufline('%', 1, '$'), tempfile)
+  let cmd = 'sed -i '
+  let cmd .= '-e "$ s/^/puts (/" -e "$ s/$/).inspect/" '
+  let cmd .= '-e "1s/^/ActiveRecord::Base.logger = nil\n/" '
+  let cmd .= tempfile
+  call system(cmd)
+  let output = system('rails runner ' . shellescape(tempfile))
+  call delete(tempfile)
+  let output = substitute(output, '\n$', '', 'g')
+  let output = substitute(output, '\n', '\n# ', 'g')
+  if v:shell_error == 0
+    let output = '# => ' . output
+  else
+    let output = "\n# ~> " . output
+  endif
+  normal G
+  put =output
+  normal! `[kJ
+  call winrestview(v)
 endfunction
 
 function! OpenMarkdownPreview() abort
@@ -2031,41 +2075,6 @@ function! LocListNext(cmd_next)
   endtry
 endfunction
 
-function! SetProjectMappings()
-  if IsRubyProject()
-    noremap <silent> <leader>rg :e Gemfile<cr>
-    noremap <silent> <leader>rG :vnew<cr>:e Gemfile<cr>
-    noremap <silent> <leader>rh :s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
-    nnoremap <silent> <leader>rH :%s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
-    noremap <silent> <leader>rn :call NewPlaygroundBuffer('ruby')<cr>
-    noremap <silent> <leader>ub obinding.pry<esc>
-    nnoremap <silent> <leader>rfv :call RubyRenameVar()<cr>
-    nnoremap <silent> <leader>rfi :call RubyRenameInstanceVar()<cr>
-    xnoremap <silent> <leader>rfev :call RubyExtractVar()<cr>
-  endif
-  if IsRailsProject()
-    noremap <silent> <leader>rr :e config/routes.rb<cr>
-    noremap <silent> <leader>rR :vnew<cr>:e config/routes.rb<cr>
-    noremap <silent> <leader>rs :e db/schema.rb<cr>
-    noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
-    noremap <silent> <leader>rm :call ShowLatestRailsMigration()<cr>
-    noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
-    xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
-  endif
-endfunction
-
-function! IsRubyProject()
-  return !empty(glob('Gemfile'))
-endfunction
-
-function! IsRailsProject()
-  return !empty(glob('config/environment.rb'))
-endfunction
-
-function! IsPhpProject()
-  return !empty(glob('*.php'))
-endfunction
-
 function! BufferHistoryLast()
   exe 'normal ' . (len(w:buffer_history) - w:buffer_history_index - 1) . ']b'
 endfunction
@@ -2382,14 +2391,11 @@ augroup general_autocommands
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
   autocmd User FzfStatusLine setlocal statusline=\ "
   autocmd CmdwinEnter * call OnCmdwinEnter()
-  autocmd DirChanged * call SetProjectMappings()
 augroup end
 
 "#############
 "### Other ###
 "#############
-
-call SetProjectMappings()
 
 if !has('nvim') && !has('gui_running')
   runtime .enable_meta_mappings.vim

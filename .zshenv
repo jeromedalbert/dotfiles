@@ -40,7 +40,8 @@ dif() { colordiff -u $@ | less }
 mkcd() { mkdir $1 && cd $1 }
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
-psgrep() {
+alias psgrep='pstree | grep'
+psgrepp() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }
 alias el=elinks
@@ -52,6 +53,7 @@ alias wcl='wc -l'
 alias ct.='ctags -f .tags -R .'
 alias chx='chmod +x'
 ed() { command ed -p '*' "$@" }
+alias wh='which'
 
 # Confs
 alias reload='. ~/.zshrc; . ~/.zshenv'
@@ -214,6 +216,7 @@ ex() {
     ggclv "$@"
   fi
 }
+al e='ex'
 alias gm="git merge"
 alias gm-="git merge -"
 gcm() {
@@ -445,12 +448,10 @@ publicip() {
   echo $ip | tee >(pbcopy)
 }
 iploc() {
-  curl ipinfo.io/"$@"
+  curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
 }
 alias public-ip='publicip'
-alias iplocation='iploc'
 alias geoip='iploc'
-alias ipgeo='iploc'
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
 function cdf() {
   cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
@@ -485,6 +486,7 @@ killui() {
 }
 alias nra='~/c/boilerplate/new-rails-app'
 alias nrg='~/c/boilerplate/new-ruby-gem'
+alias nsa='~/c/boilerplate/new-sinatra-app'
 mkpwd() {
   local max_chars=${1:-28}
   cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1
@@ -499,7 +501,7 @@ alias pw='mkpw'
 alias fd='fd --type f'
 alias cpng='curl -s http://127.0.0.1:4040/status | grep -P "https://.*?ngrok.io" -oh | tr -d "\n" | pbcopy'
 alias ngcp='cpng'
-cptxt() { tesseract $1 stdout | tee >(pbcopy) }
+tess() { tesseract $1 stdout | tee >(pbcopy) }
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -608,12 +610,21 @@ alias gmo='gem open'
 alias gmi='gem install'
 alias gmu='gem uninstall'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
-gman() {
-  local gem_path=$(VISUAL=echo gem open $1)
-  man $gem_path/man/*
+gman() { man $(gem-path $1)/man/* }
+gmcd() { cd $(gem-path $1) }
+gem-path() {
+  VISUAL=echo gem open $1
 }
 alias ocov='open coverage/index.html '
 alias cov='COVERAGE=true rspec && ocov'
+steps() {
+  git checkout master &> /dev/null
+  local master_mig_num=$(ls db/migrate | wc -l)
+  git checkout - &> /dev/null
+  local mig_num=$(ls db/migrate | wc -l)
+  local delta=$(($mig_num - $master_mig_num))
+  echo $delta
+}
 
 # Javascript
 alias y='yarn'
@@ -649,21 +660,22 @@ alias haa='heroku apps --all'
 alias hcs='heroku config:set'
 alias hr='heroku run'
 alias hrc='heroku run rails console'
-alias hro='heroku run rake db:rollback'
+# alias hro='heroku run rake db:rollback'
 alias hrp='heroku run "printenv | sort"'
+alias hrb='heroku run bash'
 
 # Brew
 alias bri='brew install'
 alias brin='brew info'
-alias bru='brew uninstall'
-alias brup='brew upgrade'
+alias bru='brew upgrade'
+alias brun='brew uninstall'
 alias brs='brew search'
 alias brl='brew list'
 alias bci='brew cask install'
 alias bcin='brew cask info'
-alias bcu='brew cask uninstall'
-alias bcup='brew cask upgrade'
-alias bcs='brew cask search'
+alias bcu='brew cask upgrade'
+alias bcun='brew cask uninstall'
+# alias bcs='brew cask search'
 alias bcl='brew cask list'
 
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
