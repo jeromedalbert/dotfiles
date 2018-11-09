@@ -346,6 +346,9 @@ cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
 " noremap <leader>fo :Gqfopen<cr>
 
+noremap <leader>ytw :setl wrap!<cr>
+noremap <leader>ytl :setl number!<cr>:setl relativenumber!<cr>
+
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
 noremap <leader>-u :call ClearUndos()<cr>
@@ -366,8 +369,6 @@ xnoremap <silent> <leader>og :<c-u>call OpenCurrentFileInGithub()<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
-noremap <leader>ytw :call ToggleOption('wrap')<cr>
-noremap <leader>ytl :call ToggleOption('number')<cr>:call ToggleOption('relativenumber')<cr>
 
 nmap <silent> <leader>h <leader>yghiw
 nmap <silent> <leader>H <leader>yhiW
@@ -1356,6 +1357,7 @@ function! OpenCurrentFileInGithub()
   let git_root = system('cd ' . file_dir . '; git rev-parse --show-toplevel | tr -d "\n"')
   let file_path = substitute(expand('%:p'), git_root . '/', '', '')
   let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"')
+  if branch == '' | let branch = 'master' | endif
   let git_remote = system('cd ' . file_dir . '; git remote get-url origin')
   let repo_path = matchlist(git_remote, ':\(.*\)\.')[1]
   let url = 'https://github.com/' . repo_path . '/blob/' . branch . '/' . file_path
@@ -2239,14 +2241,6 @@ function! FocusSelection(visual)
   enew
   exe 'set filetype=' . filetype
   normal "zpggdd
-endfunction
-
-function! ToggleOption(option_name, ...)
-  let option_scope = 'local'
-  if a:0 | let option_scope = '' | endif
-  exe 'let enabled = &' . a:option_name
-  let option_prefix = enabled ? 'no' : ''
-  exe 'set' . option_scope . ' ' . option_prefix . a:option_name
 endfunction
 
 function! DisplayEnclosingLine()

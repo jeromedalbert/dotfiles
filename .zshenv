@@ -53,14 +53,6 @@ alias wcl='wc -l'
 alias ct.='ctags -f .tags -R .'
 alias chx='chmod +x'
 ed() { command ed -p '*' "$@" }
-alias wh='which'
-
-# Confs
-alias reload='. ~/.zshrc; . ~/.zshenv'
-alias rel='reload'
-alias rl='rel'
-alias re='rel'
-alias conf="$MAIN_EDITOR ~/.zshrc"
 al() {
   if [ $# -eq 0 ]; then
     $MAIN_EDITOR ~/.zshenv
@@ -68,6 +60,15 @@ al() {
     alias $1
   fi
 }
+alias wh='which'
+alias cmd='command'
+
+# Confs
+alias reload='. ~/.zshrc; . ~/.zshenv'
+alias rel='reload'
+alias rl='rel'
+alias re='rel'
+alias conf="$MAIN_EDITOR ~/.zshrc"
 
 # Zsh
 alias dirs='dirs -v'
@@ -162,7 +163,7 @@ to() {
 # Git
 alias gi='git init'
 alias ginit='git init'
-alias gl='git pull --rebase'
+alias gl='git pull --rebase --prune'
 alias gs='git status'
 alias gc='git commit'
 alias ga='git add'
@@ -341,7 +342,6 @@ gback() {
     gco $(cat .git/previous_branch)
     rm .git/previous_branch
   fi
-
   last_commit_message=$(git log -1 --pretty=%B)
   if [ $last_commit_message = 'current work' ]; then; grh^; fi
   unset last_commit_message
@@ -367,6 +367,7 @@ git-remove-submodule() {
   rm -rf .git/modules/$submodule
 }
 alias gsr='git-remove-submodule'
+# alias glp='git pull --rebase --prune'
 
 # Github
 hc() {
@@ -383,6 +384,7 @@ alias hp="hb -- pulls"
 alias hw="hb -- wiki"
 alias hf="hub fork"
 alias hcr="hub create"
+alias gpuhc='gpu && hc'
 
 # Docker
 alias d='docker'
@@ -502,6 +504,10 @@ alias fd='fd --type f'
 alias cpng='curl -s http://127.0.0.1:4040/status | grep -P "https://.*?ngrok.io" -oh | tr -d "\n" | pbcopy'
 alias ngcp='cpng'
 tess() { tesseract $1 stdout | tee >(pbcopy) }
+gq() {
+  local escaped_query=$(printf "%q" ${@: -1})
+  curl -X POST -H 'Content-Type: application/json' $1 -d "{ \"query\": \"$escaped_query\" }"
+}
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -629,7 +635,6 @@ steps() {
 # Javascript
 alias y='yarn'
 alias yr='yarn run'
-alias ys='yarn run server'
 alias ya='yarn add'
 alias yrm='yarn remove'
 alias yre='yrm'
@@ -661,7 +666,8 @@ alias hcs='heroku config:set'
 alias hr='heroku run'
 alias hrc='heroku run rails console'
 # alias hro='heroku run rake db:rollback'
-alias hrp='heroku run "printenv | sort"'
+alias hpr='heroku run "printenv | sort"'
+alias hrp='hpr'
 alias hrb='heroku run bash'
 
 # Brew
