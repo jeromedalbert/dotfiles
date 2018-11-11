@@ -129,6 +129,12 @@ chflags nohidden ~/Library/
 # Disable Creation of Metadata Files on USB Volumes
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
+# Don't show recent apps in the dock to keep it clean
+defaults write com.apple.dock show-recents -bool false
+
+# Enable subpixel antialiasing to prevent thin text
+defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
