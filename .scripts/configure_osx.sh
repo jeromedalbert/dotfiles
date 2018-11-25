@@ -132,6 +132,12 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 # Don't show recent apps in the dock to keep it clean
 defaults write com.apple.dock show-recents -bool false
 
+# App shortcuts
+defaults write com.apple.preview NSUserKeyEquivalents \
+  '{ "Adjust Size..." = "@~s"; "Hide Sidebar" = "@1"; Thumbnails = "@2"; }'
+defaults write com.google.Chrome NSUserKeyEquivalents '{ Extensions = "@~e"; }'
+defaults write com.evernote.Evernote NSUserKeyEquivalents '{ "Delete Note" = "@$d"; "Insert Row Below" = "@\U21a9"; }'
+
 # Enable subpixel antialiasing to prevent thin text
 defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
 

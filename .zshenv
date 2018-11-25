@@ -228,6 +228,8 @@ gcm() {
   fi
 }
 gcam() { gca -m "$*" }
+alias gce='gc --allow-empty -m "Empty commit"'
+gcem() { gc --allow-empty -m "$*" }
 alias gclean="git clean -fd"
 alias grhhc="grhh && gclean"
 gd() {

@@ -20,6 +20,7 @@ alias bottomright corner bottom-right resize:screenSizeX/2;screenSizeY/2
 
 alias hyper ctrl,alt,cmd
 alias special ctrl,cmd
+alias special2 ctrl,alt
 
 ################
 ### Bindings ###
@@ -31,15 +32,15 @@ bind right:${hyper} ${righthalf}
 bind up:${hyper} ${tophalf}
 bind down:${hyper} ${bottomhalf}
 
-# bind l:${hyper} ${topleft}
-# bind ;:${hyper} ${bottomleft}
-# bind ':${hyper} ${bottomright}
-# bind backslash:${hyper} ${topright}
-
 bind right:${special} resize +10% +0
 bind left:${special} resize -10% +0
 bind up:${special} resize +0 -10%
 bind down:${special} resize +0 +10%
+
+bind up:${special2} ${topleft}
+bind left:${special2} ${bottomleft}
+bind right:${special2} ${topright}
+bind down:${special2} ${bottomright}
 
 bind b:${hyper} focus 'Google Chrome'
 
