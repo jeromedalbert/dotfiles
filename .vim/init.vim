@@ -533,7 +533,7 @@ set showcmd
 set autoread
 set nostartofline
 set wildmenu
-set complete=.,w
+set complete=.,w,b
 " set complete=.,w,b,u,t
 set grepprg=ag
 set gdefault

@@ -14,6 +14,9 @@
 !.config/karabiner
 !.config/nvim
 
+.bundle/*
+!.bundle/config
+
 .secrets.zsh
 .zcompdump
 *.pyc
