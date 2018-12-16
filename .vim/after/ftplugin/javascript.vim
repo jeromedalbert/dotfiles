@@ -1,3 +1,7 @@
+setlocal suffixesadd=.js,.jsx
+setlocal include=from
+" setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
+
 iabbrev <buffer> con const
 
 inoremap <silent><buffer> $ $<Esc>:call InsertInterpolation()<Cr>a

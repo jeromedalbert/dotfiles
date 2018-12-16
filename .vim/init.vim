@@ -559,6 +559,7 @@ set formatoptions+=j
 set history=10000
 set langnoremap
 exe "set cedit=\<c-o>"
+set path=.,,
 
 set statusline=
 set statusline+=\ %<%f
