@@ -366,6 +366,8 @@ noremap <silent> <leader>oN :vnew<cr>:e ~/.notes<cr>
 noremap <silent> <leader>obk :call OpenCurrentFileBackupHistory()<cr>
 noremap <silent> <leader>og V:<c-u>call OpenCurrentFileInGithub()<cr>
 xnoremap <silent> <leader>og :<c-u>call OpenCurrentFileInGithub()<cr>
+noremap <silent> <leader>oG V:<c-u>call OpenCurrentFileInGithub(1)<cr>
+xnoremap <silent> <leader>oG :<c-u>call OpenCurrentFileInGithub(1)<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
@@ -1353,12 +1355,13 @@ function! OpenCurrentFileBackupHistory()
   call system(cmd)
 endfunction
 
-function! OpenCurrentFileInGithub()
+function! OpenCurrentFileInGithub(...)
+  let local_branch = a:0
   let file_dir = expand('%:h')
   let git_root = system('cd ' . file_dir . '; git rev-parse --show-toplevel | tr -d "\n"')
   let file_path = substitute(expand('%:p'), git_root . '/', '', '')
-  let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"')
-  if branch == '' | let branch = 'master' | endif
+  let branch = 'master'
+  if local_branch | let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"') | endif
   let git_remote = system('cd ' . file_dir . '; git remote get-url origin')
   let repo_path = matchlist(git_remote, ':\(.*\)\.')[1]
   let url = 'https://github.com/' . repo_path . '/blob/' . branch . '/' . file_path

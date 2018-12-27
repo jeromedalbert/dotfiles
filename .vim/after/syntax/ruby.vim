@@ -20,4 +20,10 @@ syn match rubyConstantOther "\<\%(\(class\|module\)\s\+.\+\)\@<!\u\w*\>\%(\.\|::
 syn keyword rubyNew new
 hi link rubyNew Keyword
 
-syntax region rubyHereDocText matchgroup=String start=+<<[-~.]*\z([A-Z]\+\)+ end=+^\s*\z1+ contains=NONE
+syn region rubyHereDocText matchgroup=String start=+<<[-~.]*\z([A-Z]\+\)+ end=+^\s*\z1+ contains=NONE
+
+syn region rubyString matchgroup=rubyStringDelimiter start="%[qwiI]\z([~`!@#$%^&*_\-+=|\:;"',.?/]\)" end="\z1" skip="\\\\\|\\\z1"
+syn region rubyString matchgroup=rubyStringDelimiter start="%[qwiI]{"				     end="}"   skip="\\\\\|\\}"	  contains=rubyNestedCurlyBraces,rubyDelimiterEscape
+syn region rubyString matchgroup=rubyStringDelimiter start="%[qwiI]<"				     end=">"   skip="\\\\\|\\>"	  contains=rubyNestedAngleBrackets,rubyDelimiterEscape
+syn region rubyString matchgroup=rubyStringDelimiter start="%[qwiI]\["				     end="\]"  skip="\\\\\|\\\]"  contains=rubyNestedSquareBrackets,rubyDelimiterEscape
+syn region rubyString matchgroup=rubyStringDelimiter start="%[qwiI]("				     end=")"   skip="\\\\\|\\)"	  contains=rubyNestedParentheses,rubyDelimiterEscape
