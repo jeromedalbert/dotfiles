@@ -13,8 +13,8 @@ Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
 if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', '*html'] }
-Plug 'mxw/vim-jsx', { 'for': 'javascript' }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript*', '*html'] }
+Plug 'mxw/vim-jsx', { 'for': 'javascript*' }
 Plug 'othree/html5.vim', { 'for': '*html' }
 Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
