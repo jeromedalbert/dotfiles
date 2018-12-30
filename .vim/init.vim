@@ -261,7 +261,7 @@ noremap <silent> '' :call DisplayRegisters()<cr>
 noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
 
-noremap <silent> <c-p> :silent Files<cr>
+noremap <silent> <c-p> :silent call BrowseFiles()<cr>
 noremap <silent> <leader>i :silent call BrowseBufferTags()<cr>
 noremap <silent> <m-P> :silent call BrowseAllTags()<cr>
 
@@ -271,7 +271,6 @@ endif
 
 noremap <silent> <leader>k :NERDTreeToggle<CR>
 noremap <silent> <leader>g :silent! NERDTreeFind<CR>
-noremap <silent> <leader>ou :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
@@ -368,6 +367,7 @@ noremap <silent> <leader>og V:<c-u>call OpenCurrentFileInGithub()<cr>
 xnoremap <silent> <leader>og :<c-u>call OpenCurrentFileInGithub()<cr>
 noremap <silent> <leader>oG V:<c-u>call OpenCurrentFileInGithub(1)<cr>
 xnoremap <silent> <leader>oG :<c-u>call OpenCurrentFileInGithub(1)<cr>
+noremap <silent> <leader>ou :call ReadUndoFile()<cr>:GundoToggle<cr>
 
 noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
 noremap <leader>yl :call LoadSession()<cr>
@@ -426,6 +426,7 @@ cabbrev gm Gmodified
 cabbrev prof Profile
 cabbrev gmo GemOpen
 cabbrev focus FocusSelection
+cabbrev fr set filetype=ruby
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -2098,11 +2099,21 @@ function! DisplayDirectory(dir)
   exe 'NERDTree ' . a:dir
 endfunction
 
+function! BrowseFiles()
+  Files
+  call ScrollFzfLeft()
+endfunction
+
+function! ScrollFzfLeft()
+  exe "normal \<c-\>\<c-n>"
+endfunction
+
 function! BrowseBufferTags()
   if empty(tagfiles())
     call system('ctags -R -f' . g:gutentags_ctags_tagfile)
   endif
   call fzf#vim#buffer_tags('', { 'options': $FZF_DEFAULT_OPTS })
+  call ScrollFzfLeft()
 endfunction
 
 function! BrowseAllTags()
@@ -2110,6 +2121,7 @@ function! BrowseAllTags()
     call system('ctags -R -f' . g:gutentags_ctags_tagfile)
   endif
   call fzf#vim#tags('')
+  call ScrollFzfLeft()
 endfunction
 
 function! BrowseOldFiles()
@@ -2124,6 +2136,7 @@ function! BrowseOldFiles()
     \ 'source': files,
     \ 'options': ['--prompt', 'OldFiles> ']
     \ }))
+  call ScrollFzfLeft()
 endfunction
 
 function! SortBuffers(...)

@@ -58,6 +58,7 @@ al() {
     $MAIN_EDITOR ~/.zshenv
   else
     alias $1
+    if [ $? -ne 0 ]; then; which $1; fi
   fi
 }
 alias wh='which'
@@ -217,7 +218,7 @@ ex() {
     ggclv "$@"
   fi
 }
-al e='ex'
+alias e='ex'
 alias gm="git merge"
 alias gm-="git merge -"
 gcm() {
@@ -592,20 +593,11 @@ alias strc='st && rc'
 alias irb='pry'
 alias pr='powder restart'
 fs() {
-  foreman start
-  # if [ -e 'Procfile.dev' ]; then
-  #   if [ -e '.env.local' ]; then
-  #     foreman start -e .env,.env.local -f Procfile.dev "$@"
-  #   else
-  #     foreman start -e .env -f Procfile.dev "$@"
-  #   fi
-  # else
-  #   if [ -e '.env.local' ]; then
-  #     foreman start -e .env,.env.local "$@"
-  #   else
-  #     foreman start -e .env "$@"
-  #   fi
-  # fi
+  local options=''
+  if [ -e '.env' ]; then; options='-e .env'; fi
+  if [ -e '.env.local' ]; then; options="$options,.env.local"; fi
+  if [ -e 'Procfile.dev' ]; then; options="$options -f Procfile.dev"; fi
+  eval "foreman start $options $@"
 }
 rgsq() {
   rg scaffold "$@" \
