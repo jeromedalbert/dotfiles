@@ -583,6 +583,18 @@ set undodir=~/.vim/tmp/undo
 
 if has('nvim')
   set scrollback=-1
+  let g:clipboard = {
+    \ 'name': 'pbcopy',
+    \ 'copy': {
+    \    '+': 'pbcopy',
+    \    '*': 'pbcopy',
+    \  },
+    \ 'paste': {
+    \    '+': 'pbpaste',
+    \    '*': 'pbpaste',
+    \ },
+    \ 'cache_enabled': 0,
+    \ }
 endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
