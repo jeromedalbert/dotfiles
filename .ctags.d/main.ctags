@@ -47,3 +47,5 @@
 --exclude=coverage
 --exclude=vendor
 --exclude=db
+--exclude=public
+--exclude=vendor

@@ -19,7 +19,6 @@ Plug 'othree/html5.vim', { 'for': '*html' }
 Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'wavded/vim-stylus', { 'for': 'stylus' }
-Plug 'jeromedalbert/vim-markdown', { 'branch': 'hl-heading', 'for': 'markdown' }
 Plug 'keith/swift.vim', { 'for': 'swift' }
 Plug 'StanAngeloff/php.vim', { 'for': 'php' }
 Plug 'jparise/vim-graphql', { 'for': 'graphql' }
@@ -358,7 +357,6 @@ nmap cX cx$
 nnoremap cc cc
 
 noremap <silent> <leader>oo :silent call BrowseOldFiles()<cr>
-noremap <silent> <leader>oh :silent Helptags<cr>
 noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :e ~/.notes<cr>
 noremap <silent> <leader>oN :vnew<cr>:e ~/.notes<cr>
@@ -426,7 +424,6 @@ cabbrev gm Gmodified
 cabbrev prof Profile
 cabbrev gmo GemOpen
 cabbrev focus FocusSelection
-cabbrev fr set filetype=ruby
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -457,7 +454,7 @@ noremap <silent> <m-=> :call ToggleZoom()<cr>
 
 noremap <silent> <m-N> <esc>:tabnew<cr>:call BrowseOldFiles()<cr>
 
-noremap <silent> gf :call ImprovedGoToFile()<cr>
+nnoremap <silent> gf :call ImprovedGoToFile()<cr>
 noremap <silent> gl :call DisplayEnclosingLine()<cr>
 
 noremap ga= :Tabularize /=<cr>
@@ -531,7 +528,8 @@ set hidden
 set notimeout
 set textwidth=0 colorcolumn=80
 set ruler
-set tags+=./.tags;
+" set tags+=./.tags;
+set tags=./.tags;
 set showcmd
 set autoread
 set nostartofline
@@ -583,18 +581,6 @@ set undodir=~/.vim/tmp/undo
 
 if has('nvim')
   set scrollback=-1
-  let g:clipboard = {
-    \ 'name': 'pbcopy',
-    \ 'copy': {
-    \    '+': 'pbcopy',
-    \    '*': 'pbcopy',
-    \  },
-    \ 'paste': {
-    \    '+': 'pbpaste',
-    \    '*': 'pbpaste',
-    \ },
-    \ 'cache_enabled': 0,
-    \ }
 endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
@@ -602,12 +588,27 @@ if has('gui_running')
   set macmeta
 endif
 
+let g:python_host_prog  = '/usr/local/bin/python2'
+let g:python3_host_prog = '/usr/local/bin/python3'
+let g:ruby_host_prog = '~/.asdf/shims/neovim-ruby-host'
+let g:node_host_prog = '~/.asdf/installs/nodejs/8.9.4/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:clipboard = {
+  \ 'name': 'pbcopy',
+  \ 'copy': {
+  \    '+': 'pbcopy',
+  \    '*': 'pbcopy',
+  \  },
+  \ 'paste': {
+  \    '+': 'pbpaste',
+  \    '*': 'pbpaste',
+  \ },
+  \ 'cache_enabled': 0,
+  \ }
+
 let html_no_rendering = 1
 let g:html_indent_inctags = 'p,main'
 let g:html_indent_script1 = 'inc'
 let g:html_indent_style1 = 'inc'
-let g:python_host_prog  = '/usr/local/bin/python2'
-let g:python3_host_prog = '/usr/local/bin/python3'
 let g:ruby_path = ''
 let g:vim_indent_cont = &sw
 let g:is_bash = 1
@@ -678,7 +679,7 @@ let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
 let g:unimpaired_no_toggling = 1
 
-let g:UltiSnipsSnippetDirectories=['my-snippets']
+let g:UltiSnipsSnippetDirectories=['my-snippets', '.my-snippets']
 let g:UltiSnipsExpandTrigger = '<nul>'
 let g:UltiSnipsListSnippets = '<nul>'
 let g:UltiSnipsJumpForwardTrigger = '<nul>'
@@ -1487,53 +1488,53 @@ function! LoadSession()
 endfunction
 
 function! HighlightOccurencesVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = EscapeStringForSearches(@")
+  exe 'normal! `[v`]"hy'
+  let @/ = EscapeStringForSearches(@h)
   exe 'match Search /' . @/ . '/'
 endfunction
 
 function! HighlightWholeOccurencesVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = '\<' . EscapeStringForSearches(@") . '\>'
+  exe 'normal! `[v`]"hy'
+  let @/ = '\<' . EscapeStringForSearches(@h) . '\>'
   exe 'match Search /' . @/ . '/'
 endfunction
 
 function! ChangeOccurenceVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = EscapeStringForSearches(@")
+  exe 'normal! `[v`]"hy'
+  let @/ = EscapeStringForSearches(@h)
   exe 'match Search /' . @/ . '/'
   call feedkeys('cgn', 'n')
 endfunction
 
 function! ChangeWholeOccurenceVerb(type)
-  exe 'normal! `[v`]y'
-  let @/ = '\<' . EscapeStringForSearches(@") . '\>'
+  exe 'normal! `[v`]"hy'
+  let @/ = '\<' . EscapeStringForSearches(@h) . '\>'
   exe 'match Search /' . @/ . '/'
   call feedkeys('cgn', 'n')
 endfunction
 
 function! FileSearchVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = @"
+  exe 'normal! `[v`]"hy'
+  let @/ = @h
   let cmd = ":FileSearch -i -Q '" . @/ . "' \<left>\<left>"
   call feedkeys(cmd, 'n')
 endfunction
 
 function! GlobalSubstituteVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = @"
+  exe 'normal! `[v`]"hy'
+  let @/ = @h
   call feedkeys(':%s/' . @/ . '/', 'n')
 endfunction
 
 function! SubstituteVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = @"
+  exe 'normal! `[v`]"hy'
+  let @/ = @h
   call feedkeys(':s/' . @/ . '/', 'n')
 endfunction
 
 function! SearchNextOccurenceVerb(type, ...)
-  exe 'normal! `[v`]y'
-  let @/ = EscapeStringForSearches(@")
+  exe 'normal! `[v`]"hy'
+  let @/ = EscapeStringForSearches(@h)
   call feedkeys('n', 'n')
 endfunction
 

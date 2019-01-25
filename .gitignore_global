@@ -8,6 +8,7 @@
 .localized
 .rspec-local
 .ignore
+.my-snippets
 
 tags
 zeus.json

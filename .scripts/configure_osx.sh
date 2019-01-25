@@ -139,7 +139,10 @@ defaults write com.google.Chrome NSUserKeyEquivalents '{ Extensions = "@~e"; }'
 defaults write com.evernote.Evernote NSUserKeyEquivalents '{ "Delete Note" = "@$d"; "Insert Row Below" = "@\U21a9"; }'
 
 # Enable subpixel antialiasing to prevent thin text
-defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
+defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
+
+# Disable screenshots floating thumbnails
+defaults write com.apple.screencapture show-thumbnail -bool false
 
 ###############################################################################
 # Kill affected applications                                                  #

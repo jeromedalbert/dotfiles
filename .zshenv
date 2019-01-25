@@ -549,6 +549,32 @@ fgl() (
   local font=$(ls *.flf | sort | fzf --no-multi --reverse --preview "figlet -f {} $@") &&
   figlet -f "$font" "$@" | pbcopy
 )
+fkill() {
+  local pids=$(ps -f -u $USER | sed 1d | fzf --multi | tr -s '[:blank:]' | cut -d' ' -f3)
+  if [ -n "$pids" ]; then
+    echo "$pids" | xargs kill -9 "$@"
+  fi
+}
+flog() {
+  local commits=$(
+    glo --color=always "$@" |
+      fzf --ansi --no-sort --height 100% \
+      --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+      xargs -I@ sh -c 'git show --color=always @'"
+  )
+  if [ -n "$commits" ]; then
+    local hashes=$(printf "$commits" | cut -d' ' -f2 | tr '\n' ' ')
+    git show $hashes
+  fi
+}
+freflog() {
+  local hash=$(
+    git reflog --color=always "$@" |
+      fzf --no-multi --ansi --no-sort --height 100% \
+      --preview "git show --color=always {1}"
+  )
+  echo $hash
+}
 
 # Ruby / Rails
 alias b='bundle'
@@ -608,7 +634,8 @@ alias rru='rails runner'
 alias rhash='asdf reshim ruby'
 alias gmo='gem open'
 alias gmi='gem install'
-alias gmu='gem uninstall'
+alias gmun='gem uninstall'
+alias gmup='gem update'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
 gman() { man $(gem-path $1)/man/* }
 gmcd() { cd $(gem-path $1) }
@@ -665,16 +692,20 @@ alias hrp='hpr'
 alias hrb='heroku run bash'
 
 # Brew
-alias bri='brew install'
-alias brin='brew info'
-alias bru='brew upgrade'
+alias brupd='brew update'
+alias brupg='brew upgrade'
+alias brins='brew install'
+alias brinf='brew info'
 alias brun='brew uninstall'
+alias bruns='brun'
 alias brs='brew search'
 alias brl='brew list'
-alias bci='brew cask install'
-alias bcin='brew cask info'
-alias bcu='brew cask upgrade'
+alias bcs='brew search'
+alias bcupf='brew cask upgrade'
+alias bcins='brew cask install'
+alias bcinf='brew cask info'
 alias bcun='brew cask uninstall'
+alias bcuns='bcun'
 # alias bcs='brew cask search'
 alias bcl='brew cask list'
 
