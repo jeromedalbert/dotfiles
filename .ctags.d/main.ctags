@@ -49,3 +49,4 @@
 --exclude=db
 --exclude=public
 --exclude=vendor
+--exclude=*.svg

@@ -655,7 +655,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeRespectWildIgnore = 1
 let NERDTreeIgnore = [
-  \ '\.rubocop-http', '\.notes$',
+  \ '\.rubocop-http', '\.notes$', '\.my-snippets',
   \
   \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.sass-cache$',
   \ '^tmp$', '^log$', '^coverage$', '^node_modules$'
