@@ -18,3 +18,8 @@ end
 def sk
   Sidekiq.redis { |conn| conn.flushdb }
 end
+
+def cpp(input)
+  IO.popen('pbcopy', 'w') { |pipe| pipe.puts(input) }
+  input
+end

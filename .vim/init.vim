@@ -60,7 +60,6 @@ Plug 'xolox/vim-misc', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
-Plug 'wincent/replay'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
@@ -492,6 +491,8 @@ noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
 nnoremap <silent> <leader>rfv :call RubyRenameVar()<cr>
 nnoremap <silent> <leader>rfi :call RubyRenameInstanceVar()<cr>
 xnoremap <silent> <leader>rfev :call RubyExtractVar()<cr>
+
+nnoremap <silent> <cr> :call ReplayLastMacro()<cr>
 
 "#############################
 "### General configuration ###
@@ -2279,6 +2280,14 @@ function! DisplayEnclosingLine()
   let linenum = system(cmd)
   let line = substitute(getline(linenum), '^\s*', '', 'g')
   echo line
+endfunction
+
+function! ReplayLastMacro()
+  try
+    normal @@
+  catch /E748/
+    normal @q
+  endtry
 endfunction
 
 "####################
