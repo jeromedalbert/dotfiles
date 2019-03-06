@@ -329,7 +329,13 @@ gpuf() {
     gp -u -f "$@"
   fi
 }
-alias gpd='git push -d'
+gpd() {
+  if [ $# -eq 0 ]; then
+    gp -d origin $(current-git-branch)
+  else
+    gp -d "$@"
+  fi
+}
 alias gph='git push heroku master'
 alias gclo-"git clone"
 alias gx="gitx"
@@ -370,7 +376,7 @@ git-remove-submodule() {
   rm -rf .git/modules/$submodule
 }
 alias gsr='git-remove-submodule'
-# alias glp='git pull --rebase --prune'
+alias grev='git revert'
 
 # Github
 hc() {
