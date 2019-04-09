@@ -206,6 +206,7 @@ cabbrev v# vnew #
 noremap zs zt
 noremap z0 zs
 nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
+nnoremap <silent> zp :let old=&sidescrolloff<cr>:setl sidescrolloff=999<cr>:exe 'setl sidescrolloff=' . old<cr>
 noremap z<Space> za
 
 map gs gS
@@ -293,14 +294,14 @@ noremap <leader>fcn :call CopyCurrentFileName()<cr>
 noremap <leader>fn :call CreateNewFileInCurrentDir()<cr>
 noremap <leader>fN :call CreateNewFile()<cr>
 
-noremap <silent> <leader>fj :set filetype=json<cr>:%!jq '.'<cr>
-xnoremap <silent> <leader>fj :!jq '.'<cr>
+noremap <silent> <leader>fjs :set filetype=json<cr>:%!jq '.'<cr>
+xnoremap <silent> <leader>fjs :!jq '.'<cr>
+noremap <silent> <leader>fja :set filetype=javascript<cr>:%!js-beautify -s 2<cr>
+xnoremap <silent> <leader>fja :!js-beautify -s 2<cr>
 noremap <silent> <leader>fh :silent %!tidy -qi
   \ --show-errors 0 --force-output yes --tidy-mark no --wrap 0 --doctype omit<cr>
 noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 " https://github.com/beautify-web/js-beautify
-noremap <silent> <leader>fb :set filetype=javascript<cr>:%!js-beautify -s 2<cr>
-xnoremap <silent> <leader>fb :!js-beautify -s 2<cr>
 noremap <silent> <leader>fo :copen<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
@@ -442,7 +443,7 @@ cnoremap <expr> <m-W> MovePreviousCase("\<bs>")
 cnoremap <expr> <m-F> MoveNextCase("\<right>")
 cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
 
-noremap <silent> <leader>j :call Join()<cr>
+map <silent> <leader>j <Plug>Join
 
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 
@@ -509,7 +510,8 @@ endif
 set termguicolors
 set guicursor=a:block-blinkon0
 set fileformat=unix
-set number relativenumber numberwidth=5
+" set number relativenumber numberwidth=5
+set number numberwidth=5
 set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
 set incsearch ignorecase smartcase hlsearch
 set noshowmatch
@@ -817,12 +819,22 @@ let g:netrw_altfile = 1
 let g:ruby_refactoring_map_keys = 0
 
 let g:projectionist_heuristics = {
-  \   '*': {
-  \     'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
-  \     'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
-  \     'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
-  \     'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
-  \   }
+  \  '*': {
+  \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
+  \    'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
+  \    'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
+  \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
+  \  }
+  \ }
+
+let g:increment_activator_filetype_candidates = {
+  \  '_': [
+  \    ['asc', 'desc'],
+  \    ['enable', 'disable']
+  \  ],
+  \ 'rspec': [
+  \    ['build', 'create']
+  \  ]
   \ }
 
 "#################
@@ -928,6 +940,11 @@ function! ShowAllHighlights()
 endfunction
 
 function! Autowrite()
+  for tabnum in range(tabpagenr('$'))
+    for bufnum in tabpagebuflist(tabnum + 1)
+      if bufname(bufnum) =~ '^quickfix-' | return | endif
+    endfor
+  endfor
   silent! wa
   if &modified
     silent! GutentagsUpdate
@@ -1208,7 +1225,7 @@ function! OpenErrorFile(preview_mode)
   normal zz
   if a:preview_mode
     exe 'match Search /\%' . file_and_line[1] . 'l/'
-    exe winnr . 'wincmd w'
+    silent! exe winnr . 'wincmd w'
   endif
 endfunction
 
@@ -1684,14 +1701,16 @@ function! RenameTab()
   set showtabline=2
 endfunction
 
-function! Join()
+function! Join(count) abort
   let previous_last_char = getline('.')[col('$')-2]
   normal! J
   let current_char = getline('.')[col('.')-1]
   if previous_last_char =~ '(\|[\' && current_char == ' '
     normal x
   endif
+  silent! call repeat#set("\<Plug>Join", a:count)
 endfunction
+nnoremap <silent> <Plug>Join :<c-u>call Join(v:count1)<cr>
 
 function! ToggleFoldSyntax()
   if &foldmethod == 'manual'

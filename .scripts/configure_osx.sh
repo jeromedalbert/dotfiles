@@ -144,6 +144,9 @@ defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
 # Disable screenshots floating thumbnails
 defaults write com.apple.screencapture show-thumbnail -bool false
 
+# Disable "App is not optimized for your Mac" alerts
+defaults write -g CSUIDisable32BitWarning -boolean true
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################

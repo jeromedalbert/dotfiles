@@ -221,6 +221,7 @@ ex() {
 alias e='ex'
 alias gm="git merge"
 alias gm-="git merge -"
+alias gmabort="git merge --abort"
 gcm() {
   if [ $# -eq 0 ]; then
     git checkout master
@@ -287,7 +288,6 @@ alias grbir="git rebase -i --root"
 alias gcon="git rebase --continue"
 alias gaacon="gaa && gcon"
 alias gabort="git rebase --abort"
-alias gab="gabort"
 alias gsk="git rebase --skip"
 alias gb='git branch'
 alias gbso='git branch --sort=-committerdate'
@@ -359,6 +359,9 @@ alias gcurr='gaacm "current work"'
 alias gcur=gcurr
 grebase() {
   gcm && gl && gc- && grbm
+}
+gmerge() {
+  gcm && gl && gc- && git merge master
 }
 alias gt='git tag'
 alias gcp='git cherry-pick'
@@ -435,7 +438,7 @@ alias de='desk'
 
 # SSH
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
-alias ssh_key="cat ~/.ssh/id_rsa.pub | pbcopy"
+alias ssh_key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
 
 # Apps / Binaries
 alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
@@ -451,8 +454,7 @@ alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simu
 timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
 ip() {
   local ip=$(ipconfig getifaddr en0)
-  echo $ip | tr -d '\n' | pbcopy
-  echo $ip
+  echo $ip | tr -d '\n' | tee >(pbcopy)
 }
 publicip() {
   local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
@@ -487,8 +489,7 @@ alias sub='subliminal download -l en'
 alias sub2='filebot -get-subtitles'
 minivim() {
   local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
-  echo $conf | pbcopy
-  echo $conf
+  echo $conf | tee >(pbcopy)
 }
 killui() {
   for app in "Dock" "Finder" "SystemUIServer"; do
@@ -690,7 +691,9 @@ alias hap='heroku accounts:set personal'
 alias haw='heroku accounts:set work'
 alias haa='heroku apps --all'
 alias hcs='heroku config:set'
+alias hcu='heroku config:unset'
 alias hr='heroku run'
+alias hrd='heroku run:detached'
 alias hrc='heroku run rails console'
 # alias hro='heroku run rake db:rollback'
 alias hpr='heroku run "printenv | sort"'
