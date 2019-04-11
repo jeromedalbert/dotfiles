@@ -667,6 +667,7 @@ alias yr='yarn run'
 alias ya='yarn add'
 alias yrm='yarn remove'
 alias yre='yrm'
+alias nhash='asdf reshim nodejs'
 
 # Python
 alias py='python'
