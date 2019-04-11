@@ -6,4 +6,4 @@ end
 
 Pry.config.pager = false if ENV['VIM']
 
-require '~/.console_functions'
+require_relative '.console_functions'

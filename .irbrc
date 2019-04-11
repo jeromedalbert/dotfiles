@@ -10,4 +10,4 @@ end
 IRB.conf[:SAVE_HISTORY] = 10000
 IRB.conf[:AUTO_INDENT] = true
 
-require '~/.console_functions'
+require_relative '.console_functions'
