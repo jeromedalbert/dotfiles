@@ -437,6 +437,7 @@ alias desk='cd ~/Desktop'
 alias de='desk'
 
 # SSH
+alias ssh='TERM=xterm-256color ssh'
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
 alias ssh_key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
 
