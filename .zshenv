@@ -439,7 +439,8 @@ alias de='desk'
 # SSH
 alias ssh='TERM=xterm-256color ssh'
 alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
-alias ssh_key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
+alias ssh-key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
+alias ssh-keys='ssh-key'
 
 # Apps / Binaries
 alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
@@ -519,6 +520,7 @@ gq() {
   local escaped_query=$(printf "%q" ${@: -1})
   curl -X POST -H 'Content-Type: application/json' $1 -d "{ \"query\": \"$escaped_query\" }"
 }
+alias pj='pbpaste | jq .'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -707,14 +709,16 @@ alias brupd='brew update'
 alias brupg='brew upgrade'
 alias brins='brew install'
 alias brinf='brew info'
+alias brinfo='brinf'
 alias brun='brew uninstall'
 alias bruns='brun'
 alias brs='brew search'
 alias brl='brew list'
 alias bcs='brew search'
-alias bcupf='brew cask upgrade'
+alias bcupg='brew cask upgrade'
 alias bcins='brew cask install'
 alias bcinf='brew cask info'
+alias bcinfo='bcinf'
 alias bcun='brew cask uninstall'
 alias bcuns='bcun'
 # alias bcs='brew cask search'

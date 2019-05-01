@@ -86,7 +86,7 @@ noremap <silent> <leader>q :q<cr>
 noremap <silent> <leader>w :w<cr>:Lint<cr>
 noremap <silent> <leader>z :x<cr>
 noremap <silent> <leader><esc> <nop>
-noremap <silent> <leader>`q :qa!<cr>
+noremap <silent> <leader>`q :cq<cr>
 noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
 
 noremap <up> <nop>
@@ -205,7 +205,6 @@ cabbrev v# vnew #
 
 noremap zs zt
 noremap z0 zs
-nnoremap <expr> ze 'zzz'.(&scroll).'<CR>Hz'.(&scroll*2).'<CR><C-O>'
 nnoremap <silent> zp :let old=&sidescrolloff<cr>:setl sidescrolloff=999<cr>:exe 'setl sidescrolloff=' . old<cr>
 noremap z<Space> za
 
@@ -238,6 +237,8 @@ noremap <silent> <leader>rr :e config/routes.rb<cr>
 noremap <silent> <leader>rR :vnew<cr>:e config/routes.rb<cr>
 noremap <silent> <leader>rs :e db/schema.rb<cr>
 noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
+noremap <silent> <leader>rd :e config/database.yml<cr>
+noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -445,6 +446,7 @@ cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
 
 map <silent> <leader>j <Plug>Join
 
+nnoremap <silent> ze :call MoveToQuarterScreen()<cr>
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 
 " nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
@@ -1711,6 +1713,11 @@ function! Join(count) abort
   silent! call repeat#set("\<Plug>Join", a:count)
 endfunction
 nnoremap <silent> <Plug>Join :<c-u>call Join(v:count1)<cr>
+
+function! MoveToQuarterScreen()
+  normal zs
+  exe 'normal! ' . (winheight(0)/4) . "\<C-Y>"
+endfunction
 
 function! ToggleFoldSyntax()
   if &foldmethod == 'manual'

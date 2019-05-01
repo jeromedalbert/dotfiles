@@ -1,2 +1,5 @@
 \set QUIET 1
 \pset null '[NULL]'
+\x auto
+\set HISTCONTROL ignoredups
+\set PROMPT2 '[more] %R > '
