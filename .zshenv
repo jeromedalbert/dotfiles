@@ -367,7 +367,7 @@ alias gt='git tag'
 alias gcp='git cherry-pick'
 alias gcp-='git cherry-pick -'
 fix() {
-  vim +/"<<<<<<<" $(git diff --name-only --diff-filter=U | xargs)
+  vim +"silent! /<<<<<<<" $(git diff --name-only --diff-filter=U | xargs)
 }
 alias fx='fix'
 alias gstats='git shortlog -sn'
@@ -465,6 +465,7 @@ publicip() {
 iploc() {
   curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
 }
+alias whereami='iploc'
 alias public-ip='publicip'
 alias geoip='iploc'
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
@@ -707,20 +708,26 @@ alias hrb='heroku run bash'
 # Brew
 alias brupd='brew update'
 alias brupg='brew upgrade'
+alias brupgr='brupg'
 alias brins='brew install'
+alias brinst='brins'
 alias brinf='brew info'
 alias brinfo='brinf'
 alias brun='brew uninstall'
 alias bruns='brun'
+alias bruni='brui'
 alias brs='brew search'
 alias brl='brew list'
 alias bcs='brew search'
 alias bcupg='brew cask upgrade'
+alias bcupgr='bcupg'
 alias bcins='brew cask install'
+alias bcinst='bcins'
 alias bcinf='brew cask info'
 alias bcinfo='bcinf'
 alias bcun='brew cask uninstall'
 alias bcuns='bcun'
+alias bcuni='bcun'
 # alias bcs='brew cask search'
 alias bcl='brew cask list'
 

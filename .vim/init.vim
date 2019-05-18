@@ -64,7 +64,6 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
-Plug 'ecomba/vim-ruby-refactoring', { 'on': [] }
 call plug#end()
 
 "############################
@@ -168,7 +167,6 @@ noremap <leader>p <c-w>W
 noremap <silent> <leader>op :silent! exe '!open ' . getcwd()<cr>
 noremap <silent> <leader>o. :silent! exe '!open ' . expand('%:h')<cr>
 noremap <silent> <leader>of :silent! exe '!open %'<cr>
-noremap <silent> <leader>obr :silent! exe '!open -a "Google Chrome" %'<cr>
 noremap <silent> <leader>ob<esc> <nop>
 noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
@@ -219,10 +217,6 @@ xnoremap <silent> <m-J> :move '>+1<cr>gv
 nnoremap <silent> <m-K> :move .-2<cr>
 xnoremap <silent> <m-K> :move '<-2<cr>gv
 
-noremap <silent> ]a :next<cr>
-noremap <silent> ]A :last<cr>
-noremap <silent> [a :previous<cr>
-noremap <silent> [A :first<cr>
 noremap <silent> ]Q :clast<cr>
 noremap <silent> [Q :cfirst<cr>
 noremap <silent> ]L :llast<cr>
@@ -264,6 +258,7 @@ noremap <m-?> :call ShowAllHighlights()<CR>
 noremap <silent> <c-p> :silent call BrowseFiles()<cr>
 noremap <silent> <leader>i :silent call BrowseBufferTags()<cr>
 noremap <silent> <m-P> :silent call BrowseAllTags()<cr>
+noremap <silent> <m-space> :silent call BrowseDirectoryFiles()<cr>
 
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<c-g>" : "\<c-\>\<c-n>"
@@ -362,6 +357,7 @@ noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 noremap <silent> <leader>on :e ~/.notes<cr>
 noremap <silent> <leader>oN :vnew<cr>:e ~/.notes<cr>
 noremap <silent> <leader>obk :call OpenCurrentFileBackupHistory()<cr>
+noremap <silent> <leader>obr :call OpenInBrowser()<cr>
 noremap <silent> <leader>og V:<c-u>call OpenCurrentFileInGithub()<cr>
 xnoremap <silent> <leader>og :<c-u>call OpenCurrentFileInGithub()<cr>
 noremap <silent> <leader>oG V:<c-u>call OpenCurrentFileInGithub(1)<cr>
@@ -435,6 +431,7 @@ noremap <silent> <leader>tr :call RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 
 nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
+map <silent> <leader>j <Plug>Join
 
 cnoremap <expr> <m-b> MovePreviousWord("\<left>")
 cnoremap <expr> <m-f> MoveNextWord("\<right>")
@@ -443,8 +440,6 @@ cnoremap <expr> <m-B> MovePreviousCase("\<left>")
 cnoremap <expr> <m-W> MovePreviousCase("\<bs>")
 cnoremap <expr> <m-F> MoveNextCase("\<right>")
 cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
-
-map <silent> <leader>j <Plug>Join
 
 nnoremap <silent> ze :call MoveToQuarterScreen()<cr>
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
@@ -491,9 +486,6 @@ noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
 xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
 noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
-nnoremap <silent> <leader>rfv :call RubyRenameVar()<cr>
-nnoremap <silent> <leader>rfi :call RubyRenameInstanceVar()<cr>
-xnoremap <silent> <leader>rfev :call RubyExtractVar()<cr>
 
 nnoremap <silent> <cr> :call ReplayLastMacro()<cr>
 
@@ -818,7 +810,6 @@ let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0
 let g:netrw_altfile = 1
-let g:ruby_refactoring_map_keys = 0
 
 let g:projectionist_heuristics = {
   \  '*': {
@@ -2122,6 +2113,23 @@ function! LocListNext(cmd_next)
   endtry
 endfunction
 
+function! ArgListNext(cmd_next)
+  try
+    exe a:cmd_next
+    redir => output
+    silent exe "normal \<c-g>"
+    redir END
+    let position = matchstr(output, '(.*)$')
+    echo position
+  catch /E165/
+    echo 'Cannot go beyond last file'
+  catch /E164/
+    echo 'Cannot go before first file'
+  catch /E163/
+    echo 'There is only one file to edit'
+  endtry
+endfunction
+
 function! BufferHistoryLast()
   exe 'normal ' . (len(w:buffer_history) - w:buffer_history_index - 1) . ']b'
 endfunction
@@ -2141,6 +2149,14 @@ endfunction
 
 function! BrowseFiles()
   Files
+  call ScrollFzfLeft()
+endfunction
+
+function! BrowseDirectoryFiles()
+  call fzf#run(fzf#wrap({
+    \ 'source': $FZF_DEFAULT_COMMAND . ' --depth 0 --ignore ' . expand('%:t'),
+    \ 'dir': expand('%:h')
+    \ }))
   call ScrollFzfLeft()
 endfunction
 
@@ -2198,13 +2214,6 @@ function! LazyLoadFugitive(cmd)
   exe a:cmd
 endfunction
 
-function! LazyLoadRubyRefactor()
-  if !exists('g:loaded_ruby_refactoring')
-    call plug#load('vim-ruby-refactoring')
-    let g:loaded_ruby_refactoring = 1
-  endif
-endfunction
-
 function! LazyLoadDeoplete()
   if exists('g:first_enter_done')
     call plug#load('deoplete.nvim')
@@ -2260,25 +2269,6 @@ function! GemOpen(gem_name)
   exe 'e ' . path
 endfunction
 
-function! RubyRenameVar()
-  call LazyLoadRubyRefactor()
-  normal viw
-  call feedkeys(":RRenameLocalVariable\<cr>")
-endfunction
-
-function! RubyRenameInstanceVar()
-  call LazyLoadRubyRefactor()
-  normal viw
-  let v = winsaveview()
-  RRenameInstanceVariable
-  call winrestview(v)
-endfunction
-
-function! RubyExtractVar()
-  call LazyLoadRubyRefactor()
-  RExtractLocalVariable
-endfunction
-
 function! OnCmdwinEnter()
   setlocal nonumber norelativenumber colorcolumn=
   nnoremap <silent><buffer> <esc> :q<cr>
@@ -2314,6 +2304,15 @@ function! ReplayLastMacro()
   catch /E748/
     normal @q
   endtry
+endfunction
+
+function! OpenInBrowser()
+  let file = expand('%')
+  if file == ''
+    let file = tempname()
+    call writefile(getbufline('%', 1, '$'), file)
+  endif
+  call system('open -a "Google Chrome" ' . shellescape(file))
 endfunction
 
 "####################
