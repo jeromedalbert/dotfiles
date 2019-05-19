@@ -469,12 +469,22 @@ noremap <silent> ]f :<c-u>call CycleToNextFile(v:count1)<cr>
 noremap <silent> [f :<c-u>call CycleToNextFile(-v:count1)<cr>
 noremap <silent> ]F :<c-u>execute CycleToNextFile(-1, 1)<cr>
 noremap <silent> [F :<c-u>execute CycleToNextFile(0, 1)<cr>
-noremap ]e :<c-u>exe 'e ' . GetNextFile(1)<cr>
-noremap [e :<c-u>exe 'e ' . GetNextFile(-1)<cr>
+noremap <silent> ]a :call ArgListNext('next')<cr>
+noremap <silent> ]A :call ArgListNext('last')<cr>
+noremap <silent> [a :call ArgListNext('previous')<cr>
+noremap <silent> [A :call ArgListNext('first')<cr>
 noremap <silent> ]q :call QfListNext('next')<cr>
 noremap <silent> [q :call QfListNext('previous')<cr>
 noremap <silent> ]l :call LocListNext('next')<cr>
 noremap <silent> [l :call LocListNext('previous')<cr>
+map [o m'^h<Plug>(edgemotion-k)^
+map ]o m'^h<Plug>(edgemotion-j)^
+map ]e m'^<Plug>(edgemotion-j)
+map [e m'^<Plug>(edgemotion-k)
+noremap <silent> ]x :call ConflictMarkerNext(1)<cr>
+noremap <silent> [x :call ConflictMarkerNext(0)<cr>
+nmap ]X G[x
+nmap [X gg]x
 
 xmap <silent> aa <Plug>AngryOuterSuffix
 omap <silent> aa <Plug>AngryOuterSuffix
@@ -2081,6 +2091,21 @@ function! InsertLineAfter(count) abort
 endfunction
 nnoremap <silent> <Plug>InsertLineAfter :<c-u>call InsertLineAfter(v:count1)<cr>
 
+function! ArgListNext(cmd_next)
+  try
+    exe a:cmd_next
+    redir => output
+    silent exe "normal \<c-g>"
+    redir END
+    let position = matchstr(output, '(.*)$')
+    echo position
+  " catch /E163/ | echo 'Only one file in arg'
+  " catch /E164/ | echo 'First file reached'
+  " catch /E165/ | echo 'Last file reached'
+  catch /\(E163\|E164\|E165\)/ | echo 'No more files'
+  endtry
+endfunction
+
 function! QfListNext(cmd_next)
   try
     if !exists('g:saved_qflist') | let g:saved_qflist = [] | endif
@@ -2106,28 +2131,51 @@ function! LocListNext(cmd_next)
       let g:saved_loclist = current_list
       ll
     endif
-  catch /E553/
-    echo 'No more items'
-  catch /\(E42\|E776\)/
-    echo 'Empty location list'
+  catch /E553/ | echo 'No more items'
+  catch /\(E42\|E776\)/ | echo 'Empty location list'
   endtry
 endfunction
 
-function! ArgListNext(cmd_next)
+function! ConflictMarkerNext(search_forward)
   try
-    exe a:cmd_next
-    redir => output
-    silent exe "normal \<c-g>"
-    redir END
-    let position = matchstr(output, '(.*)$')
-    echo position
-  catch /E165/
-    echo 'Cannot go beyond last file'
-  catch /E164/
-    echo 'Cannot go before first file'
-  catch /E163/
-    echo 'There is only one file to edit'
+    let old_search = @/
+    let @/ = '^\(<<<<<<<\|=======\|>>>>>>>\)'
+    exe 'normal ' . (a:search_forward ? 'n' :'N')
+    let counts = CountSearchMatches()
+    let current_pos = (counts[0] - 1) / 3 + 1
+    let total = counts[1] / 3
+    echo '(' . current_pos . ' of ' . total . ')'
+    if a:search_forward && getline('.') =~ '^<' | normal ze
+    endif
+  catch /E486/ | echo 'No conflicts'
+  finally
+    let @/ = old_search
   endtry
+endfunction
+
+function! CountSearchMatches()
+  let [pos, rpos] = [winsaveview(), getpos('.')]
+  let [f, ws, now, matches] = [0, &wrapscan, reltime(), [0,0]]
+  set nowrapscan
+  try
+    while f < 2
+      if reltimestr(reltime(now))[:-6] =~ '[1-9]'
+        " time >= 100ms
+        return
+      endif
+      let matches[v:searchforward ? f : !f] += 1
+      try
+        silent exe "keepjumps norm! ".(f ? 'n' : 'N')
+      catch /^Vim[^)]\+):E38[45]\D/
+        call setpos('.',rpos)
+        let f += 1
+      endtry
+    endwhile
+  finally
+    call winrestview(pos)
+    let &wrapscan = ws
+  endtry
+  return [matches[0], matches[0] + matches[1] - 1]
 endfunction
 
 function! BufferHistoryLast()
@@ -2237,6 +2285,12 @@ function! LazyLoadNeomake()
       \ }, 1000)
   endif
   autocmd! lazy_lint
+endfunction
+
+function! OnLintJobInit()
+  if !!search('^<<<<<<<', 'wn')
+    let g:neomake_hook_context.jobinfo['argv'] = ''
+  endif
 endfunction
 
 function! LazyLoadMTA(...)
@@ -2401,6 +2455,11 @@ if has('nvim')
     autocmd InsertEnter * call LazyLoadDeoplete()
   augroup end
 endif
+
+augroup configure_linter
+  autocmd!
+  autocmd User NeomakeJobInit nested call OnLintJobInit()
+augroup end
 
 augroup lazy_lint
   autocmd!
