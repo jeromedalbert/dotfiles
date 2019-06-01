@@ -18,3 +18,7 @@ def cpp(input)
   IO.popen('pbcopy', 'w') { |pipe| pipe.puts(input) }
   input
 end
+
+def bm(&block)
+  Benchmark.realtime(&block)
+end

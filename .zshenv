@@ -380,6 +380,7 @@ git-remove-submodule() {
 }
 alias gsr='git-remove-submodule'
 alias grev='git revert'
+alias grevnoe='git revert --no-edit'
 
 # Github
 hc() {

@@ -226,13 +226,13 @@ noremap <silent> <leader>rg :e Gemfile<cr>
 noremap <silent> <leader>rG :vnew<cr>:e Gemfile<cr>
 noremap <silent> <leader>rh :s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
 nnoremap <silent> <leader>rH :%s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
-noremap <silent> <leader>ub obinding.pry<esc>
 noremap <silent> <leader>rr :e config/routes.rb<cr>
 noremap <silent> <leader>rR :vnew<cr>:e config/routes.rb<cr>
 noremap <silent> <leader>rs :e db/schema.rb<cr>
 noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <silent> <leader>rd :e config/database.yml<cr>
 noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
+noremap <silent> <leader>rb obinding.pry<esc>
 
 "######################################
 "### Plugins/functions key mappings ###
