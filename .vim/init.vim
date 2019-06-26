@@ -30,6 +30,7 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'haya14busa/vim-textobj-function-syntax'
+Plug 'rhysd/vim-textobj-conflict'
 Plug 'b4winckler/vim-angry'
 Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }
 Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }
@@ -51,7 +52,6 @@ Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
 Plug 'vim-scripts/closetag.vim', { 'for': ['*html', 'xml', '*jsx'] }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
-Plug 'haya14busa/incsearch.vim'
 Plug 'nishigori/increment-activator'
 Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -64,7 +64,15 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'dhruvasagar/vim-buffer-history'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
+Plug 'haya14busa/vim-edgemotion'
+Plug 'rhysd/conflict-marker.vim'
+Plug 'romainl/vim-cool'
+" Plug 'haya14busa/incsearch.vim'
+" Plug 'haya14busa/is.vim'
+" Plug 'osyo-manga/vim-anzu'
 call plug#end()
+
+let g:CoolTotalMatches = 1
 
 "############################
 "### General key mappings ###
@@ -118,7 +126,7 @@ inoremap <m-b> <s-left>
 noremap <silent> <m-f> <c-f>
 inoremap <m-f> <s-right>
 
-" noremap <silent> <c-c> :enew<cr>
+noremap <silent> <backspace> :enew<cr>
 noremap <silent> <m-v> :vnew<cr>
 noremap <silent> <m-V> :vsplit<cr>
 noremap <silent> <m-s> :new<cr>
@@ -173,9 +181,9 @@ noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
 noremap <silent> <leader>oq :copen<cr>
 
-noremap g; g;zz
-noremap g, g,zz
-noremap gi gi<c-o>zz
+" noremap g; g;zz
+" noremap g, g,zz
+" noremap gi gi<c-o>zz
 
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
@@ -206,8 +214,8 @@ noremap z0 zs
 nnoremap <silent> zp :let old=&sidescrolloff<cr>:setl sidescrolloff=999<cr>:exe 'setl sidescrolloff=' . old<cr>
 noremap z<Space> za
 
-map gs gS
-map gj gJ
+noremap <leader>ytw :setl wrap!<cr>
+noremap <leader>ytl :setl number!<cr>:setl relativenumber!<cr>
 
 noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
 noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
@@ -267,6 +275,9 @@ endif
 noremap <silent> <leader>k :NERDTreeToggle<CR>
 noremap <silent> <leader>g :silent! NERDTreeFind<CR>
 
+map gs gS
+map gj gJ
+
 nmap cm <Plug>Commentary
 nmap cmm <Plug>CommentaryLine
 nmap cmu <Plug>Commentary<Plug>Commentary
@@ -317,14 +328,30 @@ noremap <m-t> :call ToggleQuotes()<cr>
 inoremap <m-t> <c-o>:call ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
 
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-map <silent> n :call ClearMessages()<cr><Plug>(incsearch-nohl-n)zz
-map <silent> N :call ClearMessages()<cr><Plug>(incsearch-nohl-N)zz
-map * <Plug>(incsearch-nohl-*)zz
-map # <Plug>(incsearch-nohl-#)zz
-map g* <Plug>(incsearch-nohl-g*)zz
-map g# <Plug>(incsearch-nohl-g#)zz
+" map / <Plug>(incsearch-forward)
+" map ? <Plug>(incsearch-backward)
+" map <silent> n :call ClearMessages()<cr><Plug>(incsearch-nohl-n)<Plug>(anzu-n-with-echo)zz
+" map <silent> N :call ClearMessages()<cr><Plug>(incsearch-nohl-N)<Plug>(anzu-N-with-echo)zz
+" map * <Plug>(incsearch-nohl-*)<Plug>(anzu-star-with-echo)zz
+" map # <Plug>(incsearch-nohl-#)<Plug>(anzu-sharp-with-echo)zz
+
+" map n <Plug>(incsearch-nohl)<Plug>(anzu-n)zz
+" map N <Plug>(incsearch-nohl)<Plug>(anzu-N)zz
+" map * <Plug>(incsearch-nohl)<Plug>(anzu-star)zz
+" map # <Plug>(incsearch-nohl)<Plug>(anzu-sharp)zz
+
+" map g* <Plug>(incsearch-nohl-g*)zz
+" map g# <Plug>(incsearch-nohl-g#)zz
+
+" nnoremap n nzz
+" nnoremap N Nzz
+" nnoremap * *zz
+" nnoremap # #zz
+" nnoremap g* g*zz
+" nnoremap g# g#zz
+
+" map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
+" map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
 map <leader>; `]]<space>
 inoremap <m-J> <esc>O
@@ -340,8 +367,7 @@ cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
 " noremap <leader>fo :Gqfopen<cr>
 
-noremap <leader>ytw :setl wrap!<cr>
-noremap <leader>ytl :setl number!<cr>:setl relativenumber!<cr>
+noremap <leader>ytd :call ToggleDiff()<cr>
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -403,6 +429,8 @@ command! Gdiff call LazyLoadFugitive('Gdiff')
 command! Glog call LazyLoadFugitive('Glog')
 command! Gblame call LazyLoadFugitive('Gblame')
 command! Gmodified call GitOpenModifiedFiles()
+command! Gadd call GitAdd()
+command! Grm silent !git rm %
 command! MakePlugSnapshot PlugSnapshot! ~/.vim/.plug_snapshot.vim
 command! RestorePlugSnapshot source ~/.vim/.plug_snapshot.vim
 command! Profile call Profile()
@@ -418,6 +446,8 @@ cabbrev plugr RestorePlugSnapshot
 cabbrev goyo Goyo
 cabbrev gb Gblame
 cabbrev gm Gmodified
+cabbrev ga Gadd
+cabbrev grm Grm
 cabbrev prof Profile
 cabbrev gmo GemOpen
 cabbrev focus FocusSelection
@@ -477,14 +507,22 @@ noremap <silent> ]q :call QfListNext('next')<cr>
 noremap <silent> [q :call QfListNext('previous')<cr>
 noremap <silent> ]l :call LocListNext('next')<cr>
 noremap <silent> [l :call LocListNext('previous')<cr>
+map [e <Plug>MovePreviousInsideIndent
+map ]e <Plug>MoveNextInsideIndent
+map [E <Plug>MovePreviousAroundIndent
+map ]E <Plug>MoveNextAroundIndent
 map [o m'^h<Plug>(edgemotion-k)^
 map ]o m'^h<Plug>(edgemotion-j)^
-map ]e m'^<Plug>(edgemotion-j)
-map [e m'^<Plug>(edgemotion-k)
 noremap <silent> ]x :call ConflictMarkerNext(1)<cr>
 noremap <silent> [x :call ConflictMarkerNext(0)<cr>
 nmap ]X G[x
 nmap [X gg]x
+noremap [r :ConflictMarkerOurselves<cr>
+noremap ]r :ConflictMarkerThemselves<cr>
+nmap ]w :call GitAdd()<cr>]a]x
+
+map <C-j> <Plug>(edgemotion-j)
+map <C-k> <Plug>(edgemotion-k)
 
 xmap <silent> aa <Plug>AngryOuterSuffix
 omap <silent> aa <Plug>AngryOuterSuffix
@@ -568,12 +606,14 @@ set history=10000
 set langnoremap
 exe "set cedit=\<c-o>"
 set path=.,,
+set nomodeline
 
 set statusline=
 set statusline+=\ %<%f
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
 set statusline+=%=
+" set statusline+=%{anzu#search_status()}
 set statusline+=%{GetLintMsg()}
 set statusline+=%{GetCustomStatusMsg()}
 set statusline+=\ \ %-14(%l,%c%)
@@ -789,6 +829,41 @@ call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime plugged/vim-sandwich/macros/sandwich/keymap/surround.vim
 nunmap ds
 nunmap dss
+let g:sandwich#recipes += [
+  \ {
+  \   'buns':         ['before do', 'end'],
+  \   'nesting':      1,
+  \   'match_syntax': 1,
+  \   'skip_break':   1,
+  \   'linewise':     1,
+  \   'command':      ["normal! kV="],
+  \   'filetype':     ["rspec"],
+  \   'input':        ['B'],
+  \ },
+  \ {
+  \   'buns':         ['do', 'end'],
+  \   'action':       ['add'],
+  \   'nesting':      1,
+  \   'match_syntax': 1,
+  \   'skip_break':   1,
+  \   'linewise':     1,
+  \   'command':      ["normal! vip="],
+  \   'filetype':     ['ruby'],
+  \   'input':        ['d'],
+  \ },
+  \ {
+  \   'buns':         ['^.*do$', 'end'],
+  \   'action':       ['delete'],
+  \   'regex':        1,
+  \   'nesting':      1,
+  \   'match_syntax': 1,
+  \   'skip_break':   1,
+  \   'linewise':     1,
+  \   'command':      ["normal! vip="],
+  \   'filetype':     ['ruby'],
+  \   'input':        ['d'],
+  \ }
+  \ ]
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
@@ -825,8 +900,10 @@ let g:projectionist_heuristics = {
   \  '*': {
   \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
+  \    'lib/tasks/*.rake': { 'alternate': 'spec/lib/tasks/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
-  \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
+  \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' },
+  \    'spec/lib/tasks/*_spec.rb': { 'alternate': 'lib/tasks/{}.rake' }
   \  }
   \ }
 
@@ -839,6 +916,16 @@ let g:increment_activator_filetype_candidates = {
   \    ['build', 'create']
   \  ]
   \ }
+
+let g:conflict_marker_enable_hooks = 0
+let g:conflict_marker_enable_highlight = 0
+let g:loaded_textobj_conflict = 1
+call textobj#user#plugin('conflict', {
+  \  '_' : {
+  \    'select-i' : 'ix', '*select-i-function*' : 'textobj#conflict#select_i',
+  \    'select-a' : 'ax', '*select-a-function*' : 'textobj#conflict#select_a',
+  \  }
+  \ })
 
 "#################
 "### Functions ###
@@ -1430,6 +1517,11 @@ function! GitOpenModifiedFiles()
   wincmd w
 endfunction
 
+function! GitAdd()
+  silent w
+  silent !git add %
+endfunction
+
 function! ShowLatestRailsMigration()
   call LazyLoadRails()
   let alternate_buffer = bufnr('%')
@@ -1537,7 +1629,7 @@ endfunction
 function! FileSearchVerb(type, ...)
   exe 'normal! `[v`]"hy'
   let @/ = @h
-  let cmd = ":FileSearch -i -Q '" . @/ . "' \<left>\<left>"
+  let cmd = ":FileSearch -Q -i '" . @/ . "' \<left>\<left>"
   call feedkeys(cmd, 'n')
 endfunction
 
@@ -1740,6 +1832,14 @@ function! ToggleZoom()
     wincmd |
     wincmd _
     let t:zoomed = 1
+  endif
+endfunction
+
+function! ToggleDiff()
+  if &diff
+    windo diffoff
+  else
+    windo diffthis
   endif
 endfunction
 
@@ -2368,6 +2468,35 @@ function! OpenInBrowser()
   endif
   call system('open -a "Google Chrome" ' . shellescape(file))
 endfunction
+
+function! MoveInsideIndent(forward) abort
+  let motion_offset = a:forward ? 1 : -1
+  let nextline_num = line('.') + motion_offset
+  if getline(nextline_num) =~ '^[ \t]*$'
+    let motion_char = a:forward ? 'j' : 'k'
+    exe "normal ^\<Plug>(edgemotion-" . motion_char . ")^"
+  else
+    let direction_char = a:forward ? '' : 'o'
+    exe "normal Vii" . direction_char . "^\<esc>"
+  endif
+endfunction
+nnoremap <silent> <Plug>MoveNextInsideIndent :<c-u>call MoveInsideIndent(1)<cr>
+vnoremap <silent> <Plug>MoveNextInsideIndent :call MoveInsideIndent(1)<cr>
+onoremap <silent> <Plug>MoveNextInsideIndent V:<c-u>call MoveInsideIndent(1)<cr>
+nnoremap <silent> <Plug>MovePreviousInsideIndent :<c-u>call MoveInsideIndent(0)<cr>
+vnoremap <silent> <Plug>MovePreviousInsideIndent :call MoveInsideIndent(0)<cr>
+onoremap <silent> <Plug>MovePreviousInsideIndent V:<c-u>call MoveInsideIndent(0)<cr>
+
+function! MoveAroundIndent(forward) abort
+  let direction_char = a:forward ? '' : 'o'
+  exe "normal Vai" . direction_char . "^\<esc>"
+endfunction
+nnoremap <silent> <Plug>MoveNextAroundIndent :<c-u>call MoveAroundIndent(1)<cr>
+vnoremap <silent> <Plug>MoveNextAroundIndent :call MoveAroundIndent(1)<cr>
+onoremap <silent> <Plug>MoveNextAroundIndent V:<c-u>call MoveAroundIndent(1)<cr>
+nnoremap <silent> <Plug>MovePreviousAroundIndent :<c-u>call MoveAroundIndent(0)<cr>
+vnoremap <silent> <Plug>MovePreviousAroundIndent :call MoveAroundIndent(0)<cr>
+onoremap <silent> <Plug>MovePreviousAroundIndent V:<c-u>call MoveAroundIndent(0)<cr>
 
 "####################
 "### Autocommands ###
