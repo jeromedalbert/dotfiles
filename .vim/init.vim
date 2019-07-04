@@ -838,7 +838,7 @@ let g:sandwich#recipes += [
   \   'linewise':     1,
   \   'command':      ["normal! kV="],
   \   'filetype':     ["rspec"],
-  \   'input':        ['B'],
+  \   'input':        ['B']
   \ },
   \ {
   \   'buns':         ['do', 'end'],
@@ -849,7 +849,7 @@ let g:sandwich#recipes += [
   \   'linewise':     1,
   \   'command':      ["normal! vip="],
   \   'filetype':     ['ruby'],
-  \   'input':        ['d'],
+  \   'input':        ['d']
   \ },
   \ {
   \   'buns':         ['^.*do$', 'end'],
@@ -861,7 +861,31 @@ let g:sandwich#recipes += [
   \   'linewise':     1,
   \   'command':      ["normal! vip="],
   \   'filetype':     ['ruby'],
-  \   'input':        ['d'],
+  \   'input':        ['d']
+  \ },
+  \ {
+  \   'buns':         ['^\s*if .*', 'end'],
+  \   'action':       ['delete'],
+  \   'regex':        1,
+  \   'nesting':      1,
+  \   'match_syntax': 1,
+  \   'skip_break':   1,
+  \   'linewise':     1,
+  \   'command':      ["normal! vip="],
+  \   'filetype':     ['ruby'],
+  \   'input':        ['i']
+  \ },
+  \ {
+  \   'buns':         ['\(^\s*if \)\|\(^.*do$\)', 'end'],
+  \   'action':       ['delete'],
+  \   'regex':        1,
+  \   'nesting':      1,
+  \   'match_syntax': 1,
+  \   'skip_break':   1,
+  \   'linewise':     1,
+  \   'command':      ["normal! vip="],
+  \   'filetype':     ['ruby'],
+  \   'input':        ['r']
   \ }
   \ ]
 
@@ -1483,9 +1507,12 @@ function! OpenCurrentFileInGithub(...)
   let git_root = system('cd ' . file_dir . '; git rev-parse --show-toplevel | tr -d "\n"')
   let file_path = substitute(expand('%:p'), git_root . '/', '', '')
   let branch = 'master'
-  if local_branch | let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"') | endif
-  let git_remote = system('cd ' . file_dir . '; git remote get-url origin')
-  let repo_path = matchlist(git_remote, ':\(.*\)\.')[1]
+  if local_branch
+    let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"')
+    if branch == '' | let branch = system('git rev-parse --short HEAD | tr -d "\n"') | endif
+  endif
+  let git_remote = system('cd ' . file_dir . '; git remote get-url origin | tr -d "\n"')
+  let repo_path = matchlist(git_remote, ':\([^.]*\)')[1]
   let url = 'https://github.com/' . repo_path . '/blob/' . branch . '/' . file_path
   let first_line = getpos("'<")[1]
   let url .= '#L' . first_line
