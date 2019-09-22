@@ -595,7 +595,7 @@ set nojoinspaces
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,*.pyc,*.class,*.swp,*.dump
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
@@ -898,6 +898,7 @@ let g:AutoPairsShortcutBackInsert = ''
 
 let g:gutentags_ctags_tagfile = '.tags'
 let g:gutentags_ctags_auto_set_tags = 0
+let g:gutentags_ctags_exclude = ['.json']
 
 let g:splitjoin_ruby_hanging_args = 0
 let g:splitjoin_ruby_curly_braces = 0

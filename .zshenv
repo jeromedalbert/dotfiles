@@ -336,7 +336,6 @@ gpd() {
     gp -d "$@"
   fi
 }
-alias gph='git push heroku master'
 alias gclo-"git clone"
 alias gx="gitx"
 alias gu="gitup"
@@ -398,6 +397,7 @@ alias hw="hb -- wiki"
 alias hf="hub fork"
 alias hcr="hub create"
 alias gpuhc='gpu && hc'
+alias gpfhc='gpf && hc'
 
 # Docker
 alias d='docker'
@@ -647,6 +647,7 @@ alias rhash='asdf reshim ruby'
 alias gmo='gem open'
 alias gmi='gem install'
 alias gmun='gem uninstall'
+alias gmu='gmun'
 alias gmup='gem update'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
 gman() { man $(gem-path $1)/man/* }
@@ -654,6 +655,7 @@ gmcd() { cd $(gem-path $1) }
 gem-path() {
   VISUAL=echo gem open $1
 }
+alias gmp='gem-path'
 alias ocov='open coverage/index.html '
 alias cov='COVERAGE=true rspec && ocov'
 steps() {
@@ -705,6 +707,11 @@ alias hrc='heroku run rails console'
 alias hpr='heroku run "printenv | sort"'
 alias hrp='hpr'
 alias hrb='heroku run bash'
+hurl() {
+  heroku info -s "$@" | grep web_url | cut -d= -f2
+}
+alias gph='git push heroku master'
+alias gphm='gph'
 
 # Brew
 alias brupd='brew update'
