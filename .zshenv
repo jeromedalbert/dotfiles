@@ -392,8 +392,7 @@ hc() {
 }
 alias hc-='hc $(git-branch-previous)'
 alias hb="hub browse"
-alias hp="hb -- pulls"
-alias hw="hb -- wiki"
+alias hp="hub pr show"
 alias hf="hub fork"
 alias hcr="hub create"
 alias gpuhc='gpu && hc'
@@ -457,11 +456,13 @@ alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simu
 timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
 ip() {
   local ip=$(ipconfig getifaddr en0)
-  echo $ip | tr -d '\n' | tee >(pbcopy)
+  echo $ip | tr -d '\n' | pbcopy
+  echo $ip
 }
 publicip() {
-  local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
-  echo $ip | tee >(pbcopy)
+  local ip=$(dig @resolver1.opendns.com ANY myip.opendns.com +short -4)
+  echo $ip | tr -d '\n' | pbcopy
+  echo $ip
 }
 iploc() {
   curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
@@ -615,6 +616,7 @@ alias rd='rails destroy'
 alias rc='rails c'
 alias rcs='rails c --sandbox'
 alias rr='rake routes'
+alias rdb='rails db'
 alias mi1='rake db:migrate'
 alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
 alias mi='rake db:migrate db:rollback && mi2'
@@ -713,6 +715,16 @@ hurl() {
 alias gph='git push heroku master'
 alias gphm='gph'
 
+# Kube
+alias kr='kube run'
+krc() { kube run $@ rails c }
+krb() { kube run $@ bash }
+kpr() { kube run $@ printenv | sort }
+alias krbg='kube run:bg'
+alias kl='kube logs'
+alias ke='kube env'
+alias kp='kube pods'
+
 # Brew
 alias brupd='brew update'
 alias brupg='brew upgrade'
@@ -728,6 +740,7 @@ alias brs='brew search'
 alias brl='brew list'
 alias brls='brl'
 alias bcs='brew search'
+alias bcupd='brupd'
 alias bcupg='brew cask upgrade'
 alias bcupgr='bcupg'
 alias bcins='brew cask install'

@@ -10,8 +10,12 @@ def lm(object)
   object.methods - object.class.superclass.instance_methods
 end
 
-def sk
+def sflush
   Sidekiq.redis { |conn| conn.flushdb }
+end
+
+def skflush
+  sflush
 end
 
 def cpp(input)
