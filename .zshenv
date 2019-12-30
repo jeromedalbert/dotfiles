@@ -753,5 +753,3 @@ alias bcuni='bcun'
 # alias bcs='brew cask search'
 alias bcl='brew cask list'
 alias bcls='bcl'
-
-if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
