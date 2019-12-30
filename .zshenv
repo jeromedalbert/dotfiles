@@ -238,14 +238,14 @@ gd() {
   if [ $# -eq 0 ]; then
     gd HEAD
   else
-    git diff "$@" | _format-git-diff | eval $GIT_PAGER
+    git diff "$@" | format-git-diff | eval $GIT_PAGER
   fi
 }
-_format-git-diff() {
+format-git-diff() {
   sed -r "s/^([^-+ ]*)[-+ ]/\\1/"
 }
 gsh() {
-  git show "$@" | _format-git-diff | eval $GIT_PAGER
+  git show "$@" | format-git-diff | eval $GIT_PAGER
 }
 alias gdc="gd --cached"
 alias gdh="gd HEAD"
@@ -253,7 +253,7 @@ alias "gdh^"="gd 'HEAD^'"
 alias glog="git log"
 alias glo="git log --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 glop() {
-  glo -p "$@" | _format-git-diff | eval $GIT_PAGER
+  glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
 alias gloo="git log --all --oneline --no-merges"
 alias gloS="glo -S"

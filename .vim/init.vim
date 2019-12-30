@@ -22,6 +22,7 @@ Plug 'wavded/vim-stylus', { 'for': 'stylus' }
 Plug 'keith/swift.vim', { 'for': 'swift' }
 Plug 'StanAngeloff/php.vim', { 'for': 'php' }
 Plug 'jparise/vim-graphql', { 'for': 'graphql' }
+Plug 'towolf/vim-helm'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
@@ -70,6 +71,7 @@ Plug 'romainl/vim-cool'
 " Plug 'haya14busa/incsearch.vim'
 " Plug 'haya14busa/is.vim'
 " Plug 'osyo-manga/vim-anzu'
+Plug 'psliwka/vim-smoothie'
 call plug#end()
 
 let g:CoolTotalMatches = 1
@@ -119,11 +121,14 @@ cnoremap <c-n> <down>
 cmap <m-A> <c-a>
 cmap <m-E> <c-e>
 
-noremap <silent> <m-d> <c-d>
+" noremap <silent> <m-d> <c-d>
+" noremap <silent> <m-b> <c-b>
+" noremap <silent> <m-f> <c-f>
+map <silent> <m-d> <c-d>
+map <silent> <m-b> <c-b>
+map <silent> <m-f> <c-f>
 inoremap <m-d> <c-o>dw
-noremap <silent> <m-b> <c-b>
 inoremap <m-b> <s-left>
-noremap <silent> <m-f> <c-f>
 inoremap <m-f> <s-right>
 
 noremap <silent> <backspace> :enew<cr>
@@ -817,6 +822,11 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_html_enabled_makers = []
 let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_zsh_enabled_makers = ['zsh']
+let g:neomake_ruby_rubocop_maker = {
+    \ 'args': ['--format', 'emacs', '--force-exclusion', '--display-cop-names'],
+    \ 'errorformat': '%f:%l:%c: %t: %m,%E%f:%l: %m',
+    \ 'postprocess': function('neomake#makers#ft#ruby#RubocopEntryProcess')
+    \ }
 
 let g:mta_filetypes = {
   \ 'html': 1,
@@ -2497,8 +2507,10 @@ function! OpenInBrowser()
   call system('open -a "Google Chrome" ' . shellescape(file))
 endfunction
 
-function! MoveInsideIndent(forward) abort
+function! MoveInsideIndent(forward, ...) abort
   let motion_offset = a:forward ? 1 : -1
+  let visual_mode = get(a:000, 0)
+  if visual_mode | let start_pos = getpos("'<") | endif
   let nextline_num = line('.') + motion_offset
   if getline(nextline_num) =~ '^[ \t]*$'
     let motion_char = a:forward ? 'j' : 'k'
@@ -2507,23 +2519,35 @@ function! MoveInsideIndent(forward) abort
     let direction_char = a:forward ? '' : 'o'
     exe "normal Vii" . direction_char . "^\<esc>"
   endif
+  if visual_mode
+    call setpos("'<", start_pos)
+    call setpos("'>", getpos('.'))
+    normal! gv
+  endif
 endfunction
 nnoremap <silent> <Plug>MoveNextInsideIndent :<c-u>call MoveInsideIndent(1)<cr>
-vnoremap <silent> <Plug>MoveNextInsideIndent :call MoveInsideIndent(1)<cr>
+vnoremap <silent> <Plug>MoveNextInsideIndent :call MoveInsideIndent(1, 1)<cr>
 onoremap <silent> <Plug>MoveNextInsideIndent V:<c-u>call MoveInsideIndent(1)<cr>
 nnoremap <silent> <Plug>MovePreviousInsideIndent :<c-u>call MoveInsideIndent(0)<cr>
-vnoremap <silent> <Plug>MovePreviousInsideIndent :call MoveInsideIndent(0)<cr>
+vnoremap <silent> <Plug>MovePreviousInsideIndent :call MoveInsideIndent(0, 1)<cr>
 onoremap <silent> <Plug>MovePreviousInsideIndent V:<c-u>call MoveInsideIndent(0)<cr>
 
-function! MoveAroundIndent(forward) abort
+function! MoveAroundIndent(forward, ...) abort
   let direction_char = a:forward ? '' : 'o'
+  let visual_mode = get(a:000, 0)
+  if visual_mode | let start_pos = getpos("'<") | endif
   exe "normal Vai" . direction_char . "^\<esc>"
+  if visual_mode
+    call setpos("'<", start_pos)
+    call setpos("'>", getpos('.'))
+    normal! gv
+  endif
 endfunction
 nnoremap <silent> <Plug>MoveNextAroundIndent :<c-u>call MoveAroundIndent(1)<cr>
-vnoremap <silent> <Plug>MoveNextAroundIndent :call MoveAroundIndent(1)<cr>
+vnoremap <silent> <Plug>MoveNextAroundIndent :call MoveAroundIndent(1, 1)<cr>
 onoremap <silent> <Plug>MoveNextAroundIndent V:<c-u>call MoveAroundIndent(1)<cr>
 nnoremap <silent> <Plug>MovePreviousAroundIndent :<c-u>call MoveAroundIndent(0)<cr>
-vnoremap <silent> <Plug>MovePreviousAroundIndent :call MoveAroundIndent(0)<cr>
+vnoremap <silent> <Plug>MovePreviousAroundIndent :call MoveAroundIndent(0, 1)<cr>
 onoremap <silent> <Plug>MovePreviousAroundIndent V:<c-u>call MoveAroundIndent(0)<cr>
 
 "####################

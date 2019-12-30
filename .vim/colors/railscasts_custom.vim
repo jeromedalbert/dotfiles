@@ -67,7 +67,7 @@
 " | #900000 | #9b0000 | x           |
 " +---------+---------+-------------+
 " For better fidelity, completely disable iTerm2's 'Minimum contrast' option
-" and set 'Use think strokes for anti-aliased text' to 'Never'.
+" and set 'Use thin strokes for anti-aliased text' to 'Never'.
 
 set background=dark
 highlight clear
@@ -196,6 +196,11 @@ hi link yamlBlockCollectionItemStart String
 hi link yamlKeyValueDelimiter yamlKey
 hi link yamlPlainScalar String
 hi link yamlBool String
+
+hi link gotplAction NONE
+hi link gotplVariable NONE
+hi link gotplFunctions NONE
+hi link goSprigFunctions NONE
 
 hi cssURL guifg=NONE guibg=NONE gui=NONE
 hi link cssClassName Tag
