@@ -218,4 +218,4 @@ paste-insert() {
 source /usr/local/opt/asdf/asdf.sh
 stty -ixon
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
-if [ -z $TMUX ] && [ -z $VIM ]; then; tmux-start; fi
+if [[ -z $TMUX && -z $VIM ]]; then; tmux-start; fi

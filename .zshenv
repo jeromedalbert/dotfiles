@@ -23,7 +23,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 v() {
-  if [ $# -eq 1 ] && [ -d $1 ]; then
+  if [[ $# -eq 1 && -d $1 ]]; then
     (cd $1; $VIM_EDITOR .)
   else
     $VIM_EDITOR "$@"
@@ -54,11 +54,11 @@ alias ct.='ctags -f .tags -R .'
 alias chx='chmod +x'
 ed() { command ed -p '*' "$@" }
 al() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     $MAIN_EDITOR ~/.zshenv
   else
     alias $1
-    if [ $? -ne 0 ]; then; which $1; fi
+    if [[ $? -ne 0 ]]; then; which $1; fi
   fi
 }
 alias wh='which'
@@ -89,7 +89,7 @@ alias tl='tmux ls'
 alias td='tmux detach'
 alias kt='killall tmux'
 t() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     tmux-start
   else
     tmux "$@"
@@ -108,14 +108,14 @@ tmux-new-unnamed-session() {
   tmux new -s $i
 }
 tn() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     tmux new
   else
     tmux new -s $1
   fi
 }
 tk() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     tmux kill-session
   else
     for session in "$@"; do
@@ -124,16 +124,16 @@ tk() {
   fi
 }
 ta() {
-  if [ $# -eq 0 ]; then; tmux attach; fi
+  if [[ $# -eq 0 ]]; then; tmux attach; fi
 
-  if [ -z $TMUX ]; then
+  if [[ -z $TMUX ]]; then
     tmux attach -t "=$1"
   else
     tmux switch -t "=$1"
   fi
 }
 ts() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     tmux start-server \; source ~/.tmux.conf
     return
   fi
@@ -149,11 +149,11 @@ tgo() {
   ta go
 }
 to() {
-  if [ $# -ne 1 ]; then; return; fi
+  if [[ $# -ne 1 ]]; then; return; fi
   ta $1 2> /dev/null && return
 
   local session_file=~/.tmux/sessions/$1.conf
-  if [ -f $session_file ]; then
+  if [[ -f $session_file ]]; then
     ts $1
   else
     tmux new -d -s $1
@@ -211,7 +211,7 @@ ex() {
   [ $# -eq 0 ] && return
   local git_repo=$(git-repo $1)
   cd ~/c/tmp
-  if [ -d $git_repo ]; then
+  if [[ -d $git_repo ]]; then
     cd $git_repo
     v.
   else
@@ -223,7 +223,7 @@ alias gm="git merge"
 alias gm-="git merge -"
 alias gmabort="git merge --abort"
 gcm() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     git checkout master
   else
     gc -m "$*"
@@ -235,7 +235,7 @@ gcem() { gc --allow-empty -m "$*" }
 alias gclean="git clean -fd"
 alias grhhc="grhh && gclean"
 gd() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     gd HEAD
   else
     git diff "$@" | format-git-diff | eval $GIT_PAGER
@@ -316,21 +316,21 @@ alias gignored="git ignored"
 alias gp='git push'
 alias gpf="gp -f"
 gpu() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     gp -u origin $(current-git-branch)
   else
     gp -u "$@"
   fi
 }
 gpuf() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     gp -u -f origin $(current-git-branch)
   else
     gp -u -f "$@"
   fi
 }
 gpd() {
-  if [ $# -eq 0 ]; then
+  if [[ $# -eq 0 ]]; then
     gp -d origin $(current-git-branch)
   else
     gp -d "$@"
@@ -346,12 +346,12 @@ ggo() {
   gcm
 }
 gback() {
-  if [ -e '.git/previous_branch' ]; then
+  if [[ -e '.git/previous_branch' ]]; then
     gco $(cat .git/previous_branch)
     rm .git/previous_branch
   fi
   last_commit_message=$(git log -1 --pretty=%B)
-  if [ $last_commit_message = 'current work' ]; then; grh^; fi
+  if [[ $last_commit_message == 'current work' ]]; then; grh^; fi
   unset last_commit_message
 }
 alias gcurr='gaacm "current work"'
@@ -537,7 +537,7 @@ alias weather='curl wttr.in'
 
 # Fzf
 j() {
-  if [ $# -gt 0 ]; then
+  if [[ $# -gt 0 ]]; then
     # _z "$@"
     # cd "$(_z -l 2>&1 | fzf -f "$*" | sort -nr | head -n 1 | sed 's/^[0-9,.]* *//')"
     cd "$(_z -l 2>&1 | fzf -f "$*" | head -n 1 | sed 's/^[0-9,.]* *//')"
@@ -564,7 +564,7 @@ fgl() (
 )
 fkill() {
   local pids=$(ps -f -u $USER | sed 1d | fzf --multi | tr -s '[:blank:]' | cut -d' ' -f3)
-  if [ -n "$pids" ]; then
+  if [[ -n "$pids" ]]; then
     echo "$pids" | xargs kill -9 "$@"
   fi
 }
@@ -575,7 +575,7 @@ flog() {
       --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
       xargs -I@ sh -c 'git show --color=always @'"
   )
-  if [ -n "$commits" ]; then
+  if [[ -n "$commits" ]]; then
     local hashes=$(printf "$commits" | cut -d' ' -f2 | tr '\n' ' ')
     git show $hashes
   fi
@@ -596,16 +596,16 @@ alias bo='bundle open'
 alias bi='bundle install'
 alias bu='bundle update'
 rails() {
-  if [ -e 'bin/rails' ]; then bin/rails "$@"; else command rails "$@"; fi
+  if [[ -e 'bin/rails' ]]; then bin/rails "$@"; else command rails "$@"; fi
 }
 rake() {
-  if [ -e 'bin/rake' ]; then bin/rake "$@"; else command rake "$@"; fi
+  if [[ -e 'bin/rake' ]]; then bin/rake "$@"; else command rake "$@"; fi
 }
 rspec() {
-  if [ -e 'bin/rspec' ]; then bin/rspec "$@"; else command rspec "$@"; fi
+  if [[ -e 'bin/rspec' ]]; then bin/rspec "$@"; else command rspec "$@"; fi
 }
 spring() {
-  if [ -e 'bin/spring' ]; then bin/spring "$@"; else command spring "$@"; fi
+  if [[ -e 'bin/spring' ]]; then bin/spring "$@"; else command spring "$@"; fi
 }
 alias r='rails'
 alias rs='rails server'
@@ -634,9 +634,9 @@ alias irb='pry'
 alias pr='powder restart'
 fs() {
   local options=''
-  if [ -e '.env' ]; then; options='-e .env'; fi
-  if [ -e '.env.local' ]; then; options="$options,.env.local"; fi
-  if [ -e 'Procfile.dev' ]; then; options="$options -f Procfile.dev"; fi
+  if [[ -e '.env' ]]; then; options='-e .env'; fi
+  if [[ -e '.env.local' ]]; then; options="$options,.env.local"; fi
+  if [[ -e 'Procfile.dev' ]]; then; options="$options -f Procfile.dev"; fi
   eval "foreman start $options $@"
 }
 rgsq() {
