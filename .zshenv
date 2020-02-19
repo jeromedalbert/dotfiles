@@ -66,9 +66,7 @@ alias cmd='command'
 
 # Confs
 alias reload='. ~/.zshrc; . ~/.zshenv'
-alias rel='reload'
-alias rl='rel'
-alias re='rel'
+alias rl='reload'
 alias conf="$MAIN_EDITOR ~/.zshrc"
 
 # Zsh
@@ -251,7 +249,8 @@ alias gdc="gd --cached"
 alias gdh="gd HEAD"
 alias "gdh^"="gd 'HEAD^'"
 alias glog="git log"
-alias glo="git log --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias glo="git log --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias glod="glo --date=human --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
@@ -397,6 +396,7 @@ alias hf="hub fork"
 alias hcr="hub create"
 alias gpuhc='gpu && hc'
 alias gpfhc='gpf && hc'
+alias gpufhc='gpuf && hc'
 
 # Docker
 alias d='docker'
@@ -467,6 +467,7 @@ publicip() {
 iploc() {
   curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
 }
+alias ipl='iploc'
 alias whereami='iploc'
 alias public-ip='publicip'
 alias geoip='iploc'

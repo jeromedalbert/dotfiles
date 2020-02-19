@@ -72,6 +72,7 @@ Plug 'romainl/vim-cool'
 " Plug 'haya14busa/is.vim'
 " Plug 'osyo-manga/vim-anzu'
 Plug 'psliwka/vim-smoothie'
+" Plug 'chrisbra/csv.vim'
 call plug#end()
 
 let g:CoolTotalMatches = 1
@@ -114,6 +115,7 @@ noremap! <c-e> <end>
 noremap! <c-b> <left>
 noremap! <c-f> <right>
 noremap! <c-d> <del>
+snoremap <c-d> <del>
 inoremap <c-k> <c-o>D
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cnoremap <c-p> <up>
@@ -147,6 +149,7 @@ noremap <c-l> gt
 noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :silent! tabclose<cr>
+map <silent> <leader>tq <leader>tc
 noremap <silent> <leader>to :silent! tabonly<cr>
 noremap <silent> <leader>t3 :tabnew #<cr>
 noremap <silent> <leader>tn <c-w>T
@@ -926,11 +929,6 @@ let g:jsx_ext_required = 0
 let g:test#strategy = 'custom'
 let g:test#no_alternate = 1
 
-let g:angry_disable_maps = 1
-let g:incsearch#auto_nohlsearch = 1
-let g:gundo_help = 0
-let g:netrw_altfile = 1
-
 let g:projectionist_heuristics = {
   \  '*': {
   \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
@@ -961,6 +959,12 @@ call textobj#user#plugin('conflict', {
   \    'select-a' : 'ax', '*select-a-function*' : 'textobj#conflict#select_a',
   \  }
   \ })
+
+let g:angry_disable_maps = 1
+let g:incsearch#auto_nohlsearch = 1
+let g:gundo_help = 0
+let g:netrw_altfile = 1
+let g:csv_delim_test = ',;|'
 
 "#################
 "### Functions ###
@@ -1188,6 +1192,7 @@ function! RefreshNERDTree()
 endfunction
 
 function! NERDTreeCD()
+  exe 'cd ' . g:NERDTreeFileNode.GetSelected().path.str()
   call g:NERDTreeFileNode.GetSelected().path.changeToDir()
   call nerdtree#ui_glue#chRootCwd()
 endfunction
@@ -2583,6 +2588,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.env*,Procfile*,*.config set ft=conf
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
   autocmd BufRead,BufNewFile *.apib set ft=markdown
+  autocmd BufRead,BufNewFile Dockerfile* set ft=dockerfile
 augroup end
 
 augroup detect_binary_files

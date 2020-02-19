@@ -26,3 +26,7 @@ end
 def bm(&block)
   Benchmark.realtime(&block)
 end
+
+def explain(query)
+  puts ActiveRecord::Base.connection.execute("explain analyze #{query.to_sql}").values
+end

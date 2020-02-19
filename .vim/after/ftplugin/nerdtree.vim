@@ -9,5 +9,6 @@ nnoremap <silent><buffer> <esc> :call EscapeNERDTree()<cr>
 nnoremap <silent><buffer> <leader>q :call QuitNERDTree()<cr>
 nnoremap <silent><buffer> cd :call NERDTreeCD()<cr>
 
-map <buffer> ? <Plug>(incsearch-backward)
-" nnoremap <silent><buffer> <m-?> :call nerdtree#ui_glue#invokeKeyMap("?")<cr>
+noremap <buffer> ? ?
+" map <buffer> ? <Plug>(incsearch-backward)
+noremap <silent><buffer> <m-?> :call nerdtree#ui_glue#invokeKeyMap("?")<cr>
