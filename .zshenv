@@ -464,12 +464,14 @@ publicip() {
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
+alias public-ip='publicip'
+alias remoteip='publicip'
+alias remote-ip='publicip'
 iploc() {
   curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
 }
 alias ipl='iploc'
 alias whereami='iploc'
-alias public-ip='publicip'
 alias geoip='iploc'
 alias res="system_profiler SPDisplaysDataType | grep Resolution"
 function cdf() {
