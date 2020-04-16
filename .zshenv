@@ -242,6 +242,7 @@ gd() {
 format-git-diff() {
   sed -r "s/^([^-+ ]*)[-+ ]/\\1/"
 }
+alias gdiff='git diff'
 gsh() {
   git show "$@" | format-git-diff | eval $GIT_PAGER
 }
