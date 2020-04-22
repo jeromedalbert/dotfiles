@@ -825,11 +825,25 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_html_enabled_makers = []
 let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_zsh_enabled_makers = ['zsh']
+let g:neomake_ruby_mri_maker = {
+  \ 'exe': 'ruby',
+  \ 'args': ['-c', '-w'],
+  \ 'output_stream': 'both',
+  \ 'errorformat': '%-G%\m%.%#warning: %\%%(possibly %\)%\?useless use of == in void context,' .
+  \   '%-G%\%.%\%.%\%.%.%#,' .
+  \   '%-GSyntax OK,'.
+  \   '%E%f:%l: syntax error\, %m,'.
+  \   '%Z%p^,'.
+  \   '%W%f:%l: warning: %m,'.
+  \   '%Z%p^,'.
+  \   '%W%f:%l: %m,'.
+  \   '%-C%.%#'
+  \ }
 let g:neomake_ruby_rubocop_maker = {
-    \ 'args': ['--format', 'emacs', '--force-exclusion', '--display-cop-names'],
-    \ 'errorformat': '%f:%l:%c: %t: %m,%E%f:%l: %m',
-    \ 'postprocess': function('neomake#makers#ft#ruby#RubocopEntryProcess')
-    \ }
+  \ 'args': ['--format', 'emacs', '--force-exclusion', '--display-cop-names'],
+  \ 'errorformat': '%f:%l:%c: %t: %m,%E%f:%l: %m',
+  \ 'postprocess': function('neomake#makers#ft#ruby#RubocopEntryProcess')
+  \ }
 
 let g:mta_filetypes = {
   \ 'html': 1,
@@ -943,7 +957,8 @@ let g:projectionist_heuristics = {
 let g:increment_activator_filetype_candidates = {
   \  '_': [
   \    ['asc', 'desc'],
-  \    ['enable', 'disable']
+  \    ['enable', 'disable'],
+  \    ['private', 'public']
   \  ],
   \ 'rspec': [
   \    ['build', 'create']
