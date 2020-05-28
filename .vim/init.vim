@@ -99,6 +99,9 @@ noremap <silent> <leader><esc> <nop>
 noremap <silent> <leader>`q :cq<cr>
 noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
 
+inoremap <up> <c-p>
+inoremap <down> <c-n>
+
 noremap! <c-a> <home>
 noremap! <c-e> <end>
 noremap! <c-b> <left>
