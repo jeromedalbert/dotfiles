@@ -163,6 +163,7 @@ to() {
 alias gi='git init'
 alias ginit='git init'
 alias gl='git pull --rebase --prune'
+alias glall='ls | xargs -P10 -I{} git -C {} pull --rebase --prune'
 alias gs='git status'
 alias gc='git commit'
 alias ga='git add'
@@ -374,8 +375,8 @@ alias gsa='git submodule add'
 git-remove-submodule() {
   local submodule="$@"
   git submodule deinit -f $submodule
-  git rm -f $submodule
   rm -rf .git/modules/$submodule
+  git rm -f $submodule
 }
 alias gsr='git-remove-submodule'
 alias grev='git revert'
@@ -398,6 +399,7 @@ alias hcr="hub create"
 alias gpuhc='gpu && hc'
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
+alias gphc='gp && hc'
 
 # Docker
 alias d='docker'
@@ -601,6 +603,8 @@ alias bi='bundle install'
 alias bu='bundle update'
 rails() {
   if [[ -e 'bin/rails' ]]; then bin/rails "$@"; else command rails "$@"; fi
+
+  if [[ $? -eq 0 && $1 == 'new' ]]; then; cd $2; fi
 }
 rake() {
   if [[ -e 'bin/rake' ]]; then bin/rake "$@"; else command rake "$@"; fi
@@ -634,6 +638,8 @@ alias zc='zeus c'
 alias debug='pry-remote'
 alias st='spring stop'
 alias strc='st && rc'
+alias stt='spring status'
+alias sts='stt'
 alias irb='pry'
 alias pr='powder restart'
 fs() {
@@ -730,7 +736,13 @@ alias ke='kube env'
 alias kp='kube pods'
 
 # Brew
-alias brupd='brew update'
+brupd() {
+  if [[ $# -eq 0 ]]; then
+    brew update
+  else
+    brew upgrade "$*"
+  fi
+}
 alias brupg='brew upgrade'
 alias brupgr='brupg'
 alias brins='brew install'

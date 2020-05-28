@@ -62,6 +62,8 @@ setopt hup
 setopt long_list_jobs
 setopt notify
 
+unsetopt nomatch
+
 autoload -U compinit
 compinit
 zstyle ':completion:*' menu select

@@ -99,17 +99,6 @@ noremap <silent> <leader><esc> <nop>
 noremap <silent> <leader>`q :cq<cr>
 noremap <silent> <leader>`w :w !sudo tee % > /dev/null<cr>
 
-noremap <up> <nop>
-noremap <down> <nop>
-noremap <left> <nop>
-noremap <right> <nop>
-noremap <del> <nop>
-noremap! <up> <nop>
-noremap! <down> <nop>
-noremap! <left> <nop>
-noremap! <right> <nop>
-noremap! <del> <nop>
-
 noremap! <c-a> <home>
 noremap! <c-e> <end>
 noremap! <c-b> <left>
@@ -118,8 +107,6 @@ noremap! <c-d> <del>
 snoremap <c-d> <del>
 inoremap <c-k> <c-o>D
 cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
-cnoremap <c-p> <up>
-cnoremap <c-n> <down>
 cmap <m-A> <c-a>
 cmap <m-E> <c-e>
 
@@ -138,7 +125,7 @@ noremap <silent> <m-v> :vnew<cr>
 noremap <silent> <m-V> :vsplit<cr>
 noremap <silent> <m-s> :new<cr>
 noremap <silent> <m-S> :split<cr>
-noremap <silent> <c-n> <esc>:tabnew<cr>
+noremap <silent> <down> <esc>:tabnew<cr>
 
 noremap <silent> <m-q> :q<cr>
 for tab_number in [1, 2, 3, 4, 5, 6, 7, 8]
@@ -249,6 +236,7 @@ noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <silent> <leader>rd :e config/database.yml<cr>
 noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
 noremap <silent> <leader>rb obinding.pry<esc>
+noremap <silent> <leader>rp /^\s*\(private\\|protected\)<cr>^
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -271,7 +259,7 @@ noremap <silent> '' :call DisplayRegisters()<cr>
 noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
 
-noremap <silent> <c-p> :silent call BrowseFiles()<cr>
+noremap <silent> <up> :silent call BrowseFiles()<cr>
 noremap <silent> <leader>i :silent call BrowseBufferTags()<cr>
 noremap <silent> <m-P> :silent call BrowseAllTags()<cr>
 noremap <silent> <m-space> :silent call BrowseDirectoryFiles()<cr>
@@ -645,8 +633,8 @@ endif
 
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
-let g:ruby_host_prog = '~/.asdf/shims/neovim-ruby-host'
-let g:node_host_prog = '~/.asdf/installs/nodejs/8.9.4/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
+let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/12.16.3/lib/node_modules/neovim/bin/cli.js'
 let g:clipboard = {
   \ 'name': 'pbcopy',
   \ 'copy': {
@@ -2057,9 +2045,6 @@ function! CreateBufferMappings()
     nnoremap <buffer> d0 d^
     nmap <buffer> ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
     nmap <buffer> dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-    map <buffer> m, mO
-    map <buffer> `, `O
-    map <buffer> ', `O
   endif
   let b:buffer_mappings_created = 1
 endfunction
