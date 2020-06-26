@@ -619,6 +619,7 @@ alias r='rails'
 alias rs='rails server'
 alias rg='rails generate'
 alias rgm='rails generate migration'
+alias rgs='rails generate scaffold'
 alias rdm='rails destroy migration'
 alias rd='rails destroy'
 alias rc='rails c'
@@ -648,11 +649,6 @@ fs() {
   if [[ -e '.env.local' ]]; then; options="$options,.env.local"; fi
   if [[ -e 'Procfile.dev' ]]; then; options="$options -f Procfile.dev"; fi
   eval "foreman start $options $@"
-}
-rgsq() {
-  rg scaffold "$@" \
-    --no-assets --no-helper --no-serializer --no-controller-specs \
-    --no-view-specs --no-routing-specs --no-request-specs --no-model-specs
 }
 alias rru='rails runner'
 alias rhash='asdf reshim ruby'
@@ -769,3 +765,4 @@ alias bcuni='bcun'
 # alias bcs='brew cask search'
 alias bcl='brew cask list'
 alias bcls='bcl'
+alias brsl='brew services list'

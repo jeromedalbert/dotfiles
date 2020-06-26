@@ -239,7 +239,7 @@ noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <silent> <leader>rd :e config/database.yml<cr>
 noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
 noremap <silent> <leader>rb obinding.pry<esc>
-noremap <silent> <leader>rp /^\s*\(private\\|protected\)<cr>^
+noremap <silent> <leader>rp /^\s*\(private\\|protected\)$<cr>^
 
 "######################################
 "### Plugins/functions key mappings ###
@@ -1737,15 +1737,13 @@ function! OnGoyoLeave()
 endfunction
 
 function! SetVirtualEdit()
-  python import vim
-  let absolute_col = virtcol('.') + pyeval('vim.current.window.col')
-  let absolute_col += &foldcolumn + (&number ? &numberwidth : 0)
-  let is_on_leftmost_screen = screencol() == absolute_col
+  let saved_view = winsaveview()
+  keepjumps normal! g0
+  let is_on_leftmost_screen = col('.') == 1
+  call winrestview(saved_view)
 
   if is_on_leftmost_screen
-    setlocal virtualedit=
-  else
-    setlocal virtualedit=all
+    set virtualedit=
   endif
 endfunction
 
@@ -2448,7 +2446,6 @@ function! LazyLoadMTA(...)
 endfunction
 
 function! LazyLoadSlowCode()
-  python import vim
   if has('nvim')
     call plug#load('deoplete.nvim')
     autocmd! lazy_load_deoplete
