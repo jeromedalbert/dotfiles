@@ -257,8 +257,6 @@ xnoremap <expr> j Jumpable('gj')
 
 nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
 
-noremap <silent> '' :call DisplayRegisters()<cr>
-
 noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
 
@@ -1043,21 +1041,6 @@ function! ClearMessages(...)
   endif
 endfunction
 
-function! DisplayRegisters()
-  redir => output
-  silent exe 'reg "0123456789'
-  redir END
-  new
-  silent file [Registers]
-  setlocal nonumber norelativenumber colorcolumn=
-  setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
-  silent put =output
-  silent normal gg"_d2j
-  exe 'resize' . line('$')
-  map <silent><buffer> q :q<cr>
-  map <silent><buffer> <esc> q
-endfunction
-
 function! ShowHighlightsUnderCursor()
   if !exists("*synstack")
     return
@@ -1345,7 +1328,6 @@ endfunction
 function! OnTestDisplayed()
   noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
   map <silent><buffer> <esc> <leader>q
-  map <silent><buffer> q <esc>
   noremap <silent><buffer> o :call OpenErrorFile(1)<cr>
   noremap <silent><buffer> <cr> :call OpenErrorFile(0)<cr>
   map <silent><buffer> i <cr>
@@ -2061,10 +2043,17 @@ function! ConfigureLargeBuffers()
   else
     set lazyredraw
   endif
+  let file = expand('%')
+
+  let large_file_in_bytes = 100 * 1024 * 1024 " 100 MB
+  if getfsize(file) > large_file_in_bytes
+    setl eventignore=all
+    setl undolevels=-1
+    setl syntax=off
+  endif
 
   if (!has('nvim') || &syntax == '') | return | endif
   let b:tempfile = ''
-  let file = expand('%')
   if file == ''
     let b:tempfile = tempname()
     call writefile(getbufline('%', 1, '$'), b:tempfile)
@@ -2469,7 +2458,6 @@ endfunction
 function! OnCmdwinEnter()
   setlocal nonumber norelativenumber colorcolumn=
   nnoremap <silent><buffer> <esc> :q<cr>
-  nnoremap <silent><buffer> q :q<cr>
 endfunction
 
 function! OnTermOpen()

@@ -29,7 +29,7 @@ v() {
     $VIM_EDITOR "$@"
   fi
 }
-alias v.="v ."
+alias v.='v .'
 alias vi=v
 alias vi.=v.
 alias vim=v

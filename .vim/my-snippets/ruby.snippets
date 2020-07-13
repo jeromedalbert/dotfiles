@@ -352,3 +352,17 @@ task ${1:task_name}: :environment do
 end
 endsnippet
 
+snippet rev "reversible do .. end"
+reversible do |dir|
+	dir.${1:up} { ${0} }
+end
+endsnippet
+
+snippet revv "reversible do .. end"
+reversible do |dir|
+	dir.${1:up} do
+		${0}
+	end
+end
+endsnippet
+
