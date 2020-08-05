@@ -348,3 +348,6 @@ hi link NERDTreeDirSlash NERDTreeDir
 
 hi link graphqlConstant NONE
 hi link graphqlOperator NONE
+
+hi link sqlKeyword Keyword
+hi link sqlSpecial Boolean

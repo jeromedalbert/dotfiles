@@ -67,11 +67,11 @@ Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
+Plug 'psliwka/vim-smoothie'
 Plug 'romainl/vim-cool'
 " Plug 'haya14busa/incsearch.vim'
 " Plug 'haya14busa/is.vim'
 " Plug 'osyo-manga/vim-anzu'
-Plug 'psliwka/vim-smoothie'
 " Plug 'chrisbra/csv.vim'
 call plug#end()
 
@@ -305,7 +305,8 @@ xnoremap <silent> <leader>fja :!js-beautify -s 2<cr>
 noremap <silent> <leader>fh :silent %!tidy -qi
   \ --show-errors 0 --force-output yes --tidy-mark no --wrap 0 --doctype omit<cr>
 noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
-" https://github.com/beautify-web/js-beautify
+noremap <silent> <leader>fs :set filetype=sql<cr>:%!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>:%s/"/<cr>
+xnoremap <silent> <leader>fs :!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>
 noremap <silent> <leader>fo :copen<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl

@@ -63,6 +63,23 @@ al() {
 }
 alias wh='which'
 alias cmd='command'
+prepend() {
+  local text_to_prepend="$1"
+  local file=$2
+  local tmp_file="tmp_$file"
+
+  echo "Prepend\n"
+  echo "$text_to_prepend\n"
+  read -q "answer?to $file? "
+  echo "\n"
+  if [[ $answer != "y" ]]; then; return; fi
+
+  echo 'Prepending...'
+  echo $text_to_prepend > $tmp_file
+  cat $file >> $tmp_file
+  mv $tmp_file $file
+  echo 'Done'
+}
 
 # Confs
 alias reload='. ~/.zshrc; . ~/.zshenv'
@@ -290,8 +307,7 @@ alias gcon="git rebase --continue"
 alias gaacon="gaa && gcon"
 alias gabort="git rebase --abort"
 alias gsk="git rebase --skip"
-alias gb='git branch'
-alias gbso='git branch --sort=-committerdate'
+alias gb='git branch --sort=-committerdate'
 alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gcs="git checkout sav"
 alias gbd="git branch -d"
@@ -524,12 +540,23 @@ alias pw='mkpw'
 alias fd='fd --type f'
 alias cpng='curl -s http://127.0.0.1:4040/status | grep -P "https://.*?ngrok.io" -oh | tr -d "\n" | pbcopy'
 alias ngcp='cpng'
-tess() { tesseract $1 stdout | tee >(pbcopy) }
+tess() {
+  local file=$1
+  if [[ -z $file ]]; then
+    file=$(ls -dt ~/Desktop/* | head -n 1)
+  fi
+
+  tesseract $file stdout | tee >(pbcopy)
+}
 gq() {
   local escaped_query=$(printf "%q" ${@: -1})
   curl -X POST -H 'Content-Type: application/json' $1 -d "{ \"query\": \"$escaped_query\" }"
 }
 alias pj='pbpaste | jq .'
+parsecron() {
+  ruby -e "require 'cronex'; puts Cronex::ExpressionDescriptor.new('$1').description" \
+    | tee >(pbcopy)
+}
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
