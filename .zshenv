@@ -411,6 +411,7 @@ alias hc-='hc $(git-branch-previous)'
 alias hb="hub browse"
 alias hp="hub pr show"
 alias hf="hub fork"
+alias fork="hub fork"
 alias hcr="hub create"
 alias gpuhc='gpu && hc'
 alias gpfhc='gpf && hc'

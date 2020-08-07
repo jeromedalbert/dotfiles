@@ -434,6 +434,7 @@ command! RestorePlugSnapshot source ~/.vim/.plug_snapshot.vim
 command! Profile call Profile()
 command! Lint call LazyLint()
 command! -range=0 FocusSelection call FocusSelection(<count>)
+command! -nargs=? Wd call WriteDesktop(<q-args>)
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -449,6 +450,7 @@ cabbrev grm Grm
 cabbrev prof Profile
 cabbrev gmo GemOpen
 cabbrev focus FocusSelection
+cabbrev wd Wd
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -2543,6 +2545,12 @@ onoremap <silent> <Plug>MoveNextAroundIndent V:<c-u>call MoveAroundIndent(1)<cr>
 nnoremap <silent> <Plug>MovePreviousAroundIndent :<c-u>call MoveAroundIndent(0)<cr>
 vnoremap <silent> <Plug>MovePreviousAroundIndent :call MoveAroundIndent(0, 1)<cr>
 onoremap <silent> <Plug>MovePreviousAroundIndent V:<c-u>call MoveAroundIndent(0)<cr>
+
+function! WriteDesktop(filename)
+  let filename = a:filename
+  if filename == '' | let filename = 'tmp.txt' | endif
+  exe 'w ~/Desktop/' . filename
+endfunction
 
 "####################
 "### Autocommands ###
