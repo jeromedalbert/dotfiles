@@ -9,6 +9,7 @@
 .rspec-local
 .ignore
 .my-snippets
+.*@neomake_*
 
 tags
 zeus.json

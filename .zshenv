@@ -490,7 +490,6 @@ alias remote-ip='publicip'
 iploc() {
   curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
 }
-alias ipl='iploc'
 alias whereami='iploc'
 alias geoip='iploc'
 alias res="system_profiler SPDisplaysDataType | grep Resolution"

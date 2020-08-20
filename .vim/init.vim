@@ -141,7 +141,6 @@ noremap <silent> <m-{> :-tabmove<cr>
 noremap <silent> <leader>tc :silent! tabclose<cr>
 map <silent> <leader>tq <leader>tc
 noremap <silent> <leader>to :silent! tabonly<cr>
-noremap <silent> <leader>t3 :tabnew #<cr>
 noremap <silent> <leader>tn <c-w>T
 
 noremap <leader>e :e $MYVIMRC<cr>
@@ -206,6 +205,9 @@ cabbrev ne new
 cabbrev sn new
 cabbrev hn new
 cabbrev v# vnew #
+cabbrev v3 vnew #
+cabbrev t# tabnew #
+cabbrev t3 tabnew #
 
 noremap zs zt
 noremap z0 zs
@@ -307,6 +309,7 @@ noremap <silent> <leader>fh :silent %!tidy -qi
 noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 noremap <silent> <leader>fs :set filetype=sql<cr>:%!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>:%s/"/<cr>
 xnoremap <silent> <leader>fs :!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>
+noremap <silent> <leader>fg :set filetype=graphql<cr>$x0df":%s/↵/\r<cr>dd
 noremap <silent> <leader>fo :copen<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
