@@ -369,6 +369,7 @@ cnoremap <c-g> <end><space>-G ''<space><left><left>
 " noremap <leader>fo :Gqfopen<cr>
 
 noremap <leader>ytd :call ToggleDiff()<cr>
+map <silent> <leader>yb <Plug>BreakCall
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -438,6 +439,8 @@ command! Profile call Profile()
 command! Lint call LazyLint()
 command! -range=0 FocusSelection call FocusSelection(<count>)
 command! -nargs=? Wd call WriteDesktop(<q-args>)
+command! -nargs=? Mksession call MakeSession(<q-args>)
+command! -nargs=? Ldsession call LoadSession(<q-args>)
 
 cabbrev plugi PlugInstall
 cabbrev plugc PlugClean
@@ -454,6 +457,10 @@ cabbrev prof Profile
 cabbrev gmo GemOpen
 cabbrev focus FocusSelection
 cabbrev wd Wd
+cabbrev mksession Mksession
+cabbrev mks Mksession
+cabbrev ldsession Ldsession
+cabbrev lds Ldsession
 
 xnoremap @ :<C-u>call ExecuteMacroOnSelection()<cr>
 xnoremap <leader>2 :<C-u>call ExecuteMacroOnSelection()<cr>
@@ -1626,15 +1633,19 @@ function! OpenMarkdownPreview() abort
     \ )
 endfunction
 
-function! MakeSession()
-  exe ':silent SaveSession! ' . GetProjectName()
-  echo 'Session saved.'
+function! MakeSession(session_name)
+  let session_name = a:session_name
+  if session_name == '' | let session_name = GetProjectName() | endif
+  exe ':silent SaveSession! ' . session_name
+  echo 'Session "' . session_name . '" saved.'
 endfunction
 
-function! LoadSession()
+function! LoadSession(session_name)
   silent! NERDTreeClose
-  exe ':silent OpenSession ' . GetProjectName()
-  echo 'Session loaded.'
+  let session_name = a:session_name
+  if session_name == '' | let session_name = GetProjectName() | endif
+  exe ':silent OpenSession ' . session_name
+  echo 'Session "' . session_name . '" loaded.'
 endfunction
 
 function! HighlightOccurencesVerb(type)
@@ -1841,6 +1852,12 @@ function! Join(count) abort
   silent! call repeat#set("\<Plug>Join", a:count)
 endfunction
 nnoremap <silent> <Plug>Join :<c-u>call Join(v:count1)<cr>
+
+function! BreakCall(count) abort
+  exe "normal! f.i\<cr>\<esc>l"
+  silent! call repeat#set("\<Plug>BreakCall", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakCall :<c-u>call BreakCall(v:count1)<cr>
 
 function! MoveToQuarterScreen()
   normal zs
