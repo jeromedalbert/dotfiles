@@ -14,8 +14,24 @@ snippet sheb "#!/usr/bin/env ruby" b
 ${0}
 endsnippet
 
-snippet -> "-> (e) { .. }" w
--> (${1:e}) { ${0} }
+# snippet -> "-> { .. }" w
+# ->${1} { ${0} }
+# endsnippet
+
+snippet -> "-> { .. }" w
+-> { ${0} }
+endsnippet
+
+# snippet ->> "-> { .. } multiline" w
+# -> {
+# 	${0}
+# }
+# endsnippet
+
+snippet ->> "-> { .. } multiline" w
+-> {
+	${0}
+}
 endsnippet
 
 snippet all "all? { |e| .. }" w
@@ -370,5 +386,11 @@ snippet tran "ActiveRecord::Base.transaction do .. end"
 ActiveRecord::Base.transaction do
 	${0}
 end
+endsnippet
+
+snippet scope "scope :scope, -> { .. }"
+scope :${1:scope}, -> {
+	${0}
+}
 endsnippet
 

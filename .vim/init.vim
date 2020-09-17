@@ -216,6 +216,7 @@ noremap z<Space> za
 
 noremap <leader>ytw :setl wrap!<cr>
 noremap <leader>ytl :setl number!<cr>:setl relativenumber!<cr>
+noremap <leader>yts :windo set scrollbind!<cr>
 
 noremap <silent> <m-_> :let t:zoomed=1<cr><c-w>10>
 noremap <silent> <m-)> :let t:zoomed=1<cr><c-w>10<
@@ -369,7 +370,10 @@ cnoremap <c-g> <end><space>-G ''<space><left><left>
 " noremap <leader>fo :Gqfopen<cr>
 
 noremap <leader>ytd :call ToggleDiff()<cr>
-map <silent> <leader>yb <Plug>BreakCall
+map <silent> <leader>yb. <Plug>BreakDot
+map <silent> <leader>yb, <Plug>BreakComma
+map <silent> <leader>yb' <Plug>BreakSingleQuote
+map <silent> <leader>yb" <Plug>BreakDoubleQuote
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -392,8 +396,8 @@ noremap <silent> <leader>oG V:<c-u>call OpenCurrentFileInGithub(1)<cr>
 xnoremap <silent> <leader>oG :<c-u>call OpenCurrentFileInGithub(1)<cr>
 noremap <silent> <leader>ou :call ReadUndoFile()<cr>:GundoToggle<cr>
 
-noremap <leader>yq :call MakeSession()<cr>:qa!<cr>
-noremap <leader>yl :call LoadSession()<cr>
+noremap <leader>yq :call MakeSession('')<cr>:qa!<cr>
+noremap <leader>yl :call LoadSession('')<cr>
 
 nmap <silent> <leader>h <leader>yghiw
 nmap <silent> <leader>H <leader>yhiW
@@ -1853,11 +1857,33 @@ function! Join(count) abort
 endfunction
 nnoremap <silent> <Plug>Join :<c-u>call Join(v:count1)<cr>
 
-function! BreakCall(count) abort
+function! BreakDot(count) abort
   exe "normal! f.i\<cr>\<esc>l"
-  silent! call repeat#set("\<Plug>BreakCall", a:count)
+  silent! call repeat#set("\<Plug>BreakDot", a:count)
 endfunction
-nnoremap <silent> <Plug>BreakCall :<c-u>call BreakCall(v:count1)<cr>
+nnoremap <silent> <Plug>BreakDot :<c-u>call BreakDot(v:count1)<cr>
+
+function! BreakComma(count) abort
+  exe "normal! f,li\<cr>\<esc>l"
+  silent! call repeat#set("\<Plug>BreakComma", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakComma :<c-u>call BreakComma(v:count1)<cr>
+
+function! BreakSingleQuote(count) abort
+  call BreakQuote("'")
+  silent! call repeat#set("\<Plug>BreakSingleQuote", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakSingleQuote :<c-u>call BreakSingleQuote(v:count1)<cr>
+
+function! BreakDoubleQuote(count) abort
+  call BreakQuote('"')
+  silent! call repeat#set("\<Plug>BreakDoubleQuote", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakDoubleQuote :<c-u>call BreakDoubleQuote(v:count1)<cr>
+
+function! BreakQuote(char) abort
+  exe "normal! mCa" . a:char . " \\\<cr>" . a:char . "\<esc>`Cj"
+endfunction
 
 function! MoveToQuarterScreen()
   normal zs

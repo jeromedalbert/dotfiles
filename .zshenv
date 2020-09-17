@@ -53,14 +53,6 @@ alias wcl='wc -l'
 alias ct.='ctags -f .tags -R .'
 alias chx='chmod +x'
 ed() { command ed -p '*' "$@" }
-al() {
-  if [[ $# -eq 0 ]]; then
-    $MAIN_EDITOR ~/.zshenv
-  else
-    alias $1
-    if [[ $? -ne 0 ]]; then; which $1; fi
-  fi
-}
 alias wh='which'
 alias cmd='command'
 prepend() {
@@ -82,9 +74,18 @@ prepend() {
 }
 
 # Confs
+al() {
+  if [[ $# -eq 0 ]]; then
+    $MAIN_EDITOR ~/.zshenv
+  else
+    alias $1
+    if [[ $? -ne 0 ]]; then; which $1; fi
+  fi
+}
+alias conf="$MAIN_EDITOR ~/.zshrc"
+alias sec="$MAIN_EDITOR ~/.secrets.zsh"
 alias reload='. ~/.zshrc; . ~/.zshenv'
 alias rl='reload'
-alias conf="$MAIN_EDITOR ~/.zshrc"
 
 # Zsh
 alias dirs='dirs -v'
@@ -653,12 +654,14 @@ alias rc='rails c'
 alias rcs='rails c --sandbox'
 alias rr='rake routes'
 alias rdb='rails db'
-alias mi1='rake db:migrate'
-alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
-alias mi='rake db:migrate db:rollback && mi2'
-alias ro1='rake db:rollback'
-alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
-alias ro='ro2'
+# alias mi1='rake db:migrate'
+# alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
+# alias mi='rake db:migrate db:rollback && mi2'
+alias mi='rake db:migrate'
+# alias ro1='rake db:rollback'
+# alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
+# alias ro='ro2'
+alias ro='rake db:rollback'
 alias rT='rake -T'
 alias zs='zeus start'
 alias zs!='rm -f .zeus.sock; zs'
