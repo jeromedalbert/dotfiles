@@ -265,11 +265,12 @@ alias gdiff='git diff'
 gsh() {
   git show "$@" | format-git-diff | eval $GIT_PAGER
 }
-alias gdc="gd --cached"
-alias gdh="gd HEAD"
+alias gdc='gd --cached'
+alias gdh='gd HEAD'
 alias "gdh^"="gd 'HEAD^'"
-alias glog="git log"
+alias glog='git log'
 alias glo="git log --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias gloa='glo --author=jerome'
 alias glod="glo --date=human --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER

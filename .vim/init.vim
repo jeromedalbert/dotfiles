@@ -69,13 +69,10 @@ Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
 Plug 'psliwka/vim-smoothie'
 Plug 'romainl/vim-cool'
-" Plug 'haya14busa/incsearch.vim'
-" Plug 'haya14busa/is.vim'
-" Plug 'osyo-manga/vim-anzu'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+if has('nvim') | Plug 'Xuyuanp/scrollbar.nvim' | endif
 " Plug 'chrisbra/csv.vim'
 call plug#end()
-
-let g:CoolTotalMatches = 1
 
 "############################
 "### General key mappings ###
@@ -113,9 +110,6 @@ cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cmap <m-A> <c-a>
 cmap <m-E> <c-e>
 
-" noremap <silent> <m-d> <c-d>
-" noremap <silent> <m-b> <c-b>
-" noremap <silent> <m-f> <c-f>
 map <silent> <m-d> <c-d>
 map <silent> <m-b> <c-b>
 map <silent> <m-f> <c-f>
@@ -178,6 +172,12 @@ noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
 noremap <silent> <leader>oq :copen<cr>
 
+" nnoremap n nzz
+" nnoremap N Nzz
+" nnoremap * *zz
+" nnoremap # #zz
+" nnoremap g* g*zz
+" nnoremap g# g#zz
 " noremap g; g;zz
 " noremap g, g,zz
 " noremap gi gi<c-o>zz
@@ -330,31 +330,6 @@ noremap <m-t> :call ToggleQuotes()<cr>
 inoremap <m-t> <c-o>:call ToggleQuotes()<cr>
 cnoremap <m-t> <c-e><c-w>"" <left><left>
 
-" map / <Plug>(incsearch-forward)
-" map ? <Plug>(incsearch-backward)
-" map <silent> n :call ClearMessages()<cr><Plug>(incsearch-nohl-n)<Plug>(anzu-n-with-echo)zz
-" map <silent> N :call ClearMessages()<cr><Plug>(incsearch-nohl-N)<Plug>(anzu-N-with-echo)zz
-" map * <Plug>(incsearch-nohl-*)<Plug>(anzu-star-with-echo)zz
-" map # <Plug>(incsearch-nohl-#)<Plug>(anzu-sharp-with-echo)zz
-
-" map n <Plug>(incsearch-nohl)<Plug>(anzu-n)zz
-" map N <Plug>(incsearch-nohl)<Plug>(anzu-N)zz
-" map * <Plug>(incsearch-nohl)<Plug>(anzu-star)zz
-" map # <Plug>(incsearch-nohl)<Plug>(anzu-sharp)zz
-
-" map g* <Plug>(incsearch-nohl-g*)zz
-" map g# <Plug>(incsearch-nohl-g#)zz
-
-" nnoremap n nzz
-" nnoremap N Nzz
-" nnoremap * *zz
-" nnoremap # #zz
-" nnoremap g* g*zz
-" nnoremap g# g#zz
-
-" map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
-" map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
-
 map <leader>; `]]<space>
 inoremap <m-J> <esc>O
 noremap <m-O> O<cr>
@@ -367,7 +342,6 @@ map <leader>fW <leader>yfiW
 xnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
-" noremap <leader>fo :Gqfopen<cr>
 
 noremap <leader>ytd :call ToggleDiff()<cr>
 map <silent> <leader>yb. <Plug>BreakDot
@@ -566,7 +540,6 @@ endif
 set termguicolors
 set guicursor=a:block-blinkon0
 set fileformat=unix
-" set number relativenumber numberwidth=5
 set number numberwidth=5
 set expandtab tabstop=2 shiftwidth=2 autoindent smarttab
 set incsearch ignorecase smartcase hlsearch
@@ -593,6 +566,7 @@ set showcmd
 set autoread
 set nostartofline
 set wildmenu
+set wildoptions=
 set complete=.,w,b
 " set complete=.,w,b,u,t
 set grepprg=ag
@@ -627,7 +601,6 @@ set statusline+=\ %<%f
 set statusline+=\ %{&modified?'[+]':''}
 set statusline+=%h%r
 set statusline+=%=
-" set statusline+=%{anzu#search_status()}
 set statusline+=%{GetLintMsg()}
 set statusline+=%{GetCustomStatusMsg()}
 set statusline+=\ \ %-14(%l,%c%)
@@ -652,7 +625,7 @@ endif
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
-let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/12.16.3/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/12.18.4/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:clipboard = {
   \ 'name': 'pbcopy',
   \ 'copy': {
@@ -986,6 +959,19 @@ let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0
 let g:netrw_altfile = 1
 let g:csv_delim_test = ',;|'
+
+let g:scrollbar_right_offset = 0
+let g:scrollbar_shape = {
+  \ 'head': ' ',
+  \ 'body': ' ',
+  \ 'tail': ' ',
+  \ }
+let g:scrollbar_highlight = {
+  \ 'head': 'LineNr',
+  \ 'body': 'LineNr',
+  \ 'tail': 'LineNr',
+  \ }
+let g:scrollbar_excluded_filetypes = ['nerdtree']
 
 "#################
 "### Functions ###
@@ -2644,20 +2630,6 @@ augroup custom_undofile
   autocmd BufWritePost * call WriteUndoFile()
 augroup end
 
-if has('nvim')
-  augroup custom_backup
-    autocmd!
-    autocmd BufWritePost * call BackupCurrentFile()
-  augroup end
-
-  augroup on_display_events
-    autocmd!
-    autocmd TermOpen *test* call OnTestDisplayed()
-    autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
-    autocmd TermOpen * call OnTermOpen()
-  augroup end
-endif
-
 if exists('$TMUX') && has('nvim')
   augroup tmux_window_name
     autocmd!
@@ -2680,10 +2652,29 @@ augroup goyo_events
 augroup end
 
 if has('nvim')
+  augroup custom_backup
+    autocmd!
+    autocmd BufWritePost * call BackupCurrentFile()
+  augroup end
+
+  augroup on_display_events
+    autocmd!
+    autocmd TermOpen *test* call OnTestDisplayed()
+    autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
+    autocmd TermOpen * call OnTermOpen()
+  augroup end
+
   augroup lazy_load_deoplete
     autocmd!
     autocmd InsertEnter * call LazyLoadDeoplete()
   augroup end
+
+  augroup configure_scrollbar
+    autocmd!
+    autocmd CursorMoved * silent! lua require('scrollbar').show()
+    autocmd CursorHold,QuitPre * silent! lua require('scrollbar').clear()
+  augroup end
+  set updatetime=500
 endif
 
 augroup configure_linter

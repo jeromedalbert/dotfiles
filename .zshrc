@@ -25,6 +25,7 @@ export GREP_COLORS=auto
 export GREP_COLOR=auto
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_CLEANUP=1
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export PATH=$HOME/.bin
