@@ -2672,7 +2672,7 @@ if has('nvim')
   augroup configure_scrollbar
     autocmd!
     autocmd CursorMoved * silent! lua require('scrollbar').show()
-    autocmd CursorHold,QuitPre * silent! lua require('scrollbar').clear()
+    autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * silent! lua require('scrollbar').clear()
   augroup end
   set updatetime=500
 endif
