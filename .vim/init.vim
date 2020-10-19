@@ -2055,6 +2055,9 @@ function! OnBufEnter()
     call CreateBufferMappings()
   endif
   call ConfigureLargeBuffers()
+  if !exists('b:previous_first_visible_linenum')
+    let b:previous_first_visible_linenum = line('w0')
+  endif
 endfunction
 
 function! CreateBufferMappings()
@@ -2671,11 +2674,20 @@ if has('nvim')
 
   augroup configure_scrollbar
     autocmd!
-    autocmd CursorMoved * silent! lua require('scrollbar').show()
+    autocmd CursorMoved * call ShowScrollbar()
     autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * silent! lua require('scrollbar').clear()
   augroup end
   set updatetime=500
 endif
+
+function! ShowScrollbar()
+  if !exists('b:previous_first_visible_linenum') | return | endif
+  let first_visible_linenum = line('w0')
+  if first_visible_linenum != b:previous_first_visible_linenum
+    silent! lua require('scrollbar').show()
+  end
+  let b:previous_first_visible_linenum = first_visible_linenum
+endfunction
 
 augroup configure_linter
   autocmd!

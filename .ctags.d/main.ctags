@@ -1,3 +1,19 @@
+--exclude=.git
+--exclude=.svn
+--exclude=.hg
+--exclude=node_modules
+--exclude=log
+--exclude=tmp
+--exclude=coverage
+--exclude=vendor
+--exclude=db
+--exclude=public
+--exclude=vendor
+--exclude=*.svg
+
+--kinds-php=-an
+--kinds-vim=-vmc
+
 --regex-ruby=/^[ \t]*create_table[ \t]*"([a-zA-Z0-9_]+)"/\1/t,table/
 --regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
 
@@ -35,18 +51,6 @@
 --regex-html=/id="([A-Za-z0-9_-]+)"/\1/I,id/
 --regex-html=/class="([A-Za-z0-9_-]+)"/\1/c,class/
 
---kinds-php=-an
---kinds-vim=-vmc
-
---exclude=.git
---exclude=.svn
---exclude=.hg
---exclude=node_modules
---exclude=log
---exclude=tmp
---exclude=coverage
---exclude=vendor
---exclude=db
---exclude=public
---exclude=vendor
---exclude=*.svg
+--langdef=yaml
+--langmap=yaml:.yml.yaml
+--regex-yaml=/^([a-zA-Z0-9_]+):/\1/k,key,keys/

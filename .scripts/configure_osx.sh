@@ -110,6 +110,9 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 # Disable the all too sensitive backswipe in Chrome
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
 
+# Disable scrolling to text fragments in Chrome
+defaults write com.google.Chrome ScrollToTextFragmentEnabled -bool false
+
 # Expand Save Panel by Default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
