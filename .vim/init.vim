@@ -62,7 +62,7 @@ Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'dhruvasagar/vim-buffer-history'
+Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
 Plug 'haya14busa/vim-edgemotion'
@@ -660,9 +660,11 @@ let g:loaded_vimballPlugin = 1
 "### Plugins configuration ###
 "#############################
 
-let g:fzf_layout = {
-  \ 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew'
-  \ }
+let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.93, 'yoffset': 0.4, 'border': 'none' } }
+" let g:fzf_layout = {
+"   \ 'window': 'call HideScrollbar() | let g:launching_fzf = 1 | keepalt topleft 100split enew'
+"   \ }
+
 let g:fzf_colors = {
   \ 'fg':        ['fg', 'Normal'],
   \ 'bg':        ['bg', 'Normal'],
@@ -2189,6 +2191,7 @@ function! ImprovedGoToFile()
     catch /E426/
       call ClearMessages()
       echo 'No file found'
+    catch /E434/
     endtry
   endtry
 endfunction
@@ -2675,7 +2678,7 @@ if has('nvim')
   augroup configure_scrollbar
     autocmd!
     autocmd CursorMoved * call ShowScrollbar()
-    autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * silent! lua require('scrollbar').clear()
+    autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * call HideScrollbar()
   augroup end
   set updatetime=500
 endif
@@ -2687,6 +2690,10 @@ function! ShowScrollbar()
     silent! lua require('scrollbar').show()
   end
   let b:previous_first_visible_linenum = first_visible_linenum
+endfunction
+
+function! HideScrollbar()
+  silent! lua require('scrollbar').clear()
 endfunction
 
 augroup configure_linter

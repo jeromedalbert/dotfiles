@@ -271,7 +271,7 @@ alias "gdh^"="gd 'HEAD^'"
 alias glog='git log'
 alias glo="git log --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 alias gloa='glo --author=jerome'
-alias glod="glo --date=human --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias glod="glo --date=format-local:'%a %b %d %H:%M' --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
@@ -664,16 +664,12 @@ alias mi='rake db:migrate'
 # alias ro='ro2'
 alias ro='rake db:rollback'
 alias rT='rake -T'
-alias zs='zeus start'
-alias zs!='rm -f .zeus.sock; zs'
-alias zc='zeus c'
 alias debug='pry-remote'
 alias st='spring stop'
 alias strc='st && rc'
 alias stt='spring status'
 alias sts='stt'
 alias irb='pry'
-alias pr='powder restart'
 fs() {
   local options=''
   if [[ -e '.env' ]]; then; options='-e .env'; fi

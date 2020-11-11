@@ -1,2 +1,13 @@
 Gemfile.lock merge=bundlelock
 db/schema.rb merge=railsschema
+
+*.rb    diff=ruby
+*.rake  diff=ruby
+*.md    diff=markdown
+*.css   diff=css
+*.html  diff=html
+*.xhtml diff=html
+*.py    diff=python
+*.pl    diff=perl
+*.php   diff=php
+*.go    diff=golang
