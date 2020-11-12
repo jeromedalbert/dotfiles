@@ -64,14 +64,12 @@ Plug 'fidian/hexmode', { 'on': 'Hexmode' }
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-Plug 'christoomey/vim-tmux-runner', { 'on': 'VtrSendCommandToRunner' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
 Plug 'psliwka/vim-smoothie'
 Plug 'romainl/vim-cool'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 if has('nvim') | Plug 'Xuyuanp/scrollbar.nvim' | endif
-" Plug 'chrisbra/csv.vim'
 call plug#end()
 
 "############################
@@ -171,16 +169,6 @@ noremap <silent> <leader>or :e README*<cr>
 noremap <silent> <leader>oR :vnew<cr>:e README*<cr>
 noremap <silent> <leader>o<esc> <nop>
 noremap <silent> <leader>oq :copen<cr>
-
-" nnoremap n nzz
-" nnoremap N Nzz
-" nnoremap * *zz
-" nnoremap # #zz
-" nnoremap g* g*zz
-" nnoremap g# g#zz
-" noremap g; g;zz
-" noremap g, g,zz
-" noremap gi gi<c-o>zz
 
 noremap <leader>9 i<space><esc>l
 noremap <leader>0 a<space><esc>h
@@ -344,6 +332,7 @@ cnoremap <c-l> <end><space>-G '\.'<space><left><left>
 cnoremap <c-g> <end><space>-G ''<space><left><left>
 
 noremap <leader>ytd :call ToggleDiff()<cr>
+noremap <leader>ygt :call GenerateTags()<cr>
 map <silent> <leader>yb. <Plug>BreakDot
 map <silent> <leader>yb, <Plug>BreakComma
 map <silent> <leader>yb' <Plug>BreakSingleQuote
@@ -462,14 +451,11 @@ cnoremap <expr> <m-D> MoveNextCase("\<right>\<bs>")
 nnoremap <silent> ze :call MoveToQuarterScreen()<cr>
 nnoremap <silent> zn :call ToggleFoldSyntax()<cr>
 
-" nnoremap <silent> <f4> :silent w<cr>:VtrSendCommandToRunner<cr>
-" imap <silent> <f4> <esc><f4>
-
 noremap <silent> <m-=> :call ToggleZoom()<cr>
 
-noremap <silent> <m-N> <esc>:tabnew<cr>:call BrowseOldFiles()<cr>
-
 nnoremap <silent> gf :call ImprovedGoToFile()<cr>
+nnoremap <silent> gF :vsplit<cr>:call ImprovedGoToFile()<cr>
+nnoremap <silent> GF :call Tabnew()<cr>:call ImprovedGoToFile()<cr>
 noremap <silent> gl :call DisplayEnclosingLine()<cr>
 
 noremap ga= :Tabularize /=<cr>
@@ -560,14 +546,14 @@ set hidden
 set notimeout
 set textwidth=0 colorcolumn=80
 set ruler
-" set tags+=./.tags;
 set tags=./.tags;
 set showcmd
 set autoread
 set nostartofline
 set wildmenu
 set wildoptions=
-set complete=.,w,b
+" set complete=.,w,b
+set complete=.,w,b,u
 " set complete=.,w,b,u,t
 set grepprg=ag
 set gdefault
@@ -685,7 +671,7 @@ let g:fzf_history_dir = '~/.fzf_history'
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden -g ""'
 let $FZF_DEFAULT_OPTS .=
   \ ' --no-bold --color="info:#2f2f2f,spinner:#2f2f2f" --prompt="  "'
-  \ . ' --bind="ctrl-j:accept,ctrl-n:down,ctrl-p:up,ctrl-o:previous-history,ctrl-i:next-history"'
+  \ . ' --bind="ctrl-o:previous-history,ctrl-i:next-history"'
 
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
@@ -1773,7 +1759,7 @@ function! MergeToNextTab()
     close!
     tabnew
   endif
-  exe 'b'.cur_buf
+  exe 'b' . cur_buf
 endfunc
 
 function! MovePreviousWord(cmd)
@@ -2196,6 +2182,12 @@ function! ImprovedGoToFile()
   endtry
 endfunction
 
+function! Tabnew()
+  let cur_buf = bufnr('%')
+  tabnew
+  exe 'b' . cur_buf
+endfunction
+
 function! CycleToNextFile(count, ...)
   let dir = expand('%:p:h')
   let files = globpath(dir, '*', 0, 1) + globpath(dir, '.[^.]*', 0, 1)
@@ -2273,9 +2265,6 @@ function! ArgListNext(cmd_next)
     redir END
     let position = matchstr(output, '(.*)$')
     echo position
-  " catch /E163/ | echo 'Only one file in arg'
-  " catch /E164/ | echo 'First file reached'
-  " catch /E165/ | echo 'Last file reached'
   catch /\(E163\|E164\|E165\)/ | echo 'No more files'
   endtry
 endfunction
@@ -2299,7 +2288,7 @@ function! LocListNext(cmd_next)
   try
     if !exists('g:saved_loclist') | let g:saved_loclist = [] | endif
     let current_list = getloclist(0)
-    if current_list == g:saved_loclist "&& len(current_list) > 1
+    if current_list == g:saved_loclist
       exe 'l' . a:cmd_next
     else
       let g:saved_loclist = current_list
@@ -2386,18 +2375,18 @@ function! ScrollFzfLeft()
   exe "normal \<c-\>\<c-n>"
 endfunction
 
+function! GenerateTags()
+  call system('ctags -R -f' . g:gutentags_ctags_tagfile)
+endfunction
+
 function! BrowseBufferTags()
-  if empty(tagfiles())
-    call system('ctags -R -f' . g:gutentags_ctags_tagfile)
-  endif
+  if empty(tagfiles()) | call GenerateTags() | endif
   call fzf#vim#buffer_tags('', { 'options': $FZF_DEFAULT_OPTS })
   call ScrollFzfLeft()
 endfunction
 
 function! BrowseAllTags()
-  if empty(tagfiles())
-    call system('ctags -R -f' . g:gutentags_ctags_tagfile)
-  endif
+  if empty(tagfiles()) | call GenerateTags() | endif
   call fzf#vim#tags('')
   call ScrollFzfLeft()
 endfunction
@@ -2409,7 +2398,6 @@ function! BrowseOldFiles()
     \ + filter(copy(v:oldfiles), 'filereadable(expand(v:val))')
   let files = filter(files, "(v:val !~ '/' || v:val =~ '^" . getcwd() ."/') && v:val != '.'")
   let files = fzf#vim#_uniq(map(files, 'fnamemodify(v:val, ":.")'))
-
   call fzf#run(fzf#wrap({
     \ 'source': files,
     \ 'options': ['--prompt', 'OldFiles> ']
