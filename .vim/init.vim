@@ -3,7 +3,7 @@
 "###############
 
 call plug#begin('~/.vim/plugged')
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+Plug '/usr/local/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'fix-term-tagfiles' }
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }

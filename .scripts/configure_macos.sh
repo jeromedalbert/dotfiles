@@ -150,6 +150,10 @@ defaults write com.apple.screencapture show-thumbnail -bool false
 # Disable "App is not optimized for your Mac" alerts
 defaults write -g CSUIDisable32BitWarning -boolean true
 
+# Set accent and highlight colors to blue
+defaults write -g AppleAccentColor 4
+defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
