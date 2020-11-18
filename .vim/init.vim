@@ -455,7 +455,7 @@ noremap <silent> <m-=> :call ToggleZoom()<cr>
 
 nnoremap <silent> gf :call ImprovedGoToFile()<cr>
 nnoremap <silent> gF :vsplit<cr>:call ImprovedGoToFile()<cr>
-nnoremap <silent> GF :call Tabnew()<cr>:call ImprovedGoToFile()<cr>
+" nnoremap <silent> GF :call Tabnew()<cr>:call ImprovedGoToFile()<cr>
 noremap <silent> gl :call DisplayEnclosingLine()<cr>
 
 noremap ga= :Tabularize /=<cr>
@@ -581,6 +581,7 @@ set langnoremap
 exe "set cedit=\<c-o>"
 set path=.,,
 set nomodeline
+set scrollopt=ver,hor,jump
 
 set statusline=
 set statusline+=\ %<%f
@@ -948,7 +949,7 @@ let g:gundo_help = 0
 let g:netrw_altfile = 1
 let g:csv_delim_test = ',;|'
 
-let g:scrollbar_right_offset = 0
+let g:scrollbar_right_offset = 1
 let g:scrollbar_shape = {
   \ 'head': ' ',
   \ 'body': ' ',
