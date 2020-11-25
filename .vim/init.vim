@@ -69,7 +69,7 @@ Plug 'rhysd/conflict-marker.vim'
 Plug 'psliwka/vim-smoothie'
 Plug 'romainl/vim-cool'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-if has('nvim') | Plug 'Xuyuanp/scrollbar.nvim' | endif
+if has('nvim') | Plug 'jeromedalbert/scrollbar.nvim', { 'branch': 'better-scrollbar' } | endif
 call plug#end()
 
 "############################
@@ -532,7 +532,6 @@ set incsearch ignorecase smartcase hlsearch
 set noshowmatch
 set nrformats-=octal
 set noerrorbells visualbell t_vb= belloff=all
-set history=500
 set backspace=indent,eol,start
 set shortmess+=Ic
 set laststatus=2
@@ -576,7 +575,7 @@ set synmaxcol=1000
 set showtabline=2
 set regexpengine=1
 set formatoptions+=j
-set history=10000
+set history=500
 set langnoremap
 exe "set cedit=\<c-o>"
 set path=.,,
@@ -602,6 +601,7 @@ set undodir=~/.vim/tmp/undo
 
 if has('nvim')
   set scrollback=-1
+  set shada='10,<1,s1,h,f0
 endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
@@ -2397,7 +2397,7 @@ function! BrowseOldFiles()
   let buffers = sort(buffers, 'SortBuffers')
   let files = filter(map(buffers, 'bufname(v:val)'), 'len(v:val)')
     \ + filter(copy(v:oldfiles), 'filereadable(expand(v:val))')
-  let files = filter(files, "(v:val !~ '/' || v:val =~ '^" . getcwd() ."/') && v:val != '.'")
+  let files = filter(files, "(v:val !~ '^/' || v:val =~ '^" . getcwd() ."/') && v:val != '.' && v:val !~ 'term://'")
   let files = fzf#vim#_uniq(map(files, 'fnamemodify(v:val, ":.")'))
   call fzf#run(fzf#wrap({
     \ 'source': files,
