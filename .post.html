@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>getToPost</title>
+  <script>
+    function getToPost()
+    {
+      var form = document.getElementsByTagName('form')[0];
+      form.style.visibility = 'hidden';
+      form.action = document.location.hash.substr(1);
+      var search = decodeURIComponent(document.location.search);
+      search = search.substr(1).split('&');
+      for(var i = 0, j = search.length, input; i < j; i++)
+      {
+        input = document.createElement('input');
+        search[i] = search[i].split('=');
+        input.name = search[i][0];
+        input.value = search[i][1];
+        form.appendChild(input);
+      }
+      form.submit();
+    }
+  </script>
+</head>
+<body onload="getToPost()">
+  <form method="post"></form>
+</body>
+</html>
