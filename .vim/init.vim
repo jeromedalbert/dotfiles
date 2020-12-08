@@ -337,6 +337,7 @@ map <silent> <leader>yb. <Plug>BreakDot
 map <silent> <leader>yb, <Plug>BreakComma
 map <silent> <leader>yb' <Plug>BreakSingleQuote
 map <silent> <leader>yb" <Plug>BreakDoubleQuote
+map <silent> <leader>yb<space> <Plug>BreakSpace
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -455,7 +456,7 @@ noremap <silent> <m-=> :call ToggleZoom()<cr>
 
 nnoremap <silent> gf :call ImprovedGoToFile()<cr>
 nnoremap <silent> gF :vsplit<cr>:call ImprovedGoToFile()<cr>
-" nnoremap <silent> GF :call Tabnew()<cr>:call ImprovedGoToFile()<cr>
+noremap <silent> <c-w>gf :tab split<cr>:call ImprovedGoToFile()<cr>
 noremap <silent> gl :call DisplayEnclosingLine()<cr>
 
 noremap ga= :Tabularize /=<cr>
@@ -1860,6 +1861,12 @@ function! BreakQuote(char) abort
   exe "normal! mCa" . a:char . " \\\<cr>" . a:char . "\<esc>`Cj"
 endfunction
 
+function! BreakSpace(count) abort
+  exe "normal! f r\<cr>l"
+  silent! call repeat#set("\<Plug>BreakSpace", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakSpace :<c-u>call BreakSpace(v:count1)<cr>
+
 function! MoveToQuarterScreen()
   normal zs
   exe 'normal! ' . (winheight(0)/4) . "\<C-Y>"
@@ -2181,12 +2188,6 @@ function! ImprovedGoToFile()
     catch /E434/
     endtry
   endtry
-endfunction
-
-function! Tabnew()
-  let cur_buf = bufnr('%')
-  tabnew
-  exe 'b' . cur_buf
 endfunction
 
 function! CycleToNextFile(count, ...)
