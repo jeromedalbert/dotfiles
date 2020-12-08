@@ -69,7 +69,7 @@ Plug 'rhysd/conflict-marker.vim'
 Plug 'psliwka/vim-smoothie'
 Plug 'romainl/vim-cool'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-if has('nvim') | Plug 'jeromedalbert/scrollbar.nvim', { 'branch': 'better-scrollbar' } | endif
+" if has('nvim') | Plug 'jeromedalbert/scrollbar.nvim', { 'branch': 'better-scrollbar' } | endif
 call plug#end()
 
 "############################
@@ -648,10 +648,8 @@ let g:loaded_vimballPlugin = 1
 "### Plugins configuration ###
 "#############################
 
-let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.93, 'yoffset': 0.4, 'border': 'none' } }
-" let g:fzf_layout = {
-"   \ 'window': 'call HideScrollbar() | let g:launching_fzf = 1 | keepalt topleft 100split enew'
-"   \ }
+" let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.93, 'yoffset': 0.4, 'border': 'none' } }
+let g:fzf_layout = { 'window': 'let g:launching_fzf = 1 | keepalt topleft 100split enew' }
 
 let g:fzf_colors = {
   \ 'fg':        ['fg', 'Normal'],
@@ -949,6 +947,7 @@ let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0
 let g:netrw_altfile = 1
 let g:csv_delim_test = ',;|'
+let g:CoolTotalMatches = 1
 
 let g:scrollbar_right_offset = 1
 let g:scrollbar_shape = {
@@ -2665,12 +2664,12 @@ if has('nvim')
     autocmd InsertEnter * call LazyLoadDeoplete()
   augroup end
 
-  augroup configure_scrollbar
-    autocmd!
-    autocmd CursorMoved * call ShowScrollbar()
-    autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * call HideScrollbar()
-  augroup end
-  set updatetime=500
+  " augroup configure_scrollbar
+  "   autocmd!
+  "   autocmd CursorMoved * call ShowScrollbar()
+  "   autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * call HideScrollbar()
+  " augroup end
+  " set updatetime=500
 endif
 
 function! ShowScrollbar()
