@@ -1,0 +1,201 @@
+*provider.txt*		Nvim
+
+
+		 NVIM REFERENCE MANUAL    by Thiago de Arruda
+
+
+Providers	 						    *provider*
+
+Nvim delegates some features to dynamic "providers".
+
+				      Type |gO| to see the table of contents.
+
+==============================================================================
+Python integration		    	      *provider-python*
+
+Nvim supports Python |remote-plugin|s and the Vim legacy |python-vim| and
+|python3| interfaces (which are implemented as remote-plugins).
+Note: Only the Vim 7.3 API is supported; bindeval (Vim 7.4) is not.
+
+PYTHON QUICKSTART ~
+
+If you used a package manager to install Nvim, you might already have the
+required "neovim" Python package. Run |:checkhealth| to verify.
+
+To install the package with "pip":
+
+- For Python 2 plugins, make sure Python 2.7 is available in your $PATH, then
+  install the "neovim" Python package systemwide: >
+    sudo pip2 install --upgrade neovim
+<
+  or for the current user: >
+    pip2 install --user --upgrade neovim
+<
+- For Python 3 plugins, make sure Python 3.4+ is available in your $PATH, then
+  install the "neovim" Python package systemwide: >
+    sudo pip3 install --upgrade neovim
+<
+  or for the current user: >
+    pip3 install --user --upgrade neovim
+<
+Note: "pip" may refer to Python 2 or Python 3, so the steps above mention
+"pip2" and "pip3" explicitly. If one is missing, try "pip".
+
+Note: The `--upgrade` flag ensures you have the latest version even if
+a previous version was already installed.
+
+PYTHON PROVIDER CONFIGURATION ~
+						*g:python_host_prog*
+						*g:python3_host_prog*
+Program to use for evaluating Python code. Setting this makes startup faster.
+Also useful for working with virtualenvs.  >
+    let g:python_host_prog  = '/path/to/python'
+    let g:python3_host_prog = '/path/to/python3'
+<
+						*g:loaded_python_provider*
+To disable Python 2 support: >
+    let g:loaded_python_provider = 1
+<
+						*g:loaded_python3_provider*
+To disable Python 3 support: >
+    let g:loaded_python3_provider = 1
+
+PYTHON VIRTUALENVS ~
+
+If you plan to use per-project virtualenvs often, you should assign
+a virtualenv for Neovim and hard-code the interpreter path via
+|g:python_host_prog| (or |g:python3_host_prog|) so that the "neovim" python
+package is not required for each Environment. Example using pyenv: >
+    pyenv install 3.4.4
+    pyenv virtualenv 3.4.4 py3neovim
+    pyenv activate py3neovim
+    pip install neovim
+    pyenv which python  # Note the path
+
+The last command reports the interpreter path. Add it to your init.vim: >
+    let g:python3_host_prog = '/full/path/to/py3neovim/bin/python'
+
+More information:
+https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim
+
+==============================================================================
+Ruby integration		    	      *provider-ruby*
+
+Nvim supports Ruby |remote-plugin|s and the Vim legacy |ruby-vim| interface
+(which is itself implemented as a Nvim remote-plugin).
+
+Run |:checkhealth| to see if your system is up-to-date.
+
+RUBY QUICKSTART ~
+
+To use Ruby plugins with Nvim, install the latest "neovim" RubyGem: >
+    gem install neovim
+
+RUBY PROVIDER CONFIGURATION ~
+						*g:loaded_ruby_provider*
+To disable Ruby support: >
+    let g:loaded_ruby_provider = 1
+<
+						*g:ruby_host_prog*
+Command to start the Ruby host. By default this is "neovim-ruby-host". With
+project-local Ruby versions (via tools like RVM or rbenv) setting this can
+avoid the need to install the "neovim" gem in every project.
+
+To use an absolute path (e.g. to an rbenv installation): >
+    let g:ruby_host_prog = '~/.rbenv/versions/2.4.1/bin/neovim-ruby-host'
+<
+
+To use the RVM "system" Ruby installation: >
+    let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+<
+==============================================================================
+Node.js integration				*provider-nodejs*
+
+Nvim supports Node.js |remote-plugin|s.
+https://github.com/neovim/node-client/
+
+NODEJS QUICKSTART~
+
+To use javascript remote-plugins with Nvim, install the "neovim" npm package: >
+    npm install -g neovim
+
+Run |:checkhealth| to see if your system is up-to-date.
+
+NODEJS PROVIDER CONFIGURATION~
+						*g:loaded_node_provider*
+To disable Node.js support: >
+    :let g:loaded_node_provider = 1
+<
+						*g:node_host_prog*
+Command to start the Node.js host. Setting this makes startup faster.
+
+By default, Nvim searches for "neovim-node-host" using "npm root -g", which
+can be slow. To avoid this, set g:node_host_prog to an absolute path: >
+    let g:node_host_prog = '/usr/local/bin/neovim-node-host'
+<
+==============================================================================
+Clipboard integration 			      *provider-clipboard* *clipboard*
+
+Nvim has no direct connection to the system clipboard. Instead it depends on
+a |provider| which transparently uses shell commands to communicate with the
+system clipboard or any other clipboard "backend".
+
+To ALWAYS use the clipboard for ALL operations (instead of interacting with
+the '+' and/or '*' registers explicitly): >
+    set clipboard+=unnamedplus
+
+See 'clipboard' for details and options.
+
+							      *clipboard-tool*
+The presence of a working clipboard tool implicitly enables the '+' and '*'
+registers. Nvim looks for these clipboard tools, in order of priority:
+
+  - |g:clipboard|
+  - pbcopy/pbpaste (macOS)
+  - xsel (if $DISPLAY is set)
+  - xclip (if $DISPLAY is set)
+  - lemonade (for SSH) https://github.com/pocke/lemonade
+  - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
+  - win32yank (Windows)
+  - tmux (if $TMUX is set)
+
+								 *g:clipboard*
+To configure a custom clipboard tool, set `g:clipboard` to a dictionary: >
+    let g:clipboard = {
+          \   'name': 'myClipboard',
+          \   'copy': {
+          \      '+': 'tmux load-buffer -',
+          \      '*': 'tmux load-buffer -',
+          \    },
+          \   'paste': {
+          \      '+': 'tmux save-buffer -',
+          \      '*': 'tmux save-buffer -',
+          \   },
+          \   'cache_enabled': 1,
+          \ }
+
+If `cache_enabled` is |TRUE| then when a selection is copied, Nvim will cache
+the selection until the copy command process dies. When pasting, if the copy
+process has not died, the cached selection is applied.
+
+==============================================================================
+X11 selection mechanism			      *clipboard-x11* *x11-selection*
+
+X11 clipboard providers store text in "selections". Selections are owned by an
+application, so when the application gets closed, the selection text is lost.
+The contents of selections are held by the originating application (e.g., upon
+a copy), and only passed to another application when that other application
+requests them (e.g., upon a paste).
+
+							      *quoteplus* *quote+*
+
+There are three documented X11 selections: `PRIMARY`, `SECONDARY`, and `CLIPBOARD`.
+`CLIPBOARD` is typically used in X11 applications for copy/paste operations
+(`Ctrl-c`/`v`), while `PRIMARY` is used for the last selected text, which is
+generally inserted with the middle mouse button.
+
+Nvim's X11 clipboard providers only utilize the `PRIMARY` and `CLIPBOARD`
+selections, used for the '*' and '+' registers, respectively.
+
+==============================================================================
+ vim:tw=78:ts=8:noet:ft=help:norl:

@@ -1,0 +1,9 @@
+prefix=/usr/local/Cellar/libvterm/681
+libdir=/usr/local/Cellar/libvterm/681/lib
+includedir=${prefix}/include
+
+Name: vterm
+Description: Abstract VT220/Xterm/ECMA-48 emulation library
+Version: 0.0
+Libs: -L${libdir} -lvterm
+Cflags: -I${includedir}
