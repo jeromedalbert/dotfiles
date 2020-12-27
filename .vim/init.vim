@@ -3,7 +3,7 @@
 "###############
 
 call plug#begin('~/.vim/plugged')
-Plug '/usr/local/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'fix-term-tagfiles' }
+Plug '/usr/local/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }
@@ -509,6 +509,7 @@ noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
 xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
 noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
+noremap <leader>rc :call CopyCurrentRubyClass()<cr>
 
 nnoremap <silent> <cr> :call ReplayLastMacro()<cr>
 
@@ -602,7 +603,6 @@ set undodir=~/.vim/tmp/undo
 
 if has('nvim')
   set scrollback=-1
-  set shada='10,<1,s1,h,f0
 endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
@@ -1253,6 +1253,16 @@ function! CopyCurrentFileName()
   let @+ = expand('%:t')
 endfunction
 
+function! CopyCurrentRubyClass()
+  normal! mCgg^
+  silent exe "/^\\(module\\|class\\) "
+  let module = getline('.') =~ '^module '
+  if module | exe "normal gJ" | endif
+  normal! WyiW
+  if module | undo | endif
+  normal! `C
+endfunction
+
 function! CreateNewFile()
   let new_file = input('New file: ', '', 'file')
   if new_file != ''
@@ -1507,14 +1517,42 @@ function! OpenCurrentFileInGithub(...)
     let branch = system('git symbolic-ref --short -q HEAD | tr -d "\n"')
     if branch == '' | let branch = system('git rev-parse --short HEAD | tr -d "\n"') | endif
   endif
-  let git_remote = system('cd ' . file_dir . '; git remote get-url origin | tr -d "\n"')
-  let repo_path = matchlist(git_remote, ':\([^.]*\)')[1]
+  let repo_path = GetGithubRepoPath(expand('%:h'))
   let url = 'https://github.com/' . repo_path . '/blob/' . branch . '/' . file_path
   let first_line = getpos("'<")[1]
   let url .= '#L' . first_line
   let last_line = getpos("'>")[1]
   if last_line != first_line | let url .= '-L' . last_line | endif
   call system('open ' . url)
+endfunction
+
+function! OpenCommitInGithub(dir_path)
+  let commit = expand('<cword>')
+  let repo_path = GetGithubRepoPath(a:dir_path)
+  let url = 'https://github.com/' . repo_path . '/commit/' . commit
+  call system('open ' . url)
+endfunction
+
+function! OpenPrInGithub()
+  let pr_number = expand('<cword>')
+  let current_char = getline('.')[col('.')-1]
+  if current_char =~ '(\|#'
+    normal! mC
+    call search('\d')
+    let pr_number = expand('<cword>')
+    normal! `C
+  endif
+  let repo_path = GetGithubRepoPath(expand('%:h'))
+  let url = 'https://github.com/' . repo_path . '/pull/' . pr_number
+  call system('open ' . url)
+endfunction
+
+function! GetGithubRepoPath(dir_path)
+  let dir_path = a:dir_path
+  let dir_path = substitute(dir_path, '^fugitive://', '', '')
+  let dir_path = substitute(dir_path, '/.git$', '', '')
+  let git_remote = system('cd ' . dir_path . '; git remote get-url origin | tr -d "\n"')
+  return matchlist(git_remote, ':\([^.]*\)')[1]
 endfunction
 
 function! CloseTests()
