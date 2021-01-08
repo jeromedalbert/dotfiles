@@ -15,6 +15,7 @@ if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript*', '*html'] }
 Plug 'mxw/vim-jsx', { 'for': 'javascript*' }
+Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'othree/html5.vim', { 'for': '*html' }
 Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
@@ -906,6 +907,7 @@ let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
 let g:jsx_ext_required = 0
+let g:vue_pre_processors = []
 
 let g:test#strategy = 'custom'
 let g:test#no_alternate = 1
@@ -2651,6 +2653,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile Brewfile set ft=ruby
   autocmd BufRead,BufNewFile *.apib set ft=markdown
   autocmd BufRead,BufNewFile Dockerfile* set ft=dockerfile
+  autocmd BufRead,BufNewFile *.vue setfiletype html
 augroup end
 
 augroup detect_binary_files
