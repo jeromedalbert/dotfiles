@@ -487,8 +487,8 @@ map [e <Plug>MovePreviousInsideIndent
 map ]e <Plug>MoveNextInsideIndent
 map [E <Plug>MovePreviousAroundIndent
 map ]E <Plug>MoveNextAroundIndent
-map [o m'^h<Plug>(edgemotion-k)^
-map ]o m'^h<Plug>(edgemotion-j)^
+map <silent> [o :mark '<cr>^h<Plug>(edgemotion-k)^
+map <silent> ]o :mark '<cr>^h<Plug>(edgemotion-j)^
 noremap <silent> ]x :call ConflictMarkerNext(1)<cr>
 noremap <silent> [x :call ConflictMarkerNext(0)<cr>
 nmap ]X G[x
@@ -512,7 +512,7 @@ noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
 noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
 noremap <leader>rc :call CopyCurrentRubyClass()<cr>
 
-nnoremap <silent> <cr> :call ReplayLastMacro()<cr>
+noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
 "#############################
 "### General configuration ###

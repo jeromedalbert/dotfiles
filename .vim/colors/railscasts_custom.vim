@@ -101,6 +101,7 @@ hi VertSplit guifg=bg guibg=NONE
 hi Error guibg=#9b0000 gui=NONE
 hi link Character String
 hi Comment guifg=#bd9553 guibg=NONE gui=italic cterm=italic
+hi link SpecialComment Comment
 hi Constant guifg=#6b9bc0 guibg=NONE gui=NONE
 hi DiffAdd guifg=fg guibg=#47840d gui=bold cterm=bold
 hi DiffDelete guifg=#dc322f guibg=NONE gui=NONE
@@ -351,3 +352,7 @@ hi link graphqlOperator NONE
 
 hi link sqlKeyword Keyword
 hi link sqlSpecial Boolean
+
+hi link rustFuncCall NONE
+hi link rustSelf NONE
+hi link rustModPath NONE

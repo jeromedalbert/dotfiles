@@ -84,7 +84,7 @@ al() {
 }
 alias conf="$MAIN_EDITOR ~/.zshrc"
 alias sec="$MAIN_EDITOR ~/.secrets.zsh"
-alias reload='. ~/.zshrc; . ~/.zshenv'
+alias reload='. ~/.zshrc; . ~/.zshenv; . ~/.secrets.zsh'
 alias rl='reload'
 
 # Zsh
@@ -270,8 +270,9 @@ alias gdh='gd HEAD'
 alias "gdh^"="gd 'HEAD^'"
 alias glog='git log'
 alias glo="git log --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
-alias gloa='glo --author=jerome'
 alias glod="glo --date=format-local:'%a %b %d %H:%M' --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias gloa='glo --author=jerome'
+alias gload='glod --author=jerome'
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
@@ -540,8 +541,14 @@ mkpwd2() {
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
-alias cpng='curl -s http://127.0.0.1:4040/status | grep -P "https://.*?ngrok.io" -oh | tr -d "\n" | pbcopy'
-alias ngcp='cpng'
+alias ngrokcp='curl -s http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url" | pbcopy'
+alias ngcp='ngrokcp'
+smee() {
+  echo $SMEE_URL | pbcopy
+  command smee -u $SMEE_URL -p 5000 "$@"
+}
+alias smeecp='echo $SMEE_URL | pbcopy'
+alias smeego='open $SMEE_URL'
 tess() {
   local file=$1
   if [[ -z $file ]]; then
@@ -655,14 +662,15 @@ alias rc='rails c'
 alias rcs='rails c --sandbox'
 alias rr='rake routes'
 alias rdb='rails db'
+alias mi='rake db:migrate'
+alias ro='rake db:rollback'
+alias romi='ro && mi'
 # alias mi1='rake db:migrate'
 # alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
 # alias mi='rake db:migrate db:rollback && mi2'
-alias mi='rake db:migrate'
 # alias ro1='rake db:rollback'
 # alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
 # alias ro='ro2'
-alias ro='rake db:rollback'
 alias rT='rake -T'
 alias debug='pry-remote'
 alias st='spring stop'
