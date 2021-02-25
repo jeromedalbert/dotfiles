@@ -14,19 +14,9 @@ snippet sheb "#!/usr/bin/env ruby" b
 ${0}
 endsnippet
 
-# snippet -> "-> { .. }" w
-# ->${1} { ${0} }
-# endsnippet
-
 snippet -> "-> { .. }" w
 -> { ${0} }
 endsnippet
-
-# snippet ->> "-> { .. } multiline" w
-# -> {
-# 	${0}
-# }
-# endsnippet
 
 snippet ->> "-> { .. } multiline" w
 -> {
@@ -79,6 +69,12 @@ end
 endsnippet
 
 snippet defi "def initialize .. end"
+def initialize${1}
+	${0}
+end
+endsnippet
+
+snippet ini "def initialize .. end"
 def initialize${1}
 	${0}
 end
@@ -368,6 +364,12 @@ task ${1:task_name}: :environment do
 end
 endsnippet
 
+snippet ta "task do .. end"
+task ${1:task_name}: :environment do
+	${0}
+end
+endsnippet
+
 snippet rev "reversible do .. end"
 reversible do |dir|
 	dir.${1:up} { ${0} }
@@ -393,4 +395,3 @@ scope :${1:scope}, -> {
 	${0}
 }
 endsnippet
-

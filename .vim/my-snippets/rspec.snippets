@@ -22,6 +22,12 @@ before do
 end
 endsnippet
 
+snippet co "context 'description' do .. end"
+context '${1:description}' do
+	${0}
+end
+endsnippet
+
 snippet con "context 'description' do .. end"
 context '${1:description}' do
 	${0}
@@ -30,6 +36,12 @@ endsnippet
 
 snippet cond "context do .. end"
 context do
+	${0}
+end
+endsnippet
+
+snippet de "describe do .. end"
+describe '${1:description}' do
 	${0}
 end
 endsnippet

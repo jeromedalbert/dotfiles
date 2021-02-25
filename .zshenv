@@ -400,6 +400,14 @@ git-remove-submodule() {
 alias gsr='git-remove-submodule'
 alias grev='git revert'
 alias grevnoe='git revert --no-edit'
+git-churn() {
+  git log --all -M -C --name-only --format='format:' "$@" \
+    | sort \
+    | grep -v '^$' \
+    | uniq -c \
+    | sort -n \
+    | awk 'BEGIN {print "count\tfile"} {print $1 "\t" $2}'
+}
 
 # Github
 hc() {
@@ -699,6 +707,7 @@ gem-path() {
   VISUAL=echo gem open $1
 }
 alias gmp='gem-path'
+alias gml='gem list'
 alias ocov='open coverage/index.html '
 alias cov='COVERAGE=true rspec && ocov'
 steps() {
