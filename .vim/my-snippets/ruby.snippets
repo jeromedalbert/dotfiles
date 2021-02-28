@@ -208,6 +208,16 @@ find_each do |${1:e}|
 end
 endsnippet
 
+snippet fi "find { |e| .. }" w
+find { |${1:e}| ${0} }
+endsnippet
+
+snippet fii "find do |e| .. end" w
+find do |${1:e}|
+	${0}
+end
+endsnippet
+
 snippet fin "find { |e| .. }" w
 find { |${1:e}| ${0} }
 endsnippet
@@ -261,6 +271,12 @@ map! { |${1:e}| ${0} }
 endsnippet
 
 snippet mapp "map do |e| .. end" w
+map do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet mapd "map do |e| .. end" w
 map do |${1:e}|
 	${0}
 end
