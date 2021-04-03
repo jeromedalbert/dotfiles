@@ -55,6 +55,13 @@ rescue
 end
 endsnippet
 
+snippet begin "begin .. rescue .. end"
+begin
+	${0}
+rescue
+end
+endsnippet
+
 snippet case "case .. when .. end"
 case ${1:object}
 when ${2:condition}
@@ -114,6 +121,12 @@ class ${1:`!p snip.rv = camelcase(snip.basename)`}${2}
 end
 endsnippet
 
+snippet class "class .. end"
+class ${1:`!p snip.rv = camelcase(snip.basename)`}${2}
+	${0}
+end
+endsnippet
+
 snippet clai "class .. initialize .. end"
 class ${1:`!p snip.rv = camelcase(snip.basename)`}${2}
 	def initialize${3}
@@ -145,6 +158,10 @@ downto(${1:n}) { |${2:i}| ${0} }
 endsnippet
 
 snippet ea "each { |e| .. }" w
+each { |${1:e}| ${0} }
+endsnippet
+
+snippet each "each { |e| .. }" w
 each { |${1:e}| ${0} }
 endsnippet
 
@@ -292,6 +309,10 @@ snippet red "reduce { |acc, e| .. }" w
 reduce${1} { |${2:acc}, ${3:e}| ${0} }
 endsnippet
 
+snippet reduce "reduce { |acc, e| .. }" w
+reduce${1} { |${2:acc}, ${3:e}| ${0} }
+endsnippet
+
 snippet redd "reduce do |acc, e| .. end" w
 reduce${1} do |${2:acc}, ${3:e}|
 	${0}
@@ -299,6 +320,10 @@ end
 endsnippet
 
 snippet sel "select { |e| .. }" w
+select { |${1:e}| ${0} }
+endsnippet
+
+snippet select "select { |e| .. }" w
 select { |${1:e}| ${0} }
 endsnippet
 
@@ -322,6 +347,10 @@ snippet rej "reject { |e| .. }" w
 reject { |${1:e}| ${0} }
 endsnippet
 
+snippet reject "reject { |e| .. }" w
+reject { |${1:e}| ${0} }
+endsnippet
+
 snippet rej! "reject! { |e| .. }" w
 reject! { |${1:e}| ${0} }
 endsnippet
@@ -342,6 +371,10 @@ snippet tim "times { |i| .. }" w
 times { |${1:i}| ${0} }
 endsnippet
 
+snippet times "times { |i| .. }" w
+times { |${1:i}| ${0} }
+endsnippet
+
 snippet timm "times do |i| .. end" w
 times do |${1:i}|
 	${0}
@@ -349,6 +382,12 @@ end
 endsnippet
 
 snippet unt "until .. end"
+until ${1:condition}
+	${0}
+end
+endsnippet
+
+snippet until "until .. end"
 until ${1:condition}
 	${0}
 end

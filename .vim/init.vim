@@ -510,7 +510,9 @@ noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
 xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
 noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
-noremap <leader>rc :call CopyCurrentRubyClass()<cr>
+noremap <leader>rc :call CopyCurrentRubyClassName()<cr>
+noremap <leader>rxp :call CreateRubyPrivate()<cr>
+noremap <leader>rxm :call CreateRubyMethod()<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
@@ -1255,7 +1257,7 @@ function! CopyCurrentFileName()
   let @+ = expand('%:t')
 endfunction
 
-function! CopyCurrentRubyClass()
+function! CopyCurrentRubyClassName()
   normal! mCgg^
   silent exe "/^\\(module\\|class\\) "
   let module = getline('.') =~ '^module '
@@ -1263,6 +1265,19 @@ function! CopyCurrentRubyClass()
   normal! WyiW
   if module | undo | endif
   normal! `C
+
+
+  " let @+ = expand('%')
+endfunction
+
+function! CreateRubyPrivate()
+  exe "normal ^?^\\s\\+def \<cr>%o\<cr>private\<esc>2o\<esc>"
+  call feedkeys('cc')
+endfunction
+
+function! CreateRubyMethod()
+  exe "normal ^?^\\s\\+def \<cr>%o\<cr>def "
+  call feedkeys('a')
 endfunction
 
 function! CreateNewFile()
