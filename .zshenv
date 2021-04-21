@@ -411,20 +411,17 @@ git-churn() {
 }
 
 # Github
-hc() {
-  case $# in
-    0) hub compare $(current-git-branch);;
-    1) hub compare $1..$(current-git-branch);;
-    2) hub compare $1..$2;;
-    *) hub compare;;
-  esac
+alias hc='gh pr create --web'
+alias hp='gh pr view --web'
+alias hf='gh repo fork --remote --remote-name=jeromedalbert'
+hb() {
+  local current_branch=$(current-git-branch)
+  if [[ $current_branch == 'master' ]]; then
+    gh repo view --web
+  else
+    gh repo view --web --branch $current_branch
+  fi
 }
-alias hc-='hc $(git-branch-previous)'
-alias hb="hub browse"
-alias hp="hub pr show"
-alias hf="hub fork"
-alias fork="hub fork"
-alias hcr="hub create"
 alias gpuhc='gpu && hc'
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'

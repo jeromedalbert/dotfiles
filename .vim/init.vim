@@ -299,7 +299,7 @@ noremap <silent> <leader>fh :silent %!tidy -qi
 noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
 noremap <silent> <leader>fs :set filetype=sql<cr>:%!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>:%s/"/<cr>
 xnoremap <silent> <leader>fs :!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>
-noremap <silent> <leader>fg :set filetype=graphql<cr>$x0df":%s/↵/\r<cr>dd
+noremap <silent> <leader>fg :set filetype=graphql<cr>$x0df":silent! %s/↵/\r<cr>:silent! %s/\\n/\r<cr>dd
 noremap <silent> <leader>fo :copen<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl
