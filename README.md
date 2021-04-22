@@ -1,6 +1,6 @@
 # Jerome's dotfiles
 
-1. Install [XCode](https://itunes.apple.com/gb/app/xcode/id497799835).
+1. Install [XCode](https://apps.apple.com/gb/app/xcode/id497799835).
 
 2. Launch Zsh:
 
