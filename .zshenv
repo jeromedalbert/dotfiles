@@ -422,7 +422,7 @@ hb() {
     gh repo view --web --branch $current_branch
   fi
 }
-alias gpuhc='gpu && hc'
+gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'

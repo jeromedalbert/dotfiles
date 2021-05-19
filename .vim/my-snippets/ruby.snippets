@@ -32,6 +32,10 @@ snippet any "any? { |e| .. }" w
 any? { |${1:e}| ${2} }
 endsnippet
 
+snippet any? "any? { |e| .. }" w
+any? { |${1:e}| ${2} }
+endsnippet
+
 snippet ben "Benchmark.realtime { .. }"
 require 'benchmark'
 
@@ -331,13 +335,29 @@ snippet sel! "select! { |e| .. }" w
 select! { |${1:e}| ${0} }
 endsnippet
 
+snippet select! "select! { |e| .. }" w
+select! { |${1:e}| ${0} }
+endsnippet
+
 snippet sell "select do |e| .. end" w
 select do |${1:e}|
 	${0}
 end
 endsnippet
 
+snippet selectt "select do |e| .. end" w
+select do |${1:e}|
+	${0}
+end
+endsnippet
+
 snippet sell! "select! do |e| .. end" w
+select! do |${1:e}|
+	${0}
+end
+endsnippet
+
+snippet selectt! "select! do |e| .. end" w
 select! do |${1:e}|
 	${0}
 end
