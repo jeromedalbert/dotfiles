@@ -20,7 +20,7 @@
 --regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
 
 --regex-ruby=/^[ \t]*namespace[ \t]*:([a-zA-Z0-9_]+)/--- \1 ---/n,namespace/
---regex-ruby=/^[ \t]*task[ \t]*([a-zA-Z0-9_]+):/\1/k,task/
+--regex-ruby=/^[ \t]*task[ \t]*:?([a-zA-Z0-9_]+)[:,]/\1/k,task/
 
 --regex-ruby=/^  (resources?|scope|[A-Za-z0-9_-]*namespace[ \t]*)[ \t]*:([a-zA-Z0-9_]+)/\2/n,namespace/
 --regex-ruby=/^  (resources?|scope|[A-Za-z0-9_-]*namespace[ \t]*)[ \t]*'([^']+)'/\2/n,namespace/

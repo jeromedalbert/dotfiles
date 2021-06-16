@@ -3,7 +3,7 @@ def rr
 end
 
 def m(object)
-  object.methods - Object.methods
+  object.class.instance_methods(false)
 end
 
 def lm(object)

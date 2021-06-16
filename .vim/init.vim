@@ -339,6 +339,8 @@ map <silent> <leader>yb, <Plug>BreakComma
 map <silent> <leader>yb' <Plug>BreakSingleQuote
 map <silent> <leader>yb" <Plug>BreakDoubleQuote
 map <silent> <leader>yb<space> <Plug>BreakSpace
+map <silent> <leader>yb& <Plug>BreakAnd
+map <silent> <leader>yb\| <Plug>BreakOr
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -1920,6 +1922,18 @@ function! BreakSpace(count) abort
   silent! call repeat#set("\<Plug>BreakSpace", a:count)
 endfunction
 nnoremap <silent> <Plug>BreakSpace :<c-u>call BreakSpace(v:count1)<cr>
+
+function! BreakAnd(count) abort
+  exe "normal! f&lli\<cr>\<esc>l"
+  silent! call repeat#set("\<Plug>BreakAnd", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakAnd :<c-u>call BreakAnd(v:count1)<cr>
+
+function! BreakOr(count) abort
+  exe "normal! f|lli\<cr>\<esc>l"
+  silent! call repeat#set("\<Plug>BreakOr", a:count)
+endfunction
+nnoremap <silent> <Plug>BreakOr :<c-u>call BreakOr(v:count1)<cr>
 
 function! MoveToQuarterScreen()
   normal zs
