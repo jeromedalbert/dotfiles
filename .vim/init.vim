@@ -117,6 +117,7 @@ inoremap <m-b> <s-left>
 inoremap <m-f> <s-right>
 
 noremap <silent> <backspace> :enew<cr>
+noremap <silent> <m-backspace> ggdG
 noremap <silent> <m-v> :vnew<cr>
 noremap <silent> <m-V> :vsplit<cr>
 noremap <silent> <m-s> :new<cr>
@@ -812,7 +813,8 @@ let g:neomake_ruby_mri_maker = {
   \   '%-C%.%#'
   \ }
 let g:neomake_ruby_rubocop_maker = {
-  \ 'args': ['--format', 'emacs', '--force-exclusion', '--display-cop-names'],
+  \ 'exe': 'bundle',
+  \ 'args': ['exec', 'rubocop', '--format', 'emacs', '--force-exclusion', '--display-cop-names'],
   \ 'errorformat': '%f:%l:%c: %t: %m,%E%f:%l: %m',
   \ 'postprocess': function('neomake#makers#ft#ruby#RubocopEntryProcess')
   \ }
@@ -1952,8 +1954,7 @@ function! ToggleFoldSyntax()
 endfunction
 
 function! ToggleZoom()
-  if !exists('t:zoomed') | let t:zoomed = 0 | endif
-  if t:zoomed
+  if exists('t:zoomed') && t:zoomed
     wincmd =
     let t:zoomed = 0
   else

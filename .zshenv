@@ -241,10 +241,13 @@ alias gm-="git merge -"
 alias gmabort="git merge --abort"
 gcm() {
   if [[ $# -eq 0 ]]; then
-    git checkout master
+    git checkout $(git-main-branch)
   else
     gc -m "$*"
   fi
+}
+git-main-branch() {
+  if [[ $(git branch --list 'main') ]]; then echo 'main'; else echo 'master'; fi
 }
 gcam() { gca -m "$*" }
 alias gce='gc --allow-empty -m "Empty commit"'
@@ -274,6 +277,7 @@ alias glod="glo --date=format-local:'%a %b %d %H:%M' --format=format:'%C(yellow)
 alias gloa='glo --author=jerome'
 alias gloda='glod --author=jerome'
 alias gload='gloda'
+alias lw='gload --since="last Monday"'
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
@@ -299,28 +303,29 @@ alias gstc="git stash clear"
 alias gsts="git stash save"
 alias grb="git rebase"
 alias grb-="git rebase -"
-alias grbm="git rebase master"
+grbm() { git rebase $(git-main-branch) }
 alias grbi="git rebase -i"
 alias grbi2="git rebase -i HEAD~2"
 alias grbi3="git rebase -i HEAD~3"
 alias grbi4="git rebase -i HEAD~4"
 alias grbi5="git rebase -i HEAD~5"
-alias grbim="git rebase -i master"
+grbim() { git rebase -i $(git-main-branch) }
 alias grbir="git rebase -i --root"
 alias gcon="git rebase --continue"
 alias gaacon="gaa && gcon"
 alias gabort="git rebase --abort"
 alias gsk="git rebase --skip"
 alias gb='git branch --sort=-committerdate'
+gbcp() { echo $(current-git-branch) | pbcopy }
 alias gbs="git branch -D sav &> /dev/null; git branch sav"
 alias gcs="git checkout sav"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
-alias gbDa='git branch | remove-colors | egrep -v "master|\*" | xargs git branch -D'
+alias gbDa='git branch | remove-colors | egrep -v "master|main|\*" | xargs git branch -D'
 alias gbD-="gbD @{-1}"
 gbDi() {
-  git branch --sort=-committerdate | remove-colors | egrep -v "master|\*" | cut -c3- > /tmp/branches && \
+  git branch --sort=-committerdate | remove-colors | egrep -v "master|main|\*" | cut -c3- > /tmp/branches && \
     cp /tmp/branches /tmp/branches-to-keep && \
     $MAIN_EDITOR /tmp/branches-to-keep && \
     comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep) | xargs 2> /dev/null git branch -D
@@ -378,10 +383,12 @@ gback() {
 alias gcurr='gaacm "current work"'
 alias gcur=gcurr
 grebase() {
-  gcm && gl && gc- && grbm
+  local branch=${1:-$(git-main-branch)}
+  git checkout $branch && gl && gc- && grb-
 }
 gmerge() {
-  gcm && gl && gc- && git merge master
+  local branch=${1:-$(git-main-branch)}
+  git checkout $branch && gl && gc- && gm-
 }
 alias gt='git tag'
 alias gcp='git cherry-pick'
@@ -409,6 +416,11 @@ git-churn() {
     | sort -n \
     | awk 'BEGIN {print "count\tfile"} {print $1 "\t" $2}'
 }
+git-unchanged-since() {
+  git log --name-only --since="$@" --pretty='format:' '*.rb' | egrep '^(app|lib)/' > /tmp/changed
+  git ls-files '*.rb' | egrep '^(app|lib)/' > /tmp/all
+  comm -23 <(sort -u /tmp/all) <(sort -u /tmp/changed)
+}
 
 # Github
 alias hc='gh pr create --web'
@@ -416,7 +428,7 @@ alias hp='gh pr view --web'
 alias hf='gh repo fork --remote --remote-name=jeromedalbert'
 hb() {
   local current_branch=$(current-git-branch)
-  if [[ $current_branch == 'master' ]]; then
+  if [[ $current_branch == $(git-main-branch) ]]; then
     gh repo view --web
   else
     gh repo view --web --branch $current_branch
@@ -426,6 +438,8 @@ gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
+alias ghc='gh repo create $(basename $PWD) -y'
+alias ghi='gi; gci; ghc; gpu'
 
 # Docker
 alias d='docker'
@@ -489,7 +503,7 @@ ip() {
   echo $ip
 }
 publicip() {
-  local ip=$(dig @resolver1.opendns.com ANY myip.opendns.com +short -4)
+  local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
@@ -603,7 +617,7 @@ vj() {
 jv() {
   local old_directory=$(pwd)
   j "$@"
-  if [ "$(pwd)" != "$old_directory" ]; then; v.; fi
+  if [[ "$(pwd)" != "$old_directory" ]]; then; v.; fi
 }
 jj() {
   cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
@@ -700,7 +714,6 @@ alias rhash='asdf reshim ruby'
 alias gmo='gem open'
 alias gmi='gem install'
 alias gmun='gem uninstall'
-alias gmu='gmun'
 alias gmup='gem update'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
 gman() { man $(gem-path $1)/man/* }
@@ -713,11 +726,11 @@ alias gml='gem list'
 alias ocov='open coverage/index.html '
 alias cov='COVERAGE=true rspec && ocov'
 steps() {
-  git checkout master &> /dev/null
-  local master_mig_num=$(ls db/migrate | wc -l)
+  git checkout $(git-main-branch) &> /dev/null
+  local main_mig_num=$(ls db/migrate | wc -l)
   git checkout - &> /dev/null
   local mig_num=$(ls db/migrate | wc -l)
-  local delta=$(($mig_num - $master_mig_num))
+  local delta=$(($mig_num - $main_mig_num))
   echo $delta
 }
 
@@ -725,6 +738,7 @@ steps() {
 alias y='yarn'
 alias yr='yarn run'
 alias ya='yarn add'
+alias yu='yarn upgrade'
 alias yrm='yarn remove'
 alias yre='yrm'
 alias nhash='asdf reshim nodejs'
@@ -764,7 +778,8 @@ alias hrb='heroku run bash'
 hurl() {
   heroku info -s "$@" | grep web_url | cut -d= -f2
 }
-alias gph='git push heroku master'
+gph() { git push heroku $(git-main-branch) }
+gpfh() { git push --force heroku $(git-main-branch) }
 alias gphm='gph'
 
 # Kube
