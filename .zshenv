@@ -521,7 +521,6 @@ function cdf() {
 }
 alias o="open"
 alias o.="open ."
-alias tcam="osascript ~/.bin/isightdisabler5.scpt"
 alias toggle-cam='tcam'
 alias dpad="sudo kextunload /System/Library/Extensions/AppleUSBMultitouch.kext" # 2> /dev/null"
 alias epad="sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext"
