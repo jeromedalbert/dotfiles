@@ -561,8 +561,8 @@ mkpwd2() {
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
-alias ngrokcp='curl -s http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url" | pbcopy'
-alias ngcp='ngrokcp'
+alias ng='ngrok http 5000'
+alias ngcp='curl -s http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url" | pbcopy'
 smee() {
   echo $SMEE_URL | pbcopy
   command smee -u $SMEE_URL -p 5000 "$@"
