@@ -67,10 +67,9 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'psliwka/vim-smoothie'
+" Plug 'psliwka/vim-smoothie'
 Plug 'romainl/vim-cool'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-" if has('nvim') | Plug 'jeromedalbert/scrollbar.nvim', { 'branch': 'better-scrollbar' } | endif
 call plug#end()
 
 "############################
@@ -132,6 +131,8 @@ nnoremap <c-h> gT
 noremap <c-l> gt
 noremap <silent> <m-}> :+tabmove<cr>
 noremap <silent> <m-{> :-tabmove<cr>
+noremap <silent> <m-L> :+tabmove<cr>
+noremap <silent> <m-H> :-tabmove<cr>
 noremap <silent> <leader>tc :silent! tabclose<cr>
 map <silent> <leader>tq <leader>tc
 noremap <silent> <leader>to :silent! tabonly<cr>
@@ -331,17 +332,11 @@ map <leader>fw <leader>yfiw
 map <leader>fW <leader>yfiW
 xnoremap <leader>ff y:let @/ = GetSelectionForSearches()<cr><leader>ff<c-r>=@/<cr>
 cnoremap <c-l> <end><space>-G '\.'<space><left><left>
-cnoremap <c-g> <end><space>-G ''<space><left><left>
+cnoremap <expr> <c-g> getcmdtype() == ":" ? "<end><space>-G ''<space><left><left>" : "<c-g>"
 
 noremap <leader>ytd :call ToggleDiff()<cr>
 noremap <leader>ygt :call GenerateTags()<cr>
-map <silent> <leader>yb. <Plug>BreakDot
-map <silent> <leader>yb, <Plug>BreakComma
-map <silent> <leader>yb' <Plug>BreakSingleQuote
-map <silent> <leader>yb" <Plug>BreakDoubleQuote
-map <silent> <leader>yb<space> <Plug>BreakSpace
-map <silent> <leader>yb& <Plug>BreakAnd
-map <silent> <leader>yb\| <Plug>BreakOr
+map <silent> <leader>yb <Plug>BreakCharacter
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -1891,51 +1886,35 @@ function! Join(count) abort
 endfunction
 nnoremap <silent> <Plug>Join :<c-u>call Join(v:count1)<cr>
 
-function! BreakDot(count) abort
-  exe "normal! f.i\<cr>\<esc>l"
-  silent! call repeat#set("\<Plug>BreakDot", a:count)
-endfunction
-nnoremap <silent> <Plug>BreakDot :<c-u>call BreakDot(v:count1)<cr>
+function! BreakCharacter(count, ...) abort
+  if a:count == 0
+    let char = nr2char(getchar())
+    if char == "\<Esc>" | return | endif
+  else
+    let char = get(b:, 'last_break_char')
+  endif
+  if char == '7' | let char = '&' | endif
+  if char == '\' | let char = '|' | endif
+  let b:last_break_char = char
 
-function! BreakComma(count) abort
-  exe "normal! f,li\<cr>\<esc>l"
-  silent! call repeat#set("\<Plug>BreakComma", a:count)
-endfunction
-nnoremap <silent> <Plug>BreakComma :<c-u>call BreakComma(v:count1)<cr>
+  if char == '"' || char == "'"
+    exe "normal! mCa" . char . " \\\<cr>" . char . "\<esc>`Cj"
+    silent! call repeat#set("\<Plug>BreakCharacter", 1)
+    return
+  endif
+  let old_pos = getpos('.')
+  exe 'normal! f' . char
+  if getpos('.') == old_pos | return | endif
+  if char =~ ',\|+\|-\|*\|/\|=\|{\|('
+    exe 'normal! l'
+  elseif char =~ '&\||'
+    exe 'normal! ll'
+  endif
+  exe "normal! i\<cr>\<esc>l"
 
-function! BreakSingleQuote(count) abort
-  call BreakQuote("'")
-  silent! call repeat#set("\<Plug>BreakSingleQuote", a:count)
+  silent! call repeat#set("\<Plug>BreakCharacter", 1)
 endfunction
-nnoremap <silent> <Plug>BreakSingleQuote :<c-u>call BreakSingleQuote(v:count1)<cr>
-
-function! BreakDoubleQuote(count) abort
-  call BreakQuote('"')
-  silent! call repeat#set("\<Plug>BreakDoubleQuote", a:count)
-endfunction
-nnoremap <silent> <Plug>BreakDoubleQuote :<c-u>call BreakDoubleQuote(v:count1)<cr>
-
-function! BreakQuote(char) abort
-  exe "normal! mCa" . a:char . " \\\<cr>" . a:char . "\<esc>`Cj"
-endfunction
-
-function! BreakSpace(count) abort
-  exe "normal! f r\<cr>l"
-  silent! call repeat#set("\<Plug>BreakSpace", a:count)
-endfunction
-nnoremap <silent> <Plug>BreakSpace :<c-u>call BreakSpace(v:count1)<cr>
-
-function! BreakAnd(count) abort
-  exe "normal! f&lli\<cr>\<esc>l"
-  silent! call repeat#set("\<Plug>BreakAnd", a:count)
-endfunction
-nnoremap <silent> <Plug>BreakAnd :<c-u>call BreakAnd(v:count1)<cr>
-
-function! BreakOr(count) abort
-  exe "normal! f|lli\<cr>\<esc>l"
-  silent! call repeat#set("\<Plug>BreakOr", a:count)
-endfunction
-nnoremap <silent> <Plug>BreakOr :<c-u>call BreakOr(v:count1)<cr>
+nnoremap <silent> <Plug>BreakCharacter :<c-u>call BreakCharacter(v:count)<cr>
 
 function! MoveToQuarterScreen()
   normal zs
@@ -2558,6 +2537,7 @@ endfunction
 function! OnCmdwinEnter()
   setlocal nonumber norelativenumber colorcolumn=
   nnoremap <silent><buffer> <esc> :q<cr>
+  nnoremap <buffer> <cr> <cr>
 endfunction
 
 function! OnTermOpen()

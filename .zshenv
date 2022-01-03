@@ -497,7 +497,7 @@ alias keyboard_disable='sudo kextunload /System/Library/Extensions/AppleUSBTopCa
 alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
 alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
 timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
-ip() {
+localip() {
   local ip=$(ipconfig getifaddr en0)
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
@@ -560,8 +560,11 @@ mkpwd2() {
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
-alias ng='ngrok http 5000'
 alias ngcp='curl -s http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url" | pbcopy'
+ng() {
+  ((sleep 2; ngcp) &)
+  ngrok http 5000
+}
 smee() {
   echo $SMEE_URL | pbcopy
   command smee -u $SMEE_URL -p 5000 "$@"
