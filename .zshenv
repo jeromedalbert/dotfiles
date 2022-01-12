@@ -313,7 +313,7 @@ grbim() { git rebase -i $(git-main-branch) }
 alias grbir="git rebase -i --root"
 alias gcon="git rebase --continue"
 alias gaacon="gaa && gcon"
-alias gabort="git rebase --abort"
+alias grabort="git rebase --abort"
 alias gsk="git rebase --skip"
 alias gb='git branch --sort=-committerdate'
 gbcp() { echo $(current-git-branch) | pbcopy }
@@ -560,7 +560,12 @@ mkpwd2() {
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
-alias ngcp='curl -s http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url" | pbcopy'
+ngcp() {
+  curl -s http://localhost:4040/api/tunnels \
+    | jq -r ".tunnels[0].public_url" \
+    | sed 's/^http:/https:/' \
+    | pbcopy
+}
 ng() {
   ((sleep 2; ngcp) &)
   ngrok http 5000
@@ -576,7 +581,6 @@ tess() {
   if [[ -z $file ]]; then
     file=$(ls -dt ~/Desktop/* | head -n 1)
   fi
-
   tesseract $file stdout | tee >(pbcopy)
 }
 gq() {
@@ -592,6 +596,7 @@ alias curljs='curl -H "Content-type: application/json"'
 curlgql() {
   curljs --X POST -s -w '%{time_total}' "$@" | jq
 }
+alias unused='unused -t .tags'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"

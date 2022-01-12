@@ -510,7 +510,10 @@ noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
 noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
 noremap <leader>rc :call CopyCurrentRubyClassName()<cr>
 noremap <leader>rxp :call CreateRubyPrivate()<cr>
-noremap <leader>rxm :call CreateRubyMethod()<cr>
+noremap <leader>rxm :call CreateRubyMethod(0, 0)<cr>
+noremap <leader>rxM :call CreateRubyMethod(1, 0)<cr>
+noremap <leader>rxcm :call CreateRubyMethod(0, 1)<cr>
+noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
@@ -1274,9 +1277,13 @@ function! CreateRubyPrivate()
   call feedkeys('cc')
 endfunction
 
-function! CreateRubyMethod()
+function! CreateRubyMethod(create_at_end, use_current_line_as_name)
+  if a:use_current_line_as_name | exe 'normal yil' | endif
+  if a:create_at_end | exe 'normal G' | endif
   exe "normal ^?^\\s\\+def \<cr>%o\<cr>def "
+  if a:use_current_line_as_name | exe "normal p" | endif
   call feedkeys('a')
+  if a:use_current_line_as_name | call feedkeys("\<cr>") | endif
 endfunction
 
 function! CreateNewFile()
