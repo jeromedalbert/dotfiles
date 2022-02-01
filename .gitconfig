@@ -1,7 +1,7 @@
 [user]
 	name = Jerome Dalbert
 	email = jerome.dalbert@gmail.com
-	signingkey = 1C5D6C4B16AC0B2D
+	signingkey = 9B5649166FBD33E5
 
 [core]
   ignorecase = false
