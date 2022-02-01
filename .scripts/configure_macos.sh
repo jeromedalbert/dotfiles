@@ -39,13 +39,39 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+
+# Set the icon size of Dock items in pixels
+defaults write com.apple.dock tilesize -int 75
+
+# Don't show recent apps in the dock to keep it clean
+defaults write com.apple.dock show-recents -bool false
+
+# Set dock app icons
+defaults delete com.apple.dock persistent-apps
+dock_item() {
+  printf '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>', "$1"
+}
+defaults write com.apple.dock persistent-apps -array \
+  "$(dock_item /Applications/Google\ Chrome.app)" \
+  "$(dock_item /Applications/iTerm.app)" \
+  "$(dock_item /Applications/Calendar.app)" \
+  "$(dock_item /Applications/Evernote.app)" \
+  "$(dock_item /Applications/Photos.app)" \
+  "$(dock_item /Applications/1Password\ 7.app)" \
+  "$(dock_item /Applications/Slack.app)"
+
+# Minimize windows using the scale effect (less intrusive)
+defaults write com.apple.dock mineffect -string scale
+
 # Hot corners
 # Top right screen corner → Desktop
 defaults write com.apple.dock wvous-tr-corner -int 4
 defaults write com.apple.dock wvous-tr-modifier -int 0
 
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
+# Don’t show Dashboard as a Space
+defaults write com.apple.dock dashboard-in-overlay -bool true
 
 # Disable "natural" (Lion-style) scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
@@ -57,17 +83,11 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
 # Use scroll gesture with the Ctrl (^) modifier key to zoom
 sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 
-# Set the icon size of Dock items in pixels
-defaults write com.apple.dock tilesize -int 61
-
 # Disable Dashboard
 defaults write com.apple.dashboard mcx-disabled -bool true
 
-# Don’t show Dashboard as a Space
-defaults write com.apple.dock dashboard-in-overlay -bool true
-
 # Show battery percentage
-defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+defaults write com.apple.menuextra.battery ShowPercent -bool true
 
 # Configure Spotlight search sources
 # Yosemite-specific search results (remove them if your are using OS X 10.9 or older) are:
@@ -123,17 +143,11 @@ defaults write com.apple.CrashReporter DialogType none
 # Disable "Shake to find" cursor
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
 
-# Minimize windows using the scale effect (less intrusive)
-defaults write com.apple.dock mineffect -string scale
-
 # Show the user library folder
 chflags nohidden ~/Library/
 
 # Disable Creation of Metadata Files on USB Volumes
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-
-# Don't show recent apps in the dock to keep it clean
-defaults write com.apple.dock show-recents -bool false
 
 # App shortcuts
 defaults write com.apple.preview NSUserKeyEquivalents \
