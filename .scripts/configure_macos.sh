@@ -154,6 +154,9 @@ defaults write -g CSUIDisable32BitWarning -boolean true
 defaults write -g AppleAccentColor 4
 defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 
+# Set appearance to Auto
+defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
