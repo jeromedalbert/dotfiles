@@ -56,9 +56,9 @@ dock_item() {
 defaults write com.apple.dock persistent-apps -array \
   "$(dock_item /Applications/Google\ Chrome.app)" \
   "$(dock_item /Applications/iTerm.app)" \
-  "$(dock_item /Applications/Calendar.app)" \
+  "$(dock_item /System/Applications/Calendar.app)" \
   "$(dock_item /Applications/Evernote.app)" \
-  "$(dock_item /Applications/Photos.app)" \
+  "$(dock_item /System/Applications/Photos.app)" \
   "$(dock_item /Applications/1Password\ 7.app)" \
   "$(dock_item /Applications/Slack.app)"
 
