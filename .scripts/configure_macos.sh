@@ -55,7 +55,7 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
 
 # Use scroll gesture with the Ctrl (^) modifier key to zoom
-defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 
 # Set the icon size of Dock items in pixels
 defaults write com.apple.dock tilesize -int 61
