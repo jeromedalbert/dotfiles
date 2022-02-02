@@ -34,54 +34,29 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-# Hot corners
-# Top right screen corner → Desktop
-defaults write com.apple.dock wvous-tr-corner -int 4
-defaults write com.apple.dock wvous-tr-modifier -int 0
-
-# Don’t show Dashboard as a Space
-defaults write com.apple.dock dashboard-in-overlay -bool true
-
-# Disable "natural" (Lion-style) scrolling
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
-
-# Use scroll gesture with the Ctrl (^) modifier key to zoom
-sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-
-# Disable Dashboard
-defaults write com.apple.dashboard mcx-disabled -bool true
-
 # Configure Spotlight search sources
-# Yosemite-specific search results (remove them if your are using OS X 10.9 or older) are:
-#   MENU_DEFINITION
-#   MENU_CONVERSION
-#   MENU_EXPRESSION
-#   MENU_SPOTLIGHT_SUGGESTIONS (send search queries to Apple)
-#   MENU_WEBSEARCH             (send search queries to Apple)
-#   MENU_OTHER
 defaults write com.apple.spotlight orderedItems -array \
-        '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-        '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
-        '{"enabled" = 1;"name" = "DIRECTORIES";}' \
-        '{"enabled" = 0;"name" = "PDF";}' \
-        '{"enabled" = 0;"name" = "FONTS";}' \
-        '{"enabled" = 1;"name" = "DOCUMENTS";}' \
-        '{"enabled" = 0;"name" = "MESSAGES";}' \
-        '{"enabled" = 0;"name" = "CONTACT";}' \
-        '{"enabled" = 0;"name" = "EVENT_TODO";}' \
-        '{"enabled" = 0;"name" = "IMAGES";}' \
-        '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-        '{"enabled" = 0;"name" = "MUSIC";}' \
-        '{"enabled" = 0;"name" = "MOVIES";}' \
-        '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
-        '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
-        '{"enabled" = 0;"name" = "SOURCE";}' \
-        '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-        '{"enabled" = 0;"name" = "MENU_OTHER";}' \
-        '{"enabled" = 1;"name" = "MENU_CONVERSION";}' \
-        '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
-        '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
-        '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+  '{ enabled = 1; name = APPLICATIONS; }' \
+  '{ enabled = 1; name = "SYSTEM_PREFS"; }' \
+  '{ enabled = 1; name = DIRECTORIES; }' \
+  '{ enabled = 1; name = PDF; }' \
+  '{ enabled = 0; name = FONTS; }' \
+  '{ enabled = 1; name = DOCUMENTS; }' \
+  '{ enabled = 0; name = MESSAGES; }' \
+  '{ enabled = 0; name = CONTACT; }' \
+  '{ enabled = 0; name = "EVENT_TODO"; }' \
+  '{ enabled = 1; name = IMAGES; }' \
+  '{ enabled = 0; name = BOOKMARKS; }' \
+  '{ enabled = 0; name = MUSIC; }' \
+  '{ enabled = 0; name = MOVIES; }' \
+  '{ enabled = 1; name = PRESENTATIONS; }' \
+  '{ enabled = 1; name = SPREADSHEETS; }' \
+  '{ enabled = 1; name = SOURCE; }' \
+  '{ enabled = 0; name = "MENU_DEFINITION"; }' \
+  '{ enabled = 0; name = "MENU_OTHER"; }' \
+  '{ enabled = 1; name = "MENU_CONVERSION"; }' \
+  '{ enabled = 1; name = "MENU_EXPRESSION"; }' \
+  '{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }'
 
 # Load new settings before rebuilding the index
 killall mds > /dev/null 2>&1
@@ -132,6 +107,15 @@ defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 
 # Set appearance to Auto
 defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
+
+# Configure calendar
+defaults write com.apple.iCal.plist "TimeZone support enabled" -int 1
+defaults write com.apple.iCal.plist "add holiday calendar" -int 0
+defaults write com.apple.iCal.plist "display birthdays calendar" -int 0
+defaults write com.apple.suggestions AppCanShowSiriSuggestionsBlacklist -array "com.apple.iCal"
+
+# Never show notification previews
+defaults write com.apple.ncprefs.plist content_visibility -int 1
 
 ################
 ### Keyboard ###
@@ -217,6 +201,44 @@ sudo pmset -b lessbright 0
 
 # Turn off display after 7 minutes on battery power
 sudo pmset -b displaysleep 7
+
+###############
+### Desktop ###
+###############
+
+# Top right hot corner: Desktop
+defaults write com.apple.dock wvous-tr-corner -int 4
+defaults write com.apple.dock wvous-tr-modifier -int 0
+
+# Bottom right hot corner: nothing
+defaults write com.apple.dock wvous-br-corner -int 1
+defaults write com.apple.dock wvous-br-modifier -int 1048576
+
+# Don’t show Dashboard as a Space
+defaults write com.apple.dock dashboard-in-overlay -bool true
+
+# Disable Dashboard
+defaults write com.apple.dashboard mcx-disabled -bool true
+
+################
+### Trackpad ###
+################
+
+# Disable natural scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+
+# Disable word lookups with force click
+defaults write NSGlobalDomain com.apple.trackpad.forceClick -bool false
+
+# Set tracking speed
+defaults write NSGlobalDomain com.apple.trackpad.scaling -string "0.875"
+
+# Disable force click and haptic feedback
+defaults write com.apple.AppleMultitouchTrackpad ActuateDetents -int 0
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -int 1
+
+# Use scroll gesture with the Ctrl (^) modifier key to zoom
+sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 
 #####################
 ### Refresh macOS ###
