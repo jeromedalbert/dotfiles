@@ -1,3 +1,7 @@
+###############
+### General ###
+###############
+
 # Disable Sound Effects on Boot
 sudo nvram SystemAudioVolume=" "
 
@@ -86,9 +90,6 @@ sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool t
 # Disable Dashboard
 defaults write com.apple.dashboard mcx-disabled -bool true
 
-# Show battery percentage
-defaults write com.apple.menuextra.battery ShowPercent -bool true
-
 # Configure Spotlight search sources
 # Yosemite-specific search results (remove them if your are using OS X 10.9 or older) are:
 #   MENU_DEFINITION
@@ -171,9 +172,25 @@ defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 # Set appearance to Auto
 defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
 
-###############################################################################
-# Kill affected applications                                                  #
-###############################################################################
+################
+### Menu bar ###
+################
+
+# Show battery percentage
+defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -int 1
+
+# Set clock format
+defaults write com.apple.menuextra.clock '{ DateFormat = "EEE H:mm"; ShowDayOfMonth = 0; }'
+
+# Hide Siri
+defaults write com.apple.Siri StatusMenuVisible -int 0
+
+# Hide Spotlight
+defaults -currentHost write com.apple.Spotlight MenuItemHidden -int 1
+
+#####################
+### Refresh macOS ###
+#####################
 
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
         "Dock" "Finder" "Mail" "Messages" "Safari" "SizeUp" "SystemUIServer" \
