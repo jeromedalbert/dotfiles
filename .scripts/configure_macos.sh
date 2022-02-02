@@ -8,15 +8,6 @@ sudo nvram SystemAudioVolume=" "
 # Disable the "Are you sure you want to open this application?" dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-# Disable press-and-hold for keys in favor of key repeat
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-
-# Set a fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 2
-
-# Decrease the initial time before a keyboard repeat
-defaults write -g InitialKeyRepeat -int 15
-
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
@@ -43,32 +34,6 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
-
-# Set the icon size of Dock items in pixels
-defaults write com.apple.dock tilesize -int 75
-
-# Don't show recent apps in the dock to keep it clean
-defaults write com.apple.dock show-recents -bool false
-
-# Set dock app icons
-defaults delete com.apple.dock persistent-apps
-dock_item() {
-  printf '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>', "$1"
-}
-defaults write com.apple.dock persistent-apps -array \
-  "$(dock_item /Applications/Google\ Chrome.app)" \
-  "$(dock_item /Applications/iTerm.app)" \
-  "$(dock_item /System/Applications/Calendar.app)" \
-  "$(dock_item /Applications/Evernote.app)" \
-  "$(dock_item /System/Applications/Photos.app)" \
-  "$(dock_item /Applications/1Password\ 7.app)" \
-  "$(dock_item /Applications/Slack.app)"
-
-# Minimize windows using the scale effect (less intrusive)
-defaults write com.apple.dock mineffect -string scale
-
 # Hot corners
 # Top right screen corner → Desktop
 defaults write com.apple.dock wvous-tr-corner -int 4
@@ -79,10 +44,6 @@ defaults write com.apple.dock dashboard-in-overlay -bool true
 
 # Disable "natural" (Lion-style) scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
-
-# Enable full keyboard access for all controls
-# (e.g. enable Tab in modal dialogs)
-defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
 
 # Use scroll gesture with the Ctrl (^) modifier key to zoom
 sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
@@ -173,6 +134,65 @@ defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
 
 ################
+### Keyboard ###
+################
+
+# Disable press-and-hold for keys in favor of key repeat
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+# Set a fast keyboard repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 2
+
+# Decrease the initial time before a keyboard repeat
+defaults write -g InitialKeyRepeat -int 15
+
+# When pressing fn/globe by itself, do nothing
+defaults write com.apple.HIToolbox AppleFnUsageType -int 0
+
+# Enable full keyboard access for all controls
+# (e.g. enable Tab in modal dialogs)
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
+
+# Show expanded touch bar control strip
+defaults write com.apple.touchbar.agent PresentationModeGlobal "fullControlStrip"
+
+# Set touch bar buttons
+defaults write com.apple.controlstrip FullCustomized -array \
+  "NSTouchBarItemIdentifierFlexibleSpace" \
+  "com.apple.system.group.media" \
+  "com.apple.system.group.volume"
+
+############
+### Dock ###
+############
+
+# Automatically hide Dock
+defaults write com.apple.dock autohide -bool true
+
+# Set the icon size in pixels
+defaults write com.apple.dock tilesize -int 75
+
+# Do not show recent apps
+defaults write com.apple.dock show-recents -bool false
+
+# Set app icons
+defaults delete com.apple.dock persistent-apps
+dock_item() {
+  printf '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>', "$1"
+}
+defaults write com.apple.dock persistent-apps -array \
+  "$(dock_item /Applications/Google\ Chrome.app)" \
+  "$(dock_item /Applications/iTerm.app)" \
+  "$(dock_item /System/Applications/Calendar.app)" \
+  "$(dock_item /Applications/Evernote.app)" \
+  "$(dock_item /System/Applications/Photos.app)" \
+  "$(dock_item /Applications/1Password\ 7.app)" \
+  "$(dock_item /Applications/Slack.app)"
+
+# Minimize windows using the scale effect (less intrusive)
+defaults write com.apple.dock mineffect -string scale
+
+################
 ### Menu bar ###
 ################
 
@@ -188,13 +208,23 @@ defaults write com.apple.Siri StatusMenuVisible -int 0
 # Hide Spotlight
 defaults -currentHost write com.apple.Spotlight MenuItemHidden -int 1
 
+########################
+### Power management ###
+########################
+
+# Do not dim display on battery power
+sudo pmset -b lessbright 0
+
+# Turn off display after 7 minutes on battery power
+sudo pmset -b displaysleep 7
+
 #####################
 ### Refresh macOS ###
 #####################
 
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
         "Dock" "Finder" "Mail" "Messages" "Safari" "SizeUp" "SystemUIServer" \
-        "Terminal" "Transmission" "Twitter" "iCal"; do
+        "Terminal" "Transmission" "Twitter" "iCal" "ControlStrip"; do
         killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
