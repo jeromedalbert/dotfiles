@@ -258,7 +258,7 @@ plutil -replace ProfileSettings.activeProfile.Hide -json "$(cat <<-EOS
   "special.AllOtherItems"
 ]
 EOS
-)" ./com.surteesstudios.Bartender.plist
+)" ~/Library/Preferences/com.surteesstudios.Bartender.plist
 plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
 [
   "com.apple.controlcenter-Battery",
@@ -269,7 +269,7 @@ plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
   "com.evernote.Evernote-Item-0"
 ]
 EOS
-)" ./com.surteesstudios.Bartender.plist
+)" ~/Library/Preferences/com.surteesstudios.Bartender.plist
 
 #####################
 ### Refresh macOS ###
