@@ -15,52 +15,6 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
-# Set Home as the default location for new Finder windows
-defaults write com.apple.finder NewWindowTarget -string "PfHm"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
-
-# Show all filename extensions in Finder
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-# Show status bar in Finder
-defaults write com.apple.finder ShowStatusBar -bool true
-
-# When performing a search, search the current folder by default
-defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-
-# Use list view in all Finder windows by default
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
-# Disable the warning when changing a file extension
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-# Configure Spotlight search sources
-defaults write com.apple.spotlight orderedItems -array \
-  '{ enabled = 1; name = APPLICATIONS; }' \
-  '{ enabled = 1; name = "SYSTEM_PREFS"; }' \
-  '{ enabled = 1; name = DIRECTORIES; }' \
-  '{ enabled = 1; name = PDF; }' \
-  '{ enabled = 0; name = FONTS; }' \
-  '{ enabled = 1; name = DOCUMENTS; }' \
-  '{ enabled = 0; name = MESSAGES; }' \
-  '{ enabled = 0; name = CONTACT; }' \
-  '{ enabled = 0; name = "EVENT_TODO"; }' \
-  '{ enabled = 1; name = IMAGES; }' \
-  '{ enabled = 0; name = BOOKMARKS; }' \
-  '{ enabled = 0; name = MUSIC; }' \
-  '{ enabled = 0; name = MOVIES; }' \
-  '{ enabled = 1; name = PRESENTATIONS; }' \
-  '{ enabled = 1; name = SPREADSHEETS; }' \
-  '{ enabled = 1; name = SOURCE; }' \
-  '{ enabled = 0; name = "MENU_DEFINITION"; }' \
-  '{ enabled = 0; name = "MENU_OTHER"; }' \
-  '{ enabled = 1; name = "MENU_CONVERSION"; }' \
-  '{ enabled = 1; name = "MENU_EXPRESSION"; }' \
-  '{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }'
-
-# Load new settings before rebuilding the index
-killall mds > /dev/null 2>&1
-
 # Prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
@@ -80,17 +34,8 @@ defaults write com.apple.CrashReporter DialogType none
 # Disable "Shake to find" cursor
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
 
-# Show the user library folder
-chflags nohidden ~/Library/
-
 # Disable Creation of Metadata Files on USB Volumes
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-
-# App shortcuts
-defaults write com.apple.preview NSUserKeyEquivalents \
-  '{ "Adjust Size..." = "@~s"; "Hide Sidebar" = "@1"; Thumbnails = "@2"; }'
-defaults write com.google.Chrome NSUserKeyEquivalents '{ Extensions = "@~e"; }'
-defaults write com.evernote.Evernote NSUserKeyEquivalents '{ "Delete Note" = "@$d"; "Insert Row Below" = "@\U21a9"; }'
 
 # Enable subpixel antialiasing to prevent thin text
 defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
@@ -107,12 +52,6 @@ defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 
 # Set appearance to Auto
 defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
-
-# Configure calendar
-defaults write com.apple.iCal.plist "TimeZone support enabled" -int 1
-defaults write com.apple.iCal.plist "add holiday calendar" -int 0
-defaults write com.apple.iCal.plist "display birthdays calendar" -int 0
-defaults write com.apple.suggestions AppCanShowSiriSuggestionsBlacklist -array "com.apple.iCal"
 
 # Never show notification previews
 defaults write com.apple.ncprefs.plist content_visibility -int 1
@@ -145,6 +84,12 @@ defaults write com.apple.controlstrip FullCustomized -array \
   "NSTouchBarItemIdentifierFlexibleSpace" \
   "com.apple.system.group.media" \
   "com.apple.system.group.volume"
+
+# App shortcuts
+defaults write com.apple.preview NSUserKeyEquivalents \
+  '{ "Adjust Size..." = "@~s"; "Hide Sidebar" = "@1"; Thumbnails = "@2"; }'
+defaults write com.google.Chrome NSUserKeyEquivalents '{ Extensions = "@~e"; }'
+defaults write com.evernote.Evernote NSUserKeyEquivalents '{ "Delete Note" = "@$d"; "Insert Row Below" = "@\U21a9"; }'
 
 ############
 ### Dock ###
@@ -192,16 +137,6 @@ defaults write com.apple.Siri StatusMenuVisible -int 0
 # Hide Spotlight
 defaults -currentHost write com.apple.Spotlight MenuItemHidden -int 1
 
-########################
-### Power management ###
-########################
-
-# Do not dim display on battery power
-sudo pmset -b lessbright 0
-
-# Turn off display after 7 minutes on battery power
-sudo pmset -b displaysleep 7
-
 ###############
 ### Desktop ###
 ###############
@@ -240,13 +175,82 @@ defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -int 1
 # Use scroll gesture with the Ctrl (^) modifier key to zoom
 sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 
+########################
+### Power management ###
+########################
+
+# Do not dim display on battery power
+sudo pmset -b lessbright 0
+
+# Turn off display after 7 minutes on battery power
+sudo pmset -b displaysleep 7
+
+##############
+### Finder ###
+##############
+
+# Set Home as the default location
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Show status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# When performing a search, search the current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Use list view in all windows by default
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+# Disable the warning when changing a file extension
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+############
+### Apps ###
+############
+
+# Calendar
+defaults write com.apple.iCal.plist "TimeZone support enabled" -int 1
+defaults write com.apple.iCal.plist "add holiday calendar" -int 0
+defaults write com.apple.iCal.plist "display birthdays calendar" -int 0
+defaults write com.apple.suggestions AppCanShowSiriSuggestionsBlacklist -array "com.apple.iCal"
+
+# Spotlight search sources
+killall mds > /dev/null 2>&1
+defaults write com.apple.spotlight orderedItems -array \
+  '{ enabled = 1; name = APPLICATIONS; }' \
+  '{ enabled = 1; name = "SYSTEM_PREFS"; }' \
+  '{ enabled = 1; name = DIRECTORIES; }' \
+  '{ enabled = 1; name = PDF; }' \
+  '{ enabled = 0; name = FONTS; }' \
+  '{ enabled = 1; name = DOCUMENTS; }' \
+  '{ enabled = 0; name = MESSAGES; }' \
+  '{ enabled = 0; name = CONTACT; }' \
+  '{ enabled = 0; name = "EVENT_TODO"; }' \
+  '{ enabled = 1; name = IMAGES; }' \
+  '{ enabled = 0; name = BOOKMARKS; }' \
+  '{ enabled = 0; name = MUSIC; }' \
+  '{ enabled = 0; name = MOVIES; }' \
+  '{ enabled = 1; name = PRESENTATIONS; }' \
+  '{ enabled = 1; name = SPREADSHEETS; }' \
+  '{ enabled = 1; name = SOURCE; }' \
+  '{ enabled = 0; name = "MENU_DEFINITION"; }' \
+  '{ enabled = 0; name = "MENU_OTHER"; }' \
+  '{ enabled = 1; name = "MENU_CONVERSION"; }' \
+  '{ enabled = 1; name = "MENU_EXPRESSION"; }' \
+  '{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }'
+
 #####################
 ### Refresh macOS ###
 #####################
 
-for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-        "Dock" "Finder" "Mail" "Messages" "Safari" "SizeUp" "SystemUIServer" \
-        "Terminal" "Transmission" "Twitter" "iCal" "ControlStrip"; do
-        killall "${app}" > /dev/null 2>&1
+for app in \
+  "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" "Dock" \
+  "Finder" "Mail" "Messages" "Safari" "SizeUp" "SystemUIServer" "Terminal" \
+  "Transmission" "Twitter" "iCal" "ControlStrip"; do
+  killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
