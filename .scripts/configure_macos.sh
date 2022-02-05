@@ -2,6 +2,23 @@
 ### General ###
 ###############
 
+# Set appearance to Auto
+defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
+
+# Set accent and highlight colors to blue
+defaults write -g AppleAccentColor 4
+defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
+
+# Require password immediately after sleep or screen saver begins
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# Never show notification previews
+defaults write com.apple.ncprefs.plist content_visibility -int 1
+
+# Enable subpixel antialiasing to prevent thin text
+defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
+
 # Disable Sound Effects on Boot
 sudo nvram SystemAudioVolume=" "
 
@@ -11,18 +28,8 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
-# Require password immediately after sleep or screen saver begins
-defaults write com.apple.screensaver askForPassword -int 1
-defaults write com.apple.screensaver askForPasswordDelay -int 0
-
 # Prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-
-# Disable the all too sensitive backswipe in Chrome
-defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
-
-# Disable scrolling to text fragments in Chrome
-defaults write com.google.Chrome ScrollToTextFragmentEnabled -bool false
 
 # Expand Save Panel by Default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
@@ -37,24 +44,11 @@ defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationM
 # Disable Creation of Metadata Files on USB Volumes
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
-# Enable subpixel antialiasing to prevent thin text
-defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
-
 # Disable screenshots floating thumbnails
 defaults write com.apple.screencapture show-thumbnail -bool false
 
 # Disable "App is not optimized for your Mac" alerts
 defaults write -g CSUIDisable32BitWarning -boolean true
-
-# Set accent and highlight colors to blue
-defaults write -g AppleAccentColor 4
-defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
-
-# Set appearance to Auto
-defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
-
-# Never show notification previews
-defaults write com.apple.ncprefs.plist content_visibility -int 1
 
 ################
 ### Keyboard ###
@@ -270,6 +264,10 @@ plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
 ]
 EOS
 )" ~/Library/Preferences/com.surteesstudios.Bartender.plist
+
+# Chrome
+defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
+defaults write com.google.Chrome ScrollToTextFragmentEnabled -bool false
 
 #####################
 ### Refresh macOS ###
