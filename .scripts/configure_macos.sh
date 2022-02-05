@@ -243,6 +243,33 @@ defaults write com.apple.spotlight orderedItems -array \
   '{ enabled = 1; name = "MENU_EXPRESSION"; }' \
   '{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }'
 
+# Bartender
+plutil -replace ProfileSettings.activeProfile.Hide -json "$(cat <<-EOS
+[
+  "com.fleetsmith.agent.ui-Item-0",
+  "com.apple.Spotlight-Item-0",
+  "org.pqrs.Karabiner-Menu-Item-0",
+  "com.slate.Slate-Item-0",
+  "com.stairways.keyboardmaestro.engine-Main Status Menu",
+  "com.apple.controlcenter-Bluetooth",
+  "com.getdropbox.dropbox-Item-0",
+  "com.monosnap.monosnap-Item-0",
+  "special.AllOtherItems"
+]
+EOS
+)" ./com.surteesstudios.Bartender.plist
+plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
+[
+  "com.apple.controlcenter-Battery",
+  "com.apple.controlcenter-FocusModes",
+  "com.apple.controlcenter-WiFi",
+  "com.surteesstudios.Bartender-statusItem",
+  "com.mowglii.ItsycalApp-ItsycalStatusItem",
+  "com.evernote.Evernote-Item-0"
+]
+EOS
+)" ./com.surteesstudios.Bartender.plist
+
 #####################
 ### Refresh macOS ###
 #####################
