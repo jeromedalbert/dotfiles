@@ -123,6 +123,9 @@ defaults write com.apple.dock mineffect -string scale
 # Show battery percentage
 defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -int 1
 
+# Show battery percentage
+defaults -currentHost write com.apple.controlcenter Bluetooth -int 18
+
 # Set clock format
 defaults write com.apple.menuextra.clock '{ DateFormat = "EEE H:mm"; ShowDayOfMonth = 0; }'
 
