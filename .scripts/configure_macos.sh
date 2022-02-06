@@ -136,6 +136,9 @@ defaults -currentHost write com.apple.Spotlight MenuItemHidden -int 1
 ### Desktop ###
 ###############
 
+# Set icon size
+plutil -replace DesktopViewSettings.IconViewSettings.iconSize -integer 128 ~/Library/Preferences/com.apple.finder.plist
+
 # Top right hot corner: Desktop
 defaults write com.apple.dock wvous-tr-corner -int 4
 defaults write com.apple.dock wvous-tr-modifier -int 0
