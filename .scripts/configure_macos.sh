@@ -264,7 +264,11 @@ plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
   "com.surteesstudios.Bartender-statusItem",
   "com.mowglii.ItsycalApp-ItsycalStatusItem",
   "com.evernote.Evernote-Item-0",
-  "com.privateinternetaccess.vpn-Item-0"
+  "com.privateinternetaccess.vpn-Item-0",
+  "mega.mac-Item-0",
+  "info.marcel-dierkes.KeepingYouAwake-Item-0",
+  "com.docker.docker-Item-0",
+  "org.sabnzbd.sabnzbd-Item-0"
 ]
 EOS
 )" ~/Library/Preferences/com.surteesstudios.Bartender.plist
