@@ -263,7 +263,8 @@ plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
   "com.apple.controlcenter-WiFi",
   "com.surteesstudios.Bartender-statusItem",
   "com.mowglii.ItsycalApp-ItsycalStatusItem",
-  "com.evernote.Evernote-Item-0"
+  "com.evernote.Evernote-Item-0",
+  "com.privateinternetaccess.vpn-Item-0"
 ]
 EOS
 )" ~/Library/Preferences/com.surteesstudios.Bartender.plist
