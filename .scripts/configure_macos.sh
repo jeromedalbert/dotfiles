@@ -19,8 +19,8 @@ defaults write com.apple.ncprefs.plist content_visibility -int 1
 # Enable subpixel antialiasing to prevent thin text
 defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
 
-# Disable Sound Effects on Boot
-sudo nvram SystemAudioVolume=" "
+# Disable startup sound
+sudo nvram StartupMute=%01
 
 # Disable the "Are you sure you want to open this application?" dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
