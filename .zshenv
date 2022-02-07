@@ -99,6 +99,7 @@ alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
 alias '--' -='cd -'
+alias izsh='arch -x86_64 zsh'
 
 # Tmux
 alias tl='tmux ls'
