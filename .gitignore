@@ -18,6 +18,8 @@
 .bundle/*
 !.bundle/config
 
+.k9s/config.yml
+
 .secrets.zsh
 .zcompdump
 *.pyc
