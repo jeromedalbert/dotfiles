@@ -26,11 +26,13 @@ export GREP_COLOR=auto
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_PREFIX=/opt/homebrew
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
-export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:$HOMEBREW_PREFIX/bin
+export PATH=$PATH:$HOMEBREW_PREFIX/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/bin
 export PATH=$PATH:/usr/sbin
@@ -218,7 +220,7 @@ paste-insert() {
 ### Other ###
 #############
 
-source /usr/local/opt/asdf/asdf.sh
+source $HOMEBREW_PREFIX/opt/asdf/asdf.sh
 stty -ixon
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 if [[ -z $TMUX && -z $VIM ]]; then; tmux-start; fi
