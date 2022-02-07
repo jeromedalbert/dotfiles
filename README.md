@@ -4,13 +4,17 @@
 
 1. Clone the repo:
 
-        git clone git@github.com:jeromedalbert/dotfiles.git ~/.dotfiles
+    ```
+    git clone git@github.com:jeromedalbert/dotfiles.git ~/.dotfiles
+    ```
 
 1. Symlink the dotfiles:
 
-        setopt extended_glob
-        for file in ~/.dotfiles/.^(git|gitmodules|.gitignore); do
-          ln -sf $file ~/${file:t}
-        done
+    ```
+    setopt extended_glob
+    for file in ~/.dotfiles/.^(git|gitmodules|.gitignore); do
+      ln -sf $file ~/${file:t}
+    done
+    ```
 
 1. Install [Homebrew](http://brew.sh/) and run the scripts in `~/.scripts`.
