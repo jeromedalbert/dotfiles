@@ -50,6 +50,9 @@ defaults write com.apple.screencapture show-thumbnail -bool false
 # Disable "App is not optimized for your Mac" alerts
 defaults write -g CSUIDisable32BitWarning -boolean true
 
+# Disable Airplay Receiver to free up port 5000 used in development
+defaults -currentHost write com.apple.controlcenter AirplayRecieverEnabled -int 0
+
 ################
 ### Keyboard ###
 ################

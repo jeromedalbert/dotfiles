@@ -67,7 +67,6 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 " Plug 'psliwka/vim-smoothie'
 " Plug 'romainl/vim-cool'
 call plug#end()
