@@ -3,7 +3,7 @@
 "###############
 
 call plug#begin('~/.vim/plugged')
-Plug '$HOMEBREW_PREFIX/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
+Plug $HOMEBREW_PREFIX . '/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }
@@ -615,10 +615,10 @@ if has('gui_running')
 endif
 
 let g:python_host_prog  = '/usr/bin/python2'
-let g:python3_host_prog = '$HOMEBREW_PREFIX/bin/python3'
+let g:python3_host_prog = $HOMEBREW_PREFIX . '/bin/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
 let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/16.13.2/.npm/lib/node_modules/neovim/bin/cli.js'
-let g:perl_host_prog = '$HOMEBREW_PREFIX/bin/perl'
+let g:perl_host_prog = $HOMEBREW_PREFIX . '/bin/perl'
 let g:clipboard = {
   \ 'name': 'pbcopy',
   \ 'copy': {
