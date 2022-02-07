@@ -3,7 +3,7 @@
 "###############
 
 call plug#begin('~/.vim/plugged')
-Plug '/usr/local/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
+Plug '$HOMEBREW_PREFIX/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'SirVer/ultisnips'
 Plug 'neomake/neomake', { 'on': [] }
@@ -67,9 +67,9 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-" Plug 'psliwka/vim-smoothie'
-Plug 'romainl/vim-cool'
 Plug 'tmux-plugins/vim-tmux-focus-events'
+" Plug 'psliwka/vim-smoothie'
+" Plug 'romainl/vim-cool'
 call plug#end()
 
 "############################
@@ -614,10 +614,11 @@ if has('gui_running')
   set macmeta
 endif
 
-let g:python_host_prog  = '/usr/local/bin/python2'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python_host_prog  = '/usr/bin/python2'
+let g:python3_host_prog = '$HOMEBREW_PREFIX/bin/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
-let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/12.18.4/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/16.13.2/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:perl_host_prog = '$HOMEBREW_PREFIX/bin/perl'
 let g:clipboard = {
   \ 'name': 'pbcopy',
   \ 'copy': {
