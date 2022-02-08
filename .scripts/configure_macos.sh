@@ -189,6 +189,15 @@ sudo pmset -b lessbright 0
 # Turn off display after 7 minutes on battery power
 sudo pmset -b displaysleep 7
 
+########################
+### Software Updates ###
+########################
+
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticCheckEnabled -int 1
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload -int 1
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -int 0
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+
 ##############
 ### Finder ###
 ##############
