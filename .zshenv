@@ -86,6 +86,7 @@ alias conf="$MAIN_EDITOR ~/.zshrc"
 alias sec="$MAIN_EDITOR ~/.secrets.zsh"
 alias reload='. ~/.zshrc; . ~/.zshenv; . ~/.secrets.zsh'
 alias rl='reload'
+alias i='arch -x86_64 zsh'
 
 # Zsh
 alias dirs='dirs -v'
@@ -832,9 +833,3 @@ alias bcs='brew search --cask'
 alias bcl='brew list --cask'
 alias bcls='bcl'
 alias brsl='brew services list'
-
-# Rosetta / Intel
-alias izsh='arch -x86_64 zsh'
-alias intel='izsh'
-alias int='izsh'
-alias ibrew='arch -x86_64 /usr/local/bin/brew'

@@ -10,8 +10,7 @@ defaults write -g AppleAccentColor 4
 defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 
 # Require password immediately after sleep or screen saver begins
-defaults write com.apple.screensaver askForPassword -int 1
-defaults write com.apple.screensaver askForPasswordDelay -int 0
+sysadminctl -screenLock immediate -password -
 
 # Never show notification previews
 defaults write com.apple.ncprefs.plist content_visibility -int 1
