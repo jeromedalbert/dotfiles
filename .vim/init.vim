@@ -57,7 +57,6 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'nishigori/increment-activator'
 Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'xolox/vim-misc', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'xolox/vim-session', { 'on': ['SaveSession', 'OpenSession'] }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
@@ -67,8 +66,6 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-" Plug 'psliwka/vim-smoothie'
-" Plug 'romainl/vim-cool'
 call plug#end()
 
 "############################
