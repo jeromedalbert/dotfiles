@@ -66,6 +66,7 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
+Plug 'jeromedalbert/vim-cool', { 'branch': 'better-vim-cool' }
 call plug#end()
 
 "############################
@@ -603,6 +604,7 @@ set undodir=~/.vim/tmp/undo
 
 if has('nvim')
   set scrollback=-1
+  set inccommand=
 endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
@@ -950,7 +952,6 @@ let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0
 let g:netrw_altfile = 1
 let g:csv_delim_test = ',;|'
-let g:CoolTotalMatches = 1
 
 let g:scrollbar_right_offset = 1
 let g:scrollbar_shape = {
@@ -2718,27 +2719,7 @@ if has('nvim')
     autocmd!
     autocmd InsertEnter * call LazyLoadDeoplete()
   augroup end
-
-  " augroup configure_scrollbar
-  "   autocmd!
-  "   autocmd CursorMoved * call ShowScrollbar()
-  "   autocmd CursorHold,BufLeave,FocusLost,VimResized,QuitPre * call HideScrollbar()
-  " augroup end
-  " set updatetime=500
 endif
-
-function! ShowScrollbar()
-  if !exists('b:previous_first_visible_linenum') | return | endif
-  let first_visible_linenum = line('w0')
-  if first_visible_linenum != b:previous_first_visible_linenum
-    silent! lua require('scrollbar').show()
-  end
-  let b:previous_first_visible_linenum = first_visible_linenum
-endfunction
-
-function! HideScrollbar()
-  silent! lua require('scrollbar').clear()
-endfunction
 
 augroup configure_linter
   autocmd!

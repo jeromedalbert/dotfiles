@@ -795,7 +795,9 @@ alias kr='kube run'
 krc() { kube run $@ rails c }
 krb() { kube run $@ bash }
 kpr() { kube run $@ printenv | sort }
+krru() { kube run $1 $2 rails runner $3 }
 alias krbg='kube run:bg'
+krrubg() { kube run:bg $1 $2 rails runner $3 }
 alias kl='kube logs'
 alias ke='kube env'
 alias kp='kube pods'
