@@ -86,6 +86,7 @@ alias conf="$MAIN_EDITOR ~/.zshrc"
 alias sec="$MAIN_EDITOR ~/.secrets.zsh"
 alias reload='. ~/.zshrc; . ~/.zshenv; . ~/.secrets.zsh'
 alias rl='reload'
+alias rel='reload'
 alias i='arch -x86_64 zsh'
 
 # Zsh
@@ -669,6 +670,10 @@ alias be='bundle exec'
 alias bo='bundle open'
 alias bi='bundle install'
 alias bu='bundle update'
+bundle-path() {
+  VISUAL=echo bundle open $1
+}
+alias bp='bundle-path'
 rails() {
   if [[ -e 'bin/rails' ]]; then bin/rails "$@"; else command rails "$@"; fi
 
@@ -692,7 +697,7 @@ alias rdm='rails destroy migration'
 alias rd='rails destroy'
 alias rc='rails c'
 alias rcs='rails c --sandbox'
-alias rr='rake routes'
+alias rr='rails routes'
 alias rdb='rails db'
 alias mi='rake db:migrate'
 alias ro='rake db:rollback'
@@ -707,8 +712,7 @@ alias rT='rake -T'
 alias debug='pry-remote'
 alias st='spring stop'
 alias strc='st && rc'
-alias stt='spring status'
-alias sts='stt'
+alias ss='spring status'
 alias irb='pry'
 fs() {
   local options=''
