@@ -291,6 +291,7 @@ noremap <leader>fN :call CreateNewFile()<cr>
 
 noremap <silent> <leader>fjs :set filetype=json<cr>:%!jq '.'<cr>
 xnoremap <silent> <leader>fjs :!jq '.'<cr>
+nmap <silent> <leader>frh :call FormatRubyHashToJson()<cr>
 noremap <silent> <leader>fja :set filetype=javascript<cr>:%!js-beautify -s 2<cr>
 xnoremap <silent> <leader>fja :!js-beautify -s 2<cr>
 noremap <silent> <leader>fh :silent %!tidy -qi
@@ -1309,6 +1310,22 @@ function! CreateNewFileInCurrentDir()
   endif
 endfunction
 
+function! FormatRubyHashToJson()
+  norm gg0
+  let current_char = getline('.')[col('.')-1]
+  if current_char != '{'
+    norm ^dt{
+  endif
+  silent! %s/nil/null
+  silent! %s/=> :\(.*\),/=> "\1",
+  silent! %s/\(^\s*\)\[\d\+\]/\1
+  silent! %s/=>/:
+  silent! %s/#<ActionController::Parameters /
+  silent! %s/ permitted: false>/
+  set filetype=json
+  %!jq '.'
+endfunction
+
 function! EditAlternateFile(split)
   call LazyLoadProjectionist()
   call ProjectionistDetect(expand('%:p'))
@@ -2207,19 +2224,19 @@ function! DetectBinaryFile()
 endfunction
 
 function! SetTmuxWindowName()
-  let cmd = 'rename=$(tmux show-window-options -t $TMUX_PANE -v automatic-rename);'
-  let cmd .= 'if [[ $rename != "off" ]]; then;'
-  let cmd .= "tmux rename-window -t $TMUX_PANE '" . GetProjectName() . "';"
-  let cmd .= 'fi'
-  call jobstart(cmd)
+  if $TMUX_AUTOMATIC_RENAME != 'off'
+    call jobstart("tmux rename-window -t $TMUX_PANE '" . GetProjectName() . "'")
+  endif
 endfunction
 
 function! RestoreTmuxWindowName()
-  let cmd = 'number_of_vims=$(tmux list-panes -F "#{pane_current_command}" | grep -c vim);'
-  let cmd .= 'if [[ $number_of_vims -eq 1 ]]; then;'
-  let cmd .= 'tmux setw automatic-rename;'
-  let cmd .= 'fi'
-  call system(cmd)
+  if $TMUX_AUTOMATIC_RENAME != 'off'
+    let cmd = 'number_of_vims=$(tmux list-panes -F "#{pane_current_command}" | grep -c vim);'
+    let cmd .= 'if [[ $number_of_vims -eq 1 ]]; then;'
+    let cmd .= 'tmux setw automatic-rename;'
+    let cmd .= 'fi'
+    call system(cmd)
+  endif
 endfunction
 
 function! Profile()

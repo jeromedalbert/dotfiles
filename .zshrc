@@ -26,14 +26,17 @@ export GREP_COLOR=auto
 export HOMEBREW_PREFIX=$([[ $(arch) == 'arm64' ]] && echo '/opt/homebrew' || echo '/usr/local')
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
-export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$HOMEBREW_PREFIX/share/man:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export GH_NO_UPDATE_NOTIFIER=true
+export CLOUDSDK_GSUTIL_PYTHON=$HOMEBREW_PREFIX/bin/python3
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOMEBREW_PREFIX/bin
 export PATH=$PATH:$HOMEBREW_PREFIX/sbin
+export PATH=$PATH:$HOMEBREW_PREFIX/opt/python/libexec/bin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/bin
 export PATH=$PATH:/usr/sbin
@@ -230,4 +233,7 @@ paste-insert() {
 source $HOMEBREW_PREFIX/opt/asdf/asdf.sh
 stty -ixon
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
+if [[ $(tmux show-window-options -t $TMUX_PANE -v automatic-rename) == "off" ]]; then
+  export TMUX_AUTOMATIC_RENAME=off
+fi
 if [[ -z $TMUX && -z $VIM ]]; then; tmux-start; fi
