@@ -233,7 +233,7 @@ paste-insert() {
 source $HOMEBREW_PREFIX/opt/asdf/asdf.sh
 stty -ixon
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
-if [[ $(tmux show-window-options -t $TMUX_PANE -v automatic-rename) == "off" ]]; then
+if [[ -n $TMUX && $(tmux show-window-options -t $TMUX_PANE -v automatic-rename) == "off" ]]; then
   export TMUX_AUTOMATIC_RENAME=off
 fi
 if [[ -z $TMUX && -z $VIM ]]; then; tmux-start; fi

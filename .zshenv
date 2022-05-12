@@ -529,8 +529,8 @@ alias epad="sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext"
 alias emouse="dpad"
 alias dmouse="epad"
 alias archey="archey -c"
-serve() { ruby -run -e httpd . -p 5000 }
-servepy() { python -m SimpleHTTPServer 8000 }
+serve() { ruby -run -e httpd . -p 8000 }
+servepy() { python -m http.server 8000 }
 alias mounted="mount | column -t"
 sman() { man "${1}" | col -b | subl }
 alias rtop="top -o rsize"
