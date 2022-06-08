@@ -44,6 +44,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-projectionist', { 'on': [] }
 Plug 'jeromedalbert/vim-fugitive', { 'branch': 'better-vim-fugitive', 'on': [] }
 Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
+Plug 'jeromedalbert/vim-cool', { 'branch': 'better-vim-cool' }
 
 Plug 'machakann/vim-sandwich'
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -66,7 +67,7 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'jeromedalbert/vim-cool', { 'branch': 'better-vim-cool' }
+Plug 'github/copilot.vim'
 call plug#end()
 
 "############################
@@ -153,9 +154,10 @@ imap <m-.> <C-o>A.
 noremap <m-:> mCA:<esc>`C
 inoremap <m-:> <C-o>A:
 
-map <m-m> %
-map <m-]> <c-]>
-map <m-[> <c-t>
+nnoremap <m-m> %
+onoremap <m-m> %
+nnoremap <m-]> <c-]>
+nnoremap <m-[> <c-t>
 imap <m-_> <c-_>
 
 noremap <leader>n <c-w>w
@@ -230,6 +232,7 @@ noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <silent> <leader>rd :e config/database.yml<cr>
 noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
 noremap <silent> <leader>rb obinding.pry<esc>
+noremap <silent> <leader>rB orequire 'pry-byebug'<cr>binding.pry<esc>
 noremap <silent> <leader>rp /^\s*\(private\\|protected\)$<cr>^
 
 "######################################
@@ -435,7 +438,7 @@ noremap <silent> <leader>tl :call MergeToNextTab()<cr>
 noremap <silent> <leader>tr :call RenameTab()<cr>
 noremap <silent> <m-.> :call GoToLastActiveTab()<cr>
 
-nnoremap <silent> <Leader>b :BufExplorerHorizontalSplit<cr>
+nnoremap <silent> <leader>b :BufExplorerHorizontalSplit<cr>
 map <silent> <leader>j <Plug>Join
 
 cnoremap <expr> <m-b> MovePreviousWord("\<left>")
@@ -514,6 +517,8 @@ noremap <leader>rxcm :call CreateRubyMethod(0, 1)<cr>
 noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
+
+noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
 
 "#############################
 "### General configuration ###
@@ -2133,6 +2138,9 @@ function! CreateBufferMappings()
     nmap <buffer> ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
     nmap <buffer> dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
   endif
+  if bufname =~ '^copilot:'
+    nnoremap <silent><buffer> <esc> :q<cr>
+  endif
   let b:buffer_mappings_created = 1
 endfunction
 
@@ -2649,6 +2657,19 @@ function! WriteDesktop(filename)
   let filename = a:filename
   if filename == '' | let filename = 'tmp.txt' | endif
   exe 'w ~/Desktop/' . filename
+endfunction
+
+function! ShowCopilotPanel()
+  let current_syntax = get(synstack(line('.'), col('.')), 0)
+  if current_syntax && synIDattr(current_syntax, 'name') =~ 'comment'
+    let old_linenum = line('.')
+    normal }
+    if line('.') == old_linenum
+      normal o
+      normal cc
+    endif
+  endif
+  Copilot panel
 endfunction
 
 "####################

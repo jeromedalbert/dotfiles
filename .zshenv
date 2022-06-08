@@ -275,7 +275,7 @@ alias gdh='gd HEAD'
 alias "gdh^"="gd 'HEAD^'"
 alias glog='git log'
 alias glo="git log --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
-alias glod="glo --date=format-local:'%a %b %d %H:%M' --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias glod="glo --date=format-local:'%a %b %d %Y %H:%M' --format=format:'%C(yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
 alias gloa='glo --author=jerome'
 alias gloda='glod --author=jerome'
 alias gload='gloda'
