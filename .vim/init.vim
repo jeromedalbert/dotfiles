@@ -67,7 +67,7 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'github/copilot.vim'
+Plug 'github/copilot.vim', { 'branch': 'release' }
 call plug#end()
 
 "############################
@@ -956,6 +956,7 @@ call textobj#user#plugin('conflict', {
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0
+let g:gundo_prefer_python3 = 1
 let g:netrw_altfile = 1
 let g:csv_delim_test = ',;|'
 
@@ -1271,9 +1272,6 @@ function! CopyCurrentRubyClassName()
   normal! WyiW
   if module | undo | endif
   normal! `C
-
-
-  " let @+ = expand('%')
 endfunction
 
 function! CreateRubyPrivate()
@@ -1370,14 +1368,6 @@ function! OnVimResume()
   silent! checktime
 endfunction
 
-function! OnTestDisplayed()
-  noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
-  map <silent><buffer> <esc> <leader>q
-  noremap <silent><buffer> o :call OpenErrorFile(1)<cr>
-  noremap <silent><buffer> <cr> :call OpenErrorFile(0)<cr>
-  map <silent><buffer> i <cr>
-endfunction
-
 function! OpenErrorFile(preview_mode)
   let file_and_line = GetFileAndLineUnderCursor()
   if empty(file_and_line) | return | endif
@@ -1399,16 +1389,11 @@ function! GetFileAndLineUnderCursor()
   endif
 endfunction
 
-function! OnFileSearchDisplayed()
-  noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
-  nmap <buffer> o <cr>
-  nmap <buffer> i <cr>
-  " noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
-endfunction
-
 function! OpenFileSearchResult(new_tab)
-  if getline('.') == '' | return | endif
-  let line = matchstr(getline('.'), '^\d\+')
+  let line = getline('.')
+  if line == '' || line =~ '^[' | return | endif
+  if line == '--' | let line = getline(line('.') - 1) | endif
+  let line = matchstr(line, '^\d\+')
   normal mC
   if line != ''
     normal {
@@ -2051,6 +2036,9 @@ function! BuildTabs()
     elseif tab_name =~ 'fzf'
       let tab_name = 'FZF'
       let is_custom_name = 1
+    elseif tab_name =~ '^term://'
+      let tab_name = substitute(tab_name, '^term:.*:', '', '')
+      let is_custom_name = 1
     else
       let file_path = fnamemodify(tab_name, ':p')
       let tab_name = fnamemodify(tab_name, ':p:t')
@@ -2574,6 +2562,27 @@ function! OnTermOpen()
   if &buftype != 'terminal' | return | endif
   setlocal nonumber norelativenumber colorcolumn=
   nnoremap <silent><buffer> G G{}
+  let bufname = bufname('%')
+  if bufname =~ 'test'
+    call OnTestDisplayed()
+  elseif bufname =~ 'ag '
+    call OnFileSearchDisplayed()
+  endif
+endfunction
+
+function! OnTestDisplayed()
+  noremap <silent><buffer> <leader>q <c-w>p:call CloseTests()<cr>
+  map <silent><buffer> <esc> <leader>q
+  noremap <silent><buffer> o :call OpenErrorFile(1)<cr>
+  noremap <silent><buffer> <cr> :call OpenErrorFile(0)<cr>
+  map <silent><buffer> i <cr>
+endfunction
+
+function! OnFileSearchDisplayed()
+  noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
+  nmap <buffer> o <cr>
+  nmap <buffer> i <cr>
+  noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
 endfunction
 
 function! FocusSelection(visual)
@@ -2746,10 +2755,8 @@ if has('nvim')
     autocmd BufWritePost * call BackupCurrentFile()
   augroup end
 
-  augroup on_display_events
+  augroup term_events
     autocmd!
-    autocmd TermOpen *test* call OnTestDisplayed()
-    autocmd TermOpen *ag\ * call OnFileSearchDisplayed()
     autocmd TermOpen * call OnTermOpen()
   augroup end
 
