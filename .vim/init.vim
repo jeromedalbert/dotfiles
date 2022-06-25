@@ -2037,7 +2037,10 @@ function! BuildTabs()
       let tab_name = 'FZF'
       let is_custom_name = 1
     elseif tab_name =~ '^term://'
-      let tab_name = substitute(tab_name, '^term:.*:', '', '')
+      let tab_name = trim(substitute(tab_name, '^term:[^:]*:', '', ''))
+      if len(tab_name > 40)
+        let tab_name = tab_name[0:39]
+      endif
       let is_custom_name = 1
     else
       let file_path = fnamemodify(tab_name, ':p')
@@ -2563,9 +2566,9 @@ function! OnTermOpen()
   setlocal nonumber norelativenumber colorcolumn=
   nnoremap <silent><buffer> G G{}
   let bufname = bufname('%')
-  if bufname =~ 'test'
+  if bufname =~ '#test$'
     call OnTestDisplayed()
-  elseif bufname =~ 'ag '
+  elseif bufname =~ ':ag '
     call OnFileSearchDisplayed()
   endif
 endfunction

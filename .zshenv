@@ -178,6 +178,10 @@ to() {
     ta $1
   fi
 }
+trn() {
+  tmux rename-window $1
+  export TMUX_AUTOMATIC_RENAME=off
+}
 
 # Git
 alias gi='git init'
