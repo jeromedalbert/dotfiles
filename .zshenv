@@ -370,6 +370,7 @@ gpd() {
 }
 alias gclo-"git clone"
 alias gx="gitx"
+alias ggx="gitx"
 alias gu="gitup"
 alias git-branch-previous='git check-ref-format --branch "@{-1}"'
 ggo() {

@@ -217,8 +217,9 @@ defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 # Use list view in all windows by default
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-# Disable the warning when changing a file extension
+# Disable warnings
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
 
 ############
 ### Apps ###
