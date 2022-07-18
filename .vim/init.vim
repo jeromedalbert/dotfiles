@@ -127,10 +127,6 @@ for tab_number in [1, 2, 3, 4, 5, 6, 7, 8]
 endfor
 nnoremap <c-h> gT
 noremap <c-l> gt
-noremap <silent> <m-}> :+tabmove<cr>
-noremap <silent> <m-{> :-tabmove<cr>
-noremap <silent> <m-L> :+tabmove<cr>
-noremap <silent> <m-H> :-tabmove<cr>
 noremap <silent> <leader>tc :silent! tabclose<cr>
 map <silent> <leader>tq <leader>tc
 noremap <silent> <leader>to :silent! tabonly<cr>
@@ -253,6 +249,11 @@ nnoremap <silent> <esc> :nohlsearch<cr>:call ClearEverything()<cr>
 
 noremap <m-/> :call ShowHighlightsUnderCursor()<CR>
 noremap <m-?> :call ShowAllHighlights()<CR>
+
+noremap <silent> <m-}> :call TabMove('+')<cr>
+noremap <silent> <m-{> :call TabMove('-')<cr>
+noremap <silent> <m-L> :call TabMove('+')<cr>
+noremap <silent> <m-H> :call TabMove('-')<cr>
 
 noremap <silent> <up> :silent call BrowseFiles()<cr>
 noremap <silent> <leader>i :silent call BrowseBufferTags()<cr>
@@ -1058,6 +1059,16 @@ function! ShowAllHighlights()
   tabnew
   setlocal buftype=nofile
   normal "zpdd
+endfunction
+
+function! TabMove(direction)
+  try
+    exe a:direction . 'tabmove'
+  catch /E16/
+    0tabmove
+  catch /E474/
+    $tabmove
+  endtry
 endfunction
 
 function! Autowrite()
@@ -2585,7 +2596,7 @@ function! OnFileSearchDisplayed()
   noremap <silent><buffer> <cr> :call OpenFileSearchResult(0)<cr>
   nmap <buffer> o <cr>
   nmap <buffer> i <cr>
-  noremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
+  nnoremap <silent><buffer> t :call OpenFileSearchResult(1)<cr>
 endfunction
 
 function! FocusSelection(visual)
