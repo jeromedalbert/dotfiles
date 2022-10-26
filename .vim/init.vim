@@ -67,7 +67,7 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'github/copilot.vim', { 'branch': 'release' }
+" Plug 'github/copilot.vim', { 'branch': 'release' }
 call plug#end()
 
 "############################
@@ -301,9 +301,9 @@ xnoremap <silent> <leader>fja :!js-beautify -s 2<cr>
 noremap <silent> <leader>fh :silent %!tidy -qi
   \ --show-errors 0 --force-output yes --tidy-mark no --wrap 0 --doctype omit<cr>
 noremap <silent> <leader>fx :silent %!tidy -qi -xml --show-errors 0<cr>
-noremap <silent> <leader>fs :set filetype=sql<cr>:%!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>:%s/"/<cr>
+noremap <silent> <leader>fs :%s/["\\]/<cr>:set filetype=sql<cr>:%!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>
 xnoremap <silent> <leader>fs :!sqlformat --reindent --indent_columns --keywords upper --identifiers lower -<cr>
-noremap <silent> <leader>fg :set filetype=graphql<cr>$x0df":silent! %s/↵/\r<cr>:silent! %s/\\n/\r<cr>dd
+noremap <silent> <leader>fg :set filetype=graphql<cr>x:silent! %s/↵/\r<cr>:silent! %s/\\n/\r<cr>dd
 noremap <silent> <leader>fo :copen<cr>
 
 noremap <silent> <m--> :set virtualedit=all<cr>20zl

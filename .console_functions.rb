@@ -25,14 +25,16 @@ def bm(&block)
   Benchmark.realtime(&block)
 end
 
-def explain(query)
-  puts ActiveRecord::Base.connection.execute("explain analyze #{query.to_sql}").values
+def analyze(query)
+  query = query.to_sql if !query.is_a?(String)
+
+  puts ActiveRecord::Base.connection.execute("explain analyze #{query}").values
 end
+alias :explain :analyze
 
 def stack_trace
   caller.reject { _1['gems/'] }
 end
-
 alias :stt :stack_trace
 alias :stack :stack_trace
 alias :stacktrace :stack_trace
