@@ -441,6 +441,7 @@ hb() {
     gh repo view --web --branch $current_branch
   fi
 }
+hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
 gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
@@ -843,4 +844,7 @@ alias bcuni='bcun'
 alias bcs='brew search --cask'
 alias bcl='brew list --cask'
 alias bcls='bcl'
-alias brsl='brew services list'
+alias bsl='brew services list'
+alias bss='brew services start'
+alias bst='brew services stop'
+alias bsta='brew services stop --all'

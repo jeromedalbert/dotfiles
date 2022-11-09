@@ -230,7 +230,7 @@ paste-insert() {
 ### Other ###
 #############
 
-source $HOMEBREW_PREFIX/opt/asdf/asdf.sh
+source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
 stty -ixon
 if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 if [[ -n $TMUX && $(tmux show-window-options -t $TMUX_PANE -v automatic-rename) == "off" ]]; then
