@@ -42,7 +42,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-projectionist', { 'on': [] }
-Plug 'jeromedalbert/vim-fugitive', { 'branch': 'better-vim-fugitive', 'on': [] }
+Plug 'tpope/vim-fugitive', { 'on': [] }
 Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 Plug 'jeromedalbert/vim-cool', { 'branch': 'better-vim-cool' }
 
@@ -396,9 +396,7 @@ xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
-command! Gdiff call LazyLoadFugitive('Gdiff')
-command! Glog call LazyLoadFugitive('Glog')
-command! Gblame call LazyLoadFugitive('Gblame')
+command! Gblame call LazyLoadFugitive('Git blame')
 command! Gmodified call GitOpenModifiedFiles()
 command! Gadd call GitAdd()
 command! Grm silent !git rm %
@@ -619,7 +617,6 @@ if has('gui_running')
   set macmeta
 endif
 
-let g:python_host_prog  = '/usr/bin/python2'
 let g:python3_host_prog = $HOMEBREW_PREFIX . '/bin/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
 let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/16.13.2/.npm/lib/node_modules/neovim/bin/cli.js'
@@ -2502,7 +2499,6 @@ endfunction
 
 function! LazyLoadFugitive(cmd)
   call plug#load('vim-fugitive')
-  call fugitive#detect(expand('%:p'))
   exe a:cmd
 endfunction
 
