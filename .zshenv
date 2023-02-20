@@ -731,7 +731,9 @@ alias rru='rails runner'
 alias rhash='asdf reshim ruby'
 alias gmo='gem open'
 alias gmi='gem install'
+alias gmins='gmi'
 alias gmun='gem uninstall'
+alias gmuns='gmun'
 alias gmup='gem update'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
 gman() { man $(gem-path $1)/man/* }

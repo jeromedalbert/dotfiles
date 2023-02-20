@@ -339,6 +339,7 @@ cnoremap <expr> <c-g> getcmdtype() == ":" ? "<end><space>-G ''<space><left><left
 noremap <leader>ytd :call ToggleDiff()<cr>
 noremap <leader>ygt :call GenerateTags()<cr>
 map <silent> <leader>yb <Plug>BreakCharacter
+noremap <silent> <leader>yc :.!calc -p<cr>
 
 noremap <leader>-- @:
 noremap <leader>-b :call DeleteHiddenBuffers()<cr>
@@ -951,13 +952,6 @@ call textobj#user#plugin('conflict', {
   \  }
   \ })
 
-let g:angry_disable_maps = 1
-let g:incsearch#auto_nohlsearch = 1
-let g:gundo_help = 0
-let g:gundo_prefer_python3 = 1
-let g:netrw_altfile = 1
-let g:csv_delim_test = ',;|'
-
 let g:scrollbar_right_offset = 1
 let g:scrollbar_shape = {
   \ 'head': ' ',
@@ -970,6 +964,14 @@ let g:scrollbar_highlight = {
   \ 'tail': 'LineNr',
   \ }
 let g:scrollbar_excluded_filetypes = ['nerdtree']
+
+let g:angry_disable_maps = 1
+let g:incsearch#auto_nohlsearch = 1
+let g:gundo_help = 0
+let g:gundo_prefer_python3 = 1
+let g:netrw_altfile = 1
+let g:csv_delim_test = ',;|'
+let g:pasta_disabled_filetypes = ['fugitiveblame']
 
 "#################
 "### Functions ###
@@ -2675,7 +2677,7 @@ onoremap <silent> <Plug>MovePreviousAroundIndent V:<c-u>call MoveAroundIndent(0)
 function! WriteDesktop(filename)
   let filename = a:filename
   if filename == '' | let filename = 'tmp.txt' | endif
-  exe 'w ~/Desktop/' . filename
+  exe 'w! ~/Desktop/' . filename
 endfunction
 
 function! ShowCopilotPanel()

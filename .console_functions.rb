@@ -32,9 +32,7 @@ def analyze(query)
 end
 alias :explain :analyze
 
-def stack_trace
+def stacktrace
   caller.reject { _1['gems/'] }
 end
-alias :stt :stack_trace
-alias :stack :stack_trace
-alias :stacktrace :stack_trace
+alias :stt :stacktrace
