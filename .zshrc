@@ -37,6 +37,7 @@ export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOMEBREW_PREFIX/bin
 export PATH=$PATH:$HOMEBREW_PREFIX/sbin
 export PATH=$PATH:$HOMEBREW_PREFIX/opt/python/libexec/bin
+export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/bin
 export PATH=$PATH:/usr/sbin

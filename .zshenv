@@ -511,13 +511,10 @@ localip() {
   echo $ip
 }
 publicip() {
-  local ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
+  local ip=$(curl -s ipinfo.io | jq '.ip' | tr -d '"')
   echo $ip | tr -d '\n' | pbcopy
   echo $ip
 }
-alias public-ip='publicip'
-alias remoteip='publicip'
-alias remote-ip='publicip'
 iploc() {
   curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
 }
@@ -605,6 +602,8 @@ curlgql() {
   curljs --X POST -s -w '%{time_total}' "$@" | jq
 }
 alias unused='unused -t .tags'
+alias ytdlp='yt-dlp'
+alias chrome_no_ssl='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"
@@ -732,6 +731,7 @@ alias rhash='asdf reshim ruby'
 alias gmo='gem open'
 alias gmi='gem install'
 alias gmins='gmi'
+alias gminf='gem info'
 alias gmun='gem uninstall'
 alias gmuns='gmun'
 alias gmup='gem update'
@@ -742,6 +742,9 @@ gem-path() {
   VISUAL=echo gem open $1
 }
 alias gmp='gem-path'
+gmb() {
+  open $(gem info $1 | awk '/Homepage/ { print $2 }')
+}
 alias gml='gem list'
 alias ocov='open coverage/index.html '
 alias cov='COVERAGE=true rspec && ocov'
