@@ -47,7 +47,7 @@ Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 Plug 'jeromedalbert/vim-cool', { 'branch': 'better-vim-cool' }
 
 Plug 'machakann/vim-sandwich'
-Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'jeromedalbert/vim-ReplaceWithRegister', { 'branch': 'better-vim-ReplaceWithRegister' }
 Plug 'tommcdo/vim-exchange'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'jeromedalbert/auto-pairs', { 'branch': 'better-auto-pairs' }
@@ -67,7 +67,9 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-" Plug 'github/copilot.vim', { 'branch': 'release' }
+Plug 'github/copilot.vim', { 'branch': 'release' }
+Plug 'madox2/vim-ai'
+Plug 'Konfekt/vim-alias'
 call plug#end()
 
 "############################
@@ -181,19 +183,6 @@ noremap <leader>5 :%!
 noremap <leader>ft :set filetype=
 
 nnoremap gV `[V`]
-
-cabbrev co copen
-cabbrev qf copen
-cabbrev lo lopen
-cabbrev vn vnew
-cabbrev en enew
-cabbrev ne new
-cabbrev sn new
-cabbrev hn new
-cabbrev v# vnew #
-cabbrev v3 vnew #
-cabbrev t# tabnew #
-cabbrev t3 tabnew #
 
 noremap zs zt
 noremap z0 zs
@@ -964,6 +953,12 @@ let g:scrollbar_highlight = {
   \ 'tail': 'LineNr',
   \ }
 let g:scrollbar_excluded_filetypes = ['nerdtree']
+
+let g:vim_ai_chat = {
+  \  "ui": {
+  \    "paste_mode": 0,
+  \  }
+  \ }
 
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1

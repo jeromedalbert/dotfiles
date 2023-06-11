@@ -511,8 +511,8 @@ localip() {
   echo $ip
 }
 publicip() {
-  local ip=$(curl -s ipinfo.io | jq '.ip' | tr -d '"')
-  echo $ip | tr -d '\n' | pbcopy
+  local ip=$(curl -s ipinfo.io/ip)
+  echo $ip | pbcopy
   echo $ip
 }
 iploc() {

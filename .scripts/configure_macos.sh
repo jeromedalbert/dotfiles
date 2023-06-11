@@ -221,6 +221,12 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
 
+# Configure visibility for default macOS folders
+ln -s "$HOME/Desktop" "$HOME/Desktop "
+ln -s "$HOME/Documents" "$HOME/Documents "
+chflags hidden ~/Pictures
+ln -s "$HOME/Documents/Pictures" "$HOME/Pictures "
+
 ############
 ### Apps ###
 ############
