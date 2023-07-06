@@ -283,7 +283,7 @@ alias glod="glo --date=format-local:'%a %b %d %Y %H:%M' --format=format:'%C(yell
 alias gloa='glo --author=jerome'
 alias gloda='glod --author=jerome'
 alias gload='gloda'
-alias lw='gload --since="last Monday"'
+alias lw='gload --since="last Monday midnight"'
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
@@ -400,6 +400,8 @@ gmerge() {
 alias gt='git tag'
 alias gcp='git cherry-pick'
 alias gcp-='git cherry-pick -'
+alias gcpc='git cherry-pick --continue'
+alias gcpa='git cherry-pick --abort'
 fix() {
   vim +"silent! /<<<<<<<" $(git diff --name-only --diff-filter=U | xargs)
 }
@@ -428,6 +430,7 @@ git-unchanged-since() {
   git ls-files '*.rb' | egrep '^(app|lib)/' > /tmp/all
   comm -23 <(sort -u /tmp/all) <(sort -u /tmp/changed)
 }
+alias gsquashall='git reset --soft master; gaacm "Squashed commits"'
 
 # Github
 alias hc='gh pr create --web'
@@ -446,7 +449,7 @@ gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
-alias ghc='gh repo create $(basename $PWD) -y'
+alias ghc='gh repo create --private --source=. $(basename $PWD)'
 alias ghi='gi; gci; ghc; gpu'
 
 # Docker
@@ -604,6 +607,8 @@ curlgql() {
 alias unused='unused -t .tags'
 alias ytdlp='yt-dlp'
 alias chrome_no_ssl='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
+alias macname='scutil --get ComputerName'
+alias speedtest='networkQuality'
 
 # Entertainment
 alias cowfortune="clear && fortune -a | cowsay | lolcat"

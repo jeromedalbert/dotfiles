@@ -47,13 +47,13 @@ Plug 'jeromedalbert/vim-rails', { 'branch': 'better-vim-rails', 'on': [] }
 Plug 'jeromedalbert/vim-cool', { 'branch': 'better-vim-cool' }
 
 Plug 'machakann/vim-sandwich'
-Plug 'jeromedalbert/vim-ReplaceWithRegister', { 'branch': 'better-vim-ReplaceWithRegister' }
+Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tommcdo/vim-exchange'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'jeromedalbert/auto-pairs', { 'branch': 'better-auto-pairs' }
 Plug 'kurkale6ka/vim-pairs'
 Plug 'valloric/MatchTagAlways', { 'on': [] }
-Plug 'vim-scripts/closetag.vim', { 'for': ['*html', 'xml', '*jsx'] }
+" Plug 'vim-scripts/closetag.vim', { 'for': ['*html', 'xml', '*jsx'] }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'nishigori/increment-activator'
 Plug 'sickill/vim-pasta'
@@ -217,7 +217,7 @@ noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <silent> <leader>rd :e config/database.yml<cr>
 noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
 noremap <silent> <leader>rb obinding.pry<esc>
-noremap <silent> <leader>rB orequire 'pry-byebug'<cr>binding.pry<esc>
+noremap <silent> <leader>rB orequire 'pry-byebug'; binding.pry<esc>
 noremap <silent> <leader>rp /^\s*\(private\\|protected\)$<cr>^
 
 "######################################
