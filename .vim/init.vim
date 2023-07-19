@@ -10,7 +10,11 @@ Plug 'neomake/neomake', { 'on': [] }
 Plug 'jlanzarotta/bufexplorer'
 Plug 'janko-m/vim-test', { 'on': ['TestFile', 'TestNearest', 'TestLast'] }
 Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
-if has('nvim') | Plug 'Shougo/deoplete.nvim', { 'on': [] } | endif
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'on': [] }
+  Plug 'neovim/nvim-lspconfig'
+endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript*', '*html'] }
@@ -600,6 +604,7 @@ set undodir=~/.vim/tmp/undo
 if has('nvim')
   set scrollback=-1
   set inccommand=
+  let $MYVIMRC_LUA = $MYVIMRC . '.lua'
 endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
@@ -1071,6 +1076,9 @@ function! Autowrite()
       if bufname(bufnum) =~ '^quickfix-' | return | endif
     endfor
   endfor
+  if has('nvim') && !exists('b:testing')
+    silent! lua vim.lsp.buf.format()
+  endif
   silent! wa
   if &modified
     silent! GutentagsUpdate
@@ -1999,12 +2007,14 @@ function! CustomTestStrategy(cmd) abort
       exe bufwinnr(t:term_test_bufnum) . 'wincmd w'
     end
   endfunction
+  let b:testing = 1
   call CloseTests()
   botright new
   let t:term_test_bufnum = bufnr('%')
   resize 11
   call termopen(a:cmd . ' #test', opts)
   wincmd p
+  unlet b:testing
 endfunction
 let g:test#custom_strategies = { 'custom': function('CustomTestStrategy') }
 
@@ -2735,14 +2745,6 @@ augroup custom_undofile
   autocmd BufWritePost * call WriteUndoFile()
 augroup end
 
-if exists('$TMUX') && has('nvim')
-  augroup tmux_window_name
-    autocmd!
-    autocmd VimEnter * call SetTmuxWindowName()
-    autocmd VimLeave * call RestoreTmuxWindowName()
-  augroup end
-endif
-
 augroup custom_tab_behavior
   autocmd!
   autocmd TabEnter * let s:current_tab_number = tabpagenr()
@@ -2755,23 +2757,6 @@ augroup goyo_events
   autocmd User GoyoEnter nested call OnGoyoEnter()
   autocmd User GoyoLeave nested call OnGoyoLeave()
 augroup end
-
-if has('nvim')
-  augroup custom_backup
-    autocmd!
-    autocmd BufWritePost * call BackupCurrentFile()
-  augroup end
-
-  augroup term_events
-    autocmd!
-    autocmd TermOpen * call OnTermOpen()
-  augroup end
-
-  augroup lazy_load_deoplete
-    autocmd!
-    autocmd InsertEnter * call LazyLoadDeoplete()
-  augroup end
-endif
 
 augroup configure_linter
   autocmd!
@@ -2814,6 +2799,41 @@ augroup nerdtree_events
   autocmd BufEnter * call LeaveNERDTreePreview()
 augroup end
 
+if has('nvim')
+  augroup custom_backup
+    autocmd!
+    autocmd BufWritePost * call BackupCurrentFile()
+  augroup end
+
+  if exists('$TMUX')
+    augroup tmux_window_name
+      autocmd!
+      autocmd VimEnter * call SetTmuxWindowName()
+      autocmd VimLeave * call RestoreTmuxWindowName()
+    augroup end
+  endif
+
+  augroup term_events
+    autocmd!
+    autocmd TermOpen * call OnTermOpen()
+  augroup end
+
+  augroup lazy_load_deoplete
+    autocmd!
+    autocmd InsertEnter * call LazyLoadDeoplete()
+  augroup end
+
+  augroup autoformat
+    autocmd!
+    autocmd BufWritePre * silent! lua vim.lsp.buf.format()
+  augroup end
+
+  augroup general_neovim_autocommands
+    autocmd!
+    autocmd BufWritePost $MYVIMRC_LUA source $MYVIMRC_LUA
+  augroup end
+endif
+
 augroup general_autocommands
   autocmd!
   autocmd BufWritePre * call TrimTrailingWhitespace()
@@ -2833,6 +2853,10 @@ augroup end
 
 if !has('nvim') && !has('gui_running')
   runtime .enable_meta_mappings.vim
+endif
+
+if has('nvim')
+  source $MYVIMRC_LUA
 endif
 
 set exrc

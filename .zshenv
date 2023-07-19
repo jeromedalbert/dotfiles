@@ -686,7 +686,6 @@ bundle-path() {
 alias bp='bundle-path'
 rails() {
   if [[ -e 'bin/rails' ]]; then bin/rails "$@"; else command rails "$@"; fi
-
   if [[ $? -eq 0 && $1 == 'new' ]]; then; cd $2; fi
 }
 rake() {
@@ -761,6 +760,7 @@ steps() {
   local delta=$(($mig_num - $main_mig_num))
   echo $delta
 }
+alias sw='stree write'
 
 # Javascript
 alias y='yarn'
