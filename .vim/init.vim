@@ -925,11 +925,11 @@ let g:projectionist_heuristics = {
   \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' },
   \    'spec/lib/tasks/*_spec.rb': { 'alternate': 'lib/tasks/{}.rake' }
   \  },
-  \  '!config/application.rb&spec/': {
+  \  'spec/&!config/application.rb': {
   \    'lib/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'lib/{}.rb' }
   \  },
-  \  '!config/application.rb&test/': {
+  \  'test/&!config/application.rb': {
   \    'lib/*.rb': { 'alternate': 'test/{}_test.rb' },
   \    'test/*_test.rb': { 'alternate': 'lib/{}.rb' }
   \  }
