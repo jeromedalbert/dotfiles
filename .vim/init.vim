@@ -14,6 +14,8 @@ Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'on': [] }
   Plug 'neovim/nvim-lspconfig'
+  Plug 'lukas-reineke/lsp-format.nvim'
+  " Plug 'mhartington/formatter.nvim'
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -915,13 +917,21 @@ let g:test#strategy = 'custom'
 let g:test#no_alternate = 1
 
 let g:projectionist_heuristics = {
-  \  '*': {
+  \  'config/application.rb': {
   \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
   \    'lib/tasks/*.rake': { 'alternate': 'spec/lib/tasks/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
   \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' },
   \    'spec/lib/tasks/*_spec.rb': { 'alternate': 'lib/tasks/{}.rake' }
+  \  },
+  \  '!config/application.rb&spec/': {
+  \    'lib/*.rb': { 'alternate': 'spec/{}_spec.rb' },
+  \    'spec/*_spec.rb': { 'alternate': 'lib/{}.rb' }
+  \  },
+  \  '!config/application.rb&test/': {
+  \    'lib/*.rb': { 'alternate': 'test/{}_test.rb' },
+  \    'test/*_test.rb': { 'alternate': 'lib/{}.rb' }
   \  }
   \ }
 
@@ -2007,14 +2017,12 @@ function! CustomTestStrategy(cmd) abort
       exe bufwinnr(t:term_test_bufnum) . 'wincmd w'
     end
   endfunction
-  let b:testing = 1
   call CloseTests()
   botright new
   let t:term_test_bufnum = bufnr('%')
   resize 11
   call termopen(a:cmd . ' #test', opts)
   wincmd p
-  unlet b:testing
 endfunction
 let g:test#custom_strategies = { 'custom': function('CustomTestStrategy') }
 

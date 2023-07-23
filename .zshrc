@@ -31,7 +31,6 @@ export HOMEBREW_NO_INSTALL_CLEANUP=1
 export MANPATH=$HOMEBREW_PREFIX/share/man:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export GH_NO_UPDATE_NOTIFIER=true
-export CLOUDSDK_GSUTIL_PYTHON=$HOMEBREW_PREFIX/bin/python3
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOMEBREW_PREFIX/bin
