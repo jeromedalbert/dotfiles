@@ -614,7 +614,7 @@ if has('gui_running')
   set macmeta
 endif
 
-let g:python3_host_prog = $HOMEBREW_PREFIX . '/bin/python3'
+let g:python3_host_prog = '/Users/jerome/.asdf/shims/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
 let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/16.13.2/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:perl_host_prog = $HOMEBREW_PREFIX . '/bin/perl'
