@@ -1,4 +1,4 @@
 ---
 BUNDLE_JOBS: "8"
-BUNDLE_BUILD__LIBXML___RUBY: "--with-xml2-config=/usr/local/opt/libxml2/bin/xml2-config"
-BUNDLE_BUILD__MYSQL2: "--with-ldflags=-L/usr/local/opt/openssl/lib --with-cppflags=-I/usr/local/opt/openssl/include"
+BUNDLE_BUILD__LIBXML___RUBY: "--with-xml2-config=$HOMEBREW_PREFIX/opt/libxml2/bin/xml2-config"
+BUNDLE_BUILD__MYSQL2: "--with-ldflags=-L$HOMEBREW_PREFIX/opt/openssl/lib --with-cppflags=-I$HOMEBREW_PREFIX/opt/openssl/include"

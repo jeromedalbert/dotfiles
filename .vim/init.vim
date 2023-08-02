@@ -1086,10 +1086,11 @@ function! Autowrite()
       if bufname(bufnum) =~ '^quickfix-' | return | endif
     endfor
   endfor
-  if has('nvim') && !exists('b:testing')
-    silent! lua vim.lsp.buf.format()
-  endif
   silent! wa
+  if has('nvim')
+    " silent! FormatWrite
+    " Format
+  endif
   if &modified
     silent! GutentagsUpdate
   endif
@@ -2831,10 +2832,11 @@ if has('nvim')
     autocmd InsertEnter * call LazyLoadDeoplete()
   augroup end
 
-  augroup autoformat
-    autocmd!
-    autocmd BufWritePre * silent! lua vim.lsp.buf.format()
-  augroup end
+  " augroup autoformat
+  "   autocmd!
+    " autocmd BufWritePost * silent! FormatWrite
+    " autocmd FocusLost * silent! Format
+  " augroup end
 
   augroup general_neovim_autocommands
     autocmd!
