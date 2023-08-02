@@ -8,14 +8,14 @@ MAIN_EDITOR=$VIM_EDITOR
 
 # Unix
 alias ls='ls -G'
-alias ll="ls -lh"
-alias la="ls -A"
-alias lla="ll -A"
-alias lld="ll -d"
-alias llrt="ll -rt"
-alias llart="lla -rt"
-alias rm="rm"
-alias rmrf="rm -rf"
+alias ll='ls -lh'
+alias la='ls -A'
+alias lla='ll -A'
+alias lld='ll -d'
+alias llrt='ll -rt'
+alias llart='lla -rt'
+alias rm='rm'
+alias rmrf='rm -rf'
 # alias grep='grep --color=auto'
 alias cpr='cp -r'
 alias ..='cd ..'
@@ -242,9 +242,9 @@ ex() {
   fi
 }
 alias e='ex'
-alias gm="git merge"
-alias gm-="git merge -"
-alias gmabort="git merge --abort"
+alias gm='git merge'
+alias gm-='git merge -'
+alias gmabort='git merge --abort'
 gcm() {
   if [[ $# -eq 0 ]]; then
     git checkout $(git-main-branch)
@@ -256,10 +256,10 @@ git-main-branch() {
   if [[ $(git branch --list 'main') ]]; then echo 'main'; else echo 'master'; fi
 }
 gcam() { gca -m "$*" }
-alias gce='gc --allow-empty -m "Empty commit"'
+alias gce="gc --allow-empty -m "Empty commit""
 gcem() { gc --allow-empty -m "$*" }
-alias gclean="git clean -fd"
-alias grhhc="grhh && gclean"
+alias gclean='git clean -fd'
+alias grhhc='grhh && gclean'
 gd() {
   if [[ $# -eq 0 ]]; then
     gd HEAD
@@ -287,46 +287,46 @@ alias lw='gload --since="last Monday midnight"'
 glop() {
   glo -p "$@" | format-git-diff | eval $GIT_PAGER
 }
-alias gloo="git log --all --oneline --no-merges"
-alias gloS="glo -S"
-alias glo-="glo --"
-alias gdt="git difftool"
-alias gdtc="git difftool --cached"
-alias gmt="git mergetool"
-alias grm="git rm"
-alias grmc="git rm --cached"
-alias grv="git remote -v"
+alias gloo='git log --all --oneline --no-merges'
+alias gloS='glo -S'
+alias glo-='glo --'
+alias gdt='git difftool'
+alias gdtc='git difftool --cached'
+alias gmt='git mergetool'
+alias grm='git rm'
+alias grmc='git rm --cached'
+alias grv='git remote -v'
 alias gre='grv'
-alias gr="git reset"
+alias gr='git reset'
 alias grh='git reset HEAD'
 alias "grh^"="git reset 'HEAD^'"
 alias grhh='git reset HEAD --hard'
 alias "grhh^"="git reset --hard 'HEAD^'"
-alias gst="git stash -u"
-alias gstp="git stash pop"
-alias gstl="git stash list"
-alias gstc="git stash clear"
-alias gsts="git stash save"
-alias grb="git rebase"
-alias grb-="git rebase -"
+alias gst='git stash -u'
+alias gstp='git stash pop'
+alias gstl='git stash list'
+alias gstc='git stash clear'
+alias gsts='git stash save'
+alias grb='git rebase'
+alias grb-='git rebase -'
 grbm() { git rebase $(git-main-branch) }
-alias grbi="git rebase -i"
-alias grbi2="git rebase -i HEAD~2"
-alias grbi3="git rebase -i HEAD~3"
-alias grbi4="git rebase -i HEAD~4"
-alias grbi5="git rebase -i HEAD~5"
+alias grbi='git rebase -i'
+alias grbi2='git rebase -i HEAD~2'
+alias grbi3='git rebase -i HEAD~3'
+alias grbi4='git rebase -i HEAD~4'
+alias grbi5='git rebase -i HEAD~5'
 grbim() { git rebase -i $(git-main-branch) }
-alias grbir="git rebase -i --root"
-alias gcon="git rebase --continue"
-alias gaacon="gaa && gcon"
-alias grabort="git rebase --abort"
-alias gsk="git rebase --skip"
+alias grbir='git rebase -i --root'
+alias gcon='git rebase --continue'
+alias gaacon='gaa && gcon'
+alias grabort='git rebase --abort'
+alias gsk='git rebase --skip'
 alias gb='git branch --sort=-committerdate'
 gbcp() { echo $(current-git-branch) | pbcopy }
-alias gbs="git branch -D sav &> /dev/null; git branch sav"
-alias gcs="git checkout sav"
-alias gbd="git branch -d"
-alias gbD="git branch -D"
+alias gbs='git branch -D sav &> /dev/null; git branch sav'
+alias gcs='git checkout sav'
+alias gbd='git branch -d'
+alias gbD='git branch -D'
 alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
 alias gbDa='git branch | remove-colors | egrep -v "master|main|\*" | xargs git branch -D'
 alias gbD-="gbD @{-1}"
@@ -336,17 +336,18 @@ gbDi() {
     $MAIN_EDITOR /tmp/branches-to-keep && \
     comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep) | xargs 2> /dev/null git branch -D
 }
-alias gbm="gb -m"
+alias gbm='gb -m'
 # alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
 # alias gbDa='git-list-branches | grep -v "master\|$(current-git-branch)" | xargs git branch -D'
 # git-list-branches() {
 #   git for-each-ref --format="%(refname:short)" HEAD refs/heads
 # }
-alias gignore="git update-index --assume-unchanged"
-alias gunignore="git update-index --no-assume-unchanged"
-alias gignored="git ignored"
+alias gignore='git update-index --assume-unchanged'
+alias gunignore='git update-index --no-assume-unchanged'
+alias gignored='git ignored'
 alias gp='git push'
-alias gpf="gp -f"
+alias gpf='gp --force-with-lease'
+alias gpf!='gp --force'
 gpu() {
   if [[ $# -eq 0 ]]; then
     gp -u origin $(current-git-branch)
@@ -368,10 +369,10 @@ gpd() {
     gp -d "$@"
   fi
 }
-alias gclo-"git clone"
-alias gx="gitx"
-alias ggx="gitx"
-alias gu="gitup"
+alias gclo-'git clone'
+alias gx='gitx'
+alias ggx='gitx'
+alias gu='gitup'
 alias git-branch-previous='git check-ref-format --branch "@{-1}"'
 ggo() {
   current-git-branch > .git/previous_branch
@@ -498,12 +499,12 @@ alias ssh-keys='ssh-key'
 
 # Apps / Binaries
 alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-alias subl.="subl ."
-alias subl3="command subl"
-alias subl3.="subl3 ."
-alias zzz="pmset sleepnow"
-alias say_good="say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo"
-alias say_bad="say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo"
+alias subl.='subl .'
+alias subl3='command subl'
+alias subl3.='subl3 .'
+alias zzz='pmset sleepnow'
+alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
+alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias keyboard_disable='sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
 alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
 alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
@@ -523,24 +524,24 @@ iploc() {
 }
 alias whereami='iploc'
 alias geoip='iploc'
-alias res="system_profiler SPDisplaysDataType | grep Resolution"
+alias res='system_profiler SPDisplaysDataType | grep Resolution'
 function cdf() {
   cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
 }
-alias o="open"
-alias o.="open ."
+alias o='open'
+alias o.='open .'
 alias toggle-cam='tcam'
-alias dpad="sudo kextunload /System/Library/Extensions/AppleUSBMultitouch.kext" # 2> /dev/null"
-alias epad="sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext"
-alias emouse="dpad"
-alias dmouse="epad"
-alias archey="archey -c"
+alias dpad='sudo kextunload /System/Library/Extensions/AppleUSBMultitouch.kext' # 2> /dev/null"
+alias epad='sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext'
+alias emouse='dpad'
+alias dmouse='epad'
+alias archey='archey -c'
 serve() { ruby -run -e httpd . -p 8000 }
 servepy() { python -m http.server 8000 }
-alias mounted="mount | column -t"
+alias mounted='mount | column -t'
 sman() { man "${1}" | col -b | subl }
-alias rtop="top -o rsize"
-alias ctop="top -o cpu"
+alias rtop='top -o rsize'
+alias ctop='top -o cpu'
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 alias sub='subliminal download -l en'
 alias sub2='filebot -get-subtitles'
@@ -611,10 +612,10 @@ alias macname='scutil --get ComputerName'
 alias speedtest='networkQuality'
 
 # Entertainment
-alias cowfortune="clear && fortune -a | cowsay | lolcat"
+alias cowfortune='clear && fortune -a | cowsay | lolcat'
 alias cowfact="clear && elinks -dump http://randomfunfacts.com  | sed -n '/^| /p' | tr -d \| | cowsay | lolcat"
-alias dunnet="emacs -batch -l dunnet"
-alias emacs-games="ls /usr/share/emacs/22.1/lisp/play/*.elc | column -t"
+alias dunnet='emacs -batch -l dunnet'
+alias emacs-games='ls /usr/share/emacs/22.1/lisp/play/*.elc | column -t'
 snow() {
   clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|awk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
 }
