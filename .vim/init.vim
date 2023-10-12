@@ -389,7 +389,7 @@ nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
-command! -nargs=+ -complete=file FileSearch call FileSearch(<q-args>)
+command! -nargs=+ -complete=file FileSearch silent! call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
 command! Gblame call LazyLoadFugitive('Git blame')
