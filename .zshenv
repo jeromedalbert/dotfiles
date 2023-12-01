@@ -206,6 +206,7 @@ alias gco='git checkout'
 alias gcob='gco -b'
 alias gc-='gco -'
 alias gco-='gco -'
+alias gcom='gco master --'
 alias gcl='git clone'
 alias gclone='git clone'
 gg() {
@@ -256,7 +257,7 @@ git-main-branch() {
   if [[ $(git branch --list 'main') ]]; then echo 'main'; else echo 'master'; fi
 }
 gcam() { gca -m "$*" }
-alias gce="gc --allow-empty -m "Empty commit""
+alias gce='gc --allow-empty -m "Empty commit"'
 gcem() { gc --allow-empty -m "$*" }
 alias gclean='git clean -fd'
 alias grhhc='grhh && gclean'
@@ -417,6 +418,7 @@ git-remove-submodule() {
 }
 alias gsr='git-remove-submodule'
 alias grev='git revert'
+alias grevh='git revert HEAD'
 alias grevnoe='git revert --no-edit'
 git-churn() {
   git log --all -M -C --name-only --format='format:' "$@" \
@@ -569,16 +571,8 @@ mkpwd2() {
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
-ngcp() {
-  curl -s http://localhost:4040/api/tunnels \
-    | jq -r ".tunnels[0].public_url" \
-    | sed 's/^http:/https:/' \
-    | pbcopy
-}
-ng() {
-  ((sleep 2; ngcp) &)
-  ngrok http 5000
-}
+alias ng='ngcp && ngrok http --domain $NGROK_DOMAIN 5000'
+alias ngcp='echo "https://$NGROK_DOMAIN" | pbcopy'
 smee() {
   echo $SMEE_URL | pbcopy
   command smee -u $SMEE_URL -p 5000 "$@"
