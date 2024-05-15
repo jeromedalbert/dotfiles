@@ -214,6 +214,8 @@ noremap <silent> [L :lfirst<cr>
 
 noremap <silent> <leader>rg :e Gemfile<cr>
 noremap <silent> <leader>rG :vnew<cr>:e Gemfile<cr>
+noremap <silent> <leader>rl :e Gemfile.lock<cr>
+noremap <silent> <leader>rL :vnew<cr>:e Gemfile.lock<cr>
 noremap <silent> <leader>rh :s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
 nnoremap <silent> <leader>rH :%s/:\([^ ]*\)\(\s*\)=>/\1:<cr>
 noremap <silent> <leader>rr :e config/routes.rb<cr>
@@ -222,8 +224,6 @@ noremap <silent> <leader>rs :e db/schema.rb<cr>
 noremap <silent> <leader>rS :vnew<cr>:e db/schema.rb<cr>
 noremap <silent> <leader>rd :e config/database.yml<cr>
 noremap <silent> <leader>rD :vnew<cr>:e config/database.yml<cr>
-noremap <silent> <leader>rb obinding.pry<esc>
-noremap <silent> <leader>rB orequire 'pry-byebug'; binding.pry<esc>
 noremap <silent> <leader>rp /^\s*\(private\\|protected\)$<cr>^
 
 "######################################
@@ -393,7 +393,9 @@ command! -nargs=+ -complete=file FileSearch silent! call FileSearch(<q-args>)
 command! -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, { 'options': $FZF_DEFAULT_OPTS })
 command! -nargs=1 GemOpen call GemOpen(<q-args>)
 command! Gblame call LazyLoadFugitive('Git blame')
-command! Gmodified call GitOpenModifiedFiles()
+command! Gmodified call OpenOutputInArgslist('git ls-files --modified --others --exclude-standard')
+command! Glastcommit call OpenOutputInArgslist('git diff --name-only HEAD^')
+command! Glastcommit call OpenOutputInArgslist('git diff --name-only HEAD^')
 command! Gadd call GitAdd()
 command! Grm silent !git rm %
 command! MakePlugSnapshot PlugSnapshot! ~/.vim/.plug_snapshot.vim
@@ -414,6 +416,7 @@ cabbrev plugr RestorePlugSnapshot
 cabbrev goyo Goyo
 cabbrev gb Gblame
 cabbrev gm Gmodified
+cabbrev gl Glastcommit
 cabbrev ga Gadd
 cabbrev grm Grm
 cabbrev prof Profile
@@ -504,7 +507,9 @@ noremap <silent> <leader>rM :vnew<cr>:call ShowLatestRailsMigration()<cr>
 xnoremap <silent> <leader>rp :<c-u>call ExtractRailsPartial()<cr>
 noremap <silent> <leader>re :call EvalRubyBuffer()<cr>
 noremap <silent> <leader>ru :call EvalRailsBuffer()<cr>
+noremap <silent> <leader>rb :call AddDebugBreakpoint()<cr>
 noremap <leader>rc :call CopyCurrentRubyClassName()<cr>
+noremap <leader>rC :call CopyCurrentRubyMethodName()<cr>
 noremap <leader>rxp :call CreateRubyPrivate()<cr>
 noremap <leader>rxm :call CreateRubyMethod(0, 0)<cr>
 noremap <leader>rxM :call CreateRubyMethod(1, 0)<cr>
@@ -616,7 +621,7 @@ endif
 
 let g:python3_host_prog = '/Users/jerome/.asdf/shims/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
-let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/16.13.2/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/18.19.1/lib/node_modules/neovim/bin/cli.js'
 let g:perl_host_prog = $HOMEBREW_PREFIX . '/bin/perl'
 let g:clipboard = {
   \ 'name': 'pbcopy',
@@ -932,6 +937,10 @@ let g:projectionist_heuristics = {
   \  'test/&!config/application.rb': {
   \    'lib/*.rb': { 'alternate': 'test/{}_test.rb' },
   \    'test/*_test.rb': { 'alternate': 'lib/{}.rb' }
+  \  },
+  \  '*': {
+  \    'Gemfile': { 'alternate': 'Gemfile.lock' },
+  \    'Gemfile.lock': { 'alternate': 'Gemfile' },
   \  }
   \ }
 
@@ -1289,13 +1298,24 @@ function! CopyCurrentFileName()
 endfunction
 
 function! CopyCurrentRubyClassName()
-  normal! mCgg^
+  let v = winsaveview()
+  normal! gg^
   silent exe "/^\\(module\\|class\\) "
   let module = getline('.') =~ '^module '
   if module | exe "normal gJ" | endif
   normal! WyiW
   if module | undo | endif
-  normal! `C
+  call winrestview(v)
+endfunction
+
+function! CopyCurrentRubyMethodName()
+  let v = winsaveview()
+  normal [mw
+  let method_name = substitute(expand('<cWORD>'), '(.*', '', '')
+  call winrestview(v)
+  call CopyCurrentRubyClassName()
+  let @" .= '#' . method_name
+  echo method_name
 endfunction
 
 function! CreateRubyPrivate()
@@ -1618,16 +1638,11 @@ function! IsCurrentBufferNew()
   return bufname('%') == '' && IsCurrentBufferEmpty()
 endfunction
 
-function! GitOpenModifiedFiles()
+function! OpenOutputInArgslist(cmd)
   silent only
-  let status = system('git status -s | remove-colors | sed "s/^.\{3\}//"')
-  let filenames = split(status, "\n")
+  let filenames = split(system(a:cmd), "\n")
   if empty(filenames) | echo 'No modified files!' | return | endif
-  exec "edit " . filenames[0]
-  for filename in filenames[1:]
-    exec "sp " . filename
-  endfor
-  wincmd w
+  exe 'args ' . join(filenames, ' ')
 endfunction
 
 function! GitAdd()
@@ -1689,6 +1704,15 @@ function! EvalRailsBuffer()
   put =output
   normal! `[kJ
   call winrestview(v)
+endfunction
+
+function! AddDebugBreakpoint()
+  if !exists('g:gemfile') | let g:gemfile = system('cat Gemfile') | endif
+  if g:gemfile =~ 'pry'
+    normal! obinding.pry
+  else
+    normal! obinding.irb
+  endif
 endfunction
 
 function! OpenMarkdownPreview() abort

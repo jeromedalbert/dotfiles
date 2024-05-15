@@ -36,3 +36,9 @@ def stacktrace
   caller.reject { _1['gems/'] }
 end
 alias :stt :stacktrace
+
+def config
+  Rails.application.config
+end
+
+require File.expand_path('~/.secrets')

@@ -18,6 +18,13 @@ alias rm='rm'
 alias rmrf='rm -rf'
 # alias grep='grep --color=auto'
 alias cpr='cp -r'
+.() {
+  if [[ $# -eq 0 ]]; then
+    cd .
+  else
+    source "$@"
+  fi
+}
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -304,6 +311,7 @@ alias "grh^"="git reset 'HEAD^'"
 alias grhh='git reset HEAD --hard'
 alias "grhh^"="git reset --hard 'HEAD^'"
 alias gst='git stash -u'
+alias gstm='gst -m'
 alias gstp='git stash pop'
 alias gstl='git stash list'
 alias gstc='git stash clear'
@@ -499,112 +507,6 @@ alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
 alias ssh-key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
 alias ssh-keys='ssh-key'
 
-# Apps / Binaries
-alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-alias subl.='subl .'
-alias subl3='command subl'
-alias subl3.='subl3 .'
-alias zzz='pmset sleepnow'
-alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
-alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
-alias keyboard_disable='sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
-alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
-alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
-timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
-localip() {
-  local ip=$(ipconfig getifaddr en0)
-  echo $ip | tr -d '\n' | pbcopy
-  echo $ip
-}
-publicip() {
-  local ip=$(curl -s ipinfo.io/ip)
-  echo $ip | pbcopy
-  echo $ip
-}
-iploc() {
-  curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
-}
-alias whereami='iploc'
-alias geoip='iploc'
-alias res='system_profiler SPDisplaysDataType | grep Resolution'
-function cdf() {
-  cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
-}
-alias o='open'
-alias o.='open .'
-alias toggle-cam='tcam'
-alias dpad='sudo kextunload /System/Library/Extensions/AppleUSBMultitouch.kext' # 2> /dev/null"
-alias epad='sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext'
-alias emouse='dpad'
-alias dmouse='epad'
-alias archey='archey -c'
-serve() { ruby -run -e httpd . -p 8000 }
-servepy() { python -m http.server 8000 }
-alias mounted='mount | column -t'
-sman() { man "${1}" | col -b | subl }
-alias rtop='top -o rsize'
-alias ctop='top -o cpu'
-alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
-alias sub='subliminal download -l en'
-alias sub2='filebot -get-subtitles'
-minivim() {
-  local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
-  echo $conf | tee >(pbcopy)
-}
-killui() {
-  for app in "Dock" "Finder" "SystemUIServer"; do
-    killall "${app}"
-  done
-}
-alias nra='~/c/boilerplate/new-rails-app'
-alias nrg='~/c/boilerplate/new-ruby-gem'
-alias nsa='~/c/boilerplate/new-sinatra-app'
-mkpwd() {
-  local max_chars=${1:-28}
-  cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1
-}
-mkpwd2() {
-  local password=$(openssl rand -base64 300 | tr -d '\n=/+')
-  local max_chars=${1:-28}
-  echo $password | cut -c-$max_chars
-}
-alias mkpw='mkpwd'
-alias pw='mkpw'
-alias fd='fd --type f'
-alias ng='ngcp && ngrok http --domain $NGROK_DOMAIN 5000'
-alias ngcp='echo "https://$NGROK_DOMAIN" | pbcopy'
-smee() {
-  echo $SMEE_URL | pbcopy
-  command smee -u $SMEE_URL -p 5000 "$@"
-}
-alias smeecp='echo $SMEE_URL | pbcopy'
-alias smeego='open $SMEE_URL'
-tess() {
-  local file=$1
-  if [[ -z $file ]]; then
-    file=$(ls -dt ~/Desktop/* | head -n 1)
-  fi
-  tesseract $file stdout | tee >(pbcopy)
-}
-gq() {
-  local escaped_query=$(printf "%q" ${@: -1})
-  curl -X POST -H 'Content-Type: application/json' $1 -d "{ \"query\": \"$escaped_query\" }"
-}
-alias pj='pbpaste | jq .'
-parsecron() {
-  ruby -e "require 'cronex'; puts Cronex::ExpressionDescriptor.new('$1').description" \
-    | tee >(pbcopy)
-}
-alias curljs='curl -H "Content-type: application/json"'
-curlgql() {
-  curljs --X POST -s -w '%{time_total}' "$@" | jq
-}
-alias unused='unused -t .tags'
-alias ytdlp='yt-dlp'
-alias chrome_no_ssl='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
-alias macname='scutil --get ComputerName'
-alias speedtest='networkQuality'
-
 # Entertainment
 alias cowfortune='clear && fortune -a | cowsay | lolcat'
 alias cowfact="clear && elinks -dump http://randomfunfacts.com  | sed -n '/^| /p' | tr -d \| | cowsay | lolcat"
@@ -713,11 +615,11 @@ alias romi='ro && mi'
 # alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
 # alias ro='ro2'
 alias rT='rake -T'
-alias debug='pry-remote'
 alias st='spring stop'
 alias strc='st && rc'
 alias ss='spring status'
-alias irb='pry'
+# alias irb='pry'
+# alias debug='pry-remote'
 fs() {
   local options=''
   if [[ -e '.env' ]]; then; options='-e .env'; fi
@@ -734,6 +636,8 @@ alias gminf='gem info'
 alias gmun='gem uninstall'
 alias gmuns='gmun'
 alias gmup='gem update'
+alias gmupd='gmup'
+alias gmu='gem update'
 gmd() { open "http://www.rubydoc.info/gems/$1" }
 gman() { man $(gem-path $1)/man/* }
 gmcd() { cd $(gem-path $1) }
@@ -802,7 +706,7 @@ hurl() {
   heroku info -s "$@" | grep web_url | cut -d= -f2
 }
 gph() { git push heroku $(git-main-branch) }
-gpfh() { git push --force heroku $(git-main-branch) }
+gpfh() { gpf heroku $(git-main-branch) }
 alias gphm='gph'
 
 # Kube
@@ -822,7 +726,7 @@ brupd() {
   if [[ $# -eq 0 ]]; then
     brew update
   else
-    brew upgrade "$*"
+    brew upgrade "$@"
   fi
 }
 alias brupg='brew upgrade'
@@ -853,3 +757,119 @@ alias bsl='brew services list'
 alias bss='brew services start'
 alias bst='brew services stop'
 alias bsta='brew services stop --all'
+
+# Apps / Binaries
+alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
+alias subl.='subl .'
+alias subl3='command subl'
+alias subl3.='subl3 .'
+alias zzz='pmset sleepnow'
+alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
+alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
+alias keyboard_disable='sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
+alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
+alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
+timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
+localip() {
+  local ip=$(ipconfig getifaddr en0)
+  echo $ip | tr -d '\n' | pbcopy
+  echo $ip
+}
+alias privateip='localip'
+publicip() {
+  local ip=$(curl -s ipinfo.io/ip)
+  echo $ip | pbcopy
+  echo $ip
+}
+alias ip='publicip'
+alias myip='publicip'
+iploc() {
+  curl -s ipinfo.io/"$@" | jq '.city + ", " + .region + ", " + .country' | tr -d '"'
+}
+alias whereami='iploc'
+alias res='system_profiler SPDisplaysDataType | grep Resolution'
+function cdf() {
+  cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
+}
+alias o='open'
+alias o.='open .'
+alias toggle-cam='tcam'
+alias dpad='sudo kextunload /System/Library/Extensions/AppleUSBMultitouch.kext' # 2> /dev/null"
+alias epad='sudo kextload /System/Library/Extensions/AppleUSBMultitouch.kext'
+alias emouse='dpad'
+alias dmouse='epad'
+alias archey='archey -c'
+serve() { ruby -run -e httpd . -p 8000 }
+servepy() { python -m http.server 8000 }
+alias mounted='mount | column -t'
+sman() { man "${1}" | col -b | subl }
+alias rtop='top -o rsize'
+alias ctop='top -o cpu'
+alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
+alias sub='subliminal download -l en'
+alias sub2='filebot -get-subtitles'
+minivim() {
+  local conf=$(awk 'NF > 0 { printf ":" $0 "\\\\n" }' ~/.vimrc.minimal)
+  echo $conf | tee >(pbcopy)
+}
+killui() {
+  for app in "Dock" "Finder" "SystemUIServer"; do
+    killall "${app}"
+  done
+}
+alias nra='~/c/boilerplate/new-rails-app'
+alias nrg='~/c/boilerplate/new-ruby-gem'
+alias nsa='~/c/boilerplate/new-sinatra-app'
+mkpwd() {
+  local max_chars=${1:-28}
+  cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1
+}
+mkpwd2() {
+  local password=$(openssl rand -base64 300 | tr -d '\n=/+')
+  local max_chars=${1:-28}
+  echo $password | cut -c-$max_chars
+}
+alias mkpw='mkpwd'
+alias pw='mkpw'
+alias fd='fd --type f'
+alias ng='ngcp && ngrok http --domain $NGROK_DOMAIN 5000'
+alias ngcp='echo "https://$NGROK_DOMAIN" | pbcopy'
+smee() {
+  echo $SMEE_URL | pbcopy
+  command smee -u $SMEE_URL -p 5000 "$@"
+}
+alias smeecp='echo $SMEE_URL | pbcopy'
+alias smeego='open $SMEE_URL'
+tess() {
+  local file=$1
+  if [[ -z $file ]]; then
+    file=$(ls -dt ~/Desktop/* | head -n 1)
+  fi
+  tesseract $file stdout | tee >(pbcopy)
+}
+gq() {
+  local escaped_query=$(printf "%q" ${@: -1})
+  curl -X POST -H 'Content-Type: application/json' $1 -d "{ \"query\": \"$escaped_query\" }"
+}
+alias pj='pbpaste | jq .'
+parsecron() {
+  ruby -e "require 'cronex'; puts Cronex::ExpressionDescriptor.new('$1').description" \
+    | tee >(pbcopy)
+}
+alias curljs='curl -H "Content-type: application/json"'
+curlgql() {
+  curljs --X POST -s -w '%{time_total}' "$@" | jq
+}
+alias unused='unused -t .tags'
+alias ytdlp='yt-dlp'
+alias chrome_no_ssl='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
+alias macname='scutil --get ComputerName'
+alias speedtest='networkQuality'
+alias cores='nproc'
+bench() {
+  if [[ $# -eq 0 ]]; then; browsertime --help; return; fi
+  browsertime --headless --skipHar --resultDir=/tmp "$@"
+  echo
+  cat /tmp/browsertime.json | jq -r '.[0].statistics.timings.pageTimings | "Average DOM Load Time: \(.domContentLoadedTime.mean) ms\nAverage Load Time: \(.pageLoadTime.mean) ms\n\nMean DOM Load Time: \(.domContentLoadedTime.mean) ms\nMean Load Time: \(.pageLoadTime.mean) ms"'
+}
+alias nosleep='caffeinate -d'
