@@ -594,6 +594,9 @@ rspec() {
 spring() {
   if [[ -e 'bin/spring' ]]; then bin/spring "$@"; else command spring "$@"; fi
 }
+kamal() {
+  if [[ -e 'bin/kamal' ]]; then bin/kamal "$@"; else command kamal "$@"; fi
+}
 alias r='rails'
 alias rs='rails server'
 alias rg='rails generate'
@@ -700,6 +703,7 @@ alias hrd='heroku run:detached'
 alias hrc='heroku run rails console'
 # alias hro='heroku run rake db:rollback'
 alias hpr='heroku run "printenv | sort"'
+alias he='hpr'
 alias hrp='hpr'
 alias hrb='heroku run bash'
 hurl() {
@@ -720,6 +724,28 @@ krrubg() { kube run:bg $1 $2 rails runner $3 }
 alias kl='kube logs'
 alias ke='kube env'
 alias kp='kube pods'
+
+# Kamal
+alias km='kamal'
+alias kms='kamal setup'
+alias kmd='kamal deploy'
+alias kmlo='kamal lock'
+alias kmlr='kamal lock release'
+alias kmrm='kamal remove'
+alias kma='kamal app'
+alias kml='kamal app logs -f'
+alias kmrc="kamal app exec -i 'bin/rails console'"
+alias kmb='kamal app exec -i bash'
+alias kmrb='kmb'
+alias kme="kamal app exec -i 'printenv | sort'"
+alias kmpr='kmpr'
+alias kmep='kamal env push'
+alias kmae='kamal app exec'
+kmru() {
+  set -x
+  bin/kamal app exec -p "bin/rails runner '$*'"
+}
+alias kmrru='kmru'
 
 # Brew
 brupd() {
