@@ -621,7 +621,7 @@ endif
 
 let g:python3_host_prog = '/Users/jerome/.asdf/shims/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
-let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/18.19.1/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/20.13.1/lib/node_modules/neovim/bin/cli.js'
 let g:perl_host_prog = $HOMEBREW_PREFIX . '/bin/perl'
 let g:clipboard = {
   \ 'name': 'pbcopy',
@@ -2766,6 +2766,8 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.apib set ft=markdown
   autocmd BufRead,BufNewFile Dockerfile* set ft=dockerfile
   autocmd BufRead,BufNewFile *.vue setfiletype html
+  autocmd BufRead,BufNewFile *.rb.tt set ft=ruby
+  autocmd BufRead,BufNewFile *.yml.tt set ft=yaml
 augroup end
 
 augroup detect_binary_files

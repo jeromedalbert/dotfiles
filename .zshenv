@@ -585,18 +585,11 @@ rails() {
   if [[ -e 'bin/rails' ]]; then bin/rails "$@"; else command rails "$@"; fi
   if [[ $? -eq 0 && $1 == 'new' ]]; then; cd $2; fi
 }
-rake() {
-  if [[ -e 'bin/rake' ]]; then bin/rake "$@"; else command rake "$@"; fi
-}
-rspec() {
-  if [[ -e 'bin/rspec' ]]; then bin/rspec "$@"; else command rspec "$@"; fi
-}
-spring() {
-  if [[ -e 'bin/spring' ]]; then bin/spring "$@"; else command spring "$@"; fi
-}
-kamal() {
-  if [[ -e 'bin/kamal' ]]; then bin/kamal "$@"; else command kamal "$@"; fi
-}
+rake() { if [[ -e 'bin/rake' ]]; then bin/rake "$@"; else command rake "$@"; fi }
+rspec() { if [[ -e 'bin/rspec' ]]; then bin/rspec "$@"; else command rspec "$@"; fi }
+spring() { if [[ -e 'bin/spring' ]]; then bin/spring "$@"; else command spring "$@"; fi }
+kamal() { if [[ -e 'bin/kamal' ]]; then bin/kamal "$@"; else command kamal "$@"; fi }
+alias dev='bin/dev'
 alias r='rails'
 alias rs='rails server'
 alias rg='rails generate'
@@ -624,6 +617,7 @@ alias ss='spring status'
 # alias irb='pry'
 # alias debug='pry-remote'
 fs() {
+  if [[ -e 'bin/dev' ]]; then; bin/dev; return; fi
   local options=''
   if [[ -e '.env' ]]; then; options='-e .env'; fi
   if [[ -e '.env.local' ]]; then; options="$options,.env.local"; fi
@@ -663,6 +657,13 @@ steps() {
   echo $delta
 }
 alias sw='stree write'
+rdbg() {
+  if [[ $# -eq 0 ]]; then
+    rdbg -An
+  else
+    command rdbg "$@"
+  fi
+}
 
 # Javascript
 alias y='yarn'
@@ -733,19 +734,35 @@ alias kmlo='kamal lock'
 alias kmlr='kamal lock release'
 alias kmrm='kamal remove'
 alias kma='kamal app'
-alias kml='kamal app logs -f'
-alias kmrc="kamal app exec -i 'bin/rails console'"
-alias kmb='kamal app exec -i bash'
-alias kmrb='kmb'
-alias kme="kamal app exec -i 'printenv | sort'"
-alias kmpr='kmpr'
-alias kmep='kamal env push'
-alias kmae='kamal app exec'
-kmru() {
-  set -x
-  bin/kamal app exec -p "bin/rails runner '$*'"
+kml() {
+  kamal app logs -f -n 0 "$@" | sed '/Started GET "\/up"/,/Completed/d'
 }
+alias kmae='kamal app exec'
+alias kmc="kamal app exec -q -i 'bin/rails console'"
+alias kmrc='kmc'
+alias kmb='kamal app exec -q -i bash'
+alias kmrb='kmb'
+alias kme="kamal app exec -q 'printenv | sort'"
+alias kmpr='kme'
+alias kmep='kamal env push'
+alias kmepb='kmep && kmab'
+alias kmeu='kmepb'
+alias kmu='kmepb'
+kmr() {
+  set -x
+  bin/kamal app exec -q -p "bin/rails runner '$*'"
+}
+alias kmru='kmru'
 alias kmrru='kmru'
+alias kmh='kamal healtcheck'
+alias kmdt='kamal details -q'
+alias kmac='kamal app containers -q'
+alias kmab='kamal app boot'
+alias kmacc='kamal accessory'
+alias kmaccdt='kamal accessory details all -q'
+alias kmacce='kamal accessory exec'
+kmaccb() { kamal accessory exec $1 -q -i bash }
+alias kmt='kamal traefik'
 
 # Brew
 brupd() {

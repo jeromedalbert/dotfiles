@@ -1,3 +1,5 @@
+alias q exit
+
 def rr
   reload!
 end
