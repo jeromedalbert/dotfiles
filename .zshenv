@@ -359,10 +359,14 @@ alias gpf='gp --force-with-lease'
 alias gpf!='gp --force'
 gpu() {
   if [[ $# -eq 0 ]]; then
-    gp -u origin $(current-git-branch)
+    local remote=$(github-fork-exists && echo 'jeromedalbert' || echo 'origin')
+    gp -u $remote $(current-git-branch)
   else
     gp -u "$@"
   fi
+}
+github-fork-exists() {
+  git remote get-url jeromedalbert &>/dev/null
 }
 gpuf() {
   if [[ $# -eq 0 ]]; then
@@ -418,13 +422,13 @@ fix() {
 alias fx='fix'
 alias gstats='git shortlog -sn'
 alias gsa='git submodule add'
-git-remove-submodule() {
+git-submodule-remove() {
   local submodule="$@"
   git submodule deinit -f $submodule
   rm -rf .git/modules/$submodule
   git rm -f $submodule
 }
-alias gsr='git-remove-submodule'
+alias gsr='git-submodule-remove'
 alias grev='git revert'
 alias grevh='git revert HEAD'
 alias grevnoe='git revert --no-edit'
@@ -456,12 +460,12 @@ hb() {
   fi
 }
 hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
+alias hcr='gh repo create --private --source=. $(basename $PWD)'
+alias hi='gi; gci; hcr; gpu'
 gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
-alias ghc='gh repo create --private --source=. $(basename $PWD)'
-alias ghi='gi; gci; ghc; gpu'
 
 # Docker
 alias d='docker'
@@ -503,7 +507,8 @@ alias de='desk'
 
 # SSH
 alias ssh='TERM=xterm-256color ssh'
-alias ssh_conf="$MAIN_EDITOR ~/.ssh/config"
+alias sshconf="$MAIN_EDITOR ~/.ssh/config"
+alias sshc='sshconf'
 alias ssh-key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
 alias ssh-keys='ssh-key'
 
@@ -536,7 +541,7 @@ jv() {
   if [[ "$(pwd)" != "$old_directory" ]]; then; v.; fi
 }
 jj() {
-  cd "$(mdfind "kind:folder" -onlyin ~ -name  2> /dev/null | fzf)"
+  cd "$(mdfind "kind:folder" -onlyin ~ -name 2> /dev/null | fzf)"
 }
 fgl() (
   [ $# -eq 0 ] && return
@@ -581,14 +586,22 @@ bundle-path() {
   VISUAL=echo bundle open $1
 }
 alias bp='bundle-path'
+bs() { ag -C "$@" $(bundle show --paths) }
 rails() {
-  if [[ -e 'bin/rails' ]]; then bin/rails "$@"; else command rails "$@"; fi
+  binstub-command rails "$@"
   if [[ $? -eq 0 && $1 == 'new' ]]; then; cd $2; fi
 }
-rake() { if [[ -e 'bin/rake' ]]; then bin/rake "$@"; else command rake "$@"; fi }
-rspec() { if [[ -e 'bin/rspec' ]]; then bin/rspec "$@"; else command rspec "$@"; fi }
-spring() { if [[ -e 'bin/spring' ]]; then bin/spring "$@"; else command spring "$@"; fi }
-kamal() { if [[ -e 'bin/kamal' ]]; then bin/kamal "$@"; else command kamal "$@"; fi }
+alias rake='binstub-command rake'
+alias rspec='binstub-command rspec'
+alias spring='binstub-command spring'
+alias kamal='bin/kamal'
+alias importmap='bin/importmap'
+binstub-command() {
+  local cmd=$1
+  shift
+  if [[ -e bin/$cmd ]]; then; bin/$cmd "$@"; else command $cmd "$@"; fi
+}
+alias im='importmap'
 alias dev='bin/dev'
 alias r='rails'
 alias rs='rails server'
@@ -597,25 +610,26 @@ alias rgm='rails generate migration'
 alias rgs='rails generate scaffold'
 alias rdm='rails destroy migration'
 alias rd='rails destroy'
-alias rc='rails c'
+ruby-console() {
+  if [[ -e 'config/application.rb' ]]; then bin/rails c
+  elif [[ -e 'bin/console' ]]; then bin/console
+  else irb
+  fi
+}
+alias rc='ruby-console'
 alias rcs='rails c --sandbox'
 alias rr='rails routes'
+alias rrs='rails restart'
+alias rss='rrs'
+alias rst='rrs'
 alias rdb='rails db'
 alias mi='rake db:migrate'
 alias ro='rake db:rollback'
 alias romi='ro && mi'
-# alias mi1='rake db:migrate'
-# alias mi2='rake db:migrate && RAILS_ENV=test rake db:migrate'
-# alias mi='rake db:migrate db:rollback && mi2'
-# alias ro1='rake db:rollback'
-# alias ro2='rake db:rollback && RAILS_ENV=test rake db:rollback'
-# alias ro='ro2'
 alias rT='rake -T'
 alias st='spring stop'
 alias strc='st && rc'
 alias ss='spring status'
-# alias irb='pry'
-# alias debug='pry-remote'
 fs() {
   if [[ -e 'bin/dev' ]]; then; bin/dev; return; fi
   local options=''
@@ -664,6 +678,7 @@ rdbg() {
     command rdbg "$@"
   fi
 }
+alias dbundle='ruby ~/c/tmp/rubygems/bundler/spec/support/bundle.rb'
 
 # Javascript
 alias y='yarn'
@@ -690,9 +705,84 @@ alias anc='ansible-console'
 alias anv='ansible-vault'
 alias ang='ansible-galaxy'
 
+# Fly.io
+alias fl='fly'
+fls() {
+  local app_name=${1:-jeromeapp}
+  DISABLE_SPRING=true fly launch --no-deploy --yes --name $app_name
+  fly secrets set SECRET_KEY_BASE=$(ruby -rsecurerandom -e "puts SecureRandom.hex(64)")
+  fly deploy
+}
+alias flys='fls'
+flrm() {
+  local app_name=$(fly-app-name)
+  fly apps destroy $app_name -y
+  fly apps destroy $app_name-db -y
+}
+fly-app-name() { grep 'app =' fly.toml | sed -r "s/app = '(.*)'/\1/" }
+alias flo='fly apps open'
+alias fld='fly deploy'
+alias flst='fly status'
+alias flc='fly console'
+alias fll='fly logs'
+alias fles='fly secrets set'
+alias fleu='fly secrets unset'
+alias flb='fly ssh console'
+alias fle="fly ssh console -q -C printenv | sort"
+alias flrc='fly ssh console -q --pty -C "bin/rails console"'
+alias flmi='fly ssh console --pty -C "bin/rails db:migrate"'
+alias flr='fly ssh console -q -C'
+flru() {
+  set -x
+  fly ssh console -q -C "bin/rails runner '$*'"
+}
+alias flrru='kmru'
+alias fldb='fly postgres connect -a $(fly-app-name)-db'
+
+# Kamal
+alias km='kamal'
+alias kms='ensure-docker-is-running; kamal setup'
+alias kmd='ensure-docker-is-running; kamal deploy'
+ensure-docker-is-running() {
+  docker ps &> /dev/null
+  if [[ $? -ne 0 ]]; then; open -a Docker; fi
+}
+alias kmlo='kamal lock'
+alias kmlr='kamal lock release'
+alias kmrm='kamal remove -y'
+alias kma='kamal app'
+alias kml='kamal app logs -q -f -n 0'
+alias kmae='kamal app exec'
+alias kmc="kamal app exec -q -i 'bin/rails console'"
+alias kmrc='kmc'
+alias kmb='kamal app exec -q -i bash'
+alias kmrb='kmb'
+alias kme="kamal app exec -q 'printenv | sort'"
+alias kmpr='kme'
+alias kmep='kamal env push'
+alias kmepb='kmep && kmab'
+alias kmeu='kmepb'
+alias kmu='kmepb'
+kmru() {
+  set -x
+  bin/kamal app exec -q -p "bin/rails runner '$*'"
+}
+alias kmrru='kmru'
+alias kmh='kamal healtcheck'
+alias kmdt='kamal details -q'
+alias kmac='kamal app containers -q'
+alias kmab='kamal app boot'
+alias kmacc='kamal accessory'
+alias kmaccdt='kamal accessory details all -q'
+alias kmacce='kamal accessory exec'
+kmaccb() { kamal accessory exec $1 -q -i bash }
+alias kmt='kamal traefik'
+kmo() { dotenv -f .env.production sh -c 'open http://$SERVER_IP' }
+kmdb() { dotenv -f .env.production sh -c 'psql $DATABASE_URL' }
+
 # Heroku
 alias hps='heroku ps'
-alias hl='heroku logs -t'
+alias hl='heroku logs -t --dyno=web'
 alias hmi='heroku run rake db:migrate'
 alias hap='heroku accounts:set personal'
 alias haw='heroku accounts:set work'
@@ -707,6 +797,7 @@ alias hpr='heroku run "printenv | sort"'
 alias he='hpr'
 alias hrp='hpr'
 alias hrb='heroku run bash'
+alias ho='heroku open'
 hurl() {
   heroku info -s "$@" | grep web_url | cut -d= -f2
 }
@@ -725,44 +816,6 @@ krrubg() { kube run:bg $1 $2 rails runner $3 }
 alias kl='kube logs'
 alias ke='kube env'
 alias kp='kube pods'
-
-# Kamal
-alias km='kamal'
-alias kms='kamal setup'
-alias kmd='kamal deploy'
-alias kmlo='kamal lock'
-alias kmlr='kamal lock release'
-alias kmrm='kamal remove'
-alias kma='kamal app'
-kml() {
-  kamal app logs -f -n 0 "$@" | sed '/Started GET "\/up"/,/Completed/d'
-}
-alias kmae='kamal app exec'
-alias kmc="kamal app exec -q -i 'bin/rails console'"
-alias kmrc='kmc'
-alias kmb='kamal app exec -q -i bash'
-alias kmrb='kmb'
-alias kme="kamal app exec -q 'printenv | sort'"
-alias kmpr='kme'
-alias kmep='kamal env push'
-alias kmepb='kmep && kmab'
-alias kmeu='kmepb'
-alias kmu='kmepb'
-kmr() {
-  set -x
-  bin/kamal app exec -q -p "bin/rails runner '$*'"
-}
-alias kmru='kmru'
-alias kmrru='kmru'
-alias kmh='kamal healtcheck'
-alias kmdt='kamal details -q'
-alias kmac='kamal app containers -q'
-alias kmab='kamal app boot'
-alias kmacc='kamal accessory'
-alias kmaccdt='kamal accessory details all -q'
-alias kmacce='kamal accessory exec'
-kmaccb() { kamal accessory exec $1 -q -i bash }
-alias kmt='kamal traefik'
 
 # Brew
 brupd() {
@@ -860,9 +913,17 @@ killui() {
     killall "${app}"
   done
 }
-alias nra='~/c/boilerplate/new-rails-app'
-alias nrg='~/c/boilerplate/new-ruby-gem'
-alias nsa='~/c/boilerplate/new-sinatra-app'
+rails-new() {
+  ~/c/boilerplate/rails-template/rails-new "$@"
+  if [[ $? -eq 0 && -d "$1" ]]; then; cd $1; fi
+}
+alias rn='rails-new'
+gem-new() {
+  local gem_new_path=~/c/boilerplate/gem-new
+  bundle exec --gemfile $gem_new_path/Gemfile $gem_new_path/exe/gem-new "$@"
+  if [[ $? -eq 0 && -d "$1" ]]; then; cd $1; fi
+}
+alias gn='gem-new'
 mkpwd() {
   local max_chars=${1:-28}
   cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1

@@ -5,9 +5,12 @@ bundler
 cronex
 foreman
 gem-ctags
+gem-release
 lolcat
+licensee
 neovim
 pry
-rails
 railroady
+rails
 rcodetools
+yard

@@ -15,7 +15,8 @@ IRB.conf[:AUTO_INDENT] = true
 IRB.conf[:USE_AUTOCOMPLETE] = false
 
 IRB.conf[:COMMAND_ALIASES].merge!(
-  con: :continue
+  con: :continue,
+  'show-source': :show_source
 )
 
 require_relative '.console_functions'

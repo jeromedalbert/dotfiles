@@ -21,6 +21,7 @@
 
 [diff]
   noprefix = true
+  algorithm = histogram
 
 [merge "bundlelock"]
   name = bundle lock
@@ -46,3 +47,8 @@
 	insteadOf = "https://github.com/"
 [init]
 	defaultBranch = main
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f

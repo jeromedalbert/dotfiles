@@ -32,6 +32,7 @@ export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 export MANPATH=$HOMEBREW_PREFIX/share/man:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export GH_NO_UPDATE_NOTIFIER=true
+export RUBY_DEBUG_NO_HINT=true
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOMEBREW_PREFIX/bin

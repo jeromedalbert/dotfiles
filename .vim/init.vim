@@ -689,7 +689,7 @@ let NERDTreeIgnore = [
   \ '\.rubocop-http', '\.notes$', '\.my-snippets',
   \
   \ '^\.svn$', '^\.git$', '^\.hg$', '^\CVS$', '^\.idea$', '^\.sass-cache$',
-  \ '^tmp$', '^log$', '^coverage$', '^node_modules$'
+  \ '^tmp$', '^log$', '^coverage$', '^node_modules$', '^builds$'
   \ ]
 let NERDTreeQuitOnOpen = 1
 let NERDTreeHighlightCursorline = 1
@@ -799,6 +799,7 @@ let g:neomake_highlight_columns = 0
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
 let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_html_enabled_makers = []
+let g:neomake_markdown_enabled_makers = []
 let g:neomake_sh_enabled_makers = ['sh']
 let g:neomake_zsh_enabled_makers = ['zsh']
 let g:neomake_ruby_mri_maker = {
@@ -2768,6 +2769,8 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.vue setfiletype html
   autocmd BufRead,BufNewFile *.rb.tt set ft=ruby
   autocmd BufRead,BufNewFile *.yml.tt set ft=yaml
+  autocmd BufRead,BufNewFile *.html.erb.tt set ft=eruby.html
+  autocmd BufRead,BufNewFile *.md.tt set ft=markdown
 augroup end
 
 augroup detect_binary_files
