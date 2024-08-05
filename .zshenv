@@ -45,6 +45,14 @@ alias vimdiff="$VIM_EDITOR -d"
 alias vd=vimdiff
 dif() { colordiff -u $@ | less }
 mkcd() { mkdir $1 && cd $1 }
+tmp() {
+  if [[ $# -eq 0 ]]; then
+    cd ~/c/tmp
+  else
+    mkcd ~/c/tmp/$1
+  fi
+}
+alias ct='tmp'
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
 alias psgrep='pstree | grep'
@@ -327,6 +335,7 @@ alias grbi5='git rebase -i HEAD~5'
 grbim() { git rebase -i $(git-main-branch) }
 alias grbir='git rebase -i --root'
 alias gcon='git rebase --continue'
+alias grcon='gcon'
 alias gaacon='gaa && gcon'
 alias grabort='git rebase --abort'
 alias gsk='git rebase --skip'
@@ -450,7 +459,19 @@ alias gsquashall='git reset --soft master; gaacm "Squashed commits"'
 # Github
 alias hc='gh pr create --web'
 alias hp='gh pr view --web'
-alias hf='gh repo fork --remote --remote-name=jeromedalbert'
+hpatch() {
+  local branch=${1:-main}
+  open "https://github.com/$(github-repo jeromedalbert)/compare/$branch...$(current-git-branch)"
+}
+alias hpa='hpatch'
+hf() {
+  gh repo fork --remote --remote-name=jeromedalbert
+  gh repo set-default $(github-repo origin)
+}
+github-repo() {
+  local origin=$1
+  git remote get-url $origin | sed -r 's/.*:(.*)\.git/\1/'
+}
 hb() {
   local current_branch=$(current-git-branch)
   if [[ $current_branch == $(git-main-branch) ]]; then
@@ -461,6 +482,7 @@ hb() {
 }
 hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
 alias hcr='gh repo create --private --source=. $(basename $PWD)'
+alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hi='gi; gci; hcr; gpu'
 gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
@@ -500,8 +522,6 @@ alias st2='cd ~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
 alias st3='cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages'
 alias .vim='cd ~/.vim'
 alias c='cd ~/c'
-alias ctmp='cd ~/c/tmp'
-alias ct='ctmp'
 alias desk='cd ~/Desktop'
 alias de='desk'
 
@@ -602,7 +622,7 @@ binstub-command() {
   if [[ -e bin/$cmd ]]; then; bin/$cmd "$@"; else command $cmd "$@"; fi
 }
 alias im='importmap'
-alias dev='bin/dev'
+alias bd='bin/dev'
 alias r='rails'
 alias rs='rails server'
 alias rg='rails generate'
@@ -644,7 +664,7 @@ alias gmo='gem open'
 alias gmi='gem install'
 alias gmins='gmi'
 alias gminf='gem info'
-alias gmun='gem uninstall'
+alias gmun='gem uninstall -x'
 alias gmuns='gmun'
 alias gmup='gem update'
 alias gmupd='gmup'
