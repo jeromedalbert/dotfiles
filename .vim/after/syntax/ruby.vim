@@ -10,7 +10,7 @@ syn match rubyOperator "%\%([[:punct:]]\|[qwrsxQWRS][[:punct:]]\?\)\@!"
 
 syn match rubyOperator "\%([[:alnum:]]\s*\)\@<=/"
 
-syn match rubyOperator "\%(do\s*\)\@<!|"
+" syn match rubyOperator "\%(do\s*\)\@<!|"
 
 syn match rubyNil "nil[?!]\@!"
 hi link rubyNil rubyBoolean

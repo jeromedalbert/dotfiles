@@ -9,13 +9,15 @@
 *.pyc
 .rubocop-http*
 *.dump*
+storage/*
 
-tmp
-log
 CVS
-node_modules
+app/assets/builds
 bower_components
 coverage
+log
+node_modules
 public/assets
 public/packs
+tmp
 vendor

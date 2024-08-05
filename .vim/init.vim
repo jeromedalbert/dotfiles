@@ -15,7 +15,6 @@ if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'on': [] }
   Plug 'neovim/nvim-lspconfig'
   Plug 'lukas-reineke/lsp-format.nvim'
-  " Plug 'mhartington/formatter.nvim'
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
