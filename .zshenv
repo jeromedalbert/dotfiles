@@ -16,7 +16,15 @@ alias llrt='ll -rt'
 alias llart='lla -rt'
 alias rm='rm'
 alias rmrf='rm -rf'
-# alias grep='grep --color=auto'
+rmrf.() {
+  local dir=$(pwd)
+  if [[ $dir == ~/c/* ]]; then
+    cd ..
+    rm -rf $dir
+  else
+    echo 'ERROR: this command only works in ~/c as a security precaution.'
+  fi
+}
 alias cpr='cp -r'
 .() {
   if [[ $# -eq 0 ]]; then
@@ -48,8 +56,11 @@ mkcd() { mkdir $1 && cd $1 }
 tmp() {
   if [[ $# -eq 0 ]]; then
     cd ~/c/tmp
-  else
+  elif [[ $# -eq 1 ]]; then
     mkcd ~/c/tmp/$1
+  else
+    cd ~/c/tmp
+    eval $@
   fi
 }
 alias ct='tmp'
