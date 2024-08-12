@@ -57,7 +57,13 @@ tmp() {
   if [[ $# -eq 0 ]]; then
     cd ~/c/tmp
   elif [[ $# -eq 1 ]]; then
-    mkcd ~/c/tmp/$1
+    if [[ $1 == *.* ]]; then
+      cd ~/c/tmp
+      touch $1
+      $MAIN_EDITOR $1
+    else
+      mkcd ~/c/tmp/$1
+    fi
   else
     cd ~/c/tmp
     eval $@
@@ -465,7 +471,8 @@ git-unchanged-since() {
   git ls-files '*.rb' | egrep '^(app|lib)/' > /tmp/all
   comm -23 <(sort -u /tmp/all) <(sort -u /tmp/changed)
 }
-alias gsquashall='git reset --soft master; gaacm "Squashed commits"'
+alias squash='git reset --soft $(git-main-branch); gaacm "Squashed commits"'
+alias squashi='git reset $(git commit-tree HEAD^{tree} -m "Initial commit")'
 
 # Github
 alias hc='gh pr create --web'
@@ -625,6 +632,7 @@ rails() {
 alias rake='binstub-command rake'
 alias rspec='binstub-command rspec'
 alias spring='binstub-command spring'
+alias brakeman='binstub-command brakeman'
 alias kamal='bin/kamal'
 alias importmap='bin/importmap'
 binstub-command() {

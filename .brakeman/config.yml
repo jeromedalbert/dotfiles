@@ -1,0 +1,3 @@
+pager: false
+quiet: true
+summary_only: :no_summary
