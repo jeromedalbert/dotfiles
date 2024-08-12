@@ -574,9 +574,9 @@ vj() {
   (jv "$@")
 }
 jv() {
-  local old_directory=$(pwd)
+  local previous_dir=$(pwd)
   j "$@"
-  if [[ "$(pwd)" != "$old_directory" ]]; then; v.; fi
+  if [[ "$(pwd)" != "$previous_dir" ]]; then; v.; fi
 }
 jj() {
   cd "$(mdfind "kind:folder" -onlyin ~ -name 2> /dev/null | fzf)"
@@ -718,6 +718,19 @@ rdbg() {
   fi
 }
 alias dbundle='ruby ~/c/tmp/rubygems/bundler/spec/support/bundle.rb'
+drails() {
+  local previous_dir=$(pwd)
+  cd ~/c/rails
+  if [[ $1 == 'new' && -n $2 && ! "$@" =~ (--help|-h) ]]; then
+    local app_path=$2
+    if [[ ! "$app_path" =~ ^~?/ ]]; then; app_path="$previous_dir/$app_path"; fi
+    bundle exec rails new $app_path ${@:2} --dev
+    if [[ $? -eq 0 ]]; then; cd $app_path; else; cd $previous_dir; fi
+  else
+    bundle exec rails $@
+    cd $previous_dir
+  fi
+}
 
 # Javascript
 alias y='yarn'
