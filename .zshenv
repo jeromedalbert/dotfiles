@@ -53,7 +53,7 @@ alias vimdiff="$VIM_EDITOR -d"
 alias vd=vimdiff
 dif() { colordiff -u $@ | less }
 mkcd() { mkdir $1 && cd $1 }
-tmp() {
+ct() {
   if [[ $# -eq 0 ]]; then
     cd ~/c/tmp
   elif [[ $# -eq 1 ]]; then
@@ -69,7 +69,7 @@ tmp() {
     eval $@
   fi
 }
-alias ct='tmp'
+alias ctl='ct; llrt'
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
 alias psgrep='pstree | grep'
@@ -96,7 +96,7 @@ prepend() {
   echo "$text_to_prepend\n"
   read -q "answer?to $file? "
   echo "\n"
-  if [[ $answer != "y" ]]; then; return; fi
+  if [[ $answer != "y" ]]; then return; fi
 
   echo 'Prepending...'
   echo $text_to_prepend > $tmp_file
@@ -111,7 +111,7 @@ al() {
     $MAIN_EDITOR ~/.zshenv
   else
     alias $1
-    if [[ $? -ne 0 ]]; then; which $1; fi
+    if [[ $? -ne 0 ]]; then which $1; fi
   fi
 }
 alias conf="$MAIN_EDITOR ~/.zshrc"
@@ -174,7 +174,7 @@ tk() {
   fi
 }
 ta() {
-  if [[ $# -eq 0 ]]; then; tmux attach; fi
+  if [[ $# -eq 0 ]]; then tmux attach; fi
 
   if [[ -z $TMUX ]]; then
     tmux attach -t "=$1"
@@ -199,7 +199,7 @@ tgo() {
   ta go
 }
 to() {
-  if [[ $# -ne 1 ]]; then; return; fi
+  if [[ $# -ne 1 ]]; then return; fi
   ta $1 2> /dev/null && return
 
   local session_file=~/.tmux/sessions/$1.conf
@@ -424,7 +424,7 @@ gback() {
     rm .git/previous_branch
   fi
   last_commit_message=$(git log -1 --pretty=%B)
-  if [[ $last_commit_message == 'current work' ]]; then; grh^; fi
+  if [[ $last_commit_message == 'current work' ]]; then grh^; fi
   unset last_commit_message
 }
 alias gcurr='gaacm "current work"'
@@ -508,6 +508,14 @@ alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
 
 # Docker
+alias docker='ensure-docker-is-running; command docker'
+ensure-docker-is-running() {
+  command docker ps &> /dev/null
+  if [[ $? -ne 0 ]]; then
+    open -a Docker
+    while ! command docker ps &> /dev/null; do sleep 0.1; done
+  fi
+}
 alias d='docker'
 alias di='docker images'
 alias dps='docker ps'
@@ -576,7 +584,7 @@ vj() {
 jv() {
   local previous_dir=$(pwd)
   j "$@"
-  if [[ "$(pwd)" != "$previous_dir" ]]; then; v.; fi
+  if [[ "$(pwd)" != "$previous_dir" ]]; then v.; fi
 }
 jj() {
   cd "$(mdfind "kind:folder" -onlyin ~ -name 2> /dev/null | fzf)"
@@ -627,7 +635,7 @@ alias bp='bundle-path'
 bs() { ag -C "$@" $(bundle show --paths) }
 rails() {
   binstub-command rails "$@"
-  if [[ $? -eq 0 && $1 == 'new' ]]; then; cd $2; fi
+  if [[ $? -eq 0 && $1 == 'new' ]]; then cd $2; fi
 }
 alias rake='binstub-command rake'
 alias rspec='binstub-command rspec'
@@ -638,7 +646,7 @@ alias importmap='bin/importmap'
 binstub-command() {
   local cmd=$1
   shift
-  if [[ -e bin/$cmd ]]; then; bin/$cmd "$@"; else command $cmd "$@"; fi
+  if [[ -e bin/$cmd ]]; then bin/$cmd "$@"; else command $cmd "$@"; fi
 }
 alias im='importmap'
 alias bd='bin/dev'
@@ -670,11 +678,11 @@ alias st='spring stop'
 alias strc='st && rc'
 alias ss='spring status'
 fs() {
-  if [[ -e 'bin/dev' ]]; then; bin/dev; return; fi
+  if [[ -e 'bin/dev' ]]; then bin/dev; return; fi
   local options=''
-  if [[ -e '.env' ]]; then; options='-e .env'; fi
-  if [[ -e '.env.local' ]]; then; options="$options,.env.local"; fi
-  if [[ -e 'Procfile.dev' ]]; then; options="$options -f Procfile.dev"; fi
+  if [[ -e '.env' ]]; then options='-e .env'; fi
+  if [[ -e '.env.local' ]]; then options="$options,.env.local"; fi
+  if [[ -e 'Procfile.dev' ]]; then options="$options -f Procfile.dev"; fi
   eval "foreman start $options $@"
 }
 alias rru='rails runner'
@@ -723,9 +731,9 @@ drails() {
   cd ~/c/rails
   if [[ $1 == 'new' && -n $2 && ! "$@" =~ (--help|-h) ]]; then
     local app_path=$2
-    if [[ ! "$app_path" =~ ^~?/ ]]; then; app_path="$previous_dir/$app_path"; fi
+    if [[ ! "$app_path" =~ ^~?/ ]]; then app_path="$previous_dir/$app_path"; fi
     bundle exec rails new $app_path ${@:2} --dev
-    if [[ $? -eq 0 ]]; then; cd $app_path; else; cd $previous_dir; fi
+    if [[ $? -eq 0 ]]; then cd $app_path; else; cd $previous_dir; fi
   else
     bundle exec rails $@
     cd $previous_dir
@@ -795,10 +803,6 @@ alias fldb='fly postgres connect -a $(fly-app-name)-db'
 alias km='kamal'
 alias kms='ensure-docker-is-running; kamal setup'
 alias kmd='ensure-docker-is-running; kamal deploy'
-ensure-docker-is-running() {
-  docker ps &> /dev/null
-  if [[ $? -ne 0 ]]; then; open -a Docker; fi
-}
 alias kmlo='kamal lock'
 alias kmlr='kamal lock release'
 alias kmrm='kamal remove -y'
@@ -967,13 +971,13 @@ killui() {
 }
 rails-new() {
   ~/c/boilerplate/rails-template/rails-new "$@"
-  if [[ $? -eq 0 && -d "$1" ]]; then; cd $1; fi
+  if [[ $? -eq 0 && -d "$1" ]]; then cd $1; fi
 }
 alias rn='rails-new'
 gem-new() {
   local gem_new_path=~/c/boilerplate/gem-new
   bundle exec --gemfile $gem_new_path/Gemfile $gem_new_path/exe/gem-new "$@"
-  if [[ $? -eq 0 && -d "$1" ]]; then; cd $1; fi
+  if [[ $? -eq 0 && -d "$1" ]]; then cd $1; fi
 }
 alias gn='gem-new'
 mkpwd() {
@@ -1023,7 +1027,7 @@ alias macname='scutil --get ComputerName'
 alias speedtest='networkQuality'
 alias cores='nproc'
 bench() {
-  if [[ $# -eq 0 ]]; then; browsertime --help; return; fi
+  if [[ $# -eq 0 ]]; then browsertime --help; return; fi
   browsertime --headless --skipHar --resultDir=/tmp "$@"
   echo
   cat /tmp/browsertime.json | jq -r '.[0].statistics.timings.pageTimings | "Average DOM Load Time: \(.domContentLoadedTime.mean) ms\nAverage Load Time: \(.pageLoadTime.mean) ms\n\nMean DOM Load Time: \(.domContentLoadedTime.mean) ms\nMean Load Time: \(.pageLoadTime.mean) ms"'
