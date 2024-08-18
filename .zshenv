@@ -232,7 +232,10 @@ alias gaaca='gaa && gca'
 alias gaaca!='gaa && gca!'
 alias gaacapf!='gaaca! && gpf'
 alias gaacm='gaa && gcm'
-alias gic='gaacm Initial commit'
+gic() {
+  if [[ ! -d .git ]]; then git init; fi
+  gaacm "Initial commit"
+}
 alias gci='gic'
 alias gco='git checkout'
 alias gcob='gco -b'
