@@ -519,13 +519,14 @@ ensure-docker-is-running() {
 alias d='docker'
 alias di='docker images'
 alias dps='docker ps'
+alias ds='docker stop'
+alias dsa='docker stop $(docker ps -q)'
 alias drmi='docker rmi'
 alias drmif='docker rmi -f'
 alias drma='docker rm $(docker ps -a -q)'
 alias dr='docker run'
 alias drit='docker run -it'
 alias deit='docker exec -it'
-alias ds='docker stop'
 alias db='docker build'
 alias db.='docker build .'
 alias dl='docker pull'
@@ -533,15 +534,20 @@ alias dp='docker push'
 alias dt='docker tag'
 alias dh='docker history'
 alias da='docker attach'
-alias dm='docker-machine'
-alias dms='docker-machine start'
-alias dc='docker-compose'
-alias dcb='docker-compose build'
-alias dcr='docker-compose run'
-alias dcu='docker-compose up'
-alias dcud='docker-compose up -d'
-alias dcs='docker-compose stop'
-alias dcps='docker-compose ps'
+alias dc='docker compose'
+alias dcb='docker compose build'
+alias dcr='docker compose run'
+alias dcu='docker compose up'
+alias dcud='docker compose up -d'
+alias dcs='docker compose stop'
+alias dcps='docker compose ps'
+dq() { osascript -e 'quit app "Docker Desktop"' }
+
+# Dev containers
+alias devcontainer='ensure-docker-is-running; command devcontainer'
+alias devup='devcontainer up --workspace-folder .'
+alias devb='devcontainer exec --workspace-folder . bash'
+alias devs='docker compose -f .devcontainer/compose.yaml stop'
 
 # Directories
 alias st2='cd ~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
@@ -982,13 +988,14 @@ gem-new() {
 alias gn='gem-new'
 mkpwd() {
   local max_chars=${1:-28}
-  cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1
+  cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1 | tee >(pbcopy)
 }
 mkpwd2() {
   local password=$(openssl rand -base64 300 | tr -d '\n=/+')
   local max_chars=${1:-28}
-  echo $password | cut -c-$max_chars
+  echo $password | cut -c-$max_chars | tee >(pbcopy)
 }
+alias password='mkpwd'
 alias mkpw='mkpwd'
 alias pw='mkpw'
 alias fd='fd --type f'
