@@ -69,6 +69,15 @@ ct() {
     eval $@
   fi
 }
+cct() {
+  rm -rf ~/c/tmp/myapp* ~/c/tmp/mygem* ~/c/tmp/repro*
+  if [[ $# -eq 0 ]]; then
+    if [[ ! -d "$PWD" ]]; then cd ~/c/tmp; fi
+  else
+    ct "$@"
+  fi
+}
+alias ctt='cct'
 alias ctl='ct; llrt'
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
@@ -380,6 +389,7 @@ alias gbm='gb -m'
 # git-list-branches() {
 #   git for-each-ref --format="%(refname:short)" HEAD refs/heads
 # }
+alias gbi='git bisect'
 alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 alias gignored='git ignored'
@@ -440,7 +450,7 @@ gmerge() {
   local branch=${1:-$(git-main-branch)}
   git checkout $branch && gl && gc- && gm-
 }
-alias gt='git tag'
+alias gt='git tag --sort=-v:refname'
 alias gcp='git cherry-pick'
 alias gcp-='git cherry-pick -'
 alias gcpc='git cherry-pick --continue'
@@ -505,6 +515,8 @@ hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
 alias hcr='gh repo create --private --source=. $(basename $PWD)'
 alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hi='gi; gci; hcr; gpu'
+alias hpc='gh pr checkout'
+alias hco='hpc'
 gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
@@ -735,6 +747,7 @@ rdbg() {
   fi
 }
 alias dbundle='ruby ~/c/tmp/rubygems/bundler/spec/support/bundle.rb'
+alias dgem='ruby -I ~/c/tmp/rubygems/lib ~/c/tmp/rubygems/exe/gem install'
 drails() {
   local previous_dir=$(pwd)
   cd ~/c/rails

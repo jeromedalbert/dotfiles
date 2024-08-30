@@ -11,5 +11,7 @@
 .my-snippets
 .*@neomake_*
 
+myapp*
+mygem*
 tags
 zeus.json
