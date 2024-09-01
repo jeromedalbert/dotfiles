@@ -514,6 +514,7 @@ hb() {
 hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
 alias hcr='gh repo create --private --source=. $(basename $PWD)'
 alias hcrp='gh repo create --public --source=. $(basename $PWD)'
+alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hi='gi; gci; hcr; gpu'
 alias hpc='gh pr checkout'
 alias hco='hpc'
@@ -549,6 +550,8 @@ alias dp='docker push'
 alias dt='docker tag'
 alias dh='docker history'
 alias da='docker attach'
+drb() { docker run -it "$@" /bin/bash }
+dq() { osascript -e 'quit app "Docker Desktop"' }
 alias dc='docker compose'
 alias dcb='docker compose build'
 alias dcr='docker compose run'
@@ -556,7 +559,6 @@ alias dcu='docker compose up'
 alias dcud='docker compose up -d'
 alias dcs='docker compose stop'
 alias dcps='docker compose ps'
-dq() { osascript -e 'quit app "Docker Desktop"' }
 
 # Dev containers
 alias devcontainer='ensure-docker-is-running; command devcontainer'
