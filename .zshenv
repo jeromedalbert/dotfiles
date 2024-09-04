@@ -306,18 +306,14 @@ gcem() { gc --allow-empty -m "$*" }
 alias gclean='git clean -fd'
 alias grhhc='grhh && gclean'
 gd() {
-  if [[ $# -eq 0 ]]; then
-    gd HEAD
-  else
-    git diff "$@" | format-git-diff | eval $GIT_PAGER
-  fi
+  git diff "$@" | formatted-git-diff
 }
-format-git-diff() {
-  sed -r "s/^([^-+ ]*)[-+ ]/\\1/"
+formatted-git-diff() {
+  sed -r "s/^([^-+ ]*)[-+ ]/\\1/" | eval $GIT_PAGER
 }
-alias gdiff='git diff'
+alias gd!='git diff'
 gsh() {
-  git show "$@" | format-git-diff | eval $GIT_PAGER
+  git show "$@" | formatted-git-diff
 }
 alias gdc='gd --cached'
 alias gdh='gd HEAD'
@@ -330,7 +326,7 @@ alias gloda='glod --author=jerome'
 alias gload='gloda'
 alias lw='gload --since="last Monday midnight"'
 glop() {
-  glo -p "$@" | format-git-diff | eval $GIT_PAGER
+  glo -p "$@" | formatted-git-diff
 }
 alias gloo='git log --all --oneline --no-merges'
 alias gloS='glo -S'
@@ -495,6 +491,8 @@ hpatch() {
   open "https://github.com/$(github-repo jeromedalbert)/compare/$branch...$(current-git-branch)"
 }
 alias hpa='hpatch'
+alias hdiff='hpatch'
+alias hd='hdiff'
 hf() {
   gh repo fork --remote --remote-name=jeromedalbert
   gh repo set-default $(github-repo origin)
@@ -516,8 +514,9 @@ alias hcr='gh repo create --private --source=. $(basename $PWD)'
 alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hi='gi; gci; hcr; gpu'
-alias hpc='gh pr checkout'
-alias hco='hpc'
+alias hco='gh pr checkout'
+alias hpc='hpc'
+alias hpco='hpc'
 gpuhc() { gpu "$@" && hc }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
@@ -646,6 +645,10 @@ freflog() {
 }
 
 # Ruby / Rails
+bundle() {
+  command bundle "$@"
+  if [[ $? -eq 0 && $1 == 'gem' ]]; then cd $2; fi
+}
 alias b='bundle'
 alias be='bundle exec'
 alias bo='bundle open'
@@ -748,8 +751,8 @@ rdbg() {
     command rdbg "$@"
   fi
 }
-alias dbundle='ruby ~/c/tmp/rubygems/bundler/spec/support/bundle.rb'
-alias dgem='ruby -I ~/c/tmp/rubygems/lib ~/c/tmp/rubygems/exe/gem install'
+alias dbundle='ruby ~/c/rubygems/bundler/spec/support/bundle.rb'
+alias dgem='ruby -I ~/c/rubygems/lib ~/c/rubygems/exe/gem install'
 drails() {
   local previous_dir=$(pwd)
   cd ~/c/rails
@@ -812,6 +815,7 @@ alias fll='fly logs'
 alias fles='fly secrets set'
 alias fleu='fly secrets unset'
 alias flb='fly ssh console'
+alias flssh='flb'
 alias fle="fly ssh console -q -C printenv | sort"
 alias flrc='fly ssh console -q --pty -C "bin/rails console"'
 alias flmi='fly ssh console --pty -C "bin/rails db:migrate"'
@@ -837,6 +841,7 @@ alias kmc="kamal app exec -q -i 'bin/rails console'"
 alias kmrc='kmc'
 alias kmb='kamal app exec -q -i bash'
 alias kmrb='kmb'
+alias kmssh='kmb'
 alias kme="kamal app exec -q 'printenv | sort'"
 alias kmpr='kme'
 alias kmep='kamal env push'
@@ -877,6 +882,7 @@ alias hpr='heroku run "printenv | sort"'
 alias he='hpr'
 alias hrp='hpr'
 alias hrb='heroku run bash'
+alias hssh='hrb'
 alias ho='heroku open'
 hurl() {
   heroku info -s "$@" | grep web_url | cut -d= -f2
