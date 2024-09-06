@@ -25,6 +25,7 @@ rmrf.() {
     echo 'ERROR: this command only works in ~/c as a security precaution.'
   fi
 }
+alias rm.='rmrf.'
 alias cpr='cp -r'
 .() {
   if [[ $# -eq 0 ]]; then
@@ -542,14 +543,33 @@ alias drma='docker rm $(docker ps -a -q)'
 alias dr='docker run'
 alias drit='docker run -it'
 alias deit='docker exec -it'
-alias db='docker build'
-alias db.='docker build .'
+db() {
+  if [[ $# -eq 0 ]]; then
+    docker build .
+  else
+    docker build "$@"
+  fi
+}
+dbt() {
+  if [[ $# -eq 0 ]]; then
+    docker build -t foo .
+  else
+    docker build -t "$@"
+  fi
+}
 alias dl='docker pull'
 alias dp='docker push'
 alias dt='docker tag'
 alias dh='docker history'
 alias da='docker attach'
-drb() { docker run -it "$@" /bin/bash }
+drb() {
+  if [[ $# -eq 0 ]]; then
+    docker run -it foo /bin/bash
+  else
+    docker run -it "$@" /bin/bash
+  fi
+}
+alias dbr='dbt && drb'
 dq() { osascript -e 'quit app "Docker Desktop"' }
 alias dc='docker compose'
 alias dcb='docker compose build'
@@ -766,6 +786,7 @@ drails() {
     cd $previous_dir
   fi
 }
+alias rt='rake -T'
 
 # Javascript
 alias y='yarn'
@@ -815,7 +836,6 @@ alias fll='fly logs'
 alias fles='fly secrets set'
 alias fleu='fly secrets unset'
 alias flb='fly ssh console'
-alias flssh='flb'
 alias fle="fly ssh console -q -C printenv | sort"
 alias flrc='fly ssh console -q --pty -C "bin/rails console"'
 alias flmi='fly ssh console --pty -C "bin/rails db:migrate"'
@@ -841,7 +861,6 @@ alias kmc="kamal app exec -q -i 'bin/rails console'"
 alias kmrc='kmc'
 alias kmb='kamal app exec -q -i bash'
 alias kmrb='kmb'
-alias kmssh='kmb'
 alias kme="kamal app exec -q 'printenv | sort'"
 alias kmpr='kme'
 alias kmep='kamal env push'
@@ -882,7 +901,6 @@ alias hpr='heroku run "printenv | sort"'
 alias he='hpr'
 alias hrp='hpr'
 alias hrb='heroku run bash'
-alias hssh='hrb'
 alias ho='heroku open'
 hurl() {
   heroku info -s "$@" | grep web_url | cut -d= -f2
