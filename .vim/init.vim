@@ -575,7 +575,7 @@ set nojoinspaces
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump,.aider*
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
