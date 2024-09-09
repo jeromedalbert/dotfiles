@@ -81,6 +81,8 @@ hi LineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi FoldColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi CursorLineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi SignColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
+hi TabLine guifg=#e6e1dc guibg=#a9a9a9 gui=NONE
+hi TabLineFill guifg=NONE guibg=#e6e1dc gui=NONE
 hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE cterm=NONE
 hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guifg=NONE guibg=#454545 gui=NONE

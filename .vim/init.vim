@@ -73,7 +73,6 @@ Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
 Plug 'github/copilot.vim', { 'branch': 'release' }
-Plug 'madox2/vim-ai'
 Plug 'Konfekt/vim-alias'
 call plug#end()
 
