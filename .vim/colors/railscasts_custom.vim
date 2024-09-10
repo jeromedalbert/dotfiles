@@ -359,3 +359,8 @@ hi link sqlSpecial Boolean
 hi link rustFuncCall NONE
 hi link rustSelf NONE
 hi link rustModPath NONE
+
+hi link goEscapeC SpecialChar
+hi link goFormatSpecifier String
+hi link goPointerOperator Statement
+hi link goAsterisk Statement

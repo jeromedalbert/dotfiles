@@ -240,4 +240,4 @@ if [[ -e ~/.secrets.zsh ]]; then; source ~/.secrets.zsh; fi
 if [[ -n $TMUX && $(tmux show-window-options -t $TMUX_PANE -v automatic-rename) == "off" ]]; then
   export TMUX_AUTOMATIC_RENAME=off
 fi
-if [[ -z $TMUX && -z $VIM ]]; then; tmux-start; fi
+if [[ -z $TMUX && -z $VIM && "$TERM_PROGRAM" != "vscode" ]]; then; tmux-start; fi

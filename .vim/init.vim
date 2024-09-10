@@ -617,7 +617,9 @@ endif
 if has('gui_running')
   set guifont=Menlo:h14 linespace=3
   hi Cursor guifg=white guibg=red
-  set macmeta
+  if !exists('g:vscode')
+    set macmeta
+  endif
 endif
 
 let g:python3_host_prog = '/Users/jerome/.asdf/shims/python3'
@@ -919,6 +921,7 @@ let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
 let g:jsx_ext_required = 0
 let g:vue_pre_processors = []
+let g:go_highlight_functions = 1
 
 let g:test#strategy = 'custom'
 let g:test#no_alternate = 1
