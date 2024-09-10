@@ -15,6 +15,8 @@ if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'on': [] }
   Plug 'neovim/nvim-lspconfig'
   Plug 'lukas-reineke/lsp-format.nvim'
+  Plug 'github/copilot.vim', { 'branch': 'release' }
+  Plug 'joshuavial/aider.nvim', { 'on': [] }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -72,9 +74,7 @@ Plug 'jeromedalbert/vim-buffer-history', { 'branch': 'fix-popup-windows' }
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'github/copilot.vim', { 'branch': 'release' }
 Plug 'Konfekt/vim-alias'
-Plug 'joshuavial/aider.nvim', { 'on': [] }
 call plug#end()
 
 "############################
