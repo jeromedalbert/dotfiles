@@ -1,0 +1,21 @@
+{
+    "telemetry.telemetryLevel": "off",
+    "workbench.startupEditor": "none",
+    "security.workspace.trust.untrustedFiles": "open",
+    "extensions.ignoreRecommendations": true,
+    "git.openRepositoryInParentFolders": "never",
+    "update.showReleaseNotes": false,
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "workbench.panel.defaultLocation": "bottom",
+    "explorer.decorations.badges": false,
+    "workbench.iconTheme": null,
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "RailsCasts",
+    "rubyLsp.rubyExecutablePath": "/Users/jerome/.asdf/shims/ruby",
+    "explorer.confirmDelete": false,
+    "workbench.activityBar.location": "hidden",
+    "workbench.statusBar.visible": false,
+    "editor.stickyScroll.enabled": false
+}

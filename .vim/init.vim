@@ -74,6 +74,7 @@ Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
 Plug 'github/copilot.vim', { 'branch': 'release' }
 Plug 'Konfekt/vim-alias'
+Plug 'joshuavial/aider.nvim', { 'on': [] }
 call plug#end()
 
 "############################
@@ -516,7 +517,9 @@ noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
-noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
+" noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
+noremap <silent> <leader>A :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
+noremap <silent> <leader>C :silent !cursor -g %:p:<c-r>=line('.')<cr><cr>
 
 "#############################
 "### General configuration ###
@@ -1002,7 +1005,8 @@ function! TabComplete()
   elseif IsEmmetExpandable()
     return emmet#expandAbbr(0, '')
   else
-    return "\<tab>"
+    return copilot#Accept("\<tab>")
+    " return "\<tab>"
   endif
 endfunction
 
@@ -2594,6 +2598,14 @@ function! LazyLoadProjectionist()
     call plug#load('vim-projectionist')
   endif
   autocmd! projectionist
+endfunction
+
+function! LazyLoadAider()
+  if !exists('g:loaded_aider')
+    call plug#load('aider.nvim')
+    lua require('aider').setup({ auto_manage_context = true, default_bindings = false })
+    let g:loaded_aider = 1
+  endif
 endfunction
 
 function! GemOpen(gem_name)

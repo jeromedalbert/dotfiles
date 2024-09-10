@@ -87,6 +87,7 @@ hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE cterm=NONE
 hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guifg=NONE guibg=#454545 gui=NONE
 hi MatchParen guifg=NONE guibg=NONE gui=underline cterm=underline
+hi ModeMsg guifg=#e6e1dc guibg=NONE gui=NONE
 hi StatusLine guifg=fg guibg=#61605e gui=bold cterm=bold
 hi StatusLineNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
 hi StatusLineTerm guifg=fg guibg=#61605e gui=bold cterm=bold
