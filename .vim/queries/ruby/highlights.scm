@@ -378,24 +378,24 @@
 ; Highlight constants in certain cases.
 ; For constants like Abc::Def, only Def is highlighted.
 ((constant) @constant ; Constants not inside a class/module definition and not doing any calls
-  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$")
+  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$")
   (#not-has-ancestor? @constant class module)
   (#not-has-parent? @constant call method_call scope_resolution))
 ((call ; Constants as arguments (to method calls, include, extend, etc)
   arguments: (argument_list
     (scope_resolution name: (constant) @constant)))
   (#not-has-ancestor? @constant class module))
-  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$")
+  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$")
 ((rescue ; Constants inside a rescue block
   exceptions: (exceptions
     [
       (constant) @constant
       (scope_resolution name: (constant) @constant)
     ]))
-  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
+  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
 (call ; Methods that look like constants, for example Array(...)
   method: (constant) @constant
-  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
+  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
 
 ; Keyword parameters, for example `a:` and `b:` in `my_method(a: 1, b: 2)`
 (keyword_parameter
