@@ -288,17 +288,21 @@ if has('nvim')
   hi link @character.special.markdown_inline Constant
   hi link @punctuation.special.markdown markdownBlockQuote
   hi link @spell.markdown Normal
-  hi link @markup.heading markdownheadingdelimiter
+  hi link @markup.heading.1.markdown markdownheadingdelimiter
+  hi link @markup.heading.2.markdown markdownheadingdelimiter
+  hi link @markup.heading.3.markdown markdownheadingdelimiter
+  hi link @markup.heading.4.markdown markdownheadingdelimiter
+  hi link @markup.heading.5.markdown markdownheadingdelimiter
+  hi link @markup.heading.6.markdown markdownheadingdelimiter
+  hi link @markup.italic.markdown_inline markdownItalic
   hi link @markup.link.label.markdown_inline markdownLinkText
   hi link @markup.link.label.markdown markdownIdDeclaration
   hi link @markup.link.markdown_inline markdownLinkTextDelimiter
   hi link @markup.link.url.markdown_inline markdownUrl
   hi link @markup.link.url.markdown markdownUrl
-  hi link @markup.list.markdown Comment
+  hi link @markup.list.markdown markdownListMarker
   hi link @markup.strong.markdown_inline markdownBold
 endif
-
-highlight markdownUrl gui=none guisp=none
 
 hi link mkdListItem markdownListMarker
 hi link mkdCode NONE
