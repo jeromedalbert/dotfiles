@@ -132,10 +132,10 @@
   (#any-of? @constant.builtin
     "__callee__" "__dir__" "__id__" "__method__" "__send__" "__ENCODING__" "__FILE__" "__LINE__"))
 
-((identifier) @function.builtin
-  (#any-of? @function.builtin
-    "include" "extend" "prepend" "attr_reader" "attr_writer" "attr_accessor" "module_function"
-    "refine" "using"))
+; ((identifier) @function.builtin
+;   (#any-of? @function.builtin
+;     "include" "extend" "prepend" "attr_reader" "attr_writer" "attr_accessor" "module_function"
+;     "refine" "using"))
 
 ((identifier) @keyword.exception
   (#any-of? @keyword.exception "raise" "fail" "catch" "throw"))
@@ -362,6 +362,14 @@
   !receiver
   method: (identifier) @keyword.import)
   (#any-of? @keyword.import "require" "require_relative" "load" "autoload" "gem"))
+
+; Fixed identifiers
+((identifier) @function.builtin
+  (#any-of? @function.builtin "attr_reader" "attr_writer" "attr_accessor" "module_function"))
+((call
+  !receiver
+  method: (identifier) @function.builtin)
+  (#any-of? @function.builtin "include" "extend" "prepend" "refine" "using"))
 
 ; Shebang
 ((comment) @comment @spell
