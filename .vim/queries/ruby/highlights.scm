@@ -297,8 +297,8 @@
   "]"
   "{"
   "}"
-  "%w("
-  "%i("
+  ; "%w("
+  ; "%i("
 ] @punctuation.bracket
 
 (block_parameters
@@ -323,6 +323,9 @@
 (call
   method: (identifier) @keyword
   (#any-of? @keyword "proc" "lambda" "caller" "callcc"))
+(call
+  method: (identifier) @keyword.macro
+  (#match? @keyword.macro "(alias|define|define_singleton|remove|undef)_method"))
 (call
   method: (identifier) @keyword.rspec
   (#any-of? @keyword.rspec
@@ -367,7 +370,7 @@
   (comment) @keyword.directive)
   (#match? @keyword.directive "^#!/"))
 
-; %w and %i
+; %w and %i as dedicated highlights
 (string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
 (symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
 
@@ -393,6 +396,6 @@
   method: (constant) @constant
   (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
 
-; Misc
+; Keyword parameters, for example `a:` and `b:` in `my_method(a: 1, b: 2)`
 (keyword_parameter
   (identifier) @variable.parameter.symbol)
