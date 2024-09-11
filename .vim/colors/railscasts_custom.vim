@@ -136,6 +136,17 @@ hi link qfLineNr NONE
 hi link qfFilename NONE
 hi link qfSeparator NONE
 hi link QuickfixLine NONE
+if has('nvim')
+  hi @variable guifg=#e6e1dc guibg=#2f2f2f gui=NONE
+
+  hi link @function.call Normal
+  hi link @function.method.call @function.call
+  hi link @string.special.symbol Constant
+  hi link @punctuation.special SpecialChar
+  hi link @punctuation.delimiter.regex String
+  hi link @string.special.url NONE
+  hi link @keyword.conditional.ternary Operator
+end
 
 hi link rubyInterpolation SpecialChar
 hi link rubyInterpolationDelimiter rubyInterpolation
@@ -156,6 +167,15 @@ hi link rubyRailsRenderMethod rubyRailsARMethod
 hi link rubyConstantOther rubyRailsARMethod
 hi link rubyRegexpSpecial String
 hi link rubyHereDocText String
+if has('nvim')
+  hi link @variable.member.ruby rubyInstanceVariable
+  hi link @variable.builtin.ruby rubyPseudoVariable
+  hi link @constant.ruby rubyRailsARMethod
+  hi link @constant.regex Normal
+  hi link @constant.builtin.ruby rubyPseudoVariable
+  hi link @constant.builtin.nil.ruby rubyNil
+  hi link @string.regexp.ruby String
+end
 
 hi link erubyComment Comment
 hi link erubyRailsMethod rubyRailsARMethod
@@ -173,6 +193,12 @@ hi link htmlSpecialChar Constant
 hi link htmlTagN htmlTag
 hi link htmlSpecialTagName htmlTag
 hi link htmlError NONE
+if has('nvim')
+  hi link @keyword.embedded_template Normal
+  hi link @operator.html htmlTag
+  hi link @constant.html htmlTag
+  hi link @string.special.url.html String
+end
 
 hi link hamlTag Tag
 hi link hamlClass hamlTag
@@ -200,6 +226,13 @@ hi link yamlBlockCollectionItemStart String
 hi link yamlKeyValueDelimiter yamlKey
 hi link yamlPlainScalar String
 hi link yamlBool String
+hi link yamlFlowMappingKey String
+if has('nvim')
+  hi link @property.yaml yamlKey
+  hi link @punctuation.delimiter.yaml yamlKey
+  hi link @punctuation.special.yaml Statement
+  hi link @boolean.yaml yamlBool
+end
 
 hi link gotplAction NONE
 hi link gotplVariable NONE
@@ -245,6 +278,12 @@ hi markdownLinkTextDelimiter guifg=#647b83
 hi link markdownLinkDelimiter markdownLinkTextDelimiter
 hi markdownUrl guifg=#839496
 hi link markdownListMarker htmlTagName
+if has('nvim')
+  hi link @punctuation.special.markdown markdownBlockQuote
+  hi link @markup.heading markdownheadingdelimiter
+  hi link @spell.markdown Normal
+  hi link @character.special.markdown_inline Constant
+end
 
 hi link mkdListItem markdownListMarker
 hi link mkdCode NONE
@@ -292,6 +331,10 @@ hi link jsRegexpQuantifier String
 hi link jsSpecial String
 hi link jsLabel Statement
 hi link jsClassProperty Function
+if has('nvim')
+  hi link @variable.member.javascript jsObjectKey
+  hi link @comment.javascript jsComment
+end
 
 hi link jsonQuote String
 hi link jsonKeyword String
@@ -363,4 +406,29 @@ hi link rustModPath NONE
 hi link goEscapeC SpecialChar
 hi link goFormatSpecifier String
 hi link goPointerOperator Statement
-hi link goAsterisk Statement
+hi link goPointerRelated Statement
+
+hi goComment guifg=#797979
+" hi link goPointerOperator Constant
+" hi link goPointerRelated Constant
+hi link goBuiltins Constant
+hi link goPredefinedIdentifiers NONE
+" hi link goField Constant
+
+if has('nvim')
+  hi link @constant.bash PreProc
+  hi link @punctuation.special.bash @constant.bash
+  hi link @function.builtin.bash Statement
+
+  hi link @character.special.vim Normal
+  hi link @string.special.vim Normal
+  hi link @string.special.path.vim Normal
+  hi link @punctuation.special.vim Normal
+  hi link @function.macro.vim Normal
+  hi link @function.vim Normal
+  hi link @variable.builtin.vim PreProc
+  hi link @constant.vim Normal
+  hi link @property.vim PreProc
+  hi link vimSetStep Normal
+  hi link @label.vim Normal
+end

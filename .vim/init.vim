@@ -14,6 +14,7 @@ Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'on': [] }
   Plug 'neovim/nvim-lspconfig'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'lukas-reineke/lsp-format.nvim'
   Plug 'github/copilot.vim', { 'branch': 'release' }
   Plug 'joshuavial/aider.nvim', { 'on': [] }

@@ -1,1 +1,1 @@
-syn match goAsterisk "*"
+syn match goPointerRelated "[*&]\ze\w"
