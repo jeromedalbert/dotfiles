@@ -324,8 +324,9 @@
   method: (identifier) @keyword
   (#any-of? @keyword "proc" "lambda" "caller" "callcc"))
 (call
-  method: (identifier) @keyword.macro
-  (#match? @keyword.macro "(alias|define|define_singleton|remove|undef)_method"))
+  method: (identifier) @keyword.function
+  (#any-of? @keyword.function
+    "alias_method" "define_method" "define_singleton_method" "remove_method" "undef_method"))
 (call
   method: (identifier) @keyword.rspec
   (#any-of? @keyword.rspec
@@ -364,11 +365,11 @@
 
 ; Shebang
 ((comment) @comment @spell
-  (#not-match? @comment "^#!/"))
+  (#not-lua-match? @comment "^#!/"))
 ((program
   .
   (comment) @keyword.directive)
-  (#match? @keyword.directive "^#!/"))
+  (#lua-match? @keyword.directive "^#!/"))
 
 ; %w and %i as dedicated highlights
 (string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
