@@ -13,8 +13,8 @@ Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'on': [] }
+  Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'neovim/nvim-lspconfig'
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'lukas-reineke/lsp-format.nvim'
   Plug 'github/copilot.vim', { 'branch': 'release' }
   Plug 'joshuavial/aider.nvim', { 'on': [] }
@@ -1071,10 +1071,11 @@ function! ClearMessages(...)
 endfunction
 
 function! ShowHighlightsUnderCursor()
-  if !exists("*synstack")
-    return
+  if exists('g:loaded_nvim_treesitter')
+    Inspect
+  elseif exists("*synstack")
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
   endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction
 
 function! ShowAllHighlights()
@@ -2892,7 +2893,9 @@ augroup general_autocommands
   autocmd BufWritePre * call TrimTrailingWhitespace()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
   autocmd InsertLeave * silent! set nopaste
-  autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
+  if !has('nvim')
+    autocmd BufRead,BufNewFile *_spec.rb set syntax=rspec
+  endif
   autocmd BufEnter * call OnBufEnter()
   autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
   autocmd BufRead,BufNewFile *.html* setlocal matchpairs="(:),[:],{:}"
