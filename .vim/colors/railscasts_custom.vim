@@ -177,7 +177,6 @@ if has('nvim')
   hi link @constant.ruby rubyRailsARMethod
   hi link @constant.regex Normal
   hi link @constant.builtin.ruby rubyPseudoVariable
-  hi link @constant.builtin.nil.ruby rubyBoolean
   hi link @string.regexp.ruby String
   hi link @punctuation.bracket.special.ruby String
   hi link @label.ruby String

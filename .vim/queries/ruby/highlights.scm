@@ -89,10 +89,10 @@
     (constant)
   ] @function.call)
 
-(program
-  (call
-    (identifier) @keyword.import)
-  (#any-of? @keyword.import "require" "require_relative" "load"))
+; (program
+;   (call
+;     (identifier) @keyword.import)
+;   (#any-of? @keyword.import "require" "require_relative" "load"))
 
 ; Function definitions
 (alias
@@ -313,11 +313,16 @@
 ; #################
 
 ; Keywords
-(nil) @constant.builtin.nil
+(nil) @boolean
 (super) @keyword
+(begin_block) @keyword
+(end_block) @keyword
+(call
+  method: (identifier) @keyword.control
+  (#any-of? @keyword.control "abort" "at_exit" "exit" "fork" "loop" "trap"))
 (call
   method: (identifier) @keyword
-  (#match? @keyword "^(exit|gem|require)$"))
+  (#any-of? @keyword "proc" "lambda" "caller" "callcc"))
 (call
   method: (identifier) @keyword.rspec
   (#any-of? @keyword.rspec
@@ -348,6 +353,12 @@
     "given"
     "described_class"))
 
+; Fixed require
+((call
+  !receiver
+  method: (identifier) @keyword.import)
+  (#any-of? @keyword.import "require" "require_relative" "load" "autoload" "gem"))
+
 ; Shebang
 ((comment) @comment @spell
   (#not-match? @comment "^#!/"))
@@ -355,7 +366,6 @@
   .
   (comment) @keyword.directive)
   (#match? @keyword.directive "^#!/"))
-
 
 ; %w and %i
 (string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
