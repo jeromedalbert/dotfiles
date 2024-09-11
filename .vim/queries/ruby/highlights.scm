@@ -362,19 +362,16 @@
 (symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
 
 ; Highlight constants in certain cases.
-; For constants inside modules like Abc::Def, only Def is highlighted.
-((constant) @constant ; Constants not inside a class or module definition
+; For constants like Abc::Def, only Def is highlighted.
+((constant) @constant ; Constants not inside a class/module definition and not doing any calls
   (#match? @constant "^[A-Z][a-zA-Z0-9_]*$")
   (#not-has-ancestor? @constant class module)
   (#not-has-parent? @constant call method_call scope_resolution))
-((call ; Constants inside an extend/include/etc
-  method: (identifier) @_method
-  arguments: (argument_list [
-    (constant) @constant
-    (scope_resolution name: (constant) @constant)
-  ]))
-  (#match? @_method "^(extend|include|prepend|refine|using|describe)$")
-  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
+((call ; Constants as arguments (to method calls, include, extend, etc)
+  arguments: (argument_list
+    (scope_resolution name: (constant) @constant)))
+  (#not-has-ancestor? @constant class module))
+  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$")
 ((rescue ; Constants inside a rescue block
   exceptions: (exceptions
     [
