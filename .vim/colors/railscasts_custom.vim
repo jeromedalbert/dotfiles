@@ -142,11 +142,12 @@ hi link QuickfixLine NONE
 if has('nvim')
   hi link @function.call Normal
   hi link @function.method.call @function.call
-  hi link @string.special.symbol Constant
   hi link @punctuation.special SpecialChar
   hi link @punctuation.delimiter.regex String
   " hi link @string.special NONE
   hi link @string.special SpecialChar
+  hi link @string.special.symbol Constant
+  hi link @string.special.url.comment Comment
   hi link @keyword.conditional.ternary Operator
 endif
 
@@ -172,7 +173,7 @@ hi link rubyHereDocText String
 if has('nvim')
   hi link @variable.member.ruby rubyInstanceVariable
   hi link @variable.builtin.ruby rubyPseudoVariable
-  " hi link @variable.parameter.ruby rubySymbol
+  hi link @variable.parameter.symbol.ruby rubySymbol
   hi link @constant.ruby rubyRailsARMethod
   hi link @constant.regex Normal
   hi link @constant.builtin.ruby rubyPseudoVariable

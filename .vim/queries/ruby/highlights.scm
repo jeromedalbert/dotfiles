@@ -312,19 +312,12 @@
 ; ### Overrides ###
 ; #################
 
+; Keywords
 (nil) @constant.builtin.nil
 (super) @keyword
-
-;; Prevent normal comment highlighting for shebang
-((comment) @comment @spell
-  (#not-match? @comment "^#!/"))
-
- ; Shebang directive
-((program
-  .
-  (comment) @keyword.directive)
-  (#match? @keyword.directive "^#!/"))
-
+(call
+  method: (identifier) @keyword
+  (#match? @keyword "^(exit|gem|require)$"))
 (call
   method: (identifier) @keyword.rspec
   (#any-of? @keyword.rspec
@@ -355,28 +348,44 @@
     "given"
     "described_class"))
 
-; (call
-;   method: (identifier) @keyword.control
-;   (#eq? @keyword.control "exit"))
+; Shebang
+((comment) @comment @spell
+  (#not-match? @comment "^#!/"))
+((program
+  .
+  (comment) @keyword.directive)
+  (#match? @keyword.directive "^#!/"))
 
-(call
-  method: (identifier) @keyword
-  (#any-of? @keyword
-    "exit"
-    "gem"
-    "require"))
 
+; %w and %i
 (string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
 (symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
 
-(
-  (constant) @constant
+; Highlight constants in certain cases.
+; For constants inside modules like Abc::Def, only Def is highlighted.
+((constant) @constant ; Constants not inside a class or module definition
   (#match? @constant "^[A-Z][a-zA-Z0-9_]*$")
   (#not-has-ancestor? @constant class module)
-  (#not-has-parent? @constant call method_call scope_resolution)
-)
-
-(call
+  (#not-has-parent? @constant call method_call scope_resolution))
+((call ; Constants inside an extend/include/etc
+  method: (identifier) @_method
+  arguments: (argument_list [
+    (constant) @constant
+    (scope_resolution name: (constant) @constant)
+  ]))
+  (#match? @_method "^(extend|include|prepend|refine|using|describe)$")
+  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
+((rescue ; Constants inside a rescue block
+  exceptions: (exceptions
+    [
+      (constant) @constant
+      (scope_resolution name: (constant) @constant)
+    ]))
+  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
+(call ; Methods that look like constants, for example Array(...)
   method: (constant) @constant
-  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$")
-)
+  (#match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
+
+; Misc
+(keyword_parameter
+  (identifier) @variable.parameter.symbol)
