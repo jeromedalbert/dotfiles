@@ -140,6 +140,7 @@ hi link qfFilename NONE
 hi link qfSeparator NONE
 hi link QuickfixLine NONE
 if has('nvim')
+  hi link @constant.regex Normal
   hi link @function.call Normal
   hi link @function.method.call @function.call
   hi link @punctuation.special SpecialChar
@@ -175,12 +176,17 @@ if has('nvim')
   hi link @variable.builtin.ruby rubyPseudoVariable
   hi link @variable.parameter.symbol.ruby rubySymbol
   hi link @constant.ruby rubyRailsARMethod
-  hi link @constant.regex Normal
   hi link @constant.builtin.ruby rubyPseudoVariable
   hi link @string.regexp.ruby String
   hi link @punctuation.bracket.special.ruby String
   hi link @label.ruby String
   hi link @function.builtin.ruby Statement
+  " Make most code the same color inside an interpolation
+  hi link @interpolation.ruby rubyInterpolation
+  hi link @function.call.ruby NONE
+  hi link @variable.ruby NONE
+  hi link @punctuation.delimiter.ruby NONE
+  hi link @punctuation.bracket.ruby NONE
 endif
 
 hi link erubyComment Comment

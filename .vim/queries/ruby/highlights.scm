@@ -4,7 +4,7 @@
 ;
 ; Original highlights from https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/ruby/highlights.scm,
 ; with certain parts commented out to allow for overriding.
-; See bottom of this file for overrides.
+; See bottom of this file for extensions and overrides.
 
 ; Variables
 [
@@ -308,9 +308,9 @@
   "#{" @punctuation.special
   "}" @punctuation.special)
 
-; #################
-; ### Overrides ###
-; #################
+; ################################
+; ### Extensions and Overrides ###
+; ################################
 
 ; Keywords
 (nil) @boolean
@@ -408,3 +408,5 @@
 ; Keyword parameters, for example `a:` and `b:` in `my_method(a: 1, b: 2)`
 (keyword_parameter
   (identifier) @variable.parameter.symbol)
+
+(interpolation (_) @interpolation)
