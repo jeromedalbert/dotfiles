@@ -392,7 +392,7 @@
 ((call ; Constants as arguments (to method calls, include, extend, etc)
   arguments: (argument_list
     (scope_resolution name: (constant) @constant)))
-  (#not-has-ancestor? @constant class module))
+  (#not-has-parent? @constant class module))
   (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$")
 ((rescue ; Constants inside a rescue block
   exceptions: (exceptions
