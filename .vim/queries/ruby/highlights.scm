@@ -234,47 +234,47 @@
   (comment)+ @comment.documentation
   (method))
 
-; Operators
-[
-  "!"
-  "="
-  "=="
-  "==="
-  "<=>"
-  "=>"
-  "->"
-  ">>"
-  "<<"
-  ">"
-  "<"
-  ">="
-  "<="
-  "**"
-  "*"
-  "/"
-  "%"
-  "+"
-  "-"
-  "&"
-  "|"
-  "^"
-  "&&"
-  "||"
-  "||="
-  "&&="
-  "!="
-  "%="
-  "+="
-  "-="
-  "*="
-  "/="
-  "=~"
-  "!~"
-  "?"
-  ":"
-  ".."
-  "..."
-] @operator
+; ; Operators
+; [
+;   "!"
+;   "="
+;   "=="
+;   "==="
+;   "<=>"
+;   "=>"
+;   "->"
+;   ">>"
+;   "<<"
+;   ">"
+;   "<"
+;   ">="
+;   "<="
+;   "**"
+;   "*"
+;   "/"
+;   "%"
+;   "+"
+;   "-"
+;   "&"
+;   "|"
+;   "^"
+;   "&&"
+;   "||"
+;   "||="
+;   "&&="
+;   "!="
+;   "%="
+;   "+="
+;   "-="
+;   "*="
+;   "/="
+;   "=~"
+;   "!~"
+;   "?"
+;   ":"
+;   ".."
+;   "..."
+; ] @operator
 
 [
   ","
@@ -373,7 +373,7 @@
   method: (identifier) @function.builtin)
   (#any-of? @function.builtin "include" "extend" "prepend" "refine" "using"))
 
-; ; Shebang
+; Shebang
 ((program
   .
   (comment) @keyword.directive @nospell)
@@ -401,16 +401,16 @@
   method: (constant) @constant
   (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
 
-; Keyword parameters, for example `a:` and `b:` in `my_method(a: 1, b: 2)`
-(keyword_parameter
-  (identifier) @variable.parameter.symbol)
+; Operators
+[
+  "!" "=" "==" "===" "<=>" "->" ">>" "<<" ">" ">=" "<=" "**" "*" "/"
+  "%" "+" "-" "&" "^" "&&" "||" "||=" "&&=" "!=" "%=" "+=" "-=" "*=" "/="
+  "=~" "!~" "?"
+] @operator.highlighted
 
-; %w and %i
-(string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
-(symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
-
-; Interpolation
-(interpolation (_) @interpolation)
+; Highlight < when not used for class inheritance
+("<" @operator.highlighted
+(#not-has-ancestor? @operator.highlighted superclass))
 
 ; Regex delimiters
 (regex
@@ -418,11 +418,13 @@
   (string_content)
   "/" @punctuation.delimiter.regex)
 
-; Various ignored delimiters
-(block_parameters
-  "|" @punctuation.delimiter.ignored
-  (identifier)
-  "|" @punctuation.delimiter.ignored)
-(hash_key_symbol) ":" @punctuation.delimiter.ignored
-(range
-  _ [".." "..."] @punctuation.delimiter.ignored)
+; %w and %i
+(string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
+(symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
+
+; Keyword parameters, for example `a:` and `b:` in `my_method(a: 1, b: 2)`
+(keyword_parameter
+  (identifier) @variable.parameter.symbol)
+
+; Interpolation
+(interpolation (_) @interpolation)

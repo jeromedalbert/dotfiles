@@ -133,7 +133,7 @@ hi link qfFilename NONE
 hi link qfSeparator NONE
 hi link QuickfixLine NONE
 hi! link PreProc Statement
-hi link WarningMsg ErrorMsg
+hi! link WarningMsg ErrorMsg
 hi link StatusLineTerm StatusLine
 hi link StatusLineTermNC StatusLineNC
 hi! link Operator Statement
