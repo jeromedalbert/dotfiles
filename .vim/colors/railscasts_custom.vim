@@ -181,6 +181,7 @@ if has('nvim')
   hi link @punctuation.bracket.special.ruby String
   hi link @label.ruby String
   hi link @function.builtin.ruby Statement
+  hi link @punctuation.delimiter.regex String
   " Make most code the same color inside an interpolation
   hi link @interpolation.ruby rubyInterpolation
   hi link @function.call.ruby NONE

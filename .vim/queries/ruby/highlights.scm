@@ -357,13 +357,13 @@
     "given"
     "described_class"))
 
-; Fixed require
+; Fixed require keywords
 ((call
   !receiver
   method: (identifier) @keyword.import)
   (#any-of? @keyword.import "require" "require_relative" "load" "autoload" "gem"))
 
-; Fixed identifiers
+; Fixed identifier keywords
 ((identifier) @function.builtin
   (#any-of? @function.builtin "attr_reader" "attr_writer" "attr_accessor" "module_function"))
 ((call
@@ -378,10 +378,6 @@
   .
   (comment) @keyword.directive)
   (#lua-match? @keyword.directive "^#!/"))
-
-; %w and %i as dedicated highlights
-(string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
-(symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
 
 ; Highlight constants in certain cases.
 ; For constants like Abc::Def, only Def is highlighted.
@@ -409,4 +405,15 @@
 (keyword_parameter
   (identifier) @variable.parameter.symbol)
 
+; %w and %i
+(string_array "%w(" @punctuation.bracket.special ")" @punctuation.bracket.special)
+(symbol_array "%i(" @punctuation.bracket.special ")" @punctuation.bracket.special)
+
+; Interpolation
 (interpolation (_) @interpolation)
+
+; Regex delimiters
+(regex
+  "/" @punctuation.delimiter.regex
+  (string_content)
+  "/" @punctuation.delimiter.regex)
