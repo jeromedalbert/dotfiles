@@ -17,7 +17,8 @@
 " Maintainer:   Jerome Dalbert (jerome.dalbert@gmail.com)
 " License:      MIT
 "
-" Designed for 24-bit color terminals, with termguicolors on.
+" Designed for 24-bit color terminals with termguicolors on.
+" Supports Vim traditional and Neovim treesitter highlights.
 "
 " Originally based on the RailsCasts TextMate theme
 " (http://railscasts.com/about) and the Sublime Text 2 RailsCasts Theme
@@ -78,49 +79,36 @@ hi Normal guifg=#e6e1dc guibg=#2f2f2f gui=NONE
 hi Visual guifg=NONE guibg=#30659b gui=NONE
 hi Cursor guifg=#000000 guibg=#ffe88c gui=NONE
 hi LineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
-hi FoldColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
-hi CursorLineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
-hi SignColumn guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi TabLine guifg=#e6e1dc guibg=#a9a9a9 gui=NONE
 hi TabLineFill guifg=NONE guibg=#e6e1dc gui=NONE
 hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE cterm=NONE
 hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
 hi ColorColumn guifg=NONE guibg=#454545 gui=NONE
-hi MatchParen guifg=NONE guibg=NONE gui=underline cterm=underline
 hi ModeMsg guifg=#e6e1dc guibg=NONE gui=NONE
 hi StatusLine guifg=fg guibg=#61605e gui=bold cterm=bold
 hi StatusLineNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
-hi StatusLineTerm guifg=fg guibg=#61605e gui=bold cterm=bold
-hi StatusLineTermNC guifg=fg guibg=#61605e gui=NONE cterm=NONE
 hi Pmenu guifg=#333333 guibg=#ffffff gui=NONE
 hi PmenuSel guifg=#ffffff guibg=#5d90cf gui=bold cterm=bold
 hi PmenuThumb guibg=#999999
 hi PmenuSbar guibg=#d6d6d6
 hi IncSearch guifg=#000000 guibg=#ffe88c gui=NONE cterm=NONE
 hi Search guifg=NONE guibg=#336699 gui=NONE
-hi Directory guifg=#6b9bc0 guibg=NONE gui=NONE
+hi Symbol guifg=#6b9bc0 guibg=NONE gui=NONE
 hi Folded guifg=fg guibg=NONE
 hi VertSplit guifg=bg guibg=NONE
 hi Error guibg=#9b0000 gui=NONE
-hi link Character String
 hi Comment guifg=#bd9553 guibg=NONE gui=italic cterm=italic
-hi link SpecialComment Comment
-hi Constant guifg=#6b9bc0 guibg=NONE gui=NONE
 hi DiffAdd guifg=fg guibg=#47840d gui=bold cterm=bold
 hi DiffDelete guifg=#dc322f guibg=NONE gui=NONE
 hi DiffChange guifg=fg guibg=#204a87
 hi DiffText guifg=fg guibg=#507ab7 gui=NONE cterm=NONE
-hi link Float Number
 hi Function guifg=#ffc765 guibg=NONE gui=NONE
 hi Identifier guifg=NONE guibg=NONE gui=NONE cterm=NONE
 hi NonText guifg=#404040 guibg=NONE gui=NONE
-hi link Number String
-hi PreProc guifg=#ce7829 guibg=NONE gui=NONE
 hi Special guifg=fg guibg=NONE gui=NONE
 hi SpecialChar guifg=#4ea04c guibg=NONE gui=NONE
 hi SpecialKey guifg=#61605e guibg=NONE gui=NONE
 hi Statement guifg=#ce7829 guibg=NONE gui=NONE
-hi link StorageClass Statement
 hi String guifg=#a4c35b guibg=NONE gui=NONE
 hi Tag guifg=#e9c063 guibg=NONE gui=NONE
 hi Title guifg=NONE guibg=NONE gui=NONE
@@ -128,26 +116,39 @@ hi Todo guifg=#bd9553 guibg=NONE gui=inverse,bold,italic cterm=inverse,bold,ital
 hi Type guifg=fg guibg=NONE gui=NONE
 hi Underlined guifg=NONE guibg=NONE gui=underline cterm=underline
 hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
-hi WarningMsg guifg=#ffffff guibg=bg gui=NONE
-" hi ErrorMsg guifg=#ffffff guibg=#990000 gui=NONE
-" hi WarningMsg guifg=#000000 guibg=#DDDD00 gui=NONE
-if has('nvim')
-  hi @variable guifg=#e6e1dc guibg=#2f2f2f gui=NONE
-endif
+hi link Character String
+hi link SpecialComment Comment
+hi link FoldColumn LineNr
+hi link CursorLineNr LineNr
+hi link SignColumn LineNr
+hi! link Constant Normal
+hi! link Directory Symbol
+hi link Float Number
+hi! link MatchParen Underlined
+hi link Number String
+hi link StorageClass Statement
 hi link Whitespace Normal
 hi link qfLineNr NONE
 hi link qfFilename NONE
 hi link qfSeparator NONE
 hi link QuickfixLine NONE
+hi! link PreProc Statement
+hi link WarningMsg ErrorMsg
+hi link StatusLineTerm StatusLine
+hi link StatusLineTermNC StatusLineNC
+hi! link Operator Statement
+
 if has('nvim')
+  hi @variable guifg=#e6e1dc guibg=#2f2f2f gui=NONE
   hi link @constant.regex Normal
   hi link @function.call Normal
   hi link @function.method.call @function.call
+  hi link @number.comment Comment
   hi link @punctuation.special SpecialChar
   hi link @punctuation.delimiter.regex String
-  " hi link @string.special NONE
   hi link @string.special SpecialChar
-  hi link @string.special.symbol Constant
+  hi link @string.special.symbol Symbol
+  hi link @string.special.url String
   hi link @string.special.url.comment Comment
   hi link @keyword.conditional.ternary Operator
 endif
@@ -158,6 +159,8 @@ hi link rubyStringDelimiter String
 hi rubyBlockParameter guifg=NONE guibg=NONE gui=NONE
 hi rubyInstanceVariable guifg=#d0cfff guibg=NONE gui=NONE
 hi link rubyGlobalVariable rubyInstanceVariable
+hi link rubySymbol Symbol
+hi link rubyBoolean Symbol
 hi link rubyRegexp String
 hi link rubyRegexpDelimiter rubyRegexp
 hi link rubyEscape rubyInterpolation
@@ -174,20 +177,23 @@ hi link rubyHereDocText String
 if has('nvim')
   hi link @variable.member.ruby rubyInstanceVariable
   hi link @variable.builtin.ruby rubyPseudoVariable
-  hi link @variable.parameter.symbol.ruby rubySymbol
+  hi link @variable.parameter.symbol.ruby Symbol
   hi link @constant.ruby rubyRailsARMethod
   hi link @constant.builtin.ruby rubyPseudoVariable
   hi link @string.regexp.ruby String
   hi link @punctuation.bracket.special.ruby String
   hi link @label.ruby String
   hi link @function.builtin.ruby Statement
-  hi link @punctuation.delimiter.regex String
   " Make most code the same color inside an interpolation
+  " Start
   hi link @interpolation.ruby rubyInterpolation
   hi link @function.call.ruby NONE
   hi link @variable.ruby NONE
   hi link @punctuation.delimiter.ruby NONE
   hi link @punctuation.bracket.ruby NONE
+  " End
+  hi link @boolean.ruby Symbol
+  " hi link @operator.ruby NONE
 endif
 
 hi link erubyComment Comment
@@ -202,7 +208,7 @@ hi link htmlTag Tag
 hi link htmlEndTag htmlTag
 hi link htmlTagName htmlTag
 hi link htmlArg htmlTag
-hi link htmlSpecialChar Constant
+hi link htmlSpecialChar Symbol
 hi link htmlTagN htmlTag
 hi link htmlSpecialTagName htmlTag
 hi link htmlError NONE
@@ -226,7 +232,7 @@ hi link xmlTagName xmlTag
 hi link xmlAttrib xmlTag
 hi link xmlEqual xmlTag
 hi link xmlProcessingDelim xmlTag
-hi link xmlEntity Constant
+hi link xmlEntity Symbol
 hi link xmlEntityPunct xmlEntity
 
 hi link yamlKey Tag
@@ -262,14 +268,14 @@ hi link cssIdentifier cssClassName
 hi cssVendor guifg=NONE
 hi cssInclude guifg=NONE
 hi link cssFunctionName NONE
-hi link cssProp Constant
+hi link cssProp Symbol
 hi link cssAttr String
-hi link cssUnitDecorators Constant
+hi link cssUnitDecorators Symbol
 
 hi link sassClass Tag
 hi link sassClassChar sassClass
 hi sassVariable guifg=NONE
-hi link sassCssAttribute Constant
+hi link sassCssAttribute Symbol
 hi link sassAmpersand cssTagName
 hi link scssAmpersand cssTagName
 hi link scssSelectorName sassClass
@@ -292,7 +298,7 @@ hi link markdownLinkDelimiter markdownLinkTextDelimiter
 hi markdownUrl guifg=#839496
 hi link markdownListMarker htmlTagName
 if has('nvim')
-  hi link @character.special.markdown_inline Constant
+  hi link @character.special.markdown_inline Symbol
   hi link @punctuation.special.markdown markdownBlockQuote
   hi link @spell.markdown Normal
   hi link @markup.heading.1.markdown markdownheadingdelimiter
@@ -342,7 +348,7 @@ hi link jsExportDefault NONE
 hi link jsTernaryIfOperator NONE
 hi link jsTemplateBraces SpecialChar
 hi link jsArrowFunction jsOperator
-hi link jsObject Constant
+hi link jsObject Symbol
 hi link jsObjectKey jsObject
 hi link jsNull jsObject
 hi link jsUndefined jsNull
@@ -364,8 +370,13 @@ endif
 
 hi link jsonQuote String
 hi link jsonKeyword String
-hi link jsonNull Constant
+hi link jsonNull Symbol
 hi link jsonEscape SpecialChar
+if has('nvim')
+  hi link @property.json String
+  hi link @constant.builtin.json Symbol
+  hi link @boolean.json Symbol
+endif
 
 hi link shRange NONE
 hi link shQuote String
@@ -386,7 +397,7 @@ hi NeomakeInfoSign guibg=#e3e3e3
 hi link helpHyperTextJump Statement
 hi link CtrlPMatch Statement
 hi link bufExplorerCurBuf String
-hi link pythonBuiltIn Constant
+hi link pythonBuiltIn Symbol
 
 hi xxdAddress guifg=#bd9553
 hi link xxdSep xxdAddress
@@ -407,7 +418,7 @@ hi link phpClasses rubyConstantOther
 hi link phpComment jsComment
 hi link phpOperator NONE
 hi link phpVarSelector Keyword
-hi link phpSuperGlobals Constant
+hi link phpSuperGlobals Symbol
 " hi link phpMagicConstants rubyGlobalVariable
 
 hi link bladeDelimiter NONE
@@ -433,13 +444,18 @@ hi link goEscapeC SpecialChar
 hi link goFormatSpecifier String
 hi link goPointerOperator Statement
 hi link goPointerRelated Statement
+if has('nvim')
+  hi link @string.gosum NONE
+  hi link @string.special.symbol.gosum NONE
+  hi link @attribute.gosum NONE
+end
 
 hi goComment guifg=#797979
-" hi link goPointerOperator Constant
-" hi link goPointerRelated Constant
-hi link goBuiltins Constant
+" hi link goPointerOperator Symbol
+" hi link goPointerRelated Symbol
+hi link goBuiltins Symbol
 hi link goPredefinedIdentifiers NONE
-" hi link goField Constant
+" hi link goField Symbol
 
 if has('nvim')
   hi link @constant.bash PreProc
@@ -457,4 +473,7 @@ if has('nvim')
   hi link @property.vim PreProc
   hi link vimSetStep Normal
   hi link @label.vim Normal
+
+  hi link @string.special.path.gitignore NONE
+  hi link @character.special.gitignore NONE
 endif

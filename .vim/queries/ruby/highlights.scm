@@ -214,7 +214,7 @@
 
 (nil) @constant.builtin
 
-; (comment) @comment @spell
+(comment) @comment @spell
 
 (program
   (comment)+ @comment.documentation
@@ -315,17 +315,19 @@
 ; Keywords
 (nil) @boolean
 (super) @keyword
-(begin_block) @keyword
-(end_block) @keyword
+[
+  "BEGIN"
+  "END"
+] @keyword
 (call
-  method: (identifier) @keyword.control
-  (#any-of? @keyword.control "abort" "at_exit" "exit" "fork" "loop" "trap"))
+  method: (identifier) @function.builtin
+  (#any-of? @function.builtin "abort" "at_exit" "exit" "fork" "loop" "trap"))
 (call
-  method: (identifier) @keyword
-  (#any-of? @keyword "proc" "lambda" "caller" "callcc"))
+  method: (identifier) @function.builtin
+  (#any-of? @function.builtin "proc" "lambda" "caller" "callcc"))
 (call
-  method: (identifier) @keyword.function
-  (#any-of? @keyword.function
+  method: (identifier) @function.builtin
+  (#any-of? @function.builtin
     "alias_method" "define_method" "define_singleton_method" "remove_method" "undef_method"))
 (call
   method: (identifier) @keyword.rspec
@@ -371,12 +373,10 @@
   method: (identifier) @function.builtin)
   (#any-of? @function.builtin "include" "extend" "prepend" "refine" "using"))
 
-; Shebang
-((comment) @comment @spell
-  (#not-lua-match? @comment "^#!/"))
+; ; Shebang
 ((program
   .
-  (comment) @keyword.directive)
+  (comment) @keyword.directive @nospell)
   (#lua-match? @keyword.directive "^#!/"))
 
 ; Highlight constants in certain cases.
@@ -417,3 +417,12 @@
   "/" @punctuation.delimiter.regex
   (string_content)
   "/" @punctuation.delimiter.regex)
+
+; Various ignored delimiters
+(block_parameters
+  "|" @punctuation.delimiter.ignored
+  (identifier)
+  "|" @punctuation.delimiter.ignored)
+(hash_key_symbol) ":" @punctuation.delimiter.ignored
+(range
+  _ [".." "..."] @punctuation.delimiter.ignored)

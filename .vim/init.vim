@@ -947,6 +947,8 @@ let g:projectionist_heuristics = {
   \  '*': {
   \    'Gemfile': { 'alternate': 'Gemfile.lock' },
   \    'Gemfile.lock': { 'alternate': 'Gemfile' },
+  \    'go.mod': { 'alternate': 'go.sum' },
+  \    'go.sum': { 'alternate': 'go.mod' }
   \  }
   \ }
 
@@ -2786,6 +2788,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.yml.tt set ft=yaml
   autocmd BufRead,BufNewFile *.html.erb.tt set ft=eruby.html
   autocmd BufRead,BufNewFile *.md.tt set ft=markdown
+  autocmd BufRead ~/.vim/plugged/*/doc/*.txt set ft=help
 augroup end
 
 augroup detect_binary_files
