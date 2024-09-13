@@ -1,10 +1,10 @@
-; #######################
-; ### Ruby highlights ###
-; #######################
+; ###########################
+; ### Original highlights ###
+; ###########################
 ;
 ; Original highlights from https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/ruby/highlights.scm,
 ; with certain parts commented out to allow for overriding.
-; See bottom of this file for extensions and overrides.
+
 
 ; Variables
 [
@@ -309,7 +309,7 @@
   "}" @punctuation.special)
 
 ; ################################
-; ### Extensions and Overrides ###
+; ### Extensions and overrides ###
 ; ################################
 
 ; Keywords
@@ -382,13 +382,18 @@
 ; Constants
 ((constant) @constant
   (#not-has-parent? @constant
-    class module superclass ; Not inside a class/module definition. Example: class A < B
-    call method_call ; Not called on. Example: A.my_method
-    scope_resolution)) ; Not inside a module chain. Example: A::B::C
+    class module superclass ; Not inside a class/module definition. Example: `class A < B`
+    call method_call ; Not called on. Example: `A.my_method`
+    scope_resolution)) ; Not inside a module chain. Example: `A::B::C`
+; Last part of a module chain that is an argument to something. Example: `C` in `include A::B::C`
 (call
   arguments: (argument_list
-    (scope_resolution ; Last part of a module chain. Example: C in A::B::C
+    (scope_resolution
       name: (constant) @constant)))
+; Last part of a module chain for an uppercase constant. Example: `A::CONSTANT`
+(scope_resolution
+  name: (constant) @constant
+  (#lua-match? @constant "^[A-Z][A-Z0-9_]*$"))
 
 ; Methods that look like constants. Example: Array(...)
 (call
@@ -421,4 +426,5 @@
   (identifier) @variable.parameter.symbol)
 
 ; Interpolation
-(interpolation (_) @interpolation)
+; Low priority so builtins like __dir__ can be highlighted
+((interpolation (_) @interpolation) @interpolation (#set! "priority" 90))

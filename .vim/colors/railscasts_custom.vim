@@ -153,7 +153,7 @@ if has('nvim')
   hi link @string.special SpecialChar
   hi link @string.special.symbol Symbol
   hi link @string.special.url String
-  hi link @string.special.url.comment Comment
+  hi link @string.special.url.comment NONE
 endif
 
 hi link rubyInterpolation SpecialChar
@@ -242,6 +242,7 @@ hi link yamlDocumentHeader String
 hi link yamlBlockMappingKey yamlKey
 hi link yamlBlockMappingMerge yamlKey
 hi link yamlBlockCollectionItemStart String
+hi link yamlBlockString String
 hi link yamlKeyValueDelimiter yamlKey
 hi link yamlPlainScalar String
 hi link yamlBool String
@@ -251,6 +252,7 @@ if has('nvim')
   hi link @punctuation.delimiter.yaml yamlKey
   hi link @punctuation.special.yaml Statement
   hi link @boolean.yaml yamlBool
+  hi link @label.anchor.yaml yamlAnchor
 endif
 
 hi link gotplAction NONE
@@ -364,7 +366,7 @@ hi link jsSpecial String
 hi link jsLabel Statement
 hi link jsClassProperty Function
 if has('nvim')
-  hi link @variable.member.javascript jsObjectKey
+  hi link @variable.parameter.javascript jsObjectKey
   hi link @comment.javascript jsComment
 endif
 
@@ -458,10 +460,6 @@ hi link goPredefinedIdentifiers NONE
 " hi link goField Symbol
 
 if has('nvim')
-  hi link @constant.bash PreProc
-  hi link @punctuation.special.bash @constant.bash
-  hi link @function.builtin.bash Statement
-
   hi link @character.special.vim Normal
   hi link @string.special.vim Normal
   hi link @string.special.path.vim Normal
