@@ -69,7 +69,7 @@
   "next"
 ] @keyword.repeat
 
-(constant) @constant
+; (constant) @constant
 
 ((identifier) @keyword.modifier
   (#any-of? @keyword.modifier "private" "protected" "public"))
@@ -379,25 +379,19 @@
   (comment) @keyword.directive @nospell)
   (#lua-match? @keyword.directive "^#!/"))
 
-; Highlight constants in certain cases.
-; For constants like Abc::Def, only Def is highlighted.
-((constant) @constant ; Constants not inside a class/module definition and not doing any calls
-  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$")
-  (#not-has-ancestor? @constant class module)
-  (#not-has-parent? @constant call method_call scope_resolution))
-((call ; Constants as arguments (to method calls, include, extend, etc)
+; Constants
+((constant) @constant
+  (#not-has-parent? @constant
+    class module superclass ; Not inside a class/module definition. Example: class A < B
+    call method_call ; Not called on. Example: A.my_method
+    scope_resolution)) ; Not inside a module chain. Example: A::B::C
+(call
   arguments: (argument_list
-    (scope_resolution name: (constant) @constant)))
-  (#not-has-parent? @constant class module))
-  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$")
-((rescue ; Constants inside a rescue block
-  exceptions: (exceptions
-    [
-      (constant) @constant
-      (scope_resolution name: (constant) @constant)
-    ]))
-  (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
-(call ; Methods that look like constants, for example Array(...)
+    (scope_resolution ; Last part of a module chain. Example: C in A::B::C
+      name: (constant) @constant)))
+
+; Methods that look like constants. Example: Array(...)
+(call
   method: (constant) @constant
   (#lua-match? @constant "^[A-Z][a-zA-Z0-9_]*$"))
 
@@ -405,12 +399,12 @@
 [
   "!" "=" "==" "===" "<=>" "->" ">>" "<<" ">" ">=" "<=" "**" "*" "/"
   "%" "+" "-" "&" "^" "&&" "||" "||=" "&&=" "!=" "%=" "+=" "-=" "*=" "/="
-  "=~" "!~" "?"
-] @operator.highlighted
+  "=~" "!~" "?" "&."
+] @operator
 
 ; Highlight < when not used for class inheritance
-("<" @operator.highlighted
-(#not-has-ancestor? @operator.highlighted superclass))
+("<" @operator
+(#not-has-ancestor? @operator superclass))
 
 ; Regex delimiters
 (regex

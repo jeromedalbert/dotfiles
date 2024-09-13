@@ -140,17 +140,20 @@ hi! link Operator Statement
 
 if has('nvim')
   hi @variable guifg=#e6e1dc guibg=#2f2f2f gui=NONE
-  hi link @constant.regex Normal
+  hi link @boolean.ruby Symbol
+  hi link @constant.regex String
   hi link @function.call Normal
   hi link @function.method.call @function.call
+  hi link @keyword.conditional.ternary Operator
   hi link @number.comment Comment
-  hi link @punctuation.special SpecialChar
+  hi link @operator.regex String
+  hi link @punctuation.bracket.regex String
   hi link @punctuation.delimiter.regex String
+  hi link @punctuation.special SpecialChar
   hi link @string.special SpecialChar
   hi link @string.special.symbol Symbol
   hi link @string.special.url String
   hi link @string.special.url.comment Comment
-  hi link @keyword.conditional.ternary Operator
 endif
 
 hi link rubyInterpolation SpecialChar
@@ -184,16 +187,13 @@ if has('nvim')
   hi link @punctuation.bracket.special.ruby String
   hi link @label.ruby String
   hi link @function.builtin.ruby Statement
-  " Make most code the same color inside an interpolation
-  " Start
+  " START - Make most code the same color inside an interpolation
   hi link @interpolation.ruby rubyInterpolation
   hi link @function.call.ruby NONE
   hi link @variable.ruby NONE
   hi link @punctuation.delimiter.ruby NONE
   hi link @punctuation.bracket.ruby NONE
-  " End
-  hi link @boolean.ruby Symbol
-  " hi link @operator.ruby NONE
+  " END
 endif
 
 hi link erubyComment Comment
