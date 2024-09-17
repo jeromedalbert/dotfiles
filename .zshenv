@@ -564,7 +564,7 @@ alias dh='docker history'
 alias da='docker attach'
 drb() {
   if [[ $# -eq 0 ]]; then
-    docker run -it foo /bin/bash
+    docker run --rm -it foo /bin/bash
   else
     docker run -it "$@" /bin/bash
   fi

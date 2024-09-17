@@ -154,6 +154,7 @@ if has('nvim')
   hi link @string.special.symbol Symbol
   hi link @string.special.url String
   hi link @string.special.url.comment NONE
+  hi link @variable.builtin.regex NONE
 endif
 
 hi link rubyInterpolation SpecialChar
@@ -450,6 +451,7 @@ if has('nvim')
   hi link @string.gosum NONE
   hi link @string.special.symbol.gosum NONE
   hi link @attribute.gosum NONE
+  hi link @variable.member.go Symbol
 end
 
 hi goComment guifg=#797979
@@ -458,6 +460,7 @@ hi goComment guifg=#797979
 hi link goBuiltins Symbol
 hi link goPredefinedIdentifiers NONE
 " hi link goField Symbol
+" hi link @type.go Symbol
 
 if has('nvim')
   hi link @character.special.vim Normal

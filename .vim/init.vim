@@ -16,8 +16,13 @@ if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'neovim/nvim-lspconfig'
   Plug 'lukas-reineke/lsp-format.nvim'
+
   Plug 'github/copilot.vim', { 'branch': 'release' }
-  Plug 'joshuavial/aider.nvim', { 'on': [] }
+  Plug 'jeromedalbert/aider.nvim', { 'on': [], 'branch': 'custom' }
+  Plug 'stevearc/dressing.nvim' |
+    \ Plug 'nvim-lua/plenary.nvim' |
+    \ Plug 'MunifTanjim/nui.nvim' |
+    \ Plug 'jeromedalbert/avante.nvim', { 'branch': 'custom' }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -382,10 +387,6 @@ nnoremap <silent> <leader>ys :set opfunc=SubstituteVerb<CR>g@
 nmap <leader>yS <leader>ysiW
 xnoremap <leader>s :s/\%V
 
-nmap <leader>8 *
-nmap <leader>, *
-xmap <leader>8 *
-nnoremap <silent> <leader>y8 :set opfunc=SearchNextOccurenceVerb<cr>g@
 xnoremap * <esc>/<c-r>=GetSelectionForSearches()<cr><cr>
 xnoremap # <esc>?<c-r>=GetSelectionForSearches()<cr><cr>
 
@@ -519,8 +520,10 @@ noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
 " noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
-noremap <silent> <leader>A :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
-noremap <silent> <leader>C :silent !cursor -g %:p:<c-r>=line('.')<cr><cr>
+noremap <silent> <leader>A <Plug>(AvanteAsk)
+noremap <silent> <leader>O :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
+noremap <silent> <leader>C :call OpenCursor()<cr>
+noremap <silent> c. :call OpenCursor()<cr>
 
 "#############################
 "### General configuration ###
@@ -801,7 +804,8 @@ let g:neomake_verbose = 0
 let g:neomake_place_signs = 0
 let g:neomake_highlight_columns = 0
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-let g:neomake_javascript_enabled_makers = ['eslint']
+" let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_javascript_enabled_makers = []
 let g:neomake_html_enabled_makers = []
 let g:neomake_markdown_enabled_makers = []
 let g:neomake_sh_enabled_makers = ['sh']
@@ -924,6 +928,14 @@ let g:jsx_ext_required = 0
 let g:vue_pre_processors = []
 let g:go_highlight_functions = 1
 
+" let g:go_highlight_format_strings = 1
+" let g:go_highlight_types = 1
+" let g:go_highlight_extra_types = 1
+" let g:go_highlight_function_parameters = 1
+" let g:go_highlight_function_calls = 1
+let g:go_highlight_fields = 1
+" let g:go_highlight_variable_declarations = 1
+
 let g:test#strategy = 'custom'
 let g:test#no_alternate = 1
 
@@ -944,6 +956,10 @@ let g:projectionist_heuristics = {
   \    'lib/*.rb': { 'alternate': 'test/{}_test.rb' },
   \    'test/*_test.rb': { 'alternate': 'lib/{}.rb' }
   \  },
+  \   "go.mod": {
+  \     '*.go': { 'alternate': '{}_test.go'},
+  \     '*_test.go': { 'alternate': '{}.go'},
+  \   },
   \  '*': {
   \    'Gemfile': { 'alternate': 'Gemfile.lock' },
   \    'Gemfile.lock': { 'alternate': 'Gemfile' },
@@ -2635,6 +2651,8 @@ function! OnTermOpen()
     call OnTestDisplayed()
   elseif bufname =~ ':ag '
     call OnFileSearchDisplayed()
+	elseif bufname =~ ':aider '
+		nnoremap <silent><buffer> <esc> :q<cr>
   endif
 endfunction
 
@@ -2747,6 +2765,15 @@ function! ShowCopilotPanel()
     endif
   endif
   Copilot panel
+endfunction
+
+
+function! OpenCursor()
+  let cmd = 'cursor $(pwd)'
+  if &modifiable
+    let cmd .= ' -g ' . expand('%:p') . ':' . line('.')
+  endif
+  call system(cmd)
 endfunction
 
 "####################
