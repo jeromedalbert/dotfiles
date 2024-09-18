@@ -9,12 +9,11 @@ lspconfig.syntax_tree.setup {
 require('nvim-treesitter.configs').setup {
   ensure_installed = "all",
   highlight = {
-    auto_suggestions = false,
-    auto_set_highlight_group = true,
-    auto_set_keymaps = true,
-    auto_apply_diff_after_generation = false,
-    support_paste_from_clipboard = false,
-  }
+    enable = true,
+    disable = { "csv", "bash" },
+    additional_vim_regex_highlighting = false,
+  },
+  indent = { enable = true }
 }
 
 require('avante_lib').load()
