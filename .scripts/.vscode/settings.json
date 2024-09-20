@@ -16,9 +16,7 @@
     "rubyLsp.rubyExecutablePath": "/Users/jerome/.asdf/shims/ruby",
     "explorer.confirmDelete": false,
     "workbench.activityBar.location": "hidden",
-    "workbench.statusBar.visible": false,
     "editor.stickyScroll.enabled": false,
-    "breadcrumbs.enabled": false,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
     "editor.tabSize": 2,
@@ -28,5 +26,6 @@
     "search.mode": "reuseEditor",
     "search.quickAccess.preserveInput": true,
     "search.searchEditor.defaultNumberOfContextLines": 2,
-    "files.autoSave": "onFocusChange"
+    "files.autoSave": "onFocusChange",
+    "workbench.statusBar.visible": false
 }
