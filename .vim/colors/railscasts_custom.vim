@@ -481,4 +481,6 @@ if has('nvim')
 
   hi link @string.special.path.gitignore NONE
   hi link @character.special.gitignore NONE
+
+  hi link @spell.dockerfile Comment
 endif
