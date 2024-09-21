@@ -597,6 +597,7 @@ alias de='desk'
 alias ssh='TERM=xterm-256color ssh'
 alias sshconf="$MAIN_EDITOR ~/.ssh/config"
 alias sshc='sshconf'
+alias sshk="$MAIN_EDITOR ~/.ssh/known_hosts"
 alias ssh-key='cat ~/.ssh/id_jerome.pub | tee >(pbcopy)'
 alias ssh-keys='ssh-key'
 
@@ -855,11 +856,11 @@ alias kmlo='kamal lock'
 alias kmlr='kamal lock release'
 alias kmrm='kamal remove -y'
 alias kma='kamal app'
-alias kml='kamal app logs -q -f -n 0'
+alias kml='kamal logs -q -n 0'
 alias kmae='kamal app exec'
-alias kmc="kamal app exec -q -i 'bin/rails console'"
+alias kmc="kamal console -q"
 alias kmrc='kmc'
-alias kmb='kamal app exec -q -i bash'
+alias kmb='kamal shell -q'
 alias kmrb='kmb'
 alias kme="kamal app exec -q 'printenv | sort'"
 alias kmpr='kme'
@@ -881,8 +882,9 @@ alias kmaccdt='kamal accessory details all -q'
 alias kmacce='kamal accessory exec'
 kmaccb() { kamal accessory exec $1 -q -i bash }
 alias kmt='kamal traefik'
-kmo() { dotenv -f .env.production sh -c 'open http://$SERVER_IP' }
-kmdb() { dotenv -f .env.production sh -c 'psql $DATABASE_URL' }
+kmo() { bundle exec dotenv -f .kamal/secrets.production sh -c 'open http://$SERVER_IP' }
+kmdb() { bundle exec dotenv -f .kamal/secrets.production sh -c 'psql $DATABASE_URL' }
+kmssh() { bundle exec dotenv -f .kamal/secrets.production sh -c 'ssh root@$SERVER_IP' }
 
 # Heroku
 alias hps='heroku ps'
