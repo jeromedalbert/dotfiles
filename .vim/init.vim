@@ -13,16 +13,16 @@ Plug 'mattn/emmet-vim', { 'for': ['*html', '*css', '*jsx', 'php'] }
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'on': [] }
-  Plug 'nvim-treesitter/nvim-treesitter'
+  " Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'neovim/nvim-lspconfig'
-  Plug 'lukas-reineke/lsp-format.nvim'
+  Plug 'stevearc/conform.nvim'
 
   Plug 'github/copilot.vim', { 'branch': 'release' }
   Plug 'jeromedalbert/aider.nvim', { 'on': [], 'branch': 'custom' }
-  Plug 'stevearc/dressing.nvim' |
-    \ Plug 'nvim-lua/plenary.nvim' |
-    \ Plug 'MunifTanjim/nui.nvim' |
-    \ Plug 'jeromedalbert/avante.nvim', { 'branch': 'custom' }
+  "Plug 'stevearc/dressing.nvim' |
+  "  \ Plug 'nvim-lua/plenary.nvim' |
+  "  \ Plug 'MunifTanjim/nui.nvim' |
+  "  \ Plug 'jeromedalbert/avante.nvim', { 'branch': 'custom' }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -520,8 +520,8 @@ noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
 " noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
-noremap <silent> <leader>A <Plug>(AvanteAsk)
-noremap <silent> <leader>O :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
+" noremap <silent> <leader>A <Plug>(AvanteAsk)
+noremap <silent> <leader>A :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
 noremap <silent> <leader>C :call OpenCursor()<cr>
 noremap <silent> c. :call OpenCursor()<cr>
 

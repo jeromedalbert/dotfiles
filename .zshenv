@@ -773,7 +773,7 @@ rdbg() {
   fi
 }
 alias dbundle='ruby ~/c/rubygems/bundler/spec/support/bundle.rb'
-alias dgem='ruby -I ~/c/rubygems/lib ~/c/rubygems/exe/gem install'
+alias dgem='ruby -I ~/c/rubygems/lib ~/c/rubygems/exe/gem'
 drails() {
   local previous_dir=$(pwd)
   cd ~/c/rails
@@ -818,11 +818,8 @@ alias ang='ansible-galaxy'
 alias fl='fly'
 fls() {
   local app_name=${1:-jeromeapp}
-  DISABLE_SPRING=true fly launch --no-deploy --yes --name $app_name
-  fly secrets set SECRET_KEY_BASE=$(ruby -rsecurerandom -e "puts SecureRandom.hex(64)")
-  fly deploy
+  DISABLE_SPRING=true fly launch --yes --name $app_name
 }
-alias flys='fls'
 flrm() {
   local app_name=$(fly-app-name)
   fly apps destroy $app_name -y
@@ -882,8 +879,9 @@ alias kmaccdt='kamal accessory details all -q'
 alias kmacce='kamal accessory exec'
 kmaccb() { kamal accessory exec $1 -q -i bash }
 alias kmt='kamal traefik'
+alias kmdb='kamal dbc -q'
 kmo() { bundle exec dotenv -f .kamal/secrets.production sh -c 'open http://$SERVER_IP' }
-kmdb() { bundle exec dotenv -f .kamal/secrets.production sh -c 'psql $DATABASE_URL' }
+kmpg() { bundle exec dotenv -f .kamal/secrets.production sh -c 'psql $DATABASE_URL' }
 kmssh() { bundle exec dotenv -f .kamal/secrets.production sh -c 'ssh root@$SERVER_IP' }
 
 # Heroku

@@ -6,7 +6,7 @@ end
 
 Pry.config.pager = false if ENV['VIM']
 
-if defined?(PryByebug)
+# if defined?(PryByebug)
   # Pry.commands.alias_command 'c', 'continue'
   # Pry.commands.alias_command 's', 'step'
   # Pry.commands.alias_command 'n', 'next'
@@ -15,6 +15,6 @@ if defined?(PryByebug)
   # def c
   #   continue if !defined?(c)
   # end
-end
+# end
 
 require_relative '.console_functions'

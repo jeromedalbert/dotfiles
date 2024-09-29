@@ -118,6 +118,7 @@ hi Underlined guifg=NONE guibg=NONE gui=underline cterm=underline
 hi WildMenu guifg=Black guibg=Yellow
 hi ErrorMsg guifg=#ffffff guibg=bg gui=NONE
 hi! Prompt guifg=#ffffff guibg=bg gui=NONE
+hi MoreMsg guifg=#ffffff guibg=bg gui=NONE
 hi link Character String
 hi link SpecialComment Comment
 hi link FoldColumn LineNr
