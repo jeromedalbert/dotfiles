@@ -46,6 +46,9 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 # Disable screenshots floating thumbnails
 defaults write com.apple.screencapture show-thumbnail -bool false
 
+# Disable screenshot shadows
+defaults write com.apple.screencapture "disable-shadow" -bool "true"
+
 # Disable "App is not optimized for your Mac" alerts
 defaults write -g CSUIDisable32BitWarning -boolean true
 
@@ -238,7 +241,7 @@ defaults write com.apple.iCal.plist "display birthdays calendar" -int 0
 defaults write com.apple.suggestions AppCanShowSiriSuggestionsBlacklist -array "com.apple.iCal"
 
 # Spotlight search sources
-killall mds > /dev/null 2>&1
+killall mds >/dev/null 2>&1
 defaults write com.apple.spotlight orderedItems -array \
   '{ enabled = 1; name = APPLICATIONS; }' \
   '{ enabled = 1; name = "SYSTEM_PREFS"; }' \
@@ -263,7 +266,8 @@ defaults write com.apple.spotlight orderedItems -array \
   '{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }'
 
 # Bartender
-plutil -replace ProfileSettings.activeProfile.Hide -json "$(cat <<-EOS
+plutil -replace ProfileSettings.activeProfile.Hide -json "$(
+  cat <<-EOS
 [
   "com.fleetsmith.agent.ui-Item-0",
   "com.apple.Spotlight-Item-0",
@@ -277,7 +281,8 @@ plutil -replace ProfileSettings.activeProfile.Hide -json "$(cat <<-EOS
 ]
 EOS
 )" ~/Library/Preferences/com.surteesstudios.Bartender.plist
-plutil -replace ProfileSettings.activeProfile.Show -json "$(cat <<-EOS
+plutil -replace ProfileSettings.activeProfile.Show -json "$(
+  cat <<-EOS
 [
   "com.apple.controlcenter-Battery",
   "com.apple.controlcenter-FocusModes",
@@ -306,6 +311,6 @@ for app in \
   "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" "Dock" \
   "Finder" "Mail" "Messages" "Safari" "SizeUp" "SystemUIServer" "Terminal" \
   "Transmission" "Twitter" "iCal" "ControlStrip"; do
-  killall "${app}" > /dev/null 2>&1
+  killall "${app}" >/dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."

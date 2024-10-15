@@ -13,6 +13,6 @@
 .aider*
 !.aider.conf.yml
 
-myapp*
-mygem*
+myapp*/
+mygem*/
 tags

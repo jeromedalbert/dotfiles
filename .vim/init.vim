@@ -1008,6 +1008,11 @@ let g:vim_ai_chat = {
   \  }
   \ }
 
+let g:copilot_filetypes = {
+  \ 'text': v:false,
+  \ 'markdown': v:false,
+  \ }
+
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0

@@ -23,6 +23,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 export GREP_COLORS=auto
 export GREP_COLOR=auto
+export GOPATH=$HOME/.go
 export HOMEBREW_PREFIX=$([[ $(arch) == 'arm64' ]] && echo '/opt/homebrew' || echo '/usr/local')
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -32,6 +33,7 @@ export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 export MANPATH=$HOMEBREW_PREFIX/share/man:$MANPATH
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 export GH_NO_UPDATE_NOTIFIER=true
+export PGGSSENCMODE=disable
 export RUBY_DEBUG_NO_HINT=true
 export RUBY_DEBUG_IRB_CONSOLE=1
 export PATH=$HOME/.bin

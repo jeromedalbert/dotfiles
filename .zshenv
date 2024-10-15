@@ -18,7 +18,7 @@ alias rm='rm'
 alias rmrf='rm -rf'
 rmrf.() {
   local dir=$(pwd)
-  if [[ $dir == ~/c/* ]]; then
+  if [[ $dir == ~/c/tmp/* ]]; then
     cd ..
     rm -rf $dir
   else
@@ -242,6 +242,8 @@ alias gaaca='gaa && gca'
 alias gaaca!='gaa && gca!'
 alias gaacapf!='gaaca! && gpf'
 alias gaacm='gaa && gcm'
+alias gcf='git commit --fixup'
+alias gaacf='gaa && gcf'
 gic() {
   if [[ ! -d .git ]]; then git init; fi
   gaacm "Initial commit"
@@ -357,7 +359,11 @@ alias grbi='git rebase -i'
 alias grbi2='git rebase -i HEAD~2'
 alias grbi3='git rebase -i HEAD~3'
 alias grbi4='git rebase -i HEAD~4'
-alias grbi5='git rebase -i HEAD~5'
+alias grbi6='git rebase -i HEAD~6'
+alias grbi7='git rebase -i HEAD~7'
+alias grbi8='git rebase -i HEAD~8'
+alias grbi9='git rebase -i HEAD~9'
+alias grbi10='git rebase -i HEAD~10'
 grbim() { git rebase -i $(git-main-branch) }
 alias grbir='git rebase -i --root'
 alias gcon='git rebase --continue'
@@ -365,6 +371,21 @@ alias grcon='gcon'
 alias gaacon='gaa && gcon'
 alias grabort='git rebase --abort'
 alias gsk='git rebase --skip'
+alias grbia='git rebase -i --autosquash'
+grbiam() { git rebase -i --autosquash $(git-main-branch) }
+alias grbiar='git rebase -i --autosquash --root'
+gfix() {
+  if [[ $# -eq 0 ]]; then
+    gaacm 'fixup' &> /dev/null
+    grbi10 || grbir
+  else
+    gaacf $1 && grbia $1^
+  fi
+}
+# alias gab='git absorb'
+# alias gabn='git absorb --dry-run'
+# alias gabr='git absorb --and-rebase'
+alias gab='git absorb --and-rebase'
 alias gb='git branch --sort=-committerdate'
 gbcp() { echo $(current-git-branch) | pbcopy }
 alias gbs='git branch -D sav &> /dev/null; git branch sav'
@@ -878,10 +899,9 @@ alias kmacc='kamal accessory'
 alias kmaccdt='kamal accessory details all -q'
 alias kmacce='kamal accessory exec'
 kmaccb() { kamal accessory exec $1 -q -i bash }
-alias kmt='kamal traefik'
+alias kmp='kamal proxy'
 alias kmdb='kamal dbc -q'
 kmo() { bundle exec dotenv -f .kamal/secrets.production sh -c 'open http://$SERVER_IP' }
-kmpg() { bundle exec dotenv -f .kamal/secrets.production sh -c 'psql $DATABASE_URL' }
 kmssh() { bundle exec dotenv -f .kamal/secrets.production sh -c 'ssh root@$SERVER_IP' }
 
 # Heroku
