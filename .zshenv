@@ -564,6 +564,7 @@ alias drma='docker rm $(docker ps -a -q)'
 alias dr='docker run'
 alias drit='docker run -it'
 alias deit='docker exec -it'
+alias deb='docker exec -it /bin/bash'
 db() {
   if [[ $# -eq 0 ]]; then
     docker build .
