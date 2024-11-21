@@ -998,7 +998,6 @@ alias subl3.='subl3 .'
 cursor() {
   (/Applications/Cursor.app/Contents/MacOS/Cursor "$@" > /dev/null 2>&1 &)
 }
-alias code='cursor'
 alias cur='cursor'
 alias c.='cur .'
 alias zzz='pmset sleepnow'

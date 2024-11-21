@@ -27,5 +27,6 @@
     "search.quickAccess.preserveInput": true,
     "search.searchEditor.defaultNumberOfContextLines": 2,
     "files.autoSave": "onFocusChange",
-    "workbench.statusBar.visible": false
+    "workbench.statusBar.visible": false,
+    "security.workspace.trust.enabled": false
 }
