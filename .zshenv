@@ -14,19 +14,28 @@ alias lla='ll -A'
 alias lld='ll -d'
 alias llrt='ll -rt'
 alias llart='lla -rt'
+alias cpr='cp -r'
 alias rm='rm'
 alias rmrf='rm -rf'
-rmrf.() {
+rm.() {
   local dir=$(pwd)
   if [[ $dir == ~/c/tmp/* ]]; then
     cd ..
     rm -rf $dir
   else
+    echo 'ERROR: this command only works in ~/c/tmp as a security precaution.'
+  fi
+}
+mv.() {
+  local dir=$(pwd)
+  if [[ $dir == ~/c/* ]]; then
+    cd ..
+    mv $dir $1
+    cd $1
+  else
     echo 'ERROR: this command only works in ~/c as a security precaution.'
   fi
 }
-alias rm.='rmrf.'
-alias cpr='cp -r'
 .() {
   if [[ $# -eq 0 ]]; then
     cd .
@@ -244,11 +253,11 @@ alias gaacapf!='gaaca! && gpf'
 alias gaacm='gaa && gcm'
 alias gcf='git commit --fixup'
 alias gaacf='gaa && gcf'
-gic() {
+gci() {
   if [[ ! -d .git ]]; then git init; fi
   gaacm "Initial commit"
 }
-alias gci='gic'
+alias gic='gci'
 alias gco='git checkout'
 alias gcob='gco -b'
 alias gc-='gco -'
@@ -359,6 +368,7 @@ alias grbi='git rebase -i'
 alias grbi2='git rebase -i HEAD~2'
 alias grbi3='git rebase -i HEAD~3'
 alias grbi4='git rebase -i HEAD~4'
+alias grbi5='git rebase -i HEAD~5'
 alias grbi6='git rebase -i HEAD~6'
 alias grbi7='git rebase -i HEAD~7'
 alias grbi8='git rebase -i HEAD~8'
@@ -382,6 +392,7 @@ gfix() {
     gaacf $1 && grbia $1^
   fi
 }
+alias gf='gfix'
 # alias gab='git absorb'
 # alias gabn='git absorb --dry-run'
 # alias gabr='git absorb --and-rebase'
@@ -533,7 +544,6 @@ hb() {
 }
 hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
 alias hcr='gh repo create --private --source=. $(basename $PWD)'
-alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hcrp='gh repo create --public --source=. $(basename $PWD)'
 alias hi='gi; gci; hcr; gpu'
 alias hco='gh pr checkout'
@@ -977,6 +987,7 @@ alias bcls='bcl'
 alias bsl='brew services list'
 alias bss='brew services start'
 alias bst='brew services stop'
+alias bsr='brew services restart'
 alias bsta='brew services stop --all'
 
 # Apps / Binaries
@@ -1048,6 +1059,9 @@ rails-new() {
   ~/c/boilerplate/rails-template/rails-new "$@"
   if [[ $? -eq 0 && -d "$1" ]]; then cd $1; fi
 }
+rnm() {
+  rails-new "$@" --main
+}
 alias rn='rails-new'
 gem-new() {
   local gem_new_path=~/c/boilerplate/gem-new
@@ -1109,3 +1123,4 @@ bench() {
   cat /tmp/browsertime.json | jq -r '.[0].statistics.timings.pageTimings | "Average DOM Load Time: \(.domContentLoadedTime.mean) ms\nAverage Load Time: \(.pageLoadTime.mean) ms\n\nMean DOM Load Time: \(.domContentLoadedTime.mean) ms\nMean Load Time: \(.pageLoadTime.mean) ms"'
 }
 alias nosleep='caffeinate -d'
+alias act='ensure-docker-is-running; command act'

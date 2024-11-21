@@ -34,10 +34,9 @@ def analyze(query)
 end
 alias :explain :analyze
 
-def stacktrace
+def callerc
   caller.reject { _1['gems/'] }
 end
-alias :stt :stacktrace
 
 def config
   Rails.application.config
