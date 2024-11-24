@@ -940,26 +940,30 @@ let g:test#strategy = 'custom'
 let g:test#no_alternate = 1
 
 let g:projectionist_heuristics = {
-  \  'config/application.rb': {
+  \  'config/application.rb&spec/': {
   \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
-  \    'lib/tasks/*.rake': { 'alternate': 'spec/lib/tasks/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
-  \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' },
-  \    'spec/lib/tasks/*_spec.rb': { 'alternate': 'lib/tasks/{}.rake' }
+  \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
   \  },
-  \  'spec/&!config/application.rb': {
+  \  'config/application.rb&test/&!spec/': {
+  \    'app/*.rb': { 'alternate': 'test/{}_test.rb' },
+  \    'lib/*.rb': { 'alternate': 'test/lib/{}_test.rb' },
+  \    'test/*_test.rb': { 'alternate': 'app/{}.rb' },
+  \    'test/lib/*_test.rb': { 'alternate': 'lib/{}.rb' }
+  \  },
+  \  'spec/spec_helper.rb&!config/application.rb': {
   \    'lib/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'lib/{}.rb' }
   \  },
-  \  'test/&!config/application.rb': {
+  \  'test/test_helper.rb&!config/application.rb&!spec/': {
   \    'lib/*.rb': { 'alternate': 'test/{}_test.rb' },
   \    'test/*_test.rb': { 'alternate': 'lib/{}.rb' }
   \  },
-  \   "go.mod": {
-  \     '*.go': { 'alternate': '{}_test.go'},
-  \     '*_test.go': { 'alternate': '{}.go'},
-  \   },
+  \  'go.mod': {
+  \    '*.go': { 'alternate': '{}_test.go'},
+  \    '*_test.go': { 'alternate': '{}.go'},
+  \  },
   \  '*': {
   \    'Gemfile': { 'alternate': 'Gemfile.lock' },
   \    'Gemfile.lock': { 'alternate': 'Gemfile' },
@@ -2806,6 +2810,7 @@ augroup end
 augroup detect_filetypes
   autocmd!
   autocmd BufRead,BufNewFile *spec.rb set ft=ruby.rspec
+  autocmd BufRead,BufNewFile *test.rb set ft=ruby.minitest
   autocmd BufRead,BufNewFile *.html.erb set ft=eruby.html
   autocmd BufRead,BufNewFile *.js.erb set ft=eruby.javascript
   autocmd BufRead,BufNewFile *.nfo,*.NFO set ft=nfo
