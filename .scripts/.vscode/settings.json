@@ -15,7 +15,6 @@
     "workbench.colorTheme": "RailsCasts",
     "rubyLsp.rubyExecutablePath": "/Users/jerome/.asdf/shims/ruby",
     "explorer.confirmDelete": false,
-    "workbench.activityBar.location": "hidden",
     "editor.stickyScroll.enabled": false,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
@@ -27,6 +26,9 @@
     "search.quickAccess.preserveInput": true,
     "search.searchEditor.defaultNumberOfContextLines": 2,
     "files.autoSave": "onFocusChange",
+    "security.workspace.trust.enabled": false,
     "workbench.statusBar.visible": false,
-    "security.workspace.trust.enabled": false
+    "workbench.activityBar.location": "top",
+    "editor.minimap.enabled": false,
+    "liveshare.launcherClient": "visualStudioCode"
 }
