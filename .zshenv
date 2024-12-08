@@ -714,7 +714,7 @@ alias bp='bundle-path'
 bs() { ag -C "$@" $(bundle show --paths) }
 rails() {
   binstub-command rails "$@"
-  if [[ $? -eq 0 && $1 == 'new' ]]; then cd $2; fi
+  if [[ $? -eq 0 && $1 == 'new' && -d "$2" ]]; then cd $2; fi
 }
 alias rake='binstub-command rake'
 alias rspec='binstub-command rspec'
@@ -1054,20 +1054,19 @@ killui() {
     killall "${app}"
   done
 }
-rails-new() {
-  ~/c/boilerplate/rails-template/rails-new "$@"
-  if [[ $? -eq 0 && -d "$1" ]]; then cd $1; fi
+rn() {
+  if [[ $# -eq 0 ]]; then set -- "-o"; fi
+  if [[ "$*" =~ " worker" ]]; then set -- "$@" "--api"; fi
+  rails new $1 -m /Users/jerome/c/boilerplate/rails-template/template.rb --css tailwind ${@:2}
 }
 rnm() {
-  rails-new "$@" --main
+  rn "$@" --main
 }
-alias rn='rails-new'
-gem-new() {
+gn() {
   local gem_new_path=~/c/boilerplate/gem-new
   bundle exec --gemfile $gem_new_path/Gemfile $gem_new_path/exe/gem-new "$@"
   if [[ $? -eq 0 && -d "$1" ]]; then cd $1; fi
 }
-alias gn='gem-new'
 mkpwd() {
   local max_chars=${1:-28}
   cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $max_chars | head -n 1 | tee >(pbcopy)
