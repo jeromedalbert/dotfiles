@@ -477,8 +477,6 @@ ActiveRecord::Base.transaction do
 end
 endsnippet
 
-snippet scope "scope :scope, -> { .. }"
-scope :${1:scope}, -> {
-	${0}
-}
+snippet then "then { |e| .. }" w
+then { |${1:e}| ${0} }
 endsnippet

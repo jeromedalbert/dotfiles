@@ -66,7 +66,7 @@ mkcd() { mkdir $1 && cd $1 }
 ct() {
   if [[ $# -eq 0 ]]; then
     cd ~/c/tmp
-  elif [[ $# -eq 1 ]]; then
+  elif [[ $# -eq 1 ]] && ! which "$1" >/dev/null 2>&1; then
     if [[ $1 == *.* ]]; then
       cd ~/c/tmp
       touch $1
