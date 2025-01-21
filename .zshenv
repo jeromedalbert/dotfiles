@@ -1122,3 +1122,4 @@ bench() {
 }
 alias nosleep='caffeinate -d'
 alias act='ensure-docker-is-running; command act'
+imglatlong() { exiftool -n -p '$gpslatitude,$gpslongitude' "$@" }
