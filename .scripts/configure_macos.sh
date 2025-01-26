@@ -115,7 +115,6 @@ defaults write com.apple.dock persistent-apps -array \
   "$(dock_item /System/Applications/Calendar.app)" \
   "$(dock_item /Applications/Evernote.app)" \
   "$(dock_item /System/Applications/Photos.app)" \
-  "$(dock_item /Applications/1Password\ 7.app)" \
   "$(dock_item /Applications/Slack.app)"
 
 # Minimize windows using the scale effect (less intrusive)
@@ -128,11 +127,11 @@ defaults write com.apple.dock mineffect -string scale
 # Show battery percentage
 defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -int 1
 
-# Show battery percentage
+# Show bluetooth
 defaults -currentHost write com.apple.controlcenter Bluetooth -int 18
 
 # Set clock format
-defaults write com.apple.menuextra.clock '{ DateFormat = "EEE H:mm"; ShowDayOfMonth = 0; }'
+defaults write com.apple.menuextra.clock '{ DateFormat = "EEE H:mm"; ShowDate = 2; ShowDayOfMonth = 0; ShowDayOfWeek = 1; }'
 
 # Hide Siri
 defaults write com.apple.Siri StatusMenuVisible -int 0
@@ -191,15 +190,6 @@ sudo pmset -b lessbright 0
 # Turn off display after 7 minutes on battery power
 sudo pmset -b displaysleep 7
 
-########################
-### Software Updates ###
-########################
-
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticCheckEnabled -int 1
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload -int 1
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -int 0
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
-
 ##############
 ### Finder ###
 ##############
@@ -223,12 +213,6 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # Disable warnings
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
-
-# Configure visibility for default macOS folders
-ln -s "$HOME/Desktop" "$HOME/Desktop "
-ln -s "$HOME/Documents" "$HOME/Documents "
-chflags hidden ~/Pictures
-ln -s "$HOME/Documents/Pictures" "$HOME/Pictures "
 
 ############
 ### Apps ###
@@ -264,40 +248,6 @@ defaults write com.apple.spotlight orderedItems -array \
   '{ enabled = 1; name = "MENU_CONVERSION"; }' \
   '{ enabled = 1; name = "MENU_EXPRESSION"; }' \
   '{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }'
-
-# Bartender
-plutil -replace ProfileSettings.activeProfile.Hide -json "$(
-  cat <<-EOS
-[
-  "com.fleetsmith.agent.ui-Item-0",
-  "com.apple.Spotlight-Item-0",
-  "org.pqrs.Karabiner-Menu-Item-0",
-  "com.slate.Slate-Item-0",
-  "com.stairways.keyboardmaestro.engine-Main Status Menu",
-  "com.apple.controlcenter-Bluetooth",
-  "com.getdropbox.dropbox-Item-0",
-  "com.monosnap.monosnap-Item-0",
-  "special.AllOtherItems"
-]
-EOS
-)" ~/Library/Preferences/com.surteesstudios.Bartender.plist
-plutil -replace ProfileSettings.activeProfile.Show -json "$(
-  cat <<-EOS
-[
-  "com.apple.controlcenter-Battery",
-  "com.apple.controlcenter-FocusModes",
-  "com.apple.controlcenter-WiFi",
-  "com.surteesstudios.Bartender-statusItem",
-  "com.mowglii.ItsycalApp-ItsycalStatusItem",
-  "com.evernote.Evernote-Item-0",
-  "com.privateinternetaccess.vpn-Item-0",
-  "mega.mac-Item-0",
-  "info.marcel-dierkes.KeepingYouAwake-Item-0",
-  "com.docker.docker-Item-0",
-  "org.sabnzbd.sabnzbd-Item-0"
-]
-EOS
-)" ~/Library/Preferences/com.surteesstudios.Bartender.plist
 
 # Chrome
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
