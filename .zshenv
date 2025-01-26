@@ -106,7 +106,7 @@ alias chx='chmod +x'
 ed() { command ed -p '*' "$@" }
 alias wh='which'
 alias cmd='command'
-killport() { lsof -ti tcp:$1 | xargs kill -9 }
+killp() { lsof -ti tcp:$1 | xargs kill -9 }
 prepend() {
   local text_to_prepend="$1"
   local file=$2
@@ -1004,6 +1004,7 @@ cursor() {
 }
 alias cur='cursor'
 alias c.='cur .'
+alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
 alias zzz='pmset sleepnow'
 alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
@@ -1127,3 +1128,5 @@ bench() {
 alias nosleep='caffeinate -d'
 alias act='ensure-docker-is-running; command act'
 imglatlong() { exiftool -n -p '$gpslatitude,$gpslongitude' "$@" }
+cs() { gh copilot suggest "$*" }
+ce() { gh copilot explain "$*" }
