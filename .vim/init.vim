@@ -495,8 +495,8 @@ noremap [r :ConflictMarkerOurselves<cr>
 noremap ]r :ConflictMarkerThemselves<cr>
 nmap ]w :call GitAdd()<cr>]a]x
 
-map <C-j> <Plug>(edgemotion-j)
-map <C-k> <Plug>(edgemotion-k)
+map <silent> <C-j> :mark '<cr><Plug>(edgemotion-j)
+map <silent> <C-k> :mark '<cr><Plug>(edgemotion-k)
 
 xmap <silent> aa <Plug>AngryOuterSuffix
 omap <silent> aa <Plug>AngryOuterSuffix
@@ -2719,6 +2719,7 @@ function! MoveInsideIndent(forward, ...) abort
   let visual_mode = get(a:000, 0)
   if visual_mode | let start_pos = getpos("'<") | endif
   let nextline_num = line('.') + motion_offset
+  mark '
   if getline(nextline_num) =~ '^[ \t]*$'
     let motion_char = a:forward ? 'j' : 'k'
     exe "normal ^\<Plug>(edgemotion-" . motion_char . ")^"
@@ -2732,17 +2733,18 @@ function! MoveInsideIndent(forward, ...) abort
     normal! gv
   endif
 endfunction
-nnoremap <silent> <Plug>MoveNextInsideIndent :<c-u>call MoveInsideIndent(1)<cr>
-vnoremap <silent> <Plug>MoveNextInsideIndent :call MoveInsideIndent(1, 1)<cr>
-onoremap <silent> <Plug>MoveNextInsideIndent V:<c-u>call MoveInsideIndent(1)<cr>
-nnoremap <silent> <Plug>MovePreviousInsideIndent :<c-u>call MoveInsideIndent(0)<cr>
-vnoremap <silent> <Plug>MovePreviousInsideIndent :call MoveInsideIndent(0, 1)<cr>
-onoremap <silent> <Plug>MovePreviousInsideIndent V:<c-u>call MoveInsideIndent(0)<cr>
+nnoremap <Plug>MoveNextInsideIndent :<c-u>call MoveInsideIndent(1)<cr>
+vnoremap <Plug>MoveNextInsideIndent :call MoveInsideIndent(1, 1)<cr>
+onoremap <Plug>MoveNextInsideIndent V:<c-u>call MoveInsideIndent(1)<cr>
+nnoremap <Plug>MovePreviousInsideIndent :<c-u>call MoveInsideIndent(0)<cr>
+vnoremap <Plug>MovePreviousInsideIndent :call MoveInsideIndent(0, 1)<cr>
+onoremap <Plug>MovePreviousInsideIndent V:<c-u>call MoveInsideIndent(0)<cr>
 
 function! MoveAroundIndent(forward, ...) abort
   let direction_char = a:forward ? '' : 'o'
   let visual_mode = get(a:000, 0)
   if visual_mode | let start_pos = getpos("'<") | endif
+  mark '
   exe "normal Vai" . direction_char . "^\<esc>"
   if visual_mode
     call setpos("'<", start_pos)
