@@ -135,8 +135,9 @@ al() {
   fi
 }
 alias conf="$MAIN_EDITOR ~/.zshrc"
-alias sec="$MAIN_EDITOR ~/.secrets.zsh"
-alias reload='. ~/.zshrc; . ~/.zshenv; . ~/.secrets.zsh'
+alias loc="$MAIN_EDITOR ~/.local.zsh"
+alias sec='loc'
+alias reload='. ~/.zshrc; . ~/.zshenv; . ~/.local.zsh'
 alias rl='reload'
 alias rel='reload'
 alias i='arch -x86_64 zsh'

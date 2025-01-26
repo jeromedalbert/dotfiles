@@ -42,4 +42,4 @@ def config
   Rails.application.config
 end
 
-require File.expand_path('~/.secrets')
+require File.expand_path('~/.local')

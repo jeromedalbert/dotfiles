@@ -22,6 +22,7 @@
 
 .k9s/config.yml
 
-.secrets.zsh
+.local.zsh
+.gitconfig_local
 .zcompdump
 *.pyc
