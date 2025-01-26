@@ -2819,7 +2819,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile *.js.es6 set ft=javascript
   autocmd BufRead,BufNewFile *.js.es6.erb set ft=eruby.javascript
   autocmd BufRead,BufNewFile *.env*,Procfile*,*.config set ft=conf
-  autocmd BufRead,BufNewFile Brewfile set ft=ruby
+  autocmd BufRead,BufNewFile Brewfile* set ft=ruby
   autocmd BufRead,BufNewFile *.apib set ft=markdown
   autocmd BufRead,BufNewFile Dockerfile* set ft=dockerfile
   autocmd BufRead,BufNewFile *.vue setfiletype html
