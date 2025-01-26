@@ -106,6 +106,7 @@ alias chx='chmod +x'
 ed() { command ed -p '*' "$@" }
 alias wh='which'
 alias cmd='command'
+killport() { lsof -ti tcp:$1 | xargs kill -9 }
 prepend() {
   local text_to_prepend="$1"
   local file=$2
