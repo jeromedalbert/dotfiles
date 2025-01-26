@@ -454,6 +454,7 @@ gpd() {
   fi
 }
 alias gclo-'git clone'
+alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
 alias gx='gitx'
 alias ggx='gitx'
 alias gu='gitup'
@@ -1004,7 +1005,6 @@ cursor() {
 }
 alias cur='cursor'
 alias c.='cur .'
-alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
 alias zzz='pmset sleepnow'
 alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
