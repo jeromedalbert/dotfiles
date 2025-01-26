@@ -5,7 +5,9 @@
 .tmux/plugins
 .tmux/sessions/*
 !.tmux/sessions/blog.conf
+!.tmux/sessions/code.conf
 !.tmux/sessions/rails.conf
+!.tmux/sessions/rails_work.conf
 
 .elinks/*
 !.elinks/elinks.conf
