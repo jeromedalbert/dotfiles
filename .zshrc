@@ -36,6 +36,7 @@ export GH_NO_UPDATE_NOTIFIER=true
 export PGGSSENCMODE=disable
 export RUBY_DEBUG_NO_HINT=true
 export RUBY_DEBUG_IRB_CONSOLE=1
+export OVERMIND_TMUX_CONFIG=$HOME/.tmux.overmind.conf
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOMEBREW_PREFIX/bin
