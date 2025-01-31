@@ -952,19 +952,6 @@
                         ]
                     },
                     {
-                        "description": "fn+f1",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f1",
-                                    "modifiers": { "mandatory": ["fn"] }
-                                },
-                                "to": [{ "key_code": "display_brightness_decrement" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "fn+1",
                         "manipulators": [
                             {
@@ -973,19 +960,6 @@
                                     "modifiers": { "mandatory": ["fn"] }
                                 },
                                 "to": [{ "key_code": "display_brightness_decrement" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "fn+f2",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f2",
-                                    "modifiers": { "mandatory": ["fn"] }
-                                },
-                                "to": [{ "key_code": "display_brightness_increment" }],
                                 "type": "basic"
                             }
                         ]
@@ -1004,45 +978,6 @@
                         ]
                     },
                     {
-                        "description": "fn+f3",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f3",
-                                    "modifiers": { "mandatory": ["fn"] }
-                                },
-                                "to": [{ "key_code": "mission_control" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "fn+f4",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f4",
-                                    "modifiers": { "mandatory": ["fn"] }
-                                },
-                                "to": [{ "key_code": "launchpad" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "fn+f5",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f5",
-                                    "modifiers": { "mandatory": ["fn"] }
-                                },
-                                "to": [{ "key_code": "illumination_decrement" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "fn+3",
                         "manipulators": [
                             {
@@ -1051,19 +986,6 @@
                                     "modifiers": { "mandatory": ["fn"] }
                                 },
                                 "to": [{ "key_code": "illumination_decrement" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "fn+f6",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f6",
-                                    "modifiers": { "mandatory": ["fn"] }
-                                },
-                                "to": [{ "key_code": "illumination_increment" }],
                                 "type": "basic"
                             }
                         ]

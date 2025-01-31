@@ -628,7 +628,7 @@ endif
 
 let g:python3_host_prog = '/Users/jerome/.asdf/shims/python3'
 let g:ruby_host_prog = '/Users/jerome/.asdf/shims/neovim-ruby-host'
-let g:node_host_prog = '/Users/jerome/.asdf/installs/nodejs/20.13.1/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/jerome/.asdf/shims/neovim-node-host'
 let g:perl_host_prog = $HOMEBREW_PREFIX . '/bin/perl'
 let g:clipboard = {
   \ 'name': 'pbcopy',
