@@ -1276,6 +1276,17 @@
 			<key>Text</key>
 			<string>0x13 0x6e</string>
 		</dict>
+		<key>0x62-0x100000-0xb</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string>0x13 0x4f</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 		<key>0x63-0x100000</key>
 		<dict>
 			<key>Action</key>
