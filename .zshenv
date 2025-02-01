@@ -111,13 +111,11 @@ prepend() {
   local text_to_prepend="$1"
   local file=$2
   local tmp_file="tmp_$file"
-
   echo "Prepend\n"
   echo "$text_to_prepend\n"
   read -q "answer?to $file? "
   echo "\n"
   if [[ $answer != "y" ]]; then return; fi
-
   echo 'Prepending...'
   echo $text_to_prepend > $tmp_file
   cat $file >> $tmp_file
@@ -1131,3 +1129,8 @@ alias act='ensure-docker-is-running; command act'
 imglatlong() { exiftool -n -p '$gpslatitude,$gpslongitude' "$@" }
 cs() { gh copilot suggest "$*" }
 ce() { gh copilot explain "$*" }
+alias ol='ollama'
+olr() { ol run "$@" }
+oll() { ol run llama3.1 "$@" }
+olg() { ol run gemma2 "$@" }
+old() { ol run deepseek-r1 "$@" }
