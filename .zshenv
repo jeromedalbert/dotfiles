@@ -836,6 +836,12 @@ alias nhash='asdf reshim nodejs'
 
 # Python
 alias py='python'
+venv() {
+  if [ -z "$VIRTUAL_ENV" ]; then
+    python3 -m venv venv
+    source venv/bin/activate
+  fi
+}
 
 # PHP
 alias phpa='php -a'
