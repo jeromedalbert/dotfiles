@@ -1005,11 +1005,13 @@ alias subl="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
 alias subl.='subl .'
 alias subl3='command subl'
 alias subl3.='subl3 .'
+alias co='code'
+alias co.='code .'
 cursor() {
   (/Applications/Cursor.app/Contents/MacOS/Cursor "$@" > /dev/null 2>&1 &)
 }
 alias cur='cursor'
-alias c.='cur .'
+alias c.='cursor .'
 alias zzz='pmset sleepnow'
 alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
