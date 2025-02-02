@@ -30,5 +30,11 @@
     "workbench.statusBar.visible": false,
     "workbench.activityBar.location": "top",
     "editor.minimap.enabled": false,
-    "liveshare.launcherClient": "visualStudioCode"
+    "liveshare.launcherClient": "visualStudioCode",
+    "editor.cursorBlinking": "solid",
+    "editor.cursorWidth": 3,
+    "workbench.colorCustomizations": {
+        "editorCursor.foreground": "#FF0000"
+    },
+    "editor.renderLineHighlight": "none"
 }
