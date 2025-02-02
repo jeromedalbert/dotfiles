@@ -379,6 +379,7 @@ endif
 hi link jsonQuote String
 hi link jsonKeyword String
 hi link jsonNull Symbol
+hi link jsonBoolean Symbol
 hi link jsonEscape SpecialChar
 if has('nvim')
   hi link @property.json String
