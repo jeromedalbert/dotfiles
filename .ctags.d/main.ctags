@@ -31,7 +31,7 @@
 --regex-ruby=/^  ((root|root to:|root :to =>)[ \t]*"[^"]+")/\1/r,route/
 --regex-ruby=/^  ((devise_for|devise_scope|authenticated?)[ \t]*:[a-zA-Z0-9_]+)/\1/r,route/
 # schema.rb
---regex-ruby=/^[ \t]*create_table[ \t]*"([a-zA-Z0-9_]+)", (id|force)/\1/t,table/
+--regex-ruby=/^[ \t]*create_table[ \t]*"([a-zA-Z0-9_]+)", (id|force|primary_key)/\1/t,table/
 --regex-ruby=/^[ \t]*create_table[ \t].*comment: "New name: ([a-zA-Z0-9_]+)"/\1/t,table/
 --regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
 # rails_admin
