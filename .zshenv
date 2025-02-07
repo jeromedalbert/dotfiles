@@ -453,7 +453,7 @@ gpd() {
   fi
 }
 alias gclo-'git clone'
-alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
+alias gitx='~/.bin/GitX.app/Contents/Resources/gitx'
 alias gx='gitx'
 alias ggx='gitx'
 alias gu='gitup'
