@@ -19,10 +19,6 @@ if has('nvim')
 
   Plug 'github/copilot.vim', { 'branch': 'release' }
   Plug 'jeromedalbert/aider.nvim', { 'on': [], 'branch': 'custom' }
-  "Plug 'stevearc/dressing.nvim' |
-  "  \ Plug 'nvim-lua/plenary.nvim' |
-  "  \ Plug 'MunifTanjim/nui.nvim' |
-  "  \ Plug 'jeromedalbert/avante.nvim', { 'branch': 'custom' }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
