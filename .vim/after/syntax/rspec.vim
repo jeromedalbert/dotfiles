@@ -2,7 +2,6 @@ runtime! syntax/ruby.vim
 
 syn keyword rspecMethods
     \ describe
-    \ context
     \ let
     \ it
     \ its
@@ -18,7 +17,6 @@ syn keyword rspecMethods
     \ before
     \ after
     \ around
-    \ subject
     \ fixtures
     \ controller_name
     \ helper_name
@@ -26,9 +24,14 @@ syn keyword rspecMethods
     \ feature
     \ background
     \ given
+    \ subject
     \ described_class
+syn match rspecContext "\<context\>\ze\s\+.*\<do\>"
+" syn match rspecSubject "\<subject\>\ze\s\+\([{]\|\<do\>\)"
 
 hi link rspecMethods Statement
 hi link rspecGroupMethods Statement
 hi link rspecMatchers NONE
 hi link rspecKeywords NONE
+hi link rspecContext Keyword
+" hi link rspecSubject Keyword

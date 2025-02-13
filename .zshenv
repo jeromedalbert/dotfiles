@@ -741,9 +741,9 @@ alias rgs='rails generate scaffold'
 alias rdm='rails destroy migration'
 alias rd='rails destroy'
 ruby-console() {
-  if [[ -e 'config/application.rb' ]]; then bin/rails c
-  elif [[ -e 'bin/console' ]]; then bin/console
-  else irb
+  if [[ -e 'config/application.rb' ]]; then bin/rails c "$@"
+  elif [[ -e 'bin/console' ]]; then bin/console "$@"
+  else irb "$@"
   fi
 }
 alias rc='ruby-console'

@@ -1739,11 +1739,14 @@ endfunction
 
 function! AddDebugBreakpoint()
   if !exists('g:gemfile') | let g:gemfile = system('cat Gemfile') | endif
+  let debug_line = 'binding.irb'
   if g:gemfile =~ 'pry'
-    normal! obinding.pry
-  else
-    normal! obinding.irb
+    let debug_line = 'binding.pry'
   endif
+  if &filetype =~ 'eruby'
+    let debug_line = '<% ' . debug_line . ' %>'
+  endif
+  exe 'normal! o' . debug_line
 endfunction
 
 function! OpenMarkdownPreview() abort
