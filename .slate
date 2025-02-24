@@ -44,5 +44,5 @@ bind down:${special2} ${bottomright}
 
 bind b:${hyper} focus 'Google Chrome'
 
-bind 1:${special} throw 0 resize
+bind 1:${special} sequence throw 0 | ${full}
 bind 2:${special} sequence throw 1 | ${full}
