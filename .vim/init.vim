@@ -1038,11 +1038,15 @@ function! TabComplete()
 endfunction
 
 function! IsEmmetExpandable()
-  if &filetype !~ 'html\|css\|jsx' | return 0 | endif
-  if !emmet#isExpandable() | return 0 | endif
-  if &filetype =~ 'css' | return 1 | endif
-  let expr = matchstr(getline('.')[:col('.')], '\(\S\+\)$')
-  return expr =~ '[.#>+*]' || index(s:emmetElements, expr) >= 0
+  try
+    if &filetype !~ 'html\|css\|jsx' | return 0 | endif
+    if !emmet#isExpandable() | return 0 | endif
+    if &filetype =~ 'css' | return 1 | endif
+    let expr = matchstr(getline('.')[:col('.')], '\(\S\+\)$')
+    return expr =~ '[.#>+*]' || index(s:emmetElements, expr) >= 0
+  catch /E363/
+    return 0
+  endtry
 endfunction
 
 let s:emmetElements = [
@@ -2689,6 +2693,7 @@ function! FocusSelection(visual)
 endfunction
 
 function! DisplayEnclosingLine()
+  if &filetype == 'yaml' | echo GetYamlPathUnderCursor() | return | endif
   let cmd = "ctags -f - --fields=n " . expand('%') . " | awk -F: '{ print $NF }'"
   let cmd .= " | sort -nr | awk '" . line('.') . " >= $1 { print $1; exit }' "
   let linenum = system(cmd)
@@ -2784,6 +2789,28 @@ function! OpenCursor()
     let cmd .= ' -g ' . expand('%:p') . ':' . line('.')
   endif
   call system(cmd)
+endfunction
+
+function! GetYamlPathUnderCursor()
+  let l:indent = indent('.')
+  let l:path = []
+  let l:lineno = line('.')
+  let l:current_line = getline('.')
+  let l:current_key = matchstr(l:current_line, '^\s*\zs\S\+\ze\s*:')
+  call add(l:path, l:current_key)
+
+  let l:lineno -= 1
+  while l:lineno > 0
+    let l:line = getline(l:lineno)
+    let l:cur_indent = indent(l:lineno)
+    if l:cur_indent < l:indent && l:line =~ '^\s*\S\+\s*:'
+      let l:key = matchstr(l:line, '^\s*\zs\S\+\ze\s*:')
+      call add(l:path, l:key)
+      let l:indent = l:cur_indent
+    endif
+    let l:lineno -= 1
+  endwhile
+  return join(reverse(l:path), '.')
 endfunction
 
 "####################

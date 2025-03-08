@@ -36,6 +36,9 @@
 --regex-ruby=/^[ \t]*create_table[ \t]*:([a-zA-Z0-9_]+)/\1/t,table/
 # rails_admin
 --regex-ruby=/^[ \t]*config.model[ \t]*["']([a-zA-Z0-9_]+)["']/\1/t,table/
+# Feature specs
+--regex-ruby=/^[ \t]*(RSpec\.)?feature[ \t]*['"](.*)['"].*do/\2/f,feature/
+--regex-ruby=/^[ \t]*scenario[ \t]*['"](.*)['"][ \t]*do/\1/s,scenario/
 
 --kinds-markdown=
 --regex-markdown=/^(#+[ \t]+.*)/\1/h,heading,headings/

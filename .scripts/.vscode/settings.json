@@ -10,7 +10,7 @@
     },
     "workbench.panel.defaultLocation": "bottom",
     "explorer.decorations.badges": false,
-    "workbench.iconTheme": null,
+    "workbench.editor.showIcons": false,
     "window.zoomLevel": 1,
     "workbench.colorTheme": "RailsCasts",
     "rubyLsp.rubyExecutablePath": "/Users/jerome/.asdf/shims/ruby",

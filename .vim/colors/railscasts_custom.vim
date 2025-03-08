@@ -367,6 +367,7 @@ hi link jsBuiltins NONE
 hi link jsModuleAs NONE
 hi link jsRegexpCharClass String
 hi link jsRegexpBoundary String
+hi link jsRegexpOr String
 hi link jsRegexpQuantifier String
 hi link jsSpecial String
 hi link jsLabel Statement

@@ -2,6 +2,12 @@ local lspconfig = require('lspconfig')
 lspconfig.syntax_tree.setup({
   root_dir = lspconfig.util.root_pattern('.streerc'),
 })
+lspconfig.rubocop.setup({
+  root_dir = lspconfig.util.root_pattern('.rubocop.yml'),
+  handlers = {
+    ['textDocument/publishDiagnostics'] = function() end,
+  },
+})
 
 require('conform').setup({
   format_on_save = {
@@ -10,9 +16,9 @@ require('conform').setup({
   },
   formatters_by_ft = {
     go = { 'gofmt' },
-    javascript = { 'prettier' },
+    -- javascript = { 'prettier' },
     lua = { 'stylua' },
-    python = { 'black' },
+    -- python = { 'black' },
     ruby = { lsp_format = 'prefer' },
     sh = { 'shfmt' },
   },
