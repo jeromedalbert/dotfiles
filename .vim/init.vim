@@ -519,7 +519,7 @@ noremap <silent> <cr> :call ReplayLastMacro()<cr>
 " noremap <silent> <leader>A <Plug>(AvanteAsk)
 noremap <silent> <leader>A :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
 noremap <silent> <leader>C :call OpenCursor()<cr>
-noremap <silent> c. :call OpenCursor()<cr>
+noremap <silent> c. :call OpenVisibleBuffersInCursor()<cr>
 
 "#############################
 "### General configuration ###
@@ -2782,13 +2782,26 @@ function! ShowCopilotPanel()
   Copilot panel
 endfunction
 
-
 function! OpenCursor()
   let cmd = 'cursor $(pwd)'
   if &modifiable
     let cmd .= ' -g ' . expand('%:p') . ':' . line('.')
   endif
   call system(cmd)
+endfunction
+
+function! OpenVisibleBuffersInCursor()
+  let file_paths = []
+  for tabnum in range(tabpagenr('$'))
+    for bufnum in tabpagebuflist(tabnum + 1)
+      let file_path = expand('#'.bufnum.':p')
+      if filereadable(file_path)
+        call add(file_paths, shellescape(file_path))
+      endif
+    endfor
+  endfor
+  call insert(file_paths, '-g ' . expand('%:p') . ':' . line('.'))
+  call system('cursor $(pwd) ' . join(file_paths, ' '))
 endfunction
 
 function! GetYamlPathUnderCursor()

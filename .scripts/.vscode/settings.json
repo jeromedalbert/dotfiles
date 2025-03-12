@@ -36,5 +36,7 @@
     "workbench.colorCustomizations": {
         "editorCursor.foreground": "#FF0000"
     },
-    "editor.renderLineHighlight": "none"
+    "editor.renderLineHighlight": "none",
+    "workbench.editor.decorations.badges": false,
+    "workbench.editor.decorations.colors": false
 }

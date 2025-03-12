@@ -38,6 +38,10 @@ def callerc
   caller.reject { _1['gems/'] }
 end
 
+alias :st :caller
+alias :ss :caller
+alias :sc :callerc
+
 def config
   Rails.application.config
 end
