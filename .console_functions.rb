@@ -46,4 +46,4 @@ def config
   Rails.application.config
 end
 
-require File.expand_path('~/.local')
+require File.expand_path('~/.local.rb')

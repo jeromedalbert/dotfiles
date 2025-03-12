@@ -2996,5 +2996,9 @@ if has('nvim')
   source $MYVIMRC_LUA
 endif
 
+if filereadable(expand('~/.local.vim'))
+  source ~/.local.vim
+endif
+
 set exrc
 set secure
