@@ -1,4 +1,4 @@
-alias q exit
+alias :q :exit
 
 def rr
   reload!
@@ -15,7 +15,6 @@ end
 def skflush
   Sidekiq.redis { |conn| conn.flushdb }
 end
-
 alias :sflush :skflush
 
 def cpp(input)
@@ -34,13 +33,12 @@ def analyze(query)
 end
 alias :explain :analyze
 
-def callerc
-  caller.reject { _1['gems/'] }
+def callerc(stack_trace = Kernel.caller)
+  stack_trace = stack_trace.backtrace if stack_trace.is_a?(Exception)
+  stack_trace.reject { _1['gems/'] }
 end
-
-alias :st :caller
-alias :ss :caller
-alias :sc :callerc
+alias :st :callerc
+alias :sta :caller
 
 def config
   Rails.application.config

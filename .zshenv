@@ -545,6 +545,10 @@ hb() {
     gh repo view --web --branch $current_branch
   fi
 }
+hcm() {
+  local commit=${1:-$(git rev-parse HEAD)}
+  gh browse $commit
+}
 hs() { gh repo sync jeromedalbert/$(basename $PWD) && gl }
 alias hcr='gh repo create --private --source=. $(basename $PWD)'
 alias hcrp='gh repo create --public --source=. $(basename $PWD)'
