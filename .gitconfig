@@ -17,10 +17,12 @@
 
 [push]
   default = simple
+	autoSetupRemote = true
 
 [diff]
   noprefix = true
   algorithm = histogram
+	renames = true
 
 [diff-so-fancy]
   markEmptyLines = false
@@ -54,7 +56,16 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+
 [init]
 	defaultBranch = main
+
 [absorb]
 	autoStageIfNothingStaged = true
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[rebase]
+	updateRefs = true
