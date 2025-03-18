@@ -2861,6 +2861,7 @@ augroup detect_filetypes
   autocmd BufRead,BufNewFile Brewfile* set ft=ruby
   autocmd BufRead,BufNewFile *.apib set ft=markdown
   autocmd BufRead,BufNewFile Dockerfile* set ft=dockerfile
+  autocmd BufRead,BufNewFile Dangerfile* set ft=ruby
   autocmd BufRead,BufNewFile *.vue setfiletype html
   autocmd BufRead,BufNewFile *.rb.tt set ft=ruby
   autocmd BufRead,BufNewFile *.yml.tt set ft=yaml
