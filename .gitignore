@@ -8,6 +8,7 @@
 !.tmux/sessions/code.conf
 !.tmux/sessions/rails.conf
 !.tmux/sessions/rails_work.conf
+!.tmux/sessions/osconfig.conf
 
 .elinks/*
 !.elinks/elinks.conf
