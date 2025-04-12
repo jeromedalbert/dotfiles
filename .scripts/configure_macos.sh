@@ -75,21 +75,11 @@ defaults write com.apple.HIToolbox AppleFnUsageType -int 0
 # (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
 
-# Show expanded touch bar control strip
-defaults write com.apple.touchbar.agent PresentationModeGlobal "fullControlStrip"
-
-# Set touch bar buttons
-defaults write com.apple.controlstrip FullCustomized -array \
-  "NSTouchBarItemIdentifierFlexibleSpace" \
-  "com.apple.system.group.media" \
-  "com.apple.system.group.volume"
-
 # App shortcuts
 defaults write com.apple.preview NSUserKeyEquivalents \
   '{ "Adjust Size..." = "@~s"; "Hide Sidebar" = "@1"; Thumbnails = "@2"; }'
 defaults write com.google.Chrome NSUserKeyEquivalents '{ Extensions = "@~e"; }'
-defaults write com.monosnap.monosnap NSUserKeyEquivalents \
-  '{ "Save" = "@$s"; "Upload" = "@s"; }'
+defaults write com.monosnap.monosnap NSUserKeyEquivalents '{ "Save" = "@$s"; }'
 
 ############
 ### Dock ###
@@ -213,6 +203,9 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # Disable warnings
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
+
+# Hide recent tags in sidebar
+defaults write com.apple.finder ShowRecentTags -bool false
 
 ############
 ### Apps ###

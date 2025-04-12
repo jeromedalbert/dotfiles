@@ -1,3 +1,16 @@
+################
+### Keyboard ###
+################
+
+# # Show expanded touch bar control strip
+# defaults write com.apple.touchbar.agent PresentationModeGlobal "fullControlStrip"
+#
+# # Set touch bar buttons
+# defaults write com.apple.controlstrip FullCustomized -array \
+#   "NSTouchBarItemIdentifierFlexibleSpace" \
+#   "com.apple.system.group.media" \
+#   "com.apple.system.group.volume"
+
 ############
 ### Dock ###
 ############
