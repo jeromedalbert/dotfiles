@@ -453,6 +453,7 @@ nnoremap <silent> gf :call ImprovedGoToFile()<cr>
 nnoremap <silent> gF :vsplit<cr>:call ImprovedGoToFile()<cr>
 noremap <silent> <c-w>gf :tab split<cr>:call ImprovedGoToFile()<cr>
 noremap <silent> gl :call DisplayEnclosingLine()<cr>
+noremap <silent> gL :call CopyYamlPathUnderCursor()<cr>
 
 noremap ga= :Tabularize /=<cr>
 noremap ga<bar> :Tabularize /<bar><cr>
@@ -2805,25 +2806,31 @@ function! OpenVisibleBuffersInCursor()
 endfunction
 
 function! GetYamlPathUnderCursor()
-  let l:indent = indent('.')
-  let l:path = []
-  let l:lineno = line('.')
-  let l:current_line = getline('.')
-  let l:current_key = matchstr(l:current_line, '^\s*\zs\S\+\ze\s*:')
-  call add(l:path, l:current_key)
+  let indent = indent('.')
+  let path = []
+  let lineno = line('.')
+  let current_line = getline('.')
+  let current_key = matchstr(current_line, '^\s*\zs\S\+\ze\s*:')
+  call add(path, current_key)
 
-  let l:lineno -= 1
-  while l:lineno > 0
-    let l:line = getline(l:lineno)
-    let l:cur_indent = indent(l:lineno)
-    if l:cur_indent < l:indent && l:line =~ '^\s*\S\+\s*:'
-      let l:key = matchstr(l:line, '^\s*\zs\S\+\ze\s*:')
-      call add(l:path, l:key)
-      let l:indent = l:cur_indent
+  let lineno -= 1
+  while lineno > 0
+    let line = getline(lineno)
+    let cur_indent = indent(lineno)
+    if cur_indent < indent && line =~ '^\s*\S\+\s*:'
+      let key = matchstr(line, '^\s*\zs\S\+\ze\s*:')
+      call add(path, key)
+      let indent = cur_indent
     endif
-    let l:lineno -= 1
+    let lineno -= 1
   endwhile
-  return join(reverse(l:path), '.')
+  return join(reverse(path), '.')
+endfunction
+
+function! CopyYamlPathUnderCursor()
+  let path = GetYamlPathUnderCursor()
+  echo path
+  let @+ = path
 endfunction
 
 "####################
