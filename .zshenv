@@ -1139,6 +1139,8 @@ bench() {
 alias nosleep='caffeinate -d'
 alias act='ensure-docker-is-running; command act'
 imglatlong() { exiftool -n -p '$gpslatitude,$gpslongitude' "$@" }
+alias coords='imglatlong'
+alias coord='imglatlong'
 cs() { gh copilot suggest "$*" }
 ce() { gh copilot explain "$*" }
 alias ol='ollama'
