@@ -1,0 +1,2 @@
+cask "figma"
+cask "flux"
