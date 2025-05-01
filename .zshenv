@@ -524,7 +524,7 @@ alias hc='gh pr create --web'
 alias hp='gh pr view --web'
 hd() {
   local url=$(BROWSER=echo hc | tail -n 1 | cut -d '?' -f1)
-  open $url
+  if [[ $url == http* ]]; then open $url; fi
 }
 hf() {
   gh repo fork --remote --remote-name=jeromedalbert
