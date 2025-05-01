@@ -522,13 +522,10 @@ alias squashi='git reset $(git commit-tree HEAD^{tree} -m "Initial commit")'
 # Github
 alias hc='gh pr create --web'
 alias hp='gh pr view --web'
-hpatch() {
-  local branch=${1:-main}
-  open "https://github.com/$(github-repo jeromedalbert)/compare/$branch...$(current-git-branch)"
+hd() {
+  local url=$(BROWSER=echo hc | tail -n 1 | cut -d '?' -f1)
+  open $url
 }
-alias hpa='hpatch'
-alias hdiff='hpatch'
-alias hd='hdiff'
 hf() {
   gh repo fork --remote --remote-name=jeromedalbert
   gh repo set-default $(github-repo origin)
