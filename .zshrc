@@ -39,6 +39,7 @@ export RUBY_DEBUG_IRB_CONSOLE=1
 export OVERMIND_TMUX_CONFIG=$HOME/.tmux.overmind.conf
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
+export PATH=$PATH:/Users/jerome/.local/share/mise/shims
 export PATH=$PATH:$HOMEBREW_PREFIX/bin
 export PATH=$PATH:$HOMEBREW_PREFIX/sbin
 export PATH=$PATH:$HOMEBREW_PREFIX/opt/python/libexec/bin
@@ -237,7 +238,6 @@ paste-insert() {
 ### Other ###
 #############
 
-source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
 stty -ixon
 if [[ -e ~/.local.zsh ]]; then; source ~/.local.zsh; fi
 if [[ -n $TMUX && $(tmux show-window-options -t $TMUX_PANE -v automatic-rename) == "off" ]]; then

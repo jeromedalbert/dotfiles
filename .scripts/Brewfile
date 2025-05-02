@@ -137,6 +137,7 @@ brew "jakehilborn/jakehilborn/displayplacer"
 brew "jemalloc"
 brew "jpeg", link: true
 brew "jq"
+brew "mise"
 brew "node"
 brew "js-beautify"
 brew "kubernetes-cli"
