@@ -10,8 +10,10 @@
 !.tmux/sessions/rails_work.conf
 !.tmux/sessions/osconfig.conf
 
-.elinks/*
-!.elinks/elinks.conf
+.bin/local
+
+.bundle/*
+!.bundle/config
 
 .config/*
 !.config/karabiner
@@ -19,8 +21,8 @@
 !.config/nvim
 !.config/mise
 
-.bundle/*
-!.bundle/config
+.elinks/*
+!.elinks/elinks.conf
 
 .k9s/config.yml
 
