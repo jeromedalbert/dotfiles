@@ -17,6 +17,7 @@
 !.config/karabiner
 .config/karabiner/automatic_backups
 !.config/nvim
+!.config/mise
 
 .bundle/*
 !.bundle/config
