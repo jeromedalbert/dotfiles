@@ -554,6 +554,7 @@ alias hco='gh pr checkout'
 alias hpc='hpc'
 alias hpco='hpc'
 gpuhc() { gpu "$@" && hc }
+gpuhd() { gpu "$@" && hd }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
@@ -1145,3 +1146,4 @@ olr() { ol run "$@" }
 oll() { ol run llama3.1 "$@" }
 olg() { ol run gemma2 "$@" }
 old() { ol run deepseek-r1 "$@" }
+reshim='mise reshim'
