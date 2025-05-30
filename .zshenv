@@ -409,7 +409,7 @@ alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs
 alias gbDa='git branch | remove-colors | egrep -v "master|main|\*" | xargs git branch -D'
 alias gbD-="gbD @{-1}"
 gbDi() {
-  git branch --sort=-committerdate | remove-colors | egrep -v "master|main|\*" | cut -c3- > /tmp/branches && \
+  git branch --sort=-committerdate | remove-colors | egrep -v "^ *(master|main|\*)" | cut -c3- > /tmp/branches && \
     cp /tmp/branches /tmp/branches-to-keep && \
     $MAIN_EDITOR /tmp/branches-to-keep && \
     comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep) | xargs 2> /dev/null git branch -D
@@ -1146,4 +1146,4 @@ olr() { ol run "$@" }
 oll() { ol run llama3.1 "$@" }
 olg() { ol run gemma2 "$@" }
 old() { ol run deepseek-r1 "$@" }
-reshim='mise reshim'
+alias reshim='mise reshim'
