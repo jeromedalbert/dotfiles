@@ -826,6 +826,7 @@ drails() {
   fi
 }
 alias rt='rake -T'
+alias reshim='mise reshim'
 
 # Javascript
 alias y='yarn'
@@ -1146,4 +1147,4 @@ olr() { ol run "$@" }
 oll() { ol run llama3.1 "$@" }
 olg() { ol run gemma2 "$@" }
 old() { ol run deepseek-r1 "$@" }
-alias reshim='mise reshim'
+alias bands='ssh spitz "gl_modem AT AT+QCAINFO"'
