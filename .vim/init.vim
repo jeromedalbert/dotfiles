@@ -33,6 +33,7 @@ Plug 'keith/swift.vim', { 'for': 'swift' }
 Plug 'StanAngeloff/php.vim', { 'for': 'php' }
 Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 Plug 'towolf/vim-helm'
+Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'

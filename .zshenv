@@ -264,7 +264,7 @@ alias gco='git checkout'
 alias gcob='gco -b'
 alias gc-='gco -'
 alias gco-='gco -'
-alias gcom='gco master --'
+alias gcom='gco $(git-main-branch) --'
 alias gcl='git clone'
 alias gclone='git clone'
 gg() {
