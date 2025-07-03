@@ -1696,6 +1696,13 @@ function! ShowLatestRailsMigration()
   if bufexists(alternate_buffer) | let @# = alternate_buffer | endif
 endfunction
 
+function! ShowLastFile(dir)
+  let files = sort(filter(split(glob(a:dir . '/*'), "\n"), 'filereadable(v:val)'))
+  if !empty(files)
+    exe 'edit ' . fnameescape(files[-1])
+  endif
+endfunction
+
 function! ExtractRailsPartial()
   call LazyLoadRails()
   let name = input('Partial name: ', '')
