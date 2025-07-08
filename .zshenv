@@ -558,6 +558,16 @@ gpuhd() { gpu "$@" && hd }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
+clear-gh-notifications() {
+  local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  curl -L \
+    -X PUT \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $GITHUB_API_TOKEN" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/notifications \
+    -d "{\"last_read_at\":\"$now\",\"read\":true}"
+}
 
 # Docker
 alias docker='ensure-docker-is-running; command docker'
