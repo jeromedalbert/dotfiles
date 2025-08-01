@@ -18,7 +18,6 @@ if has('nvim')
   Plug 'stevearc/conform.nvim'
 
   Plug 'github/copilot.vim', { 'branch': 'release' }
-  Plug 'jeromedalbert/aider.nvim', { 'on': [], 'branch': 'custom' }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -519,7 +518,6 @@ noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
 " noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
 " noremap <silent> <leader>A <Plug>(AvanteAsk)
-noremap <silent> <leader>A :call LazyLoadAider()<cr>:lua AiderOpen()<cr>
 noremap <silent> <leader>C :call OpenCursor()<cr>
 noremap <silent> c. :call OpenVisibleBuffersInCursor()<cr>
 
@@ -580,7 +578,7 @@ set nojoinspaces
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump,.aider*
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
@@ -2644,14 +2642,6 @@ function! LazyLoadProjectionist()
   autocmd! projectionist
 endfunction
 
-function! LazyLoadAider()
-  if !exists('g:loaded_aider')
-    call plug#load('aider.nvim')
-    lua require('aider').setup({ auto_manage_context = true, default_bindings = false })
-    let g:loaded_aider = 1
-  endif
-endfunction
-
 function! GemOpen(gem_name)
   let path = system('VISUAL=echo gem open ' . a:gem_name)
   exe 'e ' . path
@@ -2672,8 +2662,6 @@ function! OnTermOpen()
     call OnTestDisplayed()
   elseif bufname =~ ':ag '
     call OnFileSearchDisplayed()
-	elseif bufname =~ ':aider '
-		nnoremap <silent><buffer> <esc> :q<cr>
   endif
 endfunction
 
