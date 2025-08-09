@@ -1,7 +1,5 @@
 ---
 BUNDLE_JOBS: "8"
-BUNDLE_BUILD__LIBXML___RUBY: "--with-xml2-config=$HOMEBREW_PREFIX/opt/libxml2/bin/xml2-config"
-BUNDLE_BUILD__MYSQL2: "--with-ldflags=-L$HOMEBREW_PREFIX/opt/openssl/lib --with-cppflags=-I$HOMEBREW_PREFIX/opt/openssl/include"
 BUNDLE_GEM__CI: "github"
 BUNDLE_GEM__MIT: "false"
 BUNDLE_GEM__COC: "true"

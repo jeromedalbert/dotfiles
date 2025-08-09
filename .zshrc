@@ -8,12 +8,25 @@ export LSCOLORS='exfxcxdxbxegedabagacad'
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 export PROMPT='%~$(git-prompt-info)$(arch-prompt-info)$ '
 export WORDCHARS='*?_[]~=&;!#$%^(){}'
-export FZF_DEFAULT_OPTS='--reverse --color="info:#000000,spinner:#000000" --prompt="  " --cycle --pointer=">" --style=minimal'
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=$HISTSIZE
 export PAGER=less
+export HOMEBREW_PREFIX=$([[ $(arch) == 'arm64' ]] && echo '/opt/homebrew' || echo '/usr/local')
+
+export BUNDLE_BUILD__LIBXML___RUBY="--with-xml2-config=$HOMEBREW_PREFIX/opt/libxml2/bin/xml2-config"
+export BUNDLE_BUILD__MYSQL2="--with-ldflags='-L${HOMEBREW_PREFIX}/opt/openssl/lib -L$HOMEBREW_PREFIX/opt/zstd/lib' --with-cppflags=-I$HOMEBREW_PREFIX/opt/openssl/include"
+export FZF_DEFAULT_OPTS='--reverse --color="info:#000000,spinner:#000000" --prompt="  " --cycle --pointer=">" --style=minimal'
+export GH_NO_UPDATE_NOTIFIER=true
 export GIT_PAGER='less -F -X'
+export GOPATH=$HOME/.go
+export GREP_COLOR=auto
+export GREP_COLORS=auto
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -21,22 +34,13 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[00;47;30m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-export GREP_COLORS=auto
-export GREP_COLOR=auto
-export GOPATH=$HOME/.go
-export HOMEBREW_PREFIX=$([[ $(arch) == 'arm64' ]] && echo '/opt/homebrew' || echo '/usr/local')
-export HOMEBREW_NO_ANALYTICS=1
-export HOMEBREW_NO_AUTO_UPDATE=1
-export HOMEBREW_NO_INSTALL_UPGRADE=1
-export HOMEBREW_NO_INSTALL_CLEANUP=1
-export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 export MANPATH=$HOMEBREW_PREFIX/share/man:$MANPATH
-export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-export GH_NO_UPDATE_NOTIFIER=true
-export PGGSSENCMODE=disable
-export RUBY_DEBUG_NO_HINT=true
-export RUBY_DEBUG_IRB_CONSOLE=1
 export OVERMIND_TMUX_CONFIG=$HOME/.tmux.overmind.conf
+export PGGSSENCMODE=disable
+export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
+export RUBY_DEBUG_IRB_CONSOLE=1
+export RUBY_DEBUG_NO_HINT=true
+
 export PATH=$HOME/.bin/local
 export PATH=$HOME/.bin
 export PATH=$PATH:./node_modules/.bin
