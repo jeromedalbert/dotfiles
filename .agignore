@@ -6,10 +6,10 @@
 .sass-cache
 .DS_Store
 .keep
-*.pyc
 .rubocop-http*
+
+*.pyc
 *.dump*
-storage/*
 
 CVS
 app/assets/builds
@@ -19,5 +19,7 @@ log
 node_modules
 public/assets
 public/packs
+/public/vite*
+storage/*
 tmp
 vendor

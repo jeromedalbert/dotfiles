@@ -1030,7 +1030,7 @@ alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias keyboard_disable='sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
 alias keyboard_enable='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext'
-alias iphone="open '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
+alias iphone="open -a Simulator"
 timer() { sleep $(($1*60)); terminal-notifier -message "${*:2}" }
 localip() {
   local ip=$(ipconfig getifaddr en0)
