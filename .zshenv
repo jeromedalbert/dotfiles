@@ -1135,6 +1135,9 @@ curlgql() {
 }
 alias unused='unused -t .tags'
 alias ytdlp='yt-dlp'
+alias ytdlpc='ytdlp --cookies-from-browser chrome'
+alias gdl='gallery-dl'
+alias gdlc='gdl --cookies-from-browser chrome'
 alias chrome_no_ssl='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
 alias macname='scutil --get ComputerName'
 alias speedtest='networkQuality'
