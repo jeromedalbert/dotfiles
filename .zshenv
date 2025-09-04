@@ -781,7 +781,7 @@ fs() {
   eval "foreman start $options $@"
 }
 alias rru='rails runner'
-alias rhash='asdf reshim ruby'
+# alias rhash='asdf reshim ruby'
 alias gmo='gem open'
 alias gmi='gem install'
 alias gmins='gmi'
@@ -845,7 +845,7 @@ alias ya='yarn add'
 alias yu='yarn upgrade'
 alias yrm='yarn remove'
 alias yre='yrm'
-alias nhash='asdf reshim nodejs'
+# alias nhash='asdf reshim nodejs'
 
 # Python
 alias py='python'
