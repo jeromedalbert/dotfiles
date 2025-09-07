@@ -56,11 +56,10 @@ v() {
 }
 alias v.='v .'
 alias vi=v
-alias vi.=v.
 alias vim=v
-alias vim.=v.
 alias vimdiff="$VIM_EDITOR -d"
 alias vd=vimdiff
+alias lv='NVIM_APPNAME=nvim-lazy nvim'
 dif() { colordiff -u $@ | less }
 mkcd() { mkdir $1 && cd $1 }
 ct() {
@@ -781,7 +780,13 @@ fs() {
   eval "foreman start $options $@"
 }
 alias rru='rails runner'
-# alias rhash='asdf reshim ruby'
+rhash() {
+  if which mise &> /dev/null; then
+    mise reshim
+  else
+    asdf reshim ruby
+  fi
+}
 alias gmo='gem open'
 alias gmi='gem install'
 alias gmins='gmi'
@@ -836,7 +841,6 @@ drails() {
   fi
 }
 alias rt='rake -T'
-alias reshim='mise reshim'
 
 # Javascript
 alias y='yarn'
@@ -845,7 +849,13 @@ alias ya='yarn add'
 alias yu='yarn upgrade'
 alias yrm='yarn remove'
 alias yre='yrm'
-# alias nhash='asdf reshim nodejs'
+nhash() {
+  if which mise &> /dev/null; then
+    mise reshim
+  else
+    asdf reshim nodejs
+  fi
+}
 
 # Python
 alias py='python'
@@ -1161,3 +1171,5 @@ oll() { ol run llama3.1 "$@" }
 olg() { ol run gemma2 "$@" }
 old() { ol run deepseek-r1 "$@" }
 alias bands='ssh spitz "gl_modem AT AT+QCAINFO"'
+alias reshim='mise reshim'
+alias mhash='reshim'

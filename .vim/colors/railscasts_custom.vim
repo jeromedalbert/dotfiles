@@ -80,6 +80,7 @@ hi Visual guifg=NONE guibg=#30659b gui=NONE
 hi Cursor guifg=#000000 guibg=#ffe88c gui=NONE
 hi LineNr guifg=#8A8885 guibg=#e3e3e3 gui=NONE
 hi TabLine guifg=#e6e1dc guibg=#a9a9a9 gui=NONE
+hi TabLineSel guifg=#e6e1dc guibg=#2f2f2f gui=NONE
 hi TabLineFill guifg=NONE guibg=#e6e1dc gui=NONE
 hi Cursorline guifg=NONE guibg=#3e3d3d gui=NONE cterm=NONE
 hi CursorColumn guifg=NONE guibg=#3e3d3d gui=NONE
