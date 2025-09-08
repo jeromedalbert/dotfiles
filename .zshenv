@@ -324,6 +324,7 @@ gd() {
 formatted-git-diff() {
   sed -r "s/^([^-+ ]*)[-+ ]/\\1/" | eval $GIT_PAGER
 }
+alias gdi='git diff'
 alias gd!='git diff'
 gsh() {
   git show "$@" | formatted-git-diff
