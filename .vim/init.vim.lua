@@ -3,6 +3,7 @@ lspconfig.syntax_tree.setup({
   root_dir = lspconfig.util.root_pattern('.streerc'),
 })
 lspconfig.rubocop.setup({
+  cmd = { 'bundle', 'exec', 'rubocop', '--lsp' },
   root_dir = lspconfig.util.root_pattern('.rubocop.yml'),
   handlers = {
     ['textDocument/publishDiagnostics'] = function() end,
