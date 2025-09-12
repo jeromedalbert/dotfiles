@@ -43,6 +43,7 @@ export RUBY_DEBUG_NO_HINT=true
 
 export PATH=$HOME/.bin/local
 export PATH=$PATH:$HOME/.bin
+export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:/Users/jerome/.local/share/mise/shims
 export PATH=$PATH:$HOMEBREW_PREFIX/bin
