@@ -1087,7 +1087,7 @@ minivim() {
   echo $conf | tee >(pbcopy)
 }
 killui() {
-  for app in "Dock" "Finder" "SystemUIServer"; do
+  for app in 'Dock' 'Finder' 'SystemUIServer'; do
     killall "${app}"
   done
 }
@@ -1175,6 +1175,7 @@ old() { ol run deepseek-r1 "$@" }
 alias bands='ssh spitz "gl_modem AT AT+QCAINFO"'
 alias reshim='mise reshim'
 alias mhash='reshim'
+alias ansview='iconv -f 437'
 showfigletfonts() {
   local text=${1:-Hello}
   (
@@ -1189,10 +1190,6 @@ showfigletfonts() {
 alias showfigfonts='showfigletfonts'
 showthedrawfonts() {
   local text=${1:-Hello}
-  tdfgo fonts -p -t $text | less
-}
-showthedrawfonts-old() {
-  local text=${1:-Hello}
   (
     for font in /usr/local/share/tdfiglet/fonts/*; do
       local font_name=${$(basename "$font")%.*}
@@ -1200,4 +1197,8 @@ showthedrawfonts-old() {
       tdfiglet -f $font_name $text
     done
   ) | less
+}
+showthedrawfonts-alt() {
+  local text=${1:-Hello}
+  tdfgo fonts -p -t $text | less
 }
