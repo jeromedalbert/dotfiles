@@ -121,6 +121,7 @@ prepend() {
   mv $tmp_file $file
   echo 'Done'
 }
+alias ansview='iconv -f 437'
 
 # Confs
 al() {
@@ -1093,7 +1094,7 @@ killui() {
 rn() {
   if [[ $# -eq 0 ]]; then set -- "-o"; fi
   if [[ "$*" =~ " worker" ]]; then set -- "$@" "--api"; fi
-  rails new $1 -m /Users/jerome/c/boilerplate/rails-template/template.rb --css tailwind ${@:2}
+  rails new $1 -m /Users/jerome/c/boilerplate/ace-template/template.rb --css tailwind ${@:2}
 }
 rnm() {
   rn "$@" --main
@@ -1174,3 +1175,29 @@ old() { ol run deepseek-r1 "$@" }
 alias bands='ssh spitz "gl_modem AT AT+QCAINFO"'
 alias reshim='mise reshim'
 alias mhash='reshim'
+showfigletfonts() {
+  local text=${1:-Hello}
+  (
+    for font in "$(figlet -I2)"/*; do
+      local font_name=${$(basename "$font")%.*}
+      echo "$font_name:\n"
+      figlet -w 9999 -f $font_name $text 2>/dev/null
+      echo "\n"
+    done
+  ) | less
+}
+alias showfigfonts='showfigletfonts'
+showthedrawfonts() {
+  local text=${1:-Hello}
+  tdfgo fonts -p -t $text | less
+}
+showthedrawfonts-old() {
+  local text=${1:-Hello}
+  (
+    for font in /usr/local/share/tdfiglet/fonts/*; do
+      local font_name=${$(basename "$font")%.*}
+      echo $font_name:
+      tdfiglet -f $font_name $text
+    done
+  ) | less
+}

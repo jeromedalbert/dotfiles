@@ -20,6 +20,7 @@
 .config/karabiner/automatic_backups
 !.config/nvim
 !.config/mise
+!.config/tdfgo
 
 .elinks/*
 !.elinks/elinks.conf
