@@ -390,7 +390,7 @@ alias grbiar='git rebase -i --autosquash --root'
 gfix() {
   if [[ $# -eq 0 ]]; then
     gaacm 'fixup' &> /dev/null
-    grbi10 || grbir
+    grbi10
   else
     gaacf $1 && grbia $1^
   fi

@@ -9,6 +9,10 @@ defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
 defaults write -g AppleAccentColor 4
 defaults write -g AppleHighlightColor '0.698039 0.843137 1.000000 Blue'
 
+# Reduce motion and transparency for better legibility
+defaults write com.apple.universalaccess reduceMotion -bool true
+defaults write com.apple.universalaccess reduceTransparency -bool true
+
 # Require password immediately after sleep or screen saver begins
 sysadminctl -screenLock immediate -password -
 
