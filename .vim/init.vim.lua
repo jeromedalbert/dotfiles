@@ -1,14 +1,18 @@
-local lspconfig = require('lspconfig')
-lspconfig.syntax_tree.setup({
-  root_dir = lspconfig.util.root_pattern('.streerc'),
+vim.lsp.config('syntax_tree', {
+  root_dir = function(bufnr, on_dir)
+    if vim.fs.root(bufnr, '.streerc') then on_dir(vim.fn.getcwd()) end
+  end,
 })
-lspconfig.rubocop.setup({
+vim.lsp.config('rubocop', {
   cmd = { 'bundle', 'exec', 'rubocop', '--lsp' },
-  root_dir = lspconfig.util.root_pattern('.rubocop.yml'),
+  root_dir = function(bufnr, on_dir)
+    if vim.fs.root(bufnr, '.rubocop.yml') then on_dir(vim.fn.getcwd()) end
+  end,
   handlers = {
     ['textDocument/publishDiagnostics'] = function() end,
   },
 })
+vim.lsp.enable({ 'syntax_tree', 'rubocop' })
 
 require('conform').setup({
   format_on_save = {
