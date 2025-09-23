@@ -2,6 +2,11 @@
 "### Plugins ###
 "###############
 
+silent! unmap grn
+silent! unmap gra
+silent! unmap grr
+silent! unmap gri
+
 call plug#begin('~/.vim/plugged')
 Plug $HOMEBREW_PREFIX . '/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
