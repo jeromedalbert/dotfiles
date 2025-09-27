@@ -6,6 +6,7 @@ silent! unmap grn
 silent! unmap gra
 silent! unmap grr
 silent! unmap gri
+silent! unmap grt
 
 call plug#begin('~/.vim/plugged')
 Plug $HOMEBREW_PREFIX . '/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
@@ -712,7 +713,6 @@ let NERDTreeMapChangeRoot = 'd'
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 0
 
 let g:rails_no_syntax = 1
 let g:rails_single_quotes_style = 1
