@@ -90,7 +90,9 @@ alias ctt='cct'
 alias ctl='ct; llrt'
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
-alias psgrep='pstree | grep'
+psgrep() {
+  pstree | grep $@ | grep -v grep
+}
 psgrepp() {
   grep $@ =(pstree | cut -c-$COLUMNS)
 }
