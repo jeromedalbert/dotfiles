@@ -378,6 +378,38 @@ if has('nvim')
   hi link @comment.javascript jsComment
 endif
 
+hi link typeScriptAssign Keyword
+hi link typeScriptBinaryOp Keyword
+hi link typescriptOptionalChain Keyword
+hi link typescriptArrowFuncParens Keyword
+hi link typescriptEndColons NONE
+hi link typescriptArrowFuncDef NONE
+hi link typescriptArrowFuncArg NONE
+hi link typescriptArrowFunc Keyword
+hi link typescriptBraces NONE
+hi link typescriptClassStatic NONE
+hi link typescriptCall NONE
+hi link typescriptFuncCallArg NONE
+hi link typescriptFunctionMethod NONE
+hi link typescriptPredefinedType NONE
+hi link typescriptVariable jsKeyword2
+hi link typescriptObjectLabel jsObjectKey
+hi link typescriptTemplateSB SpecialChar
+hi link typescriptNull jsNull
+hi link typescriptConsoleMethod NONE
+hi link typescriptMathStaticMethod NONE
+hi link typescriptES6SetMethod NONE
+hi link typescriptArrayMethod NONE
+hi link typescriptBOMLocationMethod NONE
+hi link typescriptJSONStaticMethod NONE
+hi link typescriptDOMEventMethod NONE
+hi link typescriptDOMEventProp NONE
+hi link typescriptDOMDocMethod NONE
+hi link typescriptDOMDocProp NONE
+hi link typescriptDOMEventTargetMethod NONE
+hi link typescriptDOMNodeMethod NONE
+hi link typescriptDOMStorageMethod NONE
+
 hi link jsonQuote String
 hi link jsonKeyword String
 hi link jsonNull Symbol
