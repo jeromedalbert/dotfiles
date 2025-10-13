@@ -1,12 +1,12 @@
-"###############
-"### Plugins ###
-"###############
-
 silent! unmap grn
 silent! unmap gra
 silent! unmap grr
 silent! unmap gri
 silent! unmap grt
+
+"###############
+"### Plugins ###
+"###############
 
 call plug#begin('~/.vim/plugged')
 Plug $HOMEBREW_PREFIX . '/opt/fzf' | Plug 'jeromedalbert/fzf.vim', { 'branch': 'better-fzf.vim' }
