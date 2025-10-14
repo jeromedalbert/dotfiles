@@ -2328,7 +2328,7 @@ endfunction
 
 function! RestoreTmuxWindowName()
   if $TMUX_AUTOMATIC_RENAME != 'off'
-    let cmd = 'number_of_vims=$(tmux list-panes -F "#{pane_current_command}" | grep -c vim);'
+    let cmd = 'number_of_vims=$(tmux list-panes -F "#{pane_current_command}" | egrep -c "vim|git");'
     let cmd .= 'if [[ $number_of_vims -eq 1 ]]; then;'
     let cmd .= 'tmux setw automatic-rename;'
     let cmd .= 'fi'

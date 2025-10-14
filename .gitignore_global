@@ -12,6 +12,7 @@
 .*@neomake_*
 .aider*
 !.aider.conf.yml
+mise.local.toml
 
 myapp*/
 mygem*/
