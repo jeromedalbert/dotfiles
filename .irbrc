@@ -5,8 +5,10 @@ rescue LoadError
 end
 
 begin
-  require 'awesome_print'
-  AwesomePrint.irb!
+  require 'amazing_print'
+  AmazingPrint.irb!
+  AmazingPrint.rdbg!
+  AmazingPrint.defaults = { hash_format: :rocket, colors: :values_only }
 rescue LoadError
 end
 

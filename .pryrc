@@ -1,6 +1,7 @@
 begin
-  require 'awesome_print'
-  AwesomePrint.pry!
+  require 'amazing_print'
+  AmazingPrint.pry!
+  AmazingPrint.defaults = { hash_format: :rocket, colors: :values_only }
 rescue LoadError
 end
 
