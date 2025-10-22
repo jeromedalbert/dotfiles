@@ -739,7 +739,7 @@ alias rake='binstub-command rake'
 alias rspec='binstub-command rspec'
 alias spring='binstub-command spring'
 alias brakeman='binstub-command brakeman'
-alias kamal='bin/kamal'
+alias kamal='ensure-docker-is-running; bin/kamal'
 alias importmap='bin/importmap'
 binstub-command() {
   local cmd=$1
@@ -916,8 +916,8 @@ alias fldb='fly postgres connect -a $(fly-app-name)-db'
 
 # Kamal
 alias km='kamal'
-alias kms='ensure-docker-is-running; kamal setup'
-alias kmd='ensure-docker-is-running; kamal deploy'
+alias kms='kamal setup'
+alias kmd='kamal deploy'
 alias kmlo='kamal lock'
 alias kmlr='kamal lock release'
 alias kmrm='kamal remove -y'
