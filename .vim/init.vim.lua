@@ -21,11 +21,22 @@ require('conform').setup({
   },
   formatters_by_ft = {
     go = { 'gofmt' },
-    -- javascript = { 'prettier' },
+    javascript = { 'prettier' },
+    javascriptreact = { 'prettier' },
     lua = { 'stylua' },
     -- python = { 'black' },
     ruby = { lsp_format = 'prefer' },
     sh = { 'shfmt' },
+    typescript = { 'prettier' },
+    typescriptreact = { 'prettier' },
+  },
+  formatters = {
+    prettier = {
+      require_cwd = true,
+      cwd = require('conform.util').root_file({
+        '.prettierignore',
+      }),
+    },
   },
 })
 
