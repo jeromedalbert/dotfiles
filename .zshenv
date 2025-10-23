@@ -36,13 +36,14 @@ mv.() {
     echo 'ERROR: this command only works in ~/c as a security precaution.'
   fi
 }
-.() {
+cd.() {
   if [[ $# -eq 0 ]]; then
     cd .
   else
     source "$@"
   fi
 }
+alias .='cd.'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
