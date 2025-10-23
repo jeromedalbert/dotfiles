@@ -409,6 +409,11 @@ hi link typescriptDOMDocProp NONE
 hi link typescriptDOMEventTargetMethod NONE
 hi link typescriptDOMNodeMethod NONE
 hi link typescriptDOMStorageMethod NONE
+hi link typescriptDestructureVariable jsObjectKey
+hi link typescriptFuncComma NONE
+hi link typescriptBOMHistoryProp NONE
+hi link typescriptXHRProp NONE
+hi link typescriptResponseProp NONE
 
 hi link jsonQuote String
 hi link jsonKeyword String
