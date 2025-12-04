@@ -16,7 +16,7 @@ export HOMEBREW_PREFIX=$([[ $(arch) == 'arm64' ]] && echo '/opt/homebrew' || ech
 
 export BUNDLE_BUILD__LIBXML___RUBY="--with-xml2-config=$HOMEBREW_PREFIX/opt/libxml2/bin/xml2-config"
 export BUNDLE_BUILD__MYSQL2="--with-ldflags='-L${HOMEBREW_PREFIX}/opt/openssl/lib -L$HOMEBREW_PREFIX/opt/zstd/lib' --with-cppflags=-I$HOMEBREW_PREFIX/opt/openssl/include"
-export FZF_DEFAULT_OPTS='--reverse --color="info:#000000,spinner:#000000" --prompt="  " --cycle --pointer=">" --style=minimal'
+export FZF_DEFAULT_OPTS='--reverse --color="info:#000000,spinner:#000000" --style=minimal --prompt="  " --cycle --pointer=">" --gutter=" "'
 export GH_NO_UPDATE_NOTIFIER=true
 export GIT_PAGER='less -F -X'
 export GOPATH=$HOME/.go
