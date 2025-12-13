@@ -899,7 +899,7 @@ flrm() {
   fly apps destroy $app_name -y
   fly apps destroy $app_name-db -y
 }
-fly-app-name() { grep 'app =' fly.toml | sed -r "s/app = '(.*)'/\1/" }
+fly-app-name() { grep -m 1 'app =' fly.toml | sed -r "s/app = '(.*)'/\1/" }
 alias flo='fly apps open'
 alias fld='fly deploy'
 alias flst='fly status'
@@ -982,6 +982,8 @@ hurl() {
 gph() { git push heroku $(git-main-branch) }
 gpfh() { gpf heroku $(git-main-branch) }
 alias gphm='gph'
+alias hde='heroku destroy'
+alias hrm='hde'
 
 # Kube
 alias kr='kube run'
