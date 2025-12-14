@@ -79,15 +79,14 @@ ct() {
     eval $@
   fi
 }
-cct() {
-  rm -rf ~/c/tmp/myapp* ~/c/tmp/mygem* ~/c/tmp/repro*
+ctt() {
+  rm -rf ~/c/tmp/my* ~/c/tmp/repro* ~/c/tmp/test*
   if [[ $# -eq 0 ]]; then
     if [[ ! -d "$PWD" ]]; then cd ~/c/tmp; fi
   else
     ct "$@"
   fi
 }
-alias ctt='cct'
 alias ctl='ct; llrt'
 alias dush='du -sh'
 alias path='echo $PATH | tr -s ":" "\n"'
