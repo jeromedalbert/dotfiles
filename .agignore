@@ -12,14 +12,14 @@
 *.dump*
 
 CVS
-app/assets/builds
-bower_components
-coverage
-log
-node_modules
-public/assets
-public/packs
+/app/assets/builds
+/bower_components
+/coverage
+/log
+/node_modules
+/public/assets
+/public/packs
 /public/vite*
-storage/*
-tmp
-vendor
+/storage/*
+/tmp
+/vendor
