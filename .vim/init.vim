@@ -83,6 +83,8 @@ Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'haya14busa/vim-edgemotion'
 Plug 'rhysd/conflict-marker.vim'
 Plug 'Konfekt/vim-alias'
+Plug 'folke/snacks.nvim', { 'on': 'CoAuthor' }
+Plug '2KAbhishek/co-author.nvim', { 'on': 'CoAuthor' }
 call plug#end()
 
 "############################
