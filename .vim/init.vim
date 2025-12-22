@@ -22,8 +22,7 @@ if has('nvim')
   " Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'neovim/nvim-lspconfig'
   Plug 'stevearc/conform.nvim'
-
-  Plug 'github/copilot.vim', { 'branch': 'release' }
+  " Plug 'github/copilot.vim', { 'branch': 'release' }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -524,7 +523,6 @@ noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
-" noremap <silent> <leader>C :call ShowCopilotPanel()<cr>
 " noremap <silent> <leader>A <Plug>(AvanteAsk)
 noremap <silent> <leader>C :call OpenCursor()<cr>
 noremap <silent> c. :call OpenVisibleBuffersInCursor()<cr>
@@ -1039,8 +1037,8 @@ function! TabComplete()
   elseif IsEmmetExpandable()
     return emmet#expandAbbr(0, '')
   else
-    return copilot#Accept("\<tab>")
-    " return "\<tab>"
+    " return copilot#Accept("\<tab>")
+    return "\<tab>"
   endif
 endfunction
 
@@ -2771,19 +2769,6 @@ function! WriteDesktop(filename)
   let filename = a:filename
   if filename == '' | let filename = 'tmp.txt' | endif
   exe 'w! ~/Desktop/' . filename
-endfunction
-
-function! ShowCopilotPanel()
-  let current_syntax = get(synstack(line('.'), col('.')), 0)
-  if current_syntax && synIDattr(current_syntax, 'name') =~ 'comment'
-    let old_linenum = line('.')
-    normal }
-    if line('.') == old_linenum
-      normal o
-      normal cc
-    endif
-  endif
-  Copilot panel
 endfunction
 
 function! OpenCursor()
