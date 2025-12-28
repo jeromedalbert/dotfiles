@@ -848,7 +848,8 @@ drails() {
     cd $previous_dir
   fi
 }
-alias rt='rake -T'
+alias rT='rake -T'
+alias rt='rails test'
 
 # Javascript
 alias y='yarn'
