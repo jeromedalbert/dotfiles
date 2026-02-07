@@ -5,9 +5,6 @@
     "extensions.ignoreRecommendations": true,
     "git.openRepositoryInParentFolders": "never",
     "update.showReleaseNotes": false,
-    "extensions.experimental.affinity": {
-        "asvetliakov.vscode-neovim": 1
-    },
     "workbench.panel.defaultLocation": "bottom",
     "explorer.decorations.badges": false,
     "workbench.editor.showIcons": false,

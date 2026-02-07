@@ -55,6 +55,8 @@
 
 [absorb]
 	autoStageIfNothingStaged = true
+  maxStack=50
+  oneFixupPerCommit = true
 
 [rerere]
 	enabled = true
