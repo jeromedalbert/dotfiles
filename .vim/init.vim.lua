@@ -21,7 +21,7 @@ require('conform').setup({
   },
   formatters_by_ft = {
     go = { 'gofmt' },
-    javascript = { 'prettier' },
+    -- javascript = { 'prettier' },
     javascriptreact = { 'prettier' },
     lua = { 'stylua' },
     -- python = { 'black' },

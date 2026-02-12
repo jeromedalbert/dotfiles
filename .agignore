@@ -11,7 +11,8 @@
 *.pyc
 *.dump*
 
-CVS
+/.venv
+/CVS
 /app/assets/builds
 /bower_components
 /coverage
@@ -23,3 +24,4 @@ CVS
 /storage/*
 /tmp
 /vendor
+/venv

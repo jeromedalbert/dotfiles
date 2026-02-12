@@ -584,7 +584,7 @@ set nojoinspaces
 set sessionoptions-=options
 set sidescroll=1 sidescrolloff=3
 set wildignorecase
-set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump
+set wildignore=.DS_Store,.localized,.tags*,tags,.keep,.gitkeep,*.pyc,*.class,*.swp,*.dump,.venv,venv
 set diffopt=vertical,filler,foldcolumn:0
 set whichwrap=b,s,h,l
 set synmaxcol=1000
@@ -628,9 +628,9 @@ if has('gui_running')
   endif
 endif
 
-let g:python3_host_prog = '/Users/jerome/.local/share/mise/shims/python3'
-let g:ruby_host_prog = '/Users/jerome/.local/share/mise/shims/neovim-ruby-host'
-let g:node_host_prog = '/Users/jerome/.local/share/mise/shims/neovim-node-host'
+let g:python3_host_prog = '/Users/jerome/.mise/shims/python3'
+let g:ruby_host_prog = '/Users/jerome/.mise/shims/neovim-ruby-host'
+let g:node_host_prog = '/Users/jerome/.mise/shims/neovim-node-host'
 let g:perl_host_prog = $HOMEBREW_PREFIX . '/bin/perl'
 let g:clipboard = {
   \ 'name': 'pbcopy',
