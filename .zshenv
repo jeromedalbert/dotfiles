@@ -361,6 +361,7 @@ alias "grh^"="git reset 'HEAD^'"
 alias grhh='git reset HEAD --hard'
 alias "grhh^"="git reset --hard 'HEAD^'"
 alias gst='git stash -u'
+alias gstd='git stash drop'
 alias gstm='gst -m'
 alias gstp='git stash pop'
 alias gstl='git stash list'
