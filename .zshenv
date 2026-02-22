@@ -1183,7 +1183,11 @@ olr() { ol run "$@" }
 oll() { ol run llama3.1 "$@" }
 olg() { ol run gemma2 "$@" }
 old() { ol run deepseek-r1 "$@" }
-alias bands='ssh spitz "gl_modem AT AT+QCAINFO"'
+alias rbands='ssh spitz "gl_modem -B 0001:01:00.0 AT AT+QCAINFO"'
+rsig() {
+  ssh spitz 'ubus call modem.signal get_signals' | jq '.signals[0] | {rsrp, timestamp}'
+}
+alias rsigw='watch -n 2 zsh -c rsig'
 alias reshim='mise reshim'
 alias mhash='reshim'
 alias ansview='iconv -f 437'
