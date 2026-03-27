@@ -1110,7 +1110,7 @@
 		</dict>
 	</dict>
 	<key>Default Bookmark Guid</key>
-	<string>C605475B-B78D-4236-A6A9-0869CB44635F</string>
+	<string>54A4C556-E59F-4EC4-89E7-6316B80E8780</string>
 	<key>DeleteProfile_SilenceUntil</key>
 	<real>479454544.065521</real>
 	<key>DeleteProfile_selection</key>
@@ -1678,6 +1678,8 @@
 			<string></string>
 			<key>AWDS Window Option</key>
 			<string>No</string>
+			<key>Allow Paste Bracketing</key>
+			<true/>
 			<key>Allow Title Reporting</key>
 			<false/>
 			<key>Ambiguous Double Width</key>

@@ -408,6 +408,7 @@ command! Profile call Profile()
 command! Lint call LazyLint()
 command! -range=0 FocusSelection call FocusSelection(<count>)
 command! -nargs=? Wd call WriteDesktop(<q-args>)
+command! -nargs=? WD call WriteDownloads(<q-args>)
 command! -nargs=? Mksession call MakeSession(<q-args>)
 command! -nargs=? Ldsession call LoadSession(<q-args>)
 
@@ -427,6 +428,7 @@ cabbrev prof Profile
 cabbrev gmo GemOpen
 cabbrev focus FocusSelection
 cabbrev wd Wd
+cabbrev wD WD
 cabbrev mksession Mksession
 cabbrev mks Mksession
 cabbrev ldsession Ldsession
@@ -2769,6 +2771,12 @@ function! WriteDesktop(filename)
   let filename = a:filename
   if filename == '' | let filename = 'tmp.txt' | endif
   exe 'w! ~/Desktop/' . filename
+endfunction
+
+function! WriteDownloads(filename)
+  let filename = a:filename
+  if filename == '' | let filename = 'tmp.txt' | endif
+  exe 'w! ~/Downloads/' . filename
 endfunction
 
 function! OpenCursor()

@@ -769,6 +769,7 @@ ruby-console() {
 alias rc='ruby-console'
 alias rcs='rails c --sandbox'
 alias rr='rails routes'
+alias rrg='rails routes -g'
 alias rrs='rails restart'
 alias rss='rrs'
 alias rst='rrs'
