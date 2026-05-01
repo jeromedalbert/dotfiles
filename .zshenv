@@ -388,6 +388,7 @@ grbim() { git rebase -i $(git-main-branch) }
 alias grbir='git rebase -i --root'
 alias gcon='git rebase --continue'
 alias grcon='gcon'
+alias gmcon='gc'
 alias gaacon='gaa && gcon'
 alias grabort='git rebase --abort'
 alias gsk='git rebase --skip'

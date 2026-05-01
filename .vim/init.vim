@@ -946,13 +946,17 @@ let g:projectionist_heuristics = {
   \  'config/application.rb&spec/': {
   \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
+  \    'script/*.rb': { 'alternate': 'spec/script/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
+  \    'spec/script/*_spec.rb': { 'alternate': 'script/{}.rb' },
   \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
   \  },
   \  'config/application.rb&test/&!spec/': {
   \    'app/*.rb': { 'alternate': 'test/{}_test.rb' },
   \    'lib/*.rb': { 'alternate': 'test/lib/{}_test.rb' },
+  \    'script/*.rb': { 'alternate': 'test/script/{}_test.rb' },
   \    'test/*_test.rb': { 'alternate': 'app/{}.rb' },
+  \    'test/script/*_test.rb': { 'alternate': 'script/{}.rb' },
   \    'test/lib/*_test.rb': { 'alternate': 'lib/{}.rb' }
   \  },
   \  'spec/spec_helper.rb&!config/application.rb': {
