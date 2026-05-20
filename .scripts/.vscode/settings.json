@@ -35,5 +35,8 @@
     },
     "editor.renderLineHighlight": "none",
     "workbench.editor.decorations.badges": false,
-    "workbench.editor.decorations.colors": false
+    "workbench.editor.decorations.colors": false,
+    "window.autoDetectColorScheme": false,
+    "chat.disableAIFeatures": true,
+    "terminal.integrated.initialHint": false
 }
