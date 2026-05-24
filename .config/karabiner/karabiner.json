@@ -1004,6 +1004,32 @@
                         ]
                     },
                     {
+                        "description": "fn+-",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "hyphen",
+                                    "modifiers": { "mandatory": ["fn"] }
+                                },
+                                "to": [{ "key_code": "volume_decrement" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "fn+=",
+                        "manipulators": [
+                            {
+                                "from": {
+                                  "key_code": "equal_sign",
+                                    "modifiers": { "mandatory": ["fn"] }
+                                },
+                                "to": [{ "key_code": "volume_increment" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "tab to esc",
                         "manipulators": [
                             {

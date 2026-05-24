@@ -15,6 +15,7 @@ end
 IRB.conf[:SAVE_HISTORY] = 10000
 IRB.conf[:AUTO_INDENT] = true
 IRB.conf[:USE_AUTOCOMPLETE] = false
+# IRB.conf[:SHOW_BANNER] = false
 
 IRB.conf[:COMMAND_ALIASES].merge!(
   con: :continue,
