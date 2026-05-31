@@ -527,6 +527,13 @@ git-unchanged-since() {
 }
 alias squash='git reset --soft $(git-main-branch); gaacm "Squashed commits"'
 alias squashi='git reset $(git commit-tree HEAD^{tree} -m "Initial commit")'
+alias gw='git worktree'
+alias gwa='git worktree add'
+alias gwl='git worktree list'
+alias gwrm='git worktree remove'
+alias gwrmf='git worktree remove -f'
+gwd() { gwrm $1; gbd $1 }
+gwD() { gwrm -f $1; gbD $1 }
 
 # Github
 alias hc='gh pr create --web'
