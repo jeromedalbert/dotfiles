@@ -38,5 +38,6 @@
     "workbench.editor.decorations.colors": false,
     "window.autoDetectColorScheme": false,
     "chat.disableAIFeatures": true,
-    "terminal.integrated.initialHint": false
+    "terminal.integrated.initialHint": false,
+    "npm.autoDetect": "off"
 }
