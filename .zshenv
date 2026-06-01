@@ -410,15 +410,21 @@ gbcp() { echo $(current-git-branch) | pbcopy }
 alias gbs='git branch -D sav &> /dev/null; git branch sav'
 alias gcs='git checkout sav'
 alias gbd='git branch -d'
-alias gbD='git branch -D'
-alias gbDs="git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*' | xargs git branch -D"
-alias gbDa='git branch | remove-colors | egrep -v "master|main|\*" | xargs git branch -D'
+gbD() {
+  for branch in "$@"; do
+    local worktree_path=$(git worktree list | grep -F "[$branch]" | cut -d' ' -f 1)
+    if [[ -n $worktree_path ]]; then git worktree remove -f $worktree_path; fi
+  done
+  git branch -D "$@"
+}
+gbDs() { gbD $(git branch | remove-colors | cut -c3- | egrep -i '^s+a+v+.*') }
+gbDa() { gbD $(git branch | remove-colors | egrep -v 'master|main|\*') }
 alias gbD-="gbD @{-1}"
 gbDi() {
   git branch --sort=-committerdate | remove-colors | egrep -v "^ *(master|main|\*)" | cut -c3- > /tmp/branches && \
     cp /tmp/branches /tmp/branches-to-keep && \
     $MAIN_EDITOR /tmp/branches-to-keep && \
-    comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep) | xargs 2> /dev/null git branch -D
+    gbD $(comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep)) 2>/dev/null
 }
 alias gbm='gb -m'
 alias gbi='git bisect'
