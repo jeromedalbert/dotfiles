@@ -404,9 +404,6 @@ gfix() {
   fi
 }
 alias gf='gfix'
-# alias gab='git absorb'
-# alias gabn='git absorb --dry-run'
-# alias gabr='git absorb --and-rebase'
 alias gab='git absorb --and-rebase'
 alias gb='git branch --sort=-committerdate'
 gbcp() { echo $(current-git-branch) | pbcopy }
@@ -424,11 +421,6 @@ gbDi() {
     comm -23 <(sort /tmp/branches) <(sort /tmp/branches-to-keep) | xargs 2> /dev/null git branch -D
 }
 alias gbm='gb -m'
-# alias gbDs="git-list-branches | egrep -i '^s+a+v+.*' | xargs git branch -D"
-# alias gbDa='git-list-branches | grep -v "master\|$(current-git-branch)" | xargs git branch -D'
-# git-list-branches() {
-#   git for-each-ref --format="%(refname:short)" HEAD refs/heads
-# }
 alias gbi='git bisect'
 alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
@@ -539,7 +531,7 @@ gwD() { gwrm -f $1; gbD $1 }
 alias hc='gh pr create --web'
 alias hp='gh pr view --web'
 hd() {
-  local url=$(BROWSER=echo hc | tail -n 1 | cut -d '?' -f1)
+  local url=$(BROWSER=echo hc | tail -n 1 | cut -d'?' -f1)
   if [[ $url == http* ]]; then open $url; fi
 }
 hf() {
