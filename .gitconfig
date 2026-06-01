@@ -4,28 +4,47 @@
 
 [core]
   ignorecase = false
-	excludesfile = /Users/jerome/.gitignore_global
+  excludesfile = /Users/jerome/.gitignore_global
   attributesfile = /Users/jerome/.gitattributes
 
-[color]
-  ui = always
+[absorb]
+  autoStageIfNothingStaged = true
+  maxStack=50
+  oneFixupPerCommit = true
 
 [alias]
   ignore = !git update-index --assume-unchanged
   unignore = !git update-index --no-assume-unchanged
   ignored = !git ls-files -v | grep ^[a-z]
 
-[push]
-  default = simple
-	autoSetupRemote = true
+[color]
+  ui = always
+
+[color "branch"]
+  worktree = normal
+
+[commit]
+  gpgsign = true
 
 [diff]
   noprefix = true
   algorithm = histogram
-	renames = true
+  renames = true
 
 [diff-so-fancy]
   markEmptyLines = false
+
+[filter "lfs"]
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+
+[include]
+  path = ~/.gitconfig_local
+
+[init]
+  defaultBranch = main
 
 # [merge "bundlelock"]
 #   name = bundle lock
@@ -35,32 +54,13 @@
   name = newer Rails schema version
   driver = "ruby -e 'system %(git), %(merge-file), %(--marker-size=%L), %(%A), %(%O), %(%B); b = File.read(%(%A)); b.sub!(/^<+ .*\\nActiveRecord::Schema\\.define.version: ([0-9_]+). do\\n=+\\nActiveRecord::Schema\\.define.version: ([0-9_]+). do\\n>+ .*/) do; %(ActiveRecord::Schema.define(version: #{[$1, $2].max}) do); end; File.open(%(%A), %(w)) {|f| f.write(b)}; exit 1 if b.include?(%(<)*%L)'"
 
-[commit]
-	gpgsign = true
+[push]
+  default = simple
+	autoSetupRemote = true
 
-[url "git@github.com:"]
-	insteadOf = "https://github.com/"
-
-[include]
-  path = ~/.gitconfig_local
-
-[filter "lfs"]
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-
-[init]
-	defaultBranch = main
-
-[absorb]
-	autoStageIfNothingStaged = true
-  maxStack=50
-  oneFixupPerCommit = true
+[rebase]
+  updateRefs = true
 
 [rerere]
 	enabled = true
 	autoupdate = true
-
-[rebase]
-	updateRefs = true
