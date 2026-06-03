@@ -1,5 +1,6 @@
 Gemfile.lock merge=bundlelock
 db/schema.rb merge=railsschema
+db/data_schema.rb merge=data-migrate-schema
 
 *.rb    diff=ruby
 *.rake  diff=ruby

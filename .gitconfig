@@ -61,6 +61,17 @@
     File.open(%(%A), %(w)) {|f| f.write(b)};\
     exit 1 if b.include?(%(<)*%L)'"
 
+[merge "data-migrate-schema"]
+  name = newer data_migrate schema version
+  driver = "ruby -e '\
+    system %(git), %(merge-file), %(--marker-size=%L), %(%A), %(%O), %(%B);\
+    b = File.read(%(%A));\
+    b.sub!(/^<+ .*\\nDataMigrate::Data\\.define.version: ([0-9_]+).\\n=+\\nDataMigrate::Data\\.define.version: ([0-9_]+).\\n>+ .*/) do;\
+      %(DataMigrate::Data.define(version: #{[$1, $2].max}));\
+    end;\
+    File.open(%(%A), %(w)) {|f| f.write(b)};\
+    exit 1 if b.include?(%(<)*%L)'"
+
 [push]
   default = simple
 	autoSetupRemote = true
