@@ -1,8 +1,10 @@
-silent! unmap grn
-silent! unmap gra
-silent! unmap grr
-silent! unmap gri
-silent! unmap grt
+if !v:vim_did_enter
+  silent! unmap grn
+  silent! unmap gra
+  silent! unmap grr
+  silent! unmap gri
+  silent! unmap grt
+endif
 
 "###############
 "### Plugins ###
