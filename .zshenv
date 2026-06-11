@@ -292,7 +292,7 @@ ggclv() {
   v.
 }
 ex() {
-  [ $# -eq 0 ] && return
+  [[ $# -eq 0 ]] && return
   local git_repo=$(git-repo $1)
   cd ~/c/tmp
   if [[ -d $git_repo ]]; then
@@ -695,7 +695,7 @@ jj() {
   cd "$(mdfind "kind:folder" -onlyin ~ -name 2> /dev/null | fzf)"
 }
 fgl() (
-  [ $# -eq 0 ] && return
+  [[ $# -eq 0 ]] && return
   cd /usr/local/Cellar/figlet/*/share/figlet/fonts
   local font=$(ls *.flf | sort | fzf --no-multi --reverse --preview "figlet -f {} $@") &&
   figlet -f "$font" "$@" | pbcopy
@@ -877,7 +877,7 @@ nhash() {
 # Python
 alias py='python'
 venv() {
-  if [ -z "$VIRTUAL_ENV" ]; then
+  if [[ -z $VIRTUAL_ENV ]]; then
     python3 -m venv venv
     source venv/bin/activate
   fi

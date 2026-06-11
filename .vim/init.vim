@@ -24,7 +24,6 @@ if has('nvim')
   " Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'neovim/nvim-lspconfig'
   Plug 'stevearc/conform.nvim'
-  " Plug 'github/copilot.vim', { 'branch': 'release' }
 endif
 
 Plug 'vim-ruby/vim-ruby', { 'for': '*ruby' }
@@ -527,7 +526,6 @@ noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
-" noremap <silent> <leader>A <Plug>(AvanteAsk)
 noremap <silent> <leader>C :call OpenCursor()<cr>
 noremap <silent> c. :call OpenVisibleBuffersInCursor()<cr>
 
@@ -1025,11 +1023,6 @@ let g:vim_ai_chat = {
   \  }
   \ }
 
-let g:copilot_filetypes = {
-  \ 'text': v:false,
-  \ 'markdown': v:false,
-  \ }
-
 let g:angry_disable_maps = 1
 let g:incsearch#auto_nohlsearch = 1
 let g:gundo_help = 0
@@ -1049,7 +1042,6 @@ function! TabComplete()
   elseif IsEmmetExpandable()
     return emmet#expandAbbr(0, '')
   else
-    " return copilot#Accept("\<tab>")
     return "\<tab>"
   endif
 endfunction
@@ -2238,9 +2230,6 @@ function! CreateBufferMappings()
     nnoremap <buffer> d0 d^
     nmap <buffer> ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
     nmap <buffer> dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-  endif
-  if bufname =~ '^copilot:'
-    nnoremap <silent><buffer> <esc> :q<cr>
   endif
   let b:buffer_mappings_created = 1
 endfunction
