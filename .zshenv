@@ -654,6 +654,7 @@ alias st3='cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages'
 alias .vim='cd ~/.vim'
 alias c='cd ~/c'
 alias desk='cd ~/Desktop'
+alias doc='cd ~/Documents'
 alias dls='cd ~/Downloads'
 alias de='desk'
 
