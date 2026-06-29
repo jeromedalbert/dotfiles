@@ -480,6 +480,8 @@ gback() {
   unset last_commit_message
 }
 alias gcurr='gaacm "current work"'
+alias wip='gcurr'
+alias gwip='gcurr'
 alias gcur=gcurr
 grebase() {
   local branch=${1:-$(git-main-branch)}
