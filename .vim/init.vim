@@ -947,8 +947,10 @@ let g:projectionist_heuristics = {
   \    'app/*.rb': { 'alternate': 'spec/{}_spec.rb' },
   \    'lib/*.rb': { 'alternate': 'spec/lib/{}_spec.rb' },
   \    'script/*.rb': { 'alternate': 'spec/script/{}_spec.rb' },
+  \    'db/data/*.rb': { 'alternate': 'spec/db/data/{}_spec.rb' },
   \    'spec/*_spec.rb': { 'alternate': 'app/{}.rb' },
   \    'spec/script/*_spec.rb': { 'alternate': 'script/{}.rb' },
+  \    'spec/db/data/*_spec.rb': { 'alternate': 'db/data/{}.rb' },
   \    'spec/lib/*_spec.rb': { 'alternate': 'lib/{}.rb' }
   \  },
   \  'app/&spec/&!config/application.rb': {
