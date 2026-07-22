@@ -84,6 +84,7 @@ defaults write com.apple.preview NSUserKeyEquivalents \
   '{ "Adjust Size..." = "@~s"; "Hide Sidebar" = "@1"; Thumbnails = "@2"; }'
 defaults write com.google.Chrome NSUserKeyEquivalents '{ Extensions = "@~e"; }'
 defaults write com.monosnap.monosnap NSUserKeyEquivalents '{ "Save" = "@$s"; }'
+defaults write com.apple.Numbers NSUserKeyEquivalents '{ "CSV..." = "@$e"; }'
 
 ############
 ### Dock ###
