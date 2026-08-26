@@ -440,9 +440,6 @@ gpu() {
     gp -u "$@"
   fi
 }
-github-fork-exists() {
-  git remote get-url jeromedalbert &>/dev/null
-}
 gpuf() {
   if [[ $# -eq 0 ]]; then
     gp -u -f origin $(current-git-branch)
@@ -572,6 +569,9 @@ gpuhd() { gpu "$@" && hd }
 alias gpfhc='gpf && hc'
 alias gpufhc='gpuf && hc'
 alias gphc='gp && hc'
+github-fork-exists() {
+  git remote get-url jeromedalbert &>/dev/null
+}
 clear-gh-notifications() {
   local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   curl -L \
@@ -582,6 +582,17 @@ clear-gh-notifications() {
     https://api.github.com/notifications \
     -d "{\"last_read_at\":\"$now\",\"read\":true}"
 }
+alias gtt='gh stack'
+alias gti='gh stack init'
+alias gtc='gh stack submit --auto'
+alias gtrb='gh stack rebase'
+alias gtrbu='gh stack rebase --upstack'
+alias gtrcon='gh stack rebase --continue'
+alias gtrabort='gh stack rebase --abort'
+alias gtp='gh stack push'
+alias gtco='gh stack checkout'
+alias gtv='gh stack view'
+alias gts='gh stack sync'
 
 # Docker
 alias docker='ensure-docker-is-running; command docker'
