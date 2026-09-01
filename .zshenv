@@ -80,9 +80,9 @@ ct() {
   fi
 }
 ctt() {
-  rm -rf ~/c/tmp/my* ~/c/tmp/repro* ~/c/tmp/test*
+  rm -rf ~/c/tmp/my* ~/c/tmp/repro* ~/c/tmp/test* ~/c/tmp/script.rb
   if [[ $# -eq 0 ]]; then
-    if [[ ! -d "$PWD" ]]; then cd ~/c/tmp; fi
+    cd ~/c/tmp
   else
     ct "$@"
   fi
