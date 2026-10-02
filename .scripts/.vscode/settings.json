@@ -39,5 +39,12 @@
     "window.autoDetectColorScheme": false,
     "chat.disableAIFeatures": true,
     "terminal.integrated.initialHint": false,
-    "npm.autoDetect": "off"
+    "npm.autoDetect": "off",
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.enableNewConversationShortcut": true,
+    "editor.fontSize": 14,
+    "chat.editor.fontSize": 14,
+    "chat.fontSize": 14,
+    "claudeCode.focusView": false,
+    "claudeCode.hideOnboarding": true
 }
