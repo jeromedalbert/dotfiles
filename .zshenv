@@ -532,7 +532,6 @@ gwD() { gwrm -f $1; gbD $1 }
 
 # Github
 alias hc='gh pr create --web'
-alias hp='gh pr view --web'
 hd() {
   local url=$(BROWSER=echo hc | tail -n 1 | cut -d'?' -f1)
   if [[ $url == http* ]]; then open $url; fi
@@ -545,12 +544,19 @@ github-repo() {
   local origin=$1
   git remote get-url $origin | sed -r 's/.*:(.*)\.git/\1/'
 }
+alias hp='gh pr view --web'
 hb() {
-  local current_branch=$(current-git-branch)
-  if [[ $current_branch == $(git-main-branch) ]]; then
+  if [[ $(current-git-branch) == $(git-main-branch) ]]; then
+    hbr
+  else
+    gh pr view --web
+  fi
+}
+hbr() {
+  if [[ $(current-git-branch) == $(git-main-branch) ]]; then
     gh repo view --web
   else
-    gh repo view --web --branch $current_branch
+    gh repo view --web --branch $(current-git-branch)
   fi
 }
 hcm() {
