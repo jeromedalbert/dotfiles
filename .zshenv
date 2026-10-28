@@ -507,6 +507,7 @@ alias gsr='git-submodule-remove'
 alias grev='git revert'
 alias grevh='git revert HEAD'
 alias grevnoe='git revert --no-edit'
+gres() { git restore --source=$(git-main-branch) "$@" }
 git-churn() {
   git log --all -M -C --name-only --format='format:' "$@" \
     | sort \
