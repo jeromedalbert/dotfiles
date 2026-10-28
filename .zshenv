@@ -200,7 +200,7 @@ ta() {
   if [[ -z $TMUX ]]; then
     tmux attach -t "=$1"
   else
-    tmux switch -t "=$1"
+    tmux switch-client -t "=$1"
   fi
 }
 ts() {
