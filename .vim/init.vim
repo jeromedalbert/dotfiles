@@ -529,6 +529,7 @@ noremap <silent> <cr> :call ReplayLastMacro()<cr>
 noremap <silent> cu. :call OpenCursor()<cr>
 noremap <silent> <leader>C :call OpenVisibleBuffersInCursor()<cr>
 noremap <silent> c. :call OpenCodex()<cr>
+xnoremap <silent> c. :call OpenCodex(1)<cr>
 
 "#############################
 "### General configuration ###
@@ -2803,16 +2804,27 @@ function! OpenVisibleBuffersInCursor()
   call system('cursor $(pwd) ' . join(file_paths, ' '))
 endfunction
 
-function! OpenCodex()
+function! OpenCodex(...) range
+  let path_and_line = expand('%') . ':' . a:firstline
+  let visual_mode = get(a:000, 0)
+  if a:firstline != a:lastline
+    let path_and_line .= '-' . a:lastline
+  elseif visual_mode && visualmode() ==# 'v'
+    let first_col = charcol("'<")
+    let last_col = charcol("'>")
+    let path_and_line .= ' (columns ' . first_col . '-' . last_col . ')'
+  endif
+
   if system('pgrep -x ChatGPT') != ''
-    call CopyCurrentFilePath(1)
+    let @+ = path_and_line
     call system('open -a Codex')
     call system("osascript -e 'tell app \"System Events\" to keystroke \"v\" using command down'")
     return
   endif
 
-  let file_path = shellescape(expand('%') . ':' . line('.'))
-  call system('open "codex://new?path=$(url-encode "$PWD")&prompt=$(url-encode ' . file_path . ')"')
+  let cmd = 'open "codex://new?path=$(url-encode "$PWD")&prompt='
+  let cmd .= '$(url-encode ' . shellescape(path_and_line) .  ')"'
+  call system(cmd)
 endfunction
 
 function! GetYamlPathUnderCursor()
