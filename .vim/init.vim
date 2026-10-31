@@ -526,8 +526,9 @@ noremap <leader>rxcM :call CreateRubyMethod(1, 1)<cr>
 
 noremap <silent> <cr> :call ReplayLastMacro()<cr>
 
-noremap <silent> <leader>C :call OpenCursor()<cr>
-noremap <silent> c. :call OpenVisibleBuffersInCursor()<cr>
+noremap <silent> cu. :call OpenCursor()<cr>
+noremap <silent> <leader>C :call OpenVisibleBuffersInCursor()<cr>
+noremap <silent> c. :call OpenCodex()<cr>
 
 "#############################
 "### General configuration ###
@@ -2800,6 +2801,18 @@ function! OpenVisibleBuffersInCursor()
   endfor
   call insert(file_paths, '-g ' . expand('%:p') . ':' . line('.'))
   call system('cursor $(pwd) ' . join(file_paths, ' '))
+endfunction
+
+function! OpenCodex()
+  if system('pgrep -x ChatGPT') != ''
+    call CopyCurrentFilePath(1)
+    call system('open -a Codex')
+    call system("osascript -e 'tell app \"System Events\" to keystroke \"v\" using command down'")
+    return
+  endif
+
+  let file_path = shellescape(expand('%') . ':' . line('.'))
+  call system('open "codex://new?path=$(url-encode "$PWD")&prompt=$(url-encode ' . file_path . ')"')
 endfunction
 
 function! GetYamlPathUnderCursor()

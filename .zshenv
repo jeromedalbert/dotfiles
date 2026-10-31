@@ -124,6 +124,7 @@ prepend() {
   echo 'Done'
 }
 alias ansview='iconv -f 437'
+url-encode() { printf '%s' "$@" | jq -sRr @uri }
 
 # Confs
 al() {
@@ -1072,8 +1073,10 @@ alias co.='code .'
 cursor() {
   (/Applications/Cursor.app/Contents/MacOS/Cursor "$@" > /dev/null 2>&1 &)
 }
-alias cur='cursor'
-alias c.='cursor .'
+alias cu.='cursor .'
+codex() { open "codex://new?path=$@" }
+cd.() { codex $PWD }
+alias c.=cd.
 alias zzz='pmset sleepnow'
 alias say_good='say -v Good ooooooooooooooooooooooooooooooooooooooooooooooooooo'
 alias say_bad='say -v Bad ooooooooooooooooooooooooooooooooooooooooooooooooooo'
@@ -1202,8 +1205,6 @@ alias act='ensure-docker-is-running; command act'
 imglatlong() { exiftool -n -p '$gpslatitude,$gpslongitude' "$@" }
 alias coords='imglatlong'
 alias coord='imglatlong'
-cs() { gh copilot suggest "$*" }
-ce() { gh copilot explain "$*" }
 alias ol='ollama'
 olr() { ol run "$@" }
 oll() { ol run llama3.1 "$@" }
